@@ -83,8 +83,8 @@ public class QuickSort {
      * @param arr the array to be printed
      */
     private static void printArray(int[] arr) {
-        for (int i : arr) {
-            System.out.print(i + " ");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
         }
         System.out.println();
     }
@@ -93,12 +93,11 @@ public class QuickSort {
 
 ### Explanation
 
-1.  The `quickSort` method takes an array of integers as input and calls the recursive `quickSort` method with the starting and ending indices of the array.
-2.  The recursive `quickSort` method checks if the sub-array has more than one element. If it does, it calls the `partition` method to partition the array around a pivot element.
-3.  The `partition` method selects the last element of the sub-array as the pivot and partitions the other elements around it. It returns the index of the pivot element.
-4.  The recursive `quickSort` method then calls itself on the sub-arrays to the left and right of the pivot element.
-5.  The `swap` method is used to swap two elements in the array.
-6.  The `main` method demonstrates the usage of the `quickSort` method by sorting an example array and printing the original and sorted arrays.
+1.  The `quickSort` method takes an array of integers as input and calls the overloaded `quickSort` method with the starting and ending indices of the array.
+2.  The overloaded `quickSort` method recursively sorts the sub-arrays by selecting a pivot element, partitioning the array around the pivot, and recursively sorting the sub-arrays.
+3.  The `partition` method partitions the array around a pivot element by iterating through the array and swapping elements that are less than the pivot to the left of the pivot.
+4.  The `swap` method swaps two elements in the array.
+5.  The `main` method demonstrates the usage of the `quickSort` method by sorting an example array and printing the original and sorted arrays.
 
 ### Time Complexity
 

@@ -60,7 +60,7 @@ public class BubbleSort {
 4.  Inside the inner loop, we compare each pair of adjacent elements. If they are in the wrong order, we swap them.
 5.  After each pass through the array, the largest element "bubbles" to the end of the array.
 6.  The `printArray` method is used to print the array before and after sorting.
-7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and print the sorted array.
+7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and then print the sorted array.
 
 ### Time Complexity
 

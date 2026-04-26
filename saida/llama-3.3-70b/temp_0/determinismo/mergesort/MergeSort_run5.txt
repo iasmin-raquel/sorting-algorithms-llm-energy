@@ -5,7 +5,7 @@
 
 Merge sort is a divide-and-conquer algorithm that splits an array into two halves, recursively sorts each half, and then merges the two sorted halves.
 
-### Implementation
+### Code
 
 ```java
 public class MergeSort {

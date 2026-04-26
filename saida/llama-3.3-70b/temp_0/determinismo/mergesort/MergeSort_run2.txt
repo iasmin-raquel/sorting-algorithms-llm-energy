@@ -98,6 +98,4 @@ public class MergeSort {
 
 ### Space Complexity
 
-*   O(n) for the recursive call stack and temporary arrays
-
-Note: This implementation has a time complexity of O(n log n) and a space complexity of O(n), making it efficient for sorting large datasets. However, it may not be suitable for very large datasets that do not fit in memory due to the recursive nature of the algorithm.
+*   O(n) for the recursive call stack and temporary arrays used during merging.

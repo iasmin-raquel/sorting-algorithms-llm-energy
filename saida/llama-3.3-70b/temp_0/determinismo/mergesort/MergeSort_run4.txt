@@ -86,8 +86,8 @@ public class MergeSort {
 
 ### Explanation
 
-1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each half has only one element (or is empty).
-2.  The `merge` method merges two sorted arrays into a single sorted array.
+1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element (which is inherently sorted).
+2.  The `merge` method combines two sorted arrays into a single sorted array by comparing elements from each array and placing the smaller element in the result array.
 3.  The `main` method demonstrates the usage of the `mergeSort` method by sorting an example array and printing the original and sorted arrays.
 
 ### Time Complexity
@@ -98,6 +98,4 @@ public class MergeSort {
 
 ### Space Complexity
 
-*   O(n) for the recursive call stack and temporary arrays
-
-Note: This implementation has a time complexity of O(n log n) and a space complexity of O(n), making it efficient for sorting large datasets. However, it may not be suitable for very large datasets that do not fit in memory due to the recursive nature of the algorithm.
+*   O(n) for the recursive call stack and temporary arrays used during merging.
