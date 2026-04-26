@@ -1,0 +1,71 @@
+Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes an **early exit** optimization to stop the algorithm if the array becomes sorted before all passes are completed.
+
+### ✅ Java Implementation of Bubble Sort
+
+```java
+public class BubbleSort {
+
+    // Method to perform bubble sort
+    public static void bubbleSort(int[] arr) {
+        boolean swapped;
+        for (int i = 0; i < arr.length - 1; i++) {
+            swapped = false;
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // Swap arr[j] and arr[j+1]
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+            // If no two elements were swapped in the inner loop, the array is sorted
+            if (!swapped) break;
+        }
+    }
+
+    // Method to print the array
+    public static void printArray(int[] arr) {
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+
+    // Main method to test the bubble sort
+    public static void main(String[] args) {
+        int[] arr = {64, 34, 25, 12, 22, 11, 90};
+
+        System.out.println("Original array:");
+        printArray(arr);
+
+        bubbleSort(arr);
+
+        System.out.println("Sorted array:");
+        printArray(arr);
+    }
+}
+```
+
+---
+
+### 🔍 Explanation:
+
+- **Outer Loop (`i`)**: Controls the number of passes through the array.
+- **Inner Loop (`j`)**: Compares adjacent elements and swaps them if they are in the wrong order.
+- **`swapped` flag**: If no swaps occur in a pass, the array is already sorted, and the algorithm exits early for efficiency.
+
+---
+
+### 🧪 Sample Output:
+
+```
+Original array:
+64 34 25 12 22 11 90 
+Sorted array:
+11 12 22 25 34 64 90 
+```
+
+---
+
+Let me know if you'd like a **descending order** version or a **generic version** that works with `Comparable` types!

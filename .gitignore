@@ -1,0 +1,32 @@
+# Credenciais e tokens
+credentials.json
+*.token
+.env
+.env.*
+
+# Ambiente virtual Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Arquivos compilados Java
+*.class
+
+# CodeCarbon
+emissions.csv
+
+# Logs
+logs/
+*.log
+
+# Claude Code
+.claude/
+
+# VS Code (opcional: remova esta linha se quiser versionar as configs)
+.vscode/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db

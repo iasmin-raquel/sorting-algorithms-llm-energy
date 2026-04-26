@@ -1,0 +1,80 @@
+Certainly! Here's a well-structured and efficient implementation of the **Bubble Sort** algorithm in **Java**. This version includes optimizations such as early termination if the array is already sorted and avoids unnecessary comparisons once the largest elements are in place.
+
+### ✅ Java Implementation of Bubble Sort
+
+```java
+public class BubbleSort {
+
+    // Method to perform bubble sort
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+        boolean swapped;
+
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+
+            // Last i elements are already in place
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // Swap arr[j] and arr[j+1]
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+
+            // If no two elements were swapped in the inner loop, the array is sorted
+            if (!swapped) {
+                break;
+            }
+        }
+    }
+
+    // Method to print the array
+    public static void printArray(int[] arr) {
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+
+    // Main method to test the bubble sort
+    public static void main(String[] args) {
+        int[] arr = {64, 34, 25, 12, 22, 11, 90};
+
+        System.out.println("Original array:");
+        printArray(arr);
+
+        bubbleSort(arr);
+
+        System.out.println("Sorted array:");
+        printArray(arr);
+    }
+}
+```
+
+---
+
+### 🔍 Explanation:
+
+- **Outer Loop (`i`)**: Controls the number of passes through the array.
+- **Inner Loop (`j`)**: Compares adjacent elements and swaps them if they are in the wrong order.
+- **`swapped` flag**: Optimizes the algorithm by stopping early if the array becomes sorted before all passes are completed.
+- **Time Complexity**:
+  - **Worst Case**: O(n²)
+  - **Best Case**: O(n) (with the optimization)
+  - **Average Case**: O(n²)
+
+---
+
+### ✅ Sample Output:
+
+```
+Original array:
+64 34 25 12 22 11 90 
+Sorted array:
+11 12 22 25 34 64 90 
+```
+
+Let me know if you'd like a version that sorts in descending order or handles other data types!

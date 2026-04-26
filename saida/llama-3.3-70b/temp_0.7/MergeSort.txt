@@ -1,0 +1,86 @@
+### Merge Sort Implementation in Java
+#### Overview
+Merge sort is a divide-and-conquer algorithm that splits a list of elements into two halves, recursively sorts each half, and then merges them.
+
+#### Code
+```java
+public class MergeSort {
+
+    /**
+     * Sorts an array using the merge sort algorithm.
+     *
+     * @param arr the array to sort
+     * @return the sorted array
+     */
+    public static int[] mergeSort(int[] arr) {
+        if (arr.length <= 1) {
+            return arr;
+        }
+
+        int mid = arr.length / 2;
+        int[] left = new int[mid];
+        int[] right = new int[arr.length - mid];
+
+        System.arraycopy(arr, 0, left, 0, mid);
+        System.arraycopy(arr, mid, right, 0, arr.length - mid);
+
+        left = mergeSort(left);
+        right = mergeSort(right);
+
+        return merge(left, right);
+    }
+
+    /**
+     * Merges two sorted arrays into a single sorted array.
+     *
+     * @param left  the first sorted array
+     * @param right the second sorted array
+     * @return the merged sorted array
+     */
+    private static int[] merge(int[] left, int[] right) {
+        int[] result = new int[left.length + right.length];
+        int i = 0, j = 0, k = 0;
+
+        while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) {
+                result[k++] = left[i++];
+            } else {
+                result[k++] = right[j++];
+            }
+        }
+
+        while (i < left.length) {
+            result[k++] = left[i++];
+        }
+
+        while (j < right.length) {
+            result[k++] = right[j++];
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 8, 3, 1, 6, 4};
+        int[] sortedArr = mergeSort(arr);
+
+        System.out.println("Sorted array:");
+        for (int num : sortedArr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+#### Explanation
+1. The `mergeSort` method takes an array as input and recursively splits it into two halves until each half has only one element.
+2. The `merge` method merges two sorted arrays into a single sorted array.
+3. The `main` method demonstrates how to use the `mergeSort` method to sort an array.
+
+#### Time Complexity
+* Best-case time complexity: O(n log n)
+* Average-case time complexity: O(n log n)
+* Worst-case time complexity: O(n log n)
+
+#### Space Complexity
+* The space complexity is O(n) because we need to store the temporary arrays during the merge process.
