@@ -1,0 +1,282 @@
+<think>
+Okay, I need to write a Java implementation of MergeSort. Let me think about how MergeSort works. So, MergeSort is a divide-and-conquer algorithm. It divides the array into two halves, recursively sorts each half, and then merges them back together. The key part is the merge function, which combines two sorted arrays into one sorted array.
+
+First, I should outline the steps. The main method will check if there's more than one element in the array. If not, it's already sorted. Otherwise, find the middle, split into left and right, then merge the sorted left and right.
+
+Wait, how to split the array? Maybe I can create two subarrays each time. For example, in the mergeSort method, find the mid index, then call mergeSort on left half and right half. Then merge them.
+
+Now, the merge function. Let's say I have two sorted arrays, left and right. I need to compare the elements of each and add the smaller one to the result. But in Java, maybe it's easier to pass the original array and the temporary arrays. Or perhaps create helper methods.
+
+Let me think about the parameters. The mergeSort method can take the original array, and then some temporary arrays during the merge step. Alternatively, the standard approach is to have a helper method that takes a subarray defined by start and end indices.
+
+So, maybe the public method is called mergeSort(int[] array), which then calls a private method that does the actual work, passing along the array and the indices.
+
+So, the steps:
+
+1. Public method mergeSort(int[] array) which checks if the array is null or has one element. Then, create a temporary array for merging? Or maybe not. Wait, during merging, perhaps the merge is done into a temporary array and then copied back?
+
+Alternatively, maybe the merge can be done in-place, but that might complicate things. Let me check.
+
+In standard implementations, during the merge step, you split the array into two parts, create temporary arrays for each, then merge them into a third temporary array, then copy back into the original array. So for example, when merging from indexes low to mid and mid to high, create two temp arrays, left and right, then merge into a temp array and copy back.
+
+So, the merge function would take the original array, then the low, mid, high values, create temp arrays, copy the two halves, then merge them back.
+
+Let me sketch the code.
+
+The merge method parameters would be something like:
+
+private static void merge(int[] array, int left, int mid, int right) {
+
+Then, create leftArray from array[left...mid], rightArray from array[mid+1...right]. Then compare elements from leftArray and rightArray, placing them into the original array.
+
+Wait, but maybe the merge function should create a temporary array, fill it with merged elements, then copy back to the original array. Because if you try to merge in-place, you need more complex logic.
+
+Yes, so for example:
+
+In merge:
+
+- Create temp array of size right - left + 1.
+
+- Initialize i to 0 (for leftArray index), j to 0 (rightArray index), k to left (original array index).
+
+- Compare leftArray[i] and rightArray[j], put the smaller into array[k], increment i or j.
+
+- After one of the arrays is exhausted, copy the remaining elements.
+
+Then, copy the temp array back into the original array's positions from left to right.
+
+So, the merge function would need to create a temporary array each time. But creating arrays in Java is straightforward.
+
+So, putting it all together:
+
+The mergeSort method would take parameters array, left, right. If left >= right, return. Else, find mid = (left + right)/2. Then recursively sort left half and right half. Then merge the two halves.
+
+The public method would call mergeSort with left=0 and right=array.length-1.
+
+Let me think about the code structure.
+
+Public class MergeSort {
+
+    public static void mergeSort(int[] array) {
+        if (array == null) {
+            throw new IllegalArgumentException("Array cannot be null.");
+        }
+        mergeSort(array, 0, array.length - 1);
+    }
+
+    private static void mergeSort(int[] array, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int mid = left + (right - left) / 2;
+        mergeSort(array, left, mid);
+        mergeSort(array, mid + 1, right);
+        merge(array, left, mid, right);
+    }
+
+    private static void merge(int[] array, int left, int mid, int right) {
+        // Create temp arrays
+        int leftSize = mid - left + 1;
+        int rightSize = right - mid;
+        int[] leftArray = new int[leftSize];
+        int[] rightArray = new int[rightSize];
+
+        // Copy data to temp arrays
+        for (int i = 0; i < leftSize; i++) {
+            leftArray[i] = array[left + i];
+        }
+        for (int j = 0; j < rightSize; j++) {
+            rightArray[j] = array[mid + 1 + j];
+        }
+
+        // Merge the temp arrays back into array
+        int i = 0, j = 0, k = left;
+        while (i < leftSize && j < rightSize) {
+            if (leftArray[i] <= rightArray[j]) {
+                array[k++] = leftArray[i++];
+            } else {
+                array[k++] = rightArray[j++];
+            }
+        }
+
+        // Copy remaining elements of leftArray if any
+        while (i < leftSize) {
+            array[k++] = leftArray[i++];
+        }
+
+        // Copy remaining elements of rightArray if any
+        while (j < rightSize) {
+            array[k++] = rightArray[j++];
+        }
+    }
+}
+
+Wait, but in Java, the array is passed by reference, so changes in the merge method will affect the original array. So that's correct.
+
+Testing edge cases: when the array is empty, the public method throws an exception? Or no. Wait, the public method checks if array is null, but not if it's empty. Maybe that's okay, because if it's empty, the mergeSort method would have left >= right (since left is 0 and right is -1, but the mergeSort method checks left >= right and returns). So that's okay.
+
+What about when the array has only one element? The mergeSort method is called with left=0 and right=0. The if (left >= right) returns, so no further processing. Which is correct.
+
+Another thing to consider: in the merge function, creating temporary arrays for left and right parts. The mid is calculated as left + (right - left)/2. So for example, if left is 0 and right is 5, mid would be 2 (since (5-0)/2 is 2.5, left + (right - left)/2 is 0 + 2 = 2). Then left part is from 0 to 2, right from 3 to 5.
+
+So when copying to leftArray and rightArray: leftArray is from left to mid (inclusive), so the size is mid - left + 1. Right array is mid+1 to right, so the size is right - mid.
+
+Yes, that's correct.
+
+Now, what about the merge function? Let's take an example. Suppose array is [5, 2, 4, 6, 1, 3]. The first call to mergeSort would split into [5, 2, 4], [6, 1, 3]. Then each is split again, etc. The merging would proceed correctly.
+
+Another thing: in the merge step, when we copy the left and right arrays. For example, if the original array is [3, 2], then during the first split, left is 0, right is 1, mid is 0. LeftArray is [3], rightArray is [2]. Then during merging, compare 3 and 2, put 2 first, then 3. So array becomes [2, 3].
+
+Yes, that should work.
+
+Potential issues: integer overflow when calculating mid? Well, in Java, if left and right are very large, left + (right - left)/2 could be okay. But the standard way is to calculate mid as (left + right)/2. Wait, but for very large numbers, (left + right) might overflow. However, in Java, the merge sort is usually implemented for arrays that are not too big, but if someone wants to avoid that, mid could be calculated as left + (right - left) / 2. Which is what I did here. So that's correct.
+
+Another thing: the merge step copies all elements. So the code seems okay.
+
+Testing the code: perhaps writing a main method for testing. But the user didn't ask for that, but since it's an implementation, maybe adding a test example is useful. However, the user just asked for the implementation. So maybe the code is okay as it is.
+
+What about the exception? The public mergeSort method checks if array is null. But in Java, if the user passes a null array, the for loop in the public method would throw a NullPointerException. But in the code, the public method checks if array is null and throws an IllegalArgumentException. That's a good practice.
+
+So the code seems correct.
+
+Wait, the public method is static. So the class can be called as:
+
+MergeSort.mergeSort(array);
+
+Yes.
+
+So the code should be correct. Let me check again the merge function.
+
+In the merge function, when copying to leftArray and rightArray:
+
+For leftArray, the loop runs from i=0 to leftSize. For each i, array[left + i] is assigned to leftArray[i]. Since leftSize is mid - left + 1. And mid is >= left. So that's correct.
+
+Same for the rightArray. mid + 1 + j: when j ranges from 0 to rightSize-1, the positions are mid+1 to mid + 1 + rightSize - 1 = mid + rightSize. Which should be equal to right. Let's check:
+
+rightSize is right - mid. So mid + rightSize = mid + (right - mid) = right. Correct.
+
+So the code is correct.
+
+I think this is a solid implementation of MergeSort in Java. Now, I can present the code as the answer.
+</think>
+
+Here is a well-structured and efficient implementation of the **MergeSort** algorithm in Java, following standard practices for clarity, correctness, and robustness.
+
+---
+
+### ✅ **Java Implementation of MergeSort**
+
+```java
+public class MergeSort {
+
+    /**
+     * Public method to initiate merge sort on an array.
+     * @param array The array to be sorted.
+     * @throws IllegalArgumentException if the array is null.
+     */
+    public static void mergeSort(int[] array) {
+        if (array == null) {
+            throw new IllegalArgumentException("Array cannot be null.");
+        }
+        mergeSort(array, 0, array.length - 1);
+    }
+
+    /**
+     * Recursively divides the array into halves and sorts them.
+     * @param array The array to sort.
+     * @param left  The starting index of the subarray.
+     * @param right The ending index of the subarray.
+     */
+    private static void mergeSort(int[] array, int left, int right) {
+        if (left >= right) {
+            return; // Base case: subarray of size 0 or 1 is already sorted
+        }
+
+        int mid = left + (right - left) / 2; // Avoids integer overflow
+
+        // Recursively sort both halves
+        mergeSort(array, left, mid);
+        mergeSort(array, mid + 1, right);
+
+        // Merge the sorted halves
+        merge(array, left, mid, right);
+    }
+
+    /**
+     * Merges two sorted subarrays into a single sorted subarray.
+     * @param array The array containing the two sorted subarrays.
+     * @param left  The starting index of the left subarray.
+     * @param mid   The ending index of the left subarray.
+     * @param right The ending index of the right subarray.
+     */
+    private static void merge(int[] array, int left, int mid, int right) {
+        int leftSize = mid - left + 1;
+        int rightSize = right - mid;
+
+        // Create temporary arrays for left and right subarrays
+        int[] leftArray = new int[leftSize];
+        int[] rightArray = new int[rightSize];
+
+        // Copy data into the temporary arrays
+        for (int i = 0; i < leftSize; i++) {
+            leftArray[i] = array[left + i];
+        }
+        for (int j = 0; j < rightSize; j++) {
+            rightArray[j] = array[mid + 1 + j];
+        }
+
+        // Merge the temporary arrays back into the original array
+        int i = 0, j = 0, k = left;
+        while (i < leftSize && j < rightSize) {
+            if (leftArray[i] <= rightArray[j]) {
+                array[k++] = leftArray[i++];
+            } else {
+                array[k++] = rightArray[j++];
+            }
+        }
+
+        // Copy any remaining elements from the left subarray
+        while (i < leftSize) {
+            array[k++] = leftArray[i++];
+        }
+
+        // Copy any remaining elements from the right subarray
+        while (j < rightSize) {
+            array[k++] = rightArray[j++];
+        }
+    }
+
+    // Optional: Main method for testing
+    public static void main(String[] args) {
+        int[] array = {38, 27, 43, 3, 9, 82, 10};
+        mergeSort(array);
+
+        System.out.println("Sorted array:");
+        for (int num : array) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+---
+
+### 🧠 **Key Features and Design Choices**
+
+- **Divide and Conquer Strategy**: The algorithm recursively splits the array into smaller subarrays until each contains a single element.
+- **Merge Operation**: Merges two sorted subarrays using a temporary array, ensuring stability and correctness.
+- **Robust Edge Case Handling**:
+  - Handles `null` inputs by throwing an informative exception.
+  - Handles arrays of size 0 or 1 gracefully.
+- **Avoids Integer Overflow**: Midpoint is calculated as `left + (right - left) / 2` instead of `(left + right) / 2`.
+- **In-Place Merge**: The final merged result is written back into the original array to avoid unnecessary memory overhead.
+
+---
+
+### 🧪 **Example Usage**
+
+Given an input array like `[38, 27, 43, 3, 9, 82, 10]`, the `main` method demonstrates how to use the `mergeSort` function and prints the sorted array.
+
+---
+
+This implementation is efficient with a **time complexity of O(n log n)** in all cases and is **stable**, making it suitable for a wide range of sorting tasks in Java applications.

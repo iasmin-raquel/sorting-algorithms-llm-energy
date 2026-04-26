@@ -1,0 +1,35 @@
+=== BubbleSort | Rodada 1 ===
+  Tokens gerados: 639
+  Arquivo salvo:  BubbleSort_run1.txt
+
+=== BubbleSort | Rodada 2 ===
+  Tokens gerados: 639
+  Arquivo salvo:  BubbleSort_run2.txt
+
+=== BubbleSort | Rodada 3 ===
+  Tokens gerados: 639
+  Arquivo salvo:  BubbleSort_run3.txt
+
+=== BubbleSort | Rodada 4 ===
+  Tokens gerados: 639
+  Arquivo salvo:  BubbleSort_run4.txt
+
+=== BubbleSort | Rodada 5 ===
+  Tokens gerados: 639
+  Arquivo salvo:  BubbleSort_run5.txt
+
+=== Comparação ===
+Pares IDÊNTICOS (10):
+  Run1 == Run2
+  Run1 == Run3
+  Run1 == Run4
+  Run1 == Run5
+  Run2 == Run3
+  Run2 == Run4
+  Run2 == Run5
+  Run3 == Run4
+  Run3 == Run5
+  Run4 == Run5
+
+Pares DIFERENTES (0):
+  Nenhum par diferente.

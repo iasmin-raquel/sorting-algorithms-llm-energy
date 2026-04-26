@@ -1,0 +1,263 @@
+<think>
+Okay, I need to write a MergeSort implementation in Java, following the same style as the given InsertionSort example. Let me think about how MergeSort works. MergeSort is a divide-and-conquer algorithm. It divides the array into two halves, sorts each half, and then merges them back together. 
+
+First, the structure of the InsertionSort example has a class named after the algorithm with a static sort method and a main method to test it. So I should create a MergeSort class with similar structure.
+
+The MergeSort's sort method will probably need to call a merge function. Let me recall the steps. The sort method will recursively split the array into two halves until they are single elements, then merge them. But since Java passes parameters by value, modifying the array in the merge method will affect the original array.
+
+Wait, in Java, arrays are objects, so when you pass them to a method, you're passing a reference. So changes to the array elements in the merge method will be reflected in the original array. 
+
+So the mergeSort method might need to take the array, along with start and end indices to sort a subarray. Alternatively, maybe I can have a helper method that does the recursive splitting. Let me think. The initial sort method could call mergeSort with 0 and arr.length - 1 as the indices. Or maybe create a helper method that takes the array and the indices. 
+
+Wait, the given InsertionSort's sort method is static, so MergeSort's should be similar. Let me outline:
+
+In the MergeSort class, the sort method is static. Inside that, perhaps we need to call mergeSort with the array, start, and end. But since Java arrays are mutable, we can pass them around. However, the merge function will need to merge two sorted subarrays. 
+
+Let me sketch the steps. The mergeSort function would split the array into two halves, call mergeSort on each, then merge them. The merge function will need temporary arrays, merge the two sorted halves into a temporary array, then copy back to the original array.
+
+So here's the plan:
+
+1. In MergeSort class, have a public static sort method that takes an int[] arr.
+
+2. Inside sort, check if the array is null or has less than two elements (base case). Then call a helper function to perform the merge sort.
+
+Wait, perhaps the helper function will be a recursive function. For example:
+
+public static void sort(int[] arr) {
+    mergeSort(arr, 0, arr.length - 1);
+}
+
+Then the helper function mergeSort(int[] arr, int left, int right) which does the recursive splitting.
+
+Then, when left < right, find mid, call mergeSort on left to mid, mid+1 to right, then merge.
+
+The merge function will take the array, left, mid, right. It will split into two subarrays: left to mid, and mid+1 to right. Then merge them.
+
+So how to implement the merge?
+
+The standard approach is to create temporary arrays for the left and right subarrays. Copy the elements from the original array into these temp arrays. Then compare elements from each temp array and put them back into the original array in order.
+
+Let me think about the steps for merging:
+
+Given array: [ ... left half ... | ... right half ... ] 
+
+Left half is from left to mid, right is mid+1 to right.
+
+Create tempLeft array of size (mid - left + 1), tempRight array of size (right - mid).
+
+Copy elements from arr[left...mid] to tempLeft, and arr[mid+1 ... right] to tempRight.
+
+Then, merge the temp arrays back into arr[left...right].
+
+Initialize indices: i for left array (starting at 0), j for right array (starting at 0), k for original array (starting at left).
+
+Compare tempLeft[i] and tempRight[j], take the smaller one and put into arr[k], incrementing the respective i or j and k. Continue until one of the temp arrays is exhausted. Then copy the remaining elements from the other array.
+
+Wait, but in Java, we can do this with loops. Let me code that.
+
+Now, for the merge function: perhaps a helper method called merge(int[] arr, int left, int mid, int right).
+
+So putting it all together:
+
+public class MergeSort {
+    public static void sort(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        mergeSort(arr, 0, arr.length - 1);
+    }
+
+    private static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            merge(arr, left, mid, right);
+        }
+    }
+
+    private static void merge(int[] arr, int left, int mid, int right) {
+        // create temp arrays
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+        int[] leftArray = new int[n1];
+        int[] rightArray = new int[n2];
+
+        // copy data to temp arrays
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = arr[left + i];
+        }
+        for (int j = 0; j < n2; j++) {
+            rightArray[j] = arr[mid + 1 + j];
+        }
+
+        // merge the temp arrays
+        int i = 0, j = 0;
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (leftArray[i] <= rightArray[j]) {
+                arr[k++] = leftArray[i++];
+            } else {
+                arr[k++] = rightArray[j++];
+            }
+        }
+
+        // copy remaining elements of leftArray if any
+        while (i < n1) {
+            arr[k++] = leftArray[i++];
+        }
+
+        // copy remaining elements of rightArray if any
+        while (j < n2) {
+            arr[k++] = rightArray[j++];
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6, 7};
+        sort(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+
+Wait, but in the original InsertionSort example, the main method uses {12, 11, 13, 5, 6} as input and outputs them sorted. For testing MergeSort, maybe I should use a similar test case. Let me check. The original example's main method uses {12, 11, 13, 5, 6} and outputs 5 6 11 12 13. For MergeSort, perhaps the same array. Let me make sure that the merge function works correctly.
+
+Another thing: in the merge function, using mid = left + (right - left)/2 to avoid possible overflow. But in Java, integer division of (left + right)/2 is same as left + (right - left)/2 if left and right are positive. But the former can overflow for very large arrays. However, since the problem is following the same style, perhaps it's acceptable. But to be safe, maybe better to use mid = (left + right) / 2. However, the standard MergeSort implementations often use mid = left + (right - left)/2. Let me check.
+
+In the original code, perhaps the style uses (left + right)/2. But since left and right are indices, perhaps for Java, it's okay. Well, for the purpose of this exercise, I think either way is acceptable. Let me proceed with mid = (left + right) / 2.
+
+Wait, in the code I wrote above, the code is:
+
+int mid = left + (right - left) / 2;
+
+But in Java, integer division. For example, if left is 0 and right is 5, mid is 0 + (5-0)/2 = 2 (since (5)/2 is 2 in integer division). So for array indexes 0 to 5 (6 elements), mid is 2, splitting into 0-2 and 3-5. Correct.
+
+But maybe in code examples, people often write (left + right) / 2. But for Java, the two approaches are same. So perhaps in the code, I can write as (left + right) / 2.
+
+But for safety, perhaps better to use left + (right - left)/2. Let me keep it as is.
+
+Now, the code structure: the main method calls sort(arr), which then calls mergeSort with 0 and arr.length-1. The mergeSort splits and merges.
+
+Testing the code with the same example as InsertionSort. The original example uses {12, 11, 13, 5, 6}, which has 5 elements. Let's see how merge sort would process that.
+
+First, the array indexes are 0 to 4. mid is (0+4)/2 = 2. So first left is 0-2 [12,11,13], right is 3-4 [5,6]. Then recursively sort left and right, then merge.
+
+But let me think: the merge function for that case would split until single elements. Let me not get into details, but the code should sort correctly.
+
+Now, in the main method, I can use the same array as the original example. Let me adjust the test array. The original example uses {12, 11, 13, 5, 6}; MergeSort should sort it correctly. Let me check.
+
+But perhaps in the code I wrote earlier, in the main method, I have {12, 11, 13, 5, 6, 7}, which is 6 elements. Let me change it to the same as original for consistency. So:
+
+public static void main(String[] args) {
+    int[] arr = {12, 11, 13, 5, 6};
+    sort(arr);
+    for (int num : arr) {
+        System.out.print(num + " ");
+    }
+}
+
+This should output 5 6 11 12 13.
+
+Now, check if the code is following the same structure as the InsertionSort example. The class is named MergeSort, with a static sort method, and a main method that tests it. The code uses the same style: for loops, variable names, etc.
+
+Another thing: in Java, the code should handle the array correctly. The merge function creates temporary arrays, copies data, then merges back. All looks correct.
+
+Potential issues: when the array length is 0 or 1. The sort method returns early if the array is null or empty? Wait, no. The current sort method checks if arr is null or length 0? Let me check:
+
+public static void sort(int[] arr) {
+    if (arr == null || arr.length == 0) {
+        return;
+    }
+    mergeSort(arr, 0, arr.length - 1);
+}
+
+But if the array has length 1, then left and right are same, so mergeSort does nothing. So that's correct.
+
+Another thing: in the mergeSort method, when left < right, proceed. So for a single element array, left == right, so no splitting. Correct.
+
+Now, possible code improvements: perhaps the merge can be optimized, but for the purpose of the exercise, standard implementation is acceptable.
+
+So the code should be correct. Now, write the code accordingly.
+</think>
+
+Here's a well-structured implementation of the **MergeSort** algorithm in Java, following the same style and structure as the provided InsertionSort example:
+
+---
+
+```java
+public class MergeSort {
+    public static void sort(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        mergeSort(arr, 0, arr.length - 1);
+    }
+
+    private static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            merge(arr, left, mid, right);
+        }
+    }
+
+    private static void merge(int[] arr, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        int[] leftArray = new int[n1];
+        int[] rightArray = new int[n2];
+
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = arr[left + i];
+        }
+        for (int j = 0; j < n2; j++) {
+            rightArray[j] = arr[mid + 1 + j];
+        }
+
+        int i = 0, j = 0, k = left;
+
+        while (i < n1 && j < n2) {
+            if (leftArray[i] <= rightArray[j]) {
+                arr[k++] = leftArray[i++];
+            } else {
+                arr[k++] = rightArray[j++];
+            }
+        }
+
+        while (i < n1) {
+            arr[k++] = leftArray[i++];
+        }
+
+        while (j < n2) {
+            arr[k++] = rightArray[j++];
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6};
+        sort(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+---
+
+### ✅ Key Features
+
+- **Class Structure**: The class is named `MergeSort`, with a `main` method for testing and a static `sort` method to perform sorting.
+- **Recursive Sorting**: The `mergeSort` method divides the array into two halves recursively.
+- **Merge Functionality**: The `merge` method merges two sorted subarrays into a single sorted array.
+- **Safe Indexing**: Uses `mid = left + (right - left) / 2` to avoid integer overflow.
+- **Edge Case Handling**: Handles null or empty arrays gracefully in the `sort` method.
+- **Consistent Testing**: The `main` method uses the same sample input `{12, 11, 13, 5, 6}` as in the InsertionSort example and prints the sorted result.
+
+---
+
+This implementation is efficient and adheres closely to the standard divide-and-conquer strategy of MergeSort, while maintaining a clean and readable structure consistent with the example provided.

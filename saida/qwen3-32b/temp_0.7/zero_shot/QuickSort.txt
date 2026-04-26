@@ -1,0 +1,321 @@
+<think>
+Okay, I need to write a good implementation of QuickSort in Java. Let me think about how to approach this.
+
+First, I remember that QuickSort is a divide-and-conquer algorithm. It works by selecting a 'pivot' element from the array and partitioning the array into two sub-arrays: elements less than the pivot and elements greater than the pivot. Then it recursively sorts the sub-arrays.
+
+So the main steps are: choose a pivot, partition the array, and then recurse on the partitions. But how to choose the pivot? Common strategies are first element, last element, middle element, or a random element. Choosing a bad pivot, like already sorted data, can lead to O(n²) performance. Maybe using a random pivot would help avoid worst-case scenarios. Or maybe the middle element as a balance between performance and simplicity.
+
+Wait, maybe the median-of-three method is better to avoid worst-case scenarios. But that might complicate things. For simplicity, perhaps I'll start with selecting the last element as the pivot. It's straightforward, but if the input is already sorted, it's bad. However, for the purpose of this implementation, maybe that's acceptable unless the user expects handling all cases efficiently.
+
+Next, the partitioning. I need to rearrange the array so that elements less than the pivot come before elements greater than the pivot. The standard approach uses two pointers, one starting from the left and one from the right. For example, in the Lomuto partition scheme, we pick a pivot, partition the array, and return the index of the pivot. But the Lomuto scheme can be less efficient because it swaps more often. Alternatively, the Hoare partition is more efficient.
+
+Wait, let me recall. The Lomuto partition is easier to implement but less efficient in terms of the number of swaps. Let me think about how to code it. Let's say the pivot is the last element. We have an index i initialized to low - 1. For each element j from low to high - 1, if the current element is less than the pivot, increment i and swap elements at i and j. At the end, swap the pivot (element at high) with the element at i + 1. Then return the partition index.
+
+But maybe I should go with the standard approach here. Let's outline the steps:
+
+The QuickSort function will be recursive. It takes an array, a low index, and a high index. If low is less than high, then partition the array, and recursively sort the left and right parts.
+
+For the partition function, using the Lomuto scheme. Let me try writing that.
+
+Let me sketch the code structure.
+
+public static void quickSort(int[] arr, int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+Then the partition function:
+
+private static int partition(int[] arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr, i, j);
+        }
+    }
+    swap(arr, i + 1, high);
+    return i + 1;
+}
+
+But here, the pivot is the last element. This is the Lomuto scheme. However, this might not be the most optimal. Also, when there are many duplicate elements, maybe the partition can be improved. But for a standard implementation, this is okay.
+
+Wait, but in the case of many duplicates, this works as expected, putting elements less than pivot on the left, and greater on the right. Duplicates can be on either side since the condition is arr[j] < pivot. So duplicates would not trigger a swap unless there's an element smaller than them.
+
+But what about stability? Well, QuickSort is not stable, so that's fine.
+
+Now, the swap function would be a helper:
+
+private static void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+So putting it all together. But wait, what about the initial call? The user would have to call quickSort(arr, 0, arr.length - 1).
+
+But maybe I should create a public method that takes just the array, and then calls the internal method with the indices.
+
+So perhaps:
+
+public static void quickSort(int[] arr) {
+    quickSort(arr, 0, arr.length - 1);
+}
+
+Which is then the entry point.
+
+But the problem here is that the standard Lomuto partition chooses the last element as pivot. For already sorted arrays, this leads to O(n²) time. To improve this, maybe we can choose a random pivot. Let me think how to modify the partition function for that.
+
+Alternatively, to make the algorithm more efficient for sorted arrays, perhaps using a random pivot. For example, selecting a random element as the pivot, swapping it with the high element, and proceeding as before.
+
+So modifying the partition function:
+
+private static int partition(int[] arr, int low, int high) {
+    Random rand = new Random();
+    int pivotIndex = low + rand.nextInt(high - low + 1);
+    swap(arr, pivotIndex, high); // move pivot to end
+    int pivot = arr[high];
+    ...
+}
+
+But then the partition method needs access to random. But using a random pivot would make the algorithm more robust against worst-case scenarios. So perhaps that's better.
+
+So integrating that into the code.
+
+But then, if I use a random pivot, the code becomes slightly more complex, but it's better for performance.
+
+Let me adjust the code:
+
+In the partition method:
+
+private static int partition(int[] arr, int low, int high) {
+    // Choose a random pivot index and swap with high
+    Random rand = new Random();
+    int pivotIndex = low + rand.nextInt(high - low + 1);
+    swap(arr, pivotIndex, high);
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr, i, j);
+        }
+    }
+    swap(arr, i + 1, high);
+    return i + 1;
+}
+
+This way, the pivot is randomly chosen. This would make the worst-case scenario less likely, leading to O(n log n) expected time.
+
+But what about the Random object? Creating a new one each time might not be efficient, but for the scope of a partition function, it's acceptable. Alternatively, maybe pass it in or have it created once. But for code simplicity, creating a new Random each time is okay? Well, technically, it's better to seed it properly. However, in a real-world scenario, perhaps it's better to pass a Random instance, but for the purposes of this code, maybe the code as written is acceptable.
+
+Another thing to consider: when the array is small, like size 1 or 0, the quickSort method does nothing. That's handled by the base case (low < high).
+
+Another optimization is to switch to insertion sort for small arrays, but that's probably beyond the scope of a standard QuickSort implementation.
+
+What about handling duplicate elements? The current code should handle them, as the partitioning puts all elements less than the pivot to the left, and the rest to the right. Duplicates can be on either side.
+
+Testing the code: For example, if the array is [5, 3, 8, 4], the first pivot would be random. Let's say it selects 4. Then partitioning would put elements less than 4 on the left, etc.
+
+Now, putting all the code together.
+
+Wait, also, the code needs to be in Java. So the classes and methods need to be properly structured. But since the user didn't specify a class structure, perhaps just write the methods as static methods in a class.
+
+But for the answer, maybe present a complete Java class with a main method for testing.
+
+So here's the plan:
+
+- Create a class QuickSort with a main method.
+- The quickSort method is called via the helper methods.
+
+But the user may not need a class structure, but just the code. Let me write the code as a set of methods.
+
+Alternatively, since Java requires methods to be inside classes, perhaps present a sample code with a main method.
+
+But the user just asked for the implementation of QuickSort. So here's the code:
+
+public class QuickSortExample {
+    public static void main(String[] args) {
+        int[] arr = {5, 3, 8, 4, 2};
+        quickSort(arr, 0, arr.length - 1);
+        // or use the single-argument method
+    }
+
+    public static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+
+    private static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        Random rand = new Random();
+        int pivotIndex = low + rand.nextInt(high - low + 1);
+        swap(arr, pivotIndex, high);
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+        swap(arr, i + 1, high);
+        return i + 1;
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
+
+But wait, in the main method, perhaps the user would call the public method quickSort with just the array. So adding the public method that takes the array.
+
+But in the code above, the public method is 'quickSort(int[])' which then calls the private method with low and high.
+
+Yes.
+
+But what about the case when the array is empty or null? Probably, the code should check for that. However, for the purposes of this question, maybe it's not necessary, unless the user expects robust error handling. But since the question is about the implementation of QuickSort, perhaps that's beyond the scope.
+
+Another thing: the Random object is created each time the partition method is called. That's okay, but perhaps less efficient than reusing a Random instance. However, for code simplicity, it's acceptable.
+
+Testing this code. Let's imagine an example. Let's say arr is [5, 3, 8, 4, 2]. The first call to partition would choose a random pivot. Suppose it picks 4 (index 3). Then swap with high (which is 4, value 2). Wait no, the pivotIndex is selected between low and high. Wait, in the code, pivotIndex is selected as low + rand... Then swapped with high. Then the pivot is arr[high], which is now the previously selected pivot value.
+
+Yes. So regardless of where the pivot was, it's moved to the high index, then the rest proceeds as in the Lomuto scheme.
+
+This should work.
+
+Another thing: the swap function is called twice in the partition method. Once during the partitioning steps, and once after the loop to swap the pivot into place.
+
+Now, what about the time and space complexity? Time is O(n log n) average case, O(n²) worst case. Space is O(log n) due to recursion stack.
+
+But with the random pivot, the worst case is highly unlikely, so in practice, this QuickSort is efficient.
+
+Another optimization is to make the algorithm iterative to avoid recursion stack issues, but that's more complex. The standard recursive approach is acceptable for most purposes.
+
+So this seems like a solid implementation. Let me check for any possible errors.
+
+In the partition method, when high == low, the for loop doesn't execute (since j goes up to high - 1). Then, i remains low - 1 (which is -1?), no. Let's take an example where low and high are the same. But in that case, the quickSort method would not be called since low is not less than high. Because the partition is called only when low < high. So the partition method is called with low <= high, but in the case where low == high, the for loop runs from j = low to high - 1, which is j from low to low - 1, which doesn't run. Then, i is -1 (if low is 0, say). Then swap the pivot (which is the element at high, same as low) with i+1 (0). So swap(arr, 0, high (which is same as low)), which does nothing. Then returns 0. So the partition index is 0. Then the quickSort would call for low to pi-1 ( -1 to 0, but since low is 0 and pi-1 is -1, the next quickSort would not be called. And for pi+1 to high (0 to 0). So that's correct.
+
+Another test case: array of two elements. Let's say [3, 2]. Partition is called with low=0, high=1. Random pivot index is 0 or 1. Suppose it's 0, swap with high (so array becomes [3, 2] if pivotIndex is 1. Wait no, if pivotIndex is 0 (low is 0, high is 1), pivotIndex is 0 + rand... Well, low is 0, high is 1. high - low + 1 is 2. So rand.nextInt(2) is 0 or 1. So pivotIndex is 0 or 1. Suppose pivotIndex is 0. Then swap with high (1). Now the array becomes [2, 3]. pivot is 3. Then i starts at -1. j runs from 0 to 0 (since high is 1). For j=0, arr[j] is 2 < 3. i increments to 0, swap arr[0] with itself. Then after loop, swap arr[i+1]=1 with high (1). So swaps 3 with 3. The array is [2, 3], and returns 1. Then the left part is 0 to 0 (already sorted), and right part is 2 to 1 (invalid). So correct.
+
+Another case: pivotIndex is 1. Then swap with high (1) does nothing. pivot is 3. Then i starts at -1. j runs from 0 to 1-1=0. j=0, arr[j]=3 < pivot (3)? No. So loop ends. Then swap i+1 (0) with high (1). So swap arr[0] and arr[1], resulting in [2,3]. returns 0. Then the left part is 0 to -1 (nothing) and right is 1 to 1. Correct.
+
+So the code works for two elements.
+
+Another test case: [5, 4, 3, 2, 1]. Let's see with random pivots. But since pivots are random, it's hard to predict. But the code should sort it eventually.
+
+So this code seems correct.
+
+Potential issues: creating a new Random object each time. In Java, creating a new Random each time might not be the best practice, but it's acceptable for this implementation. Alternatively, if the partition is called many times, it could be better to pass a single Random instance. But for simplicity, the code as written is okay.
+
+Another thing: the swap method does not check if i and j are within the array bounds. But in the context of the code, it's called with valid indices, so no problem.
+
+Thus, this should be a solid implementation of QuickSort in Java with random pivot selection for better performance.
+</think>
+
+Here is a well-structured and efficient implementation of the **QuickSort** algorithm in **Java**, with the following features:
+
+- **Random pivot selection** to avoid worst-case performance on already sorted or nearly sorted inputs.
+- **Recursive divide-and-conquer approach** for simplicity and clarity.
+- **Proper handling of edge cases**, such as empty or single-element arrays.
+- **In-place sorting**, minimizing memory usage.
+- **Entry point method** for easy usage by users.
+
+---
+
+### ✅ Java Implementation of QuickSort
+
+```java
+import java.util.Random;
+
+public class QuickSort {
+
+    // Public method to initiate QuickSort
+    public static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+
+    // Recursive QuickSort implementation
+    private static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            // Partition the array and get the pivot index
+            int pivotIndex = partition(arr, low, high);
+
+            // Recursively sort elements before and after the pivot
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    // Partition method using a random pivot
+    private static int partition(int[] arr, int low, int high) {
+        // Randomly select a pivot index
+        Random rand = new Random();
+        int pivotIndex = low + rand.nextInt(high - low + 1);
+
+        // Move the pivot to the end for ease of partitioning
+        swap(arr, pivotIndex, high);
+
+        int pivot = arr[high]; // Pivot value
+        int i = low - 1; // Index of smaller element
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+
+        // Place the pivot in its correct position
+        swap(arr, i + 1, high);
+
+        return i + 1; // Return the pivot index
+    }
+
+    // Helper method to swap two elements in the array
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    // Main method to test the QuickSort implementation
+    public static void main(String[] args) {
+        int[] arr = {5, 3, 8, 4, 2, 7, 1, 10};
+
+        System.out.println("Original array:");
+        printArray(arr);
+
+        quickSort(arr);
+
+        System.out.println("Sorted array:");
+        printArray(arr);
+    }
+
+    // Helper method to print array
+    private static void printArray(int[] arr) {
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+}
+```
+
+---
+
+### 🔍 Key Design Choices Explained
+
+- **Random

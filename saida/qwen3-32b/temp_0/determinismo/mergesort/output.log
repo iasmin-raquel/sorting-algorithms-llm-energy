@@ -1,0 +1,116 @@
+=== MergeSort | Rodada 1 ===
+  Tokens gerados: 835
+  Arquivo salvo:  MergeSort_run1.txt
+
+=== MergeSort | Rodada 2 ===
+  Tokens gerados: 868
+  Arquivo salvo:  MergeSort_run2.txt
+
+=== MergeSort | Rodada 3 ===
+  Tokens gerados: 834
+  Arquivo salvo:  MergeSort_run3.txt
+
+=== MergeSort | Rodada 4 ===
+  Tokens gerados: 846
+  Arquivo salvo:  MergeSort_run4.txt
+
+=== MergeSort | Rodada 5 ===
+  Tokens gerados: 871
+  Arquivo salvo:  MergeSort_run5.txt
+
+=== Comparação ===
+Pares IDÊNTICOS (0):
+  Nenhum par idêntico.
+
+Pares DIFERENTES (10):
+  Run1 != Run2: 17 linha(s) divergem, 1 linha(s) a mais/menos.
+    Linha 105:
+      Run1: - **Time Complexity**: O(n log n) in all cases (best, average, worst).
+      Run2: - **`mergeSort(int[] array, int left, int right)`**: Recursively splits the array into halves until each subarray has one element.
+    Linha 106:
+      Run1: - **Space Complexity**: O(n) due to the temporary arrays used during the merge.
+      Run2: - **`merge(int[] array, int left, int mid, int right)`**: Merges two sorted subarrays into one sorted array.
+    Linha 107:
+      Run1: - **Stability**: Merge Sort is a **stable** sorting algorithm.
+      Run2: - **`printArray(int[] array)`**: A helper method to print the contents of the array.
+  Run1 != Run3: 75 linha(s) divergem, 5 linha(s) a mais/menos.
+    Linha 1:
+      Run1: Certainly! Below is a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+      Run3: Certainly! Here's a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+    Linha 5:
+      Run1: - A `main` method to demonstrate the sorting functionality.
+      Run3: - A `main` method to demonstrate usage.
+    Linha 41:
+      Run1:     // First subarray is array[left..mid]
+      Run3:     public static void merge(int[] array, int left, int mid, int right) {
+  Run1 != Run4: 74 linha(s) divergem, 5 linha(s) a mais/menos.
+    Linha 1:
+      Run1: Certainly! Below is a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+      Run4: Certainly! Here's a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+    Linha 41:
+      Run1:     // First subarray is array[left..mid]
+      Run4:     public static void merge(int[] array, int left, int mid, int right) {
+    Linha 42:
+      Run1:     // Second subarray is array[mid+1..right]
+      Run4:         // Find sizes of two subarrays to be merged
+  Run1 != Run5: 17 linha(s) divergem, 1 linha(s) a mais/menos.
+    Linha 105:
+      Run1: - **Time Complexity**: O(n log n) in all cases (best, average, worst).
+      Run5: - **`mergeSort(int[] array, int left, int right)`**: Recursively splits the array into halves until each subarray has one element.
+    Linha 106:
+      Run1: - **Space Complexity**: O(n) due to the temporary arrays used during the merge.
+      Run5: - **`merge(int[] array, int left, int mid, int right)`**: Merges two sorted subarrays into one sorted array.
+    Linha 107:
+      Run1: - **Stability**: Merge Sort is a **stable** sorting algorithm.
+      Run5: - **`printArray(int[] array)`**: A helper method to print the contents of the array.
+  Run2 != Run3: 76 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 1:
+      Run2: Certainly! Below is a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+      Run3: Certainly! Here's a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+    Linha 5:
+      Run2: - A `main` method to demonstrate the sorting functionality.
+      Run3: - A `main` method to demonstrate usage.
+    Linha 41:
+      Run2:     // First subarray is array[left..mid]
+      Run3:     public static void merge(int[] array, int left, int mid, int right) {
+  Run2 != Run4: 75 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 1:
+      Run2: Certainly! Below is a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+      Run4: Certainly! Here's a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+    Linha 41:
+      Run2:     // First subarray is array[left..mid]
+      Run4:     public static void merge(int[] array, int left, int mid, int right) {
+    Linha 42:
+      Run2:     // Second subarray is array[mid+1..right]
+      Run4:         // Find sizes of two subarrays to be merged
+  Run2 != Run5: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 122:
+      Run2: This implementation is **stable**, **efficient (O(n log n))**, and suitable for sorting large datasets. Let me know if you'd like a version that uses generics or handles objects!
+      Run5: This implementation is **stable**, **efficient (O(n log n))**, and suitable for sorting large datasets. Let me know if you'd like a version that uses generics or handles `Comparable` types!
+  Run3 != Run4: 2 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 5:
+      Run3: - A `main` method to demonstrate usage.
+      Run4: - A `main` method to demonstrate the sorting functionality.
+    Linha 116:
+      Run3: This implementation is **stable**, **efficient** (O(n log n) time complexity), and **easy to understand**. Let me know if you'd like a version that uses generics or handles `Comparable` types!
+      Run4: This implementation is **stable**, **efficient (O(n log n))**, and follows the **divide-and-conquer** strategy of merge sort. Let me know if you'd like a version that uses generics or handles `Object[]` arrays instead of `int[]`.
+  Run3 != Run5: 76 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 1:
+      Run3: Certainly! Here's a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+      Run5: Certainly! Below is a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+    Linha 5:
+      Run3: - A `main` method to demonstrate usage.
+      Run5: - A `main` method to demonstrate the sorting functionality.
+    Linha 41:
+      Run3:     public static void merge(int[] array, int left, int mid, int right) {
+      Run5:     // First subarray is array[left..mid]
+  Run4 != Run5: 75 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 1:
+      Run4: Certainly! Here's a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+      Run5: Certainly! Below is a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+    Linha 41:
+      Run4:     public static void merge(int[] array, int left, int mid, int right) {
+      Run5:     // First subarray is array[left..mid]
+    Linha 42:
+      Run4:         // Find sizes of two subarrays to be merged
+      Run5:     // Second subarray is array[mid+1..right]

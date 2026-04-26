@@ -1,4 +1,5 @@
 import os
+import time
 from groq import Groq
 from codecarbon import EmissionsTracker
 
@@ -20,6 +21,7 @@ tracker = EmissionsTracker(
     log_level="error"
 )
 
+inicio = time.time()
 tracker.start()
 completion = client.chat.completions.create(
     model="qwen/qwen3-32b",
@@ -31,10 +33,11 @@ completion = client.chat.completions.create(
     stream=False,
 )
 emissoes = tracker.stop()
+duracao = time.time() - inicio
 
 with open(os.path.join(SAIDA_DIR, "QuickSort.txt"), "w", encoding="utf-8") as f:
     f.write(completion.choices[0].message.content)
 
 print(f"  Tokens gerados: {completion.usage.completion_tokens}")
-print(f"  Duração:        {tracker.final_emissions_data.duration:.2f}s")
+print(f"  Duração:        {duracao:.2f}s")
 print(f"  CO₂ emitido:    {emissoes:.6f} kg")

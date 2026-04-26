@@ -1,0 +1,110 @@
+=== QuickSort | Rodada 1 ===
+  Tokens gerados: 926
+  Arquivo salvo:  QuickSort_run1.txt
+
+=== QuickSort | Rodada 2 ===
+  Tokens gerados: 902
+  Arquivo salvo:  QuickSort_run2.txt
+
+=== QuickSort | Rodada 3 ===
+  Tokens gerados: 892
+  Arquivo salvo:  QuickSort_run3.txt
+
+=== QuickSort | Rodada 4 ===
+  Tokens gerados: 892
+  Arquivo salvo:  QuickSort_run4.txt
+
+=== QuickSort | Rodada 5 ===
+  Tokens gerados: 924
+  Arquivo salvo:  QuickSort_run5.txt
+
+=== Comparação ===
+Pares IDÊNTICOS (0):
+  Nenhum par idêntico.
+
+Pares DIFERENTES (10):
+  Run1 != Run2: 19 linha(s) divergem, 1 linha(s) a mais/menos.
+    Linha 86:
+      Run1:         for (int i : arr) {
+      Run2:         for (int i = 0; i < arr.length; i++) {
+    Linha 87:
+      Run1:             System.out.print(i + " ");
+      Run2:             System.out.print(arr[i] + " ");
+    Linha 96:
+      Run1: 1.  The `quickSort` method takes an array of integers as input and calls the recursive `quickSort` method with the starting and ending indices of the array.
+      Run2: 1.  The `quickSort` method takes an array of integers as input and calls the overloaded `quickSort` method with the starting and ending indices of the array.
+  Run1 != Run3: 18 linha(s) divergem, 1 linha(s) a mais/menos.
+    Linha 81:
+      Run1:      * Prints the elements of the array.
+      Run3:      * Prints the elements of an array.
+    Linha 96:
+      Run1: 1.  The `quickSort` method takes an array of integers as input and calls the recursive `quickSort` method with the starting and ending indices of the array.
+      Run3: 1.  The `quickSort` method takes an array of integers as input and calls the overloaded `quickSort` method with the starting and ending indices of the array.
+    Linha 97:
+      Run1: 2.  The recursive `quickSort` method checks if the sub-array has more than one element. If it does, it calls the `partition` method to partition the array around a pivot element.
+      Run3: 2.  The overloaded `quickSort` method recursively sorts the sub-arrays by selecting a pivot element, partitioning the array around the pivot, and recursively sorting the sub-arrays.
+  Run1 != Run4: 17 linha(s) divergem, 1 linha(s) a mais/menos.
+    Linha 96:
+      Run1: 1.  The `quickSort` method takes an array of integers as input and calls the recursive `quickSort` method with the starting and ending indices of the array.
+      Run4: 1.  The `quickSort` method takes an array of integers as input and calls the overloaded `quickSort` method with the starting and ending indices of the array.
+    Linha 97:
+      Run1: 2.  The recursive `quickSort` method checks if the sub-array has more than one element. If it does, it calls the `partition` method to partition the array around a pivot element.
+      Run4: 2.  The overloaded `quickSort` method recursively sorts the sub-arrays by selecting a pivot element, partitioning the array around the pivot, and recursively sorting the sub-arrays.
+    Linha 98:
+      Run1: 3.  The `partition` method selects the last element of the sub-array as the pivot and partitions the other elements around it. It returns the index of the pivot element.
+      Run4: 3.  The `partition` method partitions the array around a pivot element by iterating through the array and swapping elements that are less than the pivot to the left of the pivot.
+  Run1 != Run5: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 99:
+      Run1: 4.  The recursive `quickSort` method then calls itself on the sub-arrays to the left and right of the pivot element.
+      Run5: 4.  The recursive `quickSort` method calls itself to sort the sub-arrays on either side of the pivot element.
+  Run2 != Run3: 3 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 81:
+      Run2:      * Prints the elements of the array.
+      Run3:      * Prints the elements of an array.
+    Linha 86:
+      Run2:         for (int i = 0; i < arr.length; i++) {
+      Run3:         for (int i : arr) {
+    Linha 87:
+      Run2:             System.out.print(arr[i] + " ");
+      Run3:             System.out.print(i + " ");
+  Run2 != Run4: 2 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 86:
+      Run2:         for (int i = 0; i < arr.length; i++) {
+      Run4:         for (int i : arr) {
+    Linha 87:
+      Run2:             System.out.print(arr[i] + " ");
+      Run4:             System.out.print(i + " ");
+  Run2 != Run5: 19 linha(s) divergem, 1 linha(s) a mais/menos.
+    Linha 86:
+      Run2:         for (int i = 0; i < arr.length; i++) {
+      Run5:         for (int i : arr) {
+    Linha 87:
+      Run2:             System.out.print(arr[i] + " ");
+      Run5:             System.out.print(i + " ");
+    Linha 96:
+      Run2: 1.  The `quickSort` method takes an array of integers as input and calls the overloaded `quickSort` method with the starting and ending indices of the array.
+      Run5: 1.  The `quickSort` method takes an array of integers as input and calls the recursive `quickSort` method with the starting and ending indices of the array.
+  Run3 != Run4: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 81:
+      Run3:      * Prints the elements of an array.
+      Run4:      * Prints the elements of the array.
+  Run3 != Run5: 18 linha(s) divergem, 1 linha(s) a mais/menos.
+    Linha 81:
+      Run3:      * Prints the elements of an array.
+      Run5:      * Prints the elements of the array.
+    Linha 96:
+      Run3: 1.  The `quickSort` method takes an array of integers as input and calls the overloaded `quickSort` method with the starting and ending indices of the array.
+      Run5: 1.  The `quickSort` method takes an array of integers as input and calls the recursive `quickSort` method with the starting and ending indices of the array.
+    Linha 97:
+      Run3: 2.  The overloaded `quickSort` method recursively sorts the sub-arrays by selecting a pivot element, partitioning the array around the pivot, and recursively sorting the sub-arrays.
+      Run5: 2.  The recursive `quickSort` method checks if the sub-array has more than one element. If it does, it calls the `partition` method to partition the array around a pivot element.
+  Run4 != Run5: 17 linha(s) divergem, 1 linha(s) a mais/menos.
+    Linha 96:
+      Run4: 1.  The `quickSort` method takes an array of integers as input and calls the overloaded `quickSort` method with the starting and ending indices of the array.
+      Run5: 1.  The `quickSort` method takes an array of integers as input and calls the recursive `quickSort` method with the starting and ending indices of the array.
+    Linha 97:
+      Run4: 2.  The overloaded `quickSort` method recursively sorts the sub-arrays by selecting a pivot element, partitioning the array around the pivot, and recursively sorting the sub-arrays.
+      Run5: 2.  The recursive `quickSort` method checks if the sub-array has more than one element. If it does, it calls the `partition` method to partition the array around a pivot element.
+    Linha 98:
+      Run4: 3.  The `partition` method partitions the array around a pivot element by iterating through the array and swapping elements that are less than the pivot to the left of the pivot.
+      Run5: 3.  The `partition` method selects the last element of the sub-array as the pivot and partitions the other elements around it. It returns the index of the pivot element.

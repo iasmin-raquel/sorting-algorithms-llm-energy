@@ -1,0 +1,103 @@
+=== BubbleSort | Rodada 1 ===
+  Tokens gerados: 566
+  Arquivo salvo:  BubbleSort_run1.txt
+
+=== BubbleSort | Rodada 2 ===
+  Tokens gerados: 573
+  Arquivo salvo:  BubbleSort_run2.txt
+
+=== BubbleSort | Rodada 3 ===
+  Tokens gerados: 573
+  Arquivo salvo:  BubbleSort_run3.txt
+
+=== BubbleSort | Rodada 4 ===
+  Tokens gerados: 577
+  Arquivo salvo:  BubbleSort_run4.txt
+
+=== BubbleSort | Rodada 5 ===
+  Tokens gerados: 526
+  Arquivo salvo:  BubbleSort_run5.txt
+
+=== Comparação ===
+Pares IDÊNTICOS (1):
+  Run2 == Run3
+
+Pares DIFERENTES (9):
+  Run1 != Run2: 1 linha(s) divergem, 2 linha(s) a mais/menos.
+    Linha 75:
+      Run1: Let me know if you'd like a version that sorts in descending order or handles custom objects!
+      Run2: ---
+  Run1 != Run3: 1 linha(s) divergem, 2 linha(s) a mais/menos.
+    Linha 75:
+      Run1: Let me know if you'd like a version that sorts in descending order or handles custom objects!
+      Run3: ---
+  Run1 != Run4: 69 linha(s) divergem, 5 linha(s) a mais/menos.
+    Linha 1:
+      Run1: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes **early termination** if the array becomes sorted before all passes are completed, which improves performance in the best-case scenario (O(n)).
+      Run4: Certainly! Here's a well-structured and efficient implementation of the **Bubble Sort** algorithm in **Java**. This version includes optimizations such as early termination if the array is already sorted and avoids unnecessary comparisons once the largest elements are in place.
+    Linha 3:
+      Run1: ---
+      Run4: ### ✅ Java Implementation of Bubble Sort
+    Linha 5:
+      Run1: ### ✅ Java Implementation of Bubble Sort
+      Run4: ```java
+  Run1 != Run5: 66 linha(s) divergem, 4 linha(s) a mais/menos.
+    Linha 1:
+      Run1: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes **early termination** if the array becomes sorted before all passes are completed, which improves performance in the best-case scenario (O(n)).
+      Run5: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes an **early exit** optimization to stop the algorithm if the array becomes sorted before all passes are completed.
+    Linha 3:
+      Run1: ---
+      Run5: ### ✅ Java Implementation of Bubble Sort
+    Linha 5:
+      Run1: ### ✅ Java Implementation of Bubble Sort
+      Run5: ```java
+  Run2 != Run4: 71 linha(s) divergem, 3 linha(s) a mais/menos.
+    Linha 1:
+      Run2: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes **early termination** if the array becomes sorted before all passes are completed, which improves performance in the best-case scenario (O(n)).
+      Run4: Certainly! Here's a well-structured and efficient implementation of the **Bubble Sort** algorithm in **Java**. This version includes optimizations such as early termination if the array is already sorted and avoids unnecessary comparisons once the largest elements are in place.
+    Linha 3:
+      Run2: ---
+      Run4: ### ✅ Java Implementation of Bubble Sort
+    Linha 5:
+      Run2: ### ✅ Java Implementation of Bubble Sort
+      Run4: ```java
+  Run2 != Run5: 66 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 1:
+      Run2: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes **early termination** if the array becomes sorted before all passes are completed, which improves performance in the best-case scenario (O(n)).
+      Run5: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes an **early exit** optimization to stop the algorithm if the array becomes sorted before all passes are completed.
+    Linha 3:
+      Run2: ---
+      Run5: ### ✅ Java Implementation of Bubble Sort
+    Linha 5:
+      Run2: ### ✅ Java Implementation of Bubble Sort
+      Run5: ```java
+  Run3 != Run4: 71 linha(s) divergem, 3 linha(s) a mais/menos.
+    Linha 1:
+      Run3: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes **early termination** if the array becomes sorted before all passes are completed, which improves performance in the best-case scenario (O(n)).
+      Run4: Certainly! Here's a well-structured and efficient implementation of the **Bubble Sort** algorithm in **Java**. This version includes optimizations such as early termination if the array is already sorted and avoids unnecessary comparisons once the largest elements are in place.
+    Linha 3:
+      Run3: ---
+      Run4: ### ✅ Java Implementation of Bubble Sort
+    Linha 5:
+      Run3: ### ✅ Java Implementation of Bubble Sort
+      Run4: ```java
+  Run3 != Run5: 66 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 1:
+      Run3: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes **early termination** if the array becomes sorted before all passes are completed, which improves performance in the best-case scenario (O(n)).
+      Run5: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes an **early exit** optimization to stop the algorithm if the array becomes sorted before all passes are completed.
+    Linha 3:
+      Run3: ---
+      Run5: ### ✅ Java Implementation of Bubble Sort
+    Linha 5:
+      Run3: ### ✅ Java Implementation of Bubble Sort
+      Run5: ```java
+  Run4 != Run5: 57 linha(s) divergem, 9 linha(s) a mais/menos.
+    Linha 1:
+      Run4: Certainly! Here's a well-structured and efficient implementation of the **Bubble Sort** algorithm in **Java**. This version includes optimizations such as early termination if the array is already sorted and avoids unnecessary comparisons once the largest elements are in place.
+      Run5: Certainly! Here's a well-structured and efficient implementation of **Bubble Sort** in **Java**. This version includes an **early exit** optimization to stop the algorithm if the array becomes sorted before all passes are completed.
+    Linha 10:
+      Run4:         int n = arr.length;
+      Run5:         boolean swapped;
+    Linha 11:
+      Run4:         boolean swapped;
+      Run5:         for (int i = 0; i < arr.length - 1; i++) {

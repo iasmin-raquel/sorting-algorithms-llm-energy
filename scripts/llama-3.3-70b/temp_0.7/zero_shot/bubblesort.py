@@ -6,12 +6,14 @@ from codecarbon import EmissionsTracker
 client = Groq()
 
 BASE_DIR       = os.path.dirname(os.path.abspath(__file__))
-SAIDA_DIR      = os.path.join(BASE_DIR, "..", "..", "..", "saida", "Qwen3-32B", "temp_0")
-RESULTADOS_DIR = os.path.join(BASE_DIR, "..", "..", "..", "resultados", "qwen3-32b", "temp_0", "isolado")
+SAIDA_DIR      = os.path.abspath(os.path.join(BASE_DIR, "..", "..", "..", "..", "saida", "llama-3.3-70b", "temp_0.7", "zero_shot"))
+RESULTADOS_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "..", "..", "..", "resultados", "llama-3.3-70b", "temp_0.7", "zero_shot", "isolado"))
+os.makedirs(SAIDA_DIR, exist_ok=True)
+os.makedirs(RESULTADOS_DIR, exist_ok=True)
 
 PROMPT = "Please write your best implementation of BubbleSort in Java programming language."
 
-print("=== BubbleSort | temperatura=0 ===")
+print("=== BubbleSort | zero_shot | temperatura=0.7 ===")
 
 tracker = EmissionsTracker(
     project_name="BubbleSort",
@@ -24,12 +26,10 @@ tracker = EmissionsTracker(
 inicio = time.time()
 tracker.start()
 completion = client.chat.completions.create(
-    model="qwen/qwen3-32b",
+    model="llama-3.3-70b-versatile",
     messages=[{"role": "user", "content": PROMPT}],
-    temperature=0,
+    temperature=0.7,
     max_completion_tokens=4096,
-    top_p=0.95,
-    reasoning_effort="default",
     stream=False,
 )
 emissoes = tracker.stop()

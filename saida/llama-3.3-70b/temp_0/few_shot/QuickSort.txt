@@ -1,0 +1,83 @@
+### QuickSort Implementation in Java
+#### Overview
+QuickSort is a divide-and-conquer algorithm that works by selecting a 'pivot' element from the array and partitioning the other elements into two sub-arrays, according to whether they are less than or greater than the pivot. The sub-arrays are then recursively sorted.
+
+#### Implementation
+```java
+public class QuickSort {
+    /**
+     * Sorts an array of integers using the QuickSort algorithm.
+     * 
+     * @param arr the array to be sorted
+     */
+    public static void sort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+
+    /**
+     * Recursively sorts a sub-array using the QuickSort algorithm.
+     * 
+     * @param arr   the array to be sorted
+     * @param low   the starting index of the sub-array
+     * @param high  the ending index of the sub-array
+     */
+    private static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    /**
+     * Partitions the array around a pivot element.
+     * 
+     * @param arr   the array to be partitioned
+     * @param low   the starting index of the sub-array
+     * @param high  the ending index of the sub-array
+     * @return      the index of the pivot element
+     */
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                // Swap arr[i] and arr[j]
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        // Swap arr[i+1] and arr[high] (pivot)
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        return i + 1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6};
+        sort(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+#### Explanation
+*   The `sort` method is the public interface for the QuickSort algorithm. It calls the `quickSort` method with the initial array bounds.
+*   The `quickSort` method recursively sorts the array by selecting a pivot element, partitioning the array, and sorting the sub-arrays.
+*   The `partition` method rearranges the array such that all elements less than the pivot are on the left, and all elements greater than the pivot are on the right. The pivot index is returned.
+*   In the `main` method, an example array is created, sorted using QuickSort, and printed to the console.
+
+#### Time Complexity
+*   Best-case: O(n log n)
+*   Average-case: O(n log n)
+*   Worst-case: O(n^2) (when the pivot is the smallest or largest element)
+
+#### Space Complexity
+*   O(log n) due to recursive call stack
+
+Note: This implementation uses the "Lomuto" partition scheme, which is a variation of the standard "Hoare" partition scheme that is slightly faster and more efficient in practice.

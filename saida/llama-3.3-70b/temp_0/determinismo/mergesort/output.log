@@ -1,0 +1,88 @@
+=== MergeSort | Rodada 1 ===
+  Tokens gerados: 651
+  Arquivo salvo:  MergeSort_run1.txt
+
+=== MergeSort | Rodada 2 ===
+  Tokens gerados: 651
+  Arquivo salvo:  MergeSort_run2.txt
+
+=== MergeSort | Rodada 3 ===
+  Tokens gerados: 685
+  Arquivo salvo:  MergeSort_run3.txt
+
+=== MergeSort | Rodada 4 ===
+  Tokens gerados: 668
+  Arquivo salvo:  MergeSort_run4.txt
+
+=== MergeSort | Rodada 5 ===
+  Tokens gerados: 651
+  Arquivo salvo:  MergeSort_run5.txt
+
+=== Comparação ===
+Pares IDÊNTICOS (3):
+  Run1 == Run2
+  Run1 == Run5
+  Run2 == Run5
+
+Pares DIFERENTES (7):
+  Run1 != Run3: 6 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 8:
+      Run1: ### Code
+      Run3: ### Implementation
+    Linha 89:
+      Run1: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each half has only one element (or is empty).
+      Run3: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element.
+    Linha 95:
+      Run1: *   Best-case: O(n log n)
+      Run3: *   Best-case time complexity: O(n log n)
+  Run1 != Run4: 2 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 89:
+      Run1: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each half has only one element (or is empty).
+      Run4: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element (which is inherently sorted).
+    Linha 90:
+      Run1: 2.  The `merge` method merges two sorted arrays into a single sorted array.
+      Run4: 2.  The `merge` method combines two sorted arrays into a single sorted array by comparing elements from each array and placing the smaller element in the result array.
+  Run2 != Run3: 6 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 8:
+      Run2: ### Code
+      Run3: ### Implementation
+    Linha 89:
+      Run2: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each half has only one element (or is empty).
+      Run3: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element.
+    Linha 95:
+      Run2: *   Best-case: O(n log n)
+      Run3: *   Best-case time complexity: O(n log n)
+  Run2 != Run4: 2 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 89:
+      Run2: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each half has only one element (or is empty).
+      Run4: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element (which is inherently sorted).
+    Linha 90:
+      Run2: 2.  The `merge` method merges two sorted arrays into a single sorted array.
+      Run4: 2.  The `merge` method combines two sorted arrays into a single sorted array by comparing elements from each array and placing the smaller element in the result array.
+  Run3 != Run4: 7 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 8:
+      Run3: ### Implementation
+      Run4: ### Code
+    Linha 89:
+      Run3: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element.
+      Run4: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element (which is inherently sorted).
+    Linha 90:
+      Run3: 2.  The `merge` method merges two sorted arrays into a single sorted array.
+      Run4: 2.  The `merge` method combines two sorted arrays into a single sorted array by comparing elements from each array and placing the smaller element in the result array.
+  Run3 != Run5: 6 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 8:
+      Run3: ### Implementation
+      Run5: ### Code
+    Linha 89:
+      Run3: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element.
+      Run5: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each half has only one element (or is empty).
+    Linha 95:
+      Run3: *   Best-case time complexity: O(n log n)
+      Run5: *   Best-case: O(n log n)
+  Run4 != Run5: 2 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 89:
+      Run4: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each sub-array has only one element (which is inherently sorted).
+      Run5: 1.  The `mergeSort` method takes an array as input and recursively divides it into two halves until each half has only one element (or is empty).
+    Linha 90:
+      Run4: 2.  The `merge` method combines two sorted arrays into a single sorted array by comparing elements from each array and placing the smaller element in the result array.
+      Run5: 2.  The `merge` method merges two sorted arrays into a single sorted array.

@@ -1,0 +1,103 @@
+=== QuickSort | Rodada 1 ===
+  Tokens gerados: 639
+  Arquivo salvo:  QuickSort_run1.txt
+
+=== QuickSort | Rodada 2 ===
+  Tokens gerados: 629
+  Arquivo salvo:  QuickSort_run2.txt
+
+=== QuickSort | Rodada 3 ===
+  Tokens gerados: 698
+  Arquivo salvo:  QuickSort_run3.txt
+
+=== QuickSort | Rodada 4 ===
+  Tokens gerados: 639
+  Arquivo salvo:  QuickSort_run4.txt
+
+=== QuickSort | Rodada 5 ===
+  Tokens gerados: 639
+  Arquivo salvo:  QuickSort_run5.txt
+
+=== Comparação ===
+Pares IDÊNTICOS (1):
+  Run4 == Run5
+
+Pares DIFERENTES (9):
+  Run1 != Run2: 54 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 12:
+      Run1:         int[] arr = {10, 7, 8, 9, 1, 5};
+      Run2:         int[] arr = {9, 7, 5, 11, 12, 2, 14, 3, 10, 6};
+    Linha 22:
+      Run1:     // Main quickSort method
+      Run2:     // Main QuickSort method
+    Linha 25:
+      Run1:             // Partition the array and get the pivot index
+      Run2:             int pi = partition(arr, low, high); // Partition the array
+  Run1 != Run3: 6 linha(s) divergem, 7 linha(s) a mais/menos.
+    Linha 81:
+      Run1: ### 🔄 Optional: Randomized Pivot (Improved for Real-World Data)
+      Run3: ### 📌 Time and Space Complexity
+    Linha 83:
+      Run1: If you want to avoid worst-case performance on already sorted arrays, you can randomize the pivot selection. Let me know if you'd like that version too!
+      Run3: - **Best Case**: O(n log n)
+    Linha 84:
+      Run1: 
+      Run3: - **Average Case**: O(n log n)
+  Run1 != Run4: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 87:
+      Run1: Let me know if you'd like a **non-recursive (iterative)** version or a **3-way partition** version for handling duplicates more efficiently.
+      Run4: Let me know if you'd like a **non-recursive (iterative)** version or a **3-way partition** version for handling many duplicate elements.
+  Run1 != Run5: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 87:
+      Run1: Let me know if you'd like a **non-recursive (iterative)** version or a **3-way partition** version for handling duplicates more efficiently.
+      Run5: Let me know if you'd like a **non-recursive (iterative)** version or a **3-way partition** version for handling many duplicate elements.
+  Run2 != Run3: 54 linha(s) divergem, 13 linha(s) a mais/menos.
+    Linha 12:
+      Run2:         int[] arr = {9, 7, 5, 11, 12, 2, 14, 3, 10, 6};
+      Run3:         int[] arr = {10, 7, 8, 9, 1, 5};
+    Linha 22:
+      Run2:     // Main QuickSort method
+      Run3:     // Main quickSort method
+    Linha 25:
+      Run2:             int pi = partition(arr, low, high); // Partition the array
+      Run3:             // Partition the array and get the pivot index
+  Run2 != Run4: 54 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 12:
+      Run2:         int[] arr = {9, 7, 5, 11, 12, 2, 14, 3, 10, 6};
+      Run4:         int[] arr = {10, 7, 8, 9, 1, 5};
+    Linha 22:
+      Run2:     // Main QuickSort method
+      Run4:     // Main quickSort method
+    Linha 25:
+      Run2:             int pi = partition(arr, low, high); // Partition the array
+      Run4:             // Partition the array and get the pivot index
+  Run2 != Run5: 54 linha(s) divergem, 6 linha(s) a mais/menos.
+    Linha 12:
+      Run2:         int[] arr = {9, 7, 5, 11, 12, 2, 14, 3, 10, 6};
+      Run5:         int[] arr = {10, 7, 8, 9, 1, 5};
+    Linha 22:
+      Run2:     // Main QuickSort method
+      Run5:     // Main quickSort method
+    Linha 25:
+      Run2:             int pi = partition(arr, low, high); // Partition the array
+      Run5:             // Partition the array and get the pivot index
+  Run3 != Run4: 6 linha(s) divergem, 7 linha(s) a mais/menos.
+    Linha 81:
+      Run3: ### 📌 Time and Space Complexity
+      Run4: ### 🔄 Optional: Randomized Pivot (Improved for Real-World Data)
+    Linha 83:
+      Run3: - **Best Case**: O(n log n)
+      Run4: If you want to avoid worst-case performance on already sorted arrays, you can randomize the pivot selection. Let me know if you'd like that version too!
+    Linha 84:
+      Run3: - **Average Case**: O(n log n)
+      Run4: 
+  Run3 != Run5: 6 linha(s) divergem, 7 linha(s) a mais/menos.
+    Linha 81:
+      Run3: ### 📌 Time and Space Complexity
+      Run5: ### 🔄 Optional: Randomized Pivot (Improved for Real-World Data)
+    Linha 83:
+      Run3: - **Best Case**: O(n log n)
+      Run5: If you want to avoid worst-case performance on already sorted arrays, you can randomize the pivot selection. Let me know if you'd like that version too!
+    Linha 84:
+      Run3: - **Average Case**: O(n log n)
+      Run5: 

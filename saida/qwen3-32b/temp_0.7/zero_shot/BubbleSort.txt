@@ -1,0 +1,272 @@
+<think>
+Okay, I need to write a good implementation of Bubble Sort in Java. Let me think about how Bubble Sort works. It's a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. The pass through the list is repeated until the list is sorted.
+
+First, I should outline the steps. For an array of size n, each pass will bubble the largest unsorted element to its correct position. So in the first pass, we compare elements from index 0 to n-1, but after each pass, the last i elements are already sorted, so we can reduce the number of comparisons each time.
+
+Wait, right. So for the outer loop, it can run from 0 to n-1. But the inner loop can run from 0 to n - i - 1. Because after each iteration of the outer loop, the next largest element is in place. So the inner loop doesn't need to check the last i elements each time.
+
+Now, how to implement this in Java. Let's create a method called bubbleSort that takes an array of integers as a parameter.
+
+Start by getting the length of the array. Then, for each i from 0 to array length - 1. Then a nested loop for j from 0 to (array length - i - 1). Compare array[j] and array[j+1]. If array[j] is greater than array[j+1], swap them.
+
+Wait, but Bubble Sort can be optimized. If during a pass no swaps occur, the array is already sorted, and we can terminate early. So adding a flag to check if any swaps happened in the inner loop. If not, break out of the loop.
+
+Yes, that's a good optimization. So in each iteration of the outer loop, we can have a boolean variable swapped, initially false. In the inner loop, whenever a swap happens, set swapped to true. After each inner loop completes, check if swapped is false, then break the outer loop.
+
+Let me structure this:
+
+public static void bubbleSort(int[] arr) {
+    int n = arr.length;
+    boolean swapped;
+    for (int i = 0; i < n - 1; i++) {
+        swapped = false;
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // swap arr[j] and arr[j+1]
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        if (!swapped) break;
+    }
+}
+
+Wait, but the outer loop runs n-1 times. Because after n-1 passes, the last element is already in place. But with the early termination condition, maybe it can exit earlier.
+
+Let me test with an example. Suppose the array is already sorted. The first pass (i=0) through the inner loop will not make any swaps, so swapped remains false, and the outer loop breaks. So it's O(n) in the best case for sorted arrays.
+
+That's correct. So this implementation is optimized with the early exit.
+
+Now, what about edge cases? What if the array is null or empty? Well, in Java, if the input array is null, then in the for loop, n would be 0, so the outer loop doesn't run. Similarly for empty array. So no problem there.
+
+But maybe add a check for null? Well, the method is supposed to handle any input. But in Java, if someone passes a null array, it will throw a NullPointerException when trying to get the length. But perhaps in the method, we can check if the array is null first. Let me add that.
+
+Wait, the problem says "implementation of BubbleSort in Java". So perhaps the method should handle null checks? But maybe the user expects a standard implementation. However, in practice, it's good practice to check for null.
+
+But for the purpose of this exercise, perhaps the user wants the standard implementation without null checks. Let me see. The problem says "best implementation". So including null check would be better?
+
+Hmm. Let me think. Well, the method is static, so perhaps the user is supposed to handle that. But in Java, it's common to check for null. However, perhaps the user just wants the core logic.
+
+Alternatively, the method can have a check. Let me include it.
+
+Wait, but the problem didn't mention handling null, but perhaps for a robust implementation, it's better to include.
+
+But maybe the user is expecting a standard code. Let me proceed with the code including the null check. For example:
+
+public static void bubbleSort(int[] arr) {
+    if (arr == null) {
+        return; // or throw an exception? Well, for primitives, it's probably better to return if null.
+    }
+    int n = arr.length;
+    ...
+}
+
+Wait, but if the array is null, trying to get arr.length would throw NPE. So the method should check for null first.
+
+Yes. So adding:
+
+public static void bubbleSort(int[] arr) {
+    if (arr == null) {
+        return;
+    }
+    int n = arr.length;
+    ...
+
+But what is the correct way to handle a null array? Since it's a void method, returning is acceptable. Alternatively, you can throw an IllegalArgumentException. But perhaps for the purpose of this code, just check for null and return early.
+
+So adding that check.
+
+But maybe the problem assumes that the input array is valid. However, including the check makes it more robust. Let me include it.
+
+Putting it all together:
+
+public class BubbleSort {
+    public static void bubbleSort(int[] arr) {
+        if (arr == null) {
+            return;
+        }
+        int n = arr.length;
+        boolean swapped;
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+            if (!swapped) {
+                break;
+            }
+        }
+    }
+}
+
+But perhaps the user wants the code to be written as a complete Java class, including a main method for testing? The question says "implementation of BubbleSort", so maybe just the method. But the problem says "write your best implementation", so perhaps the method as a part of a class.
+
+But the user might want the method to be in a class. But since Java requires it. So the code above is correct.
+
+Alternatively, perhaps to make it more complete, adding a main method to test it. But the problem didn't ask for that, but perhaps including it as an example.
+
+But the user might just want the function. Let me check the original question again: "Please write your best implementation of BubbleSort in Java programming language." So they probably expect the method, and maybe a sample class.
+
+But the code above is sufficient. Let me check for possible errors.
+
+Wait, in the inner loop, j runs up to n - 1 - i. Because for each i, the last i elements are already sorted. So in the first iteration of i=0, j runs up to n-1-0 -1? Wait, n-1 -i is n-1 -0 = n-1. But j starts from 0, and compares j and j+1. So the inner loop runs for j from 0 to (n - 1 - i) - 1? Wait, the inner loop is written as for (int j = 0; j < n - 1 - i; j++).
+
+Let me take an example. Suppose n is 5. For i=0, j runs while j < 5-0-1 = 4. So j can be 0,1,2,3. Which compares elements 0&1, 1&2, 2&3, 3&4. That's correct for the first pass, which has n-1 comparisons. Then, after each pass, the next largest element is bubbled to the end. So yes, the inner loop is correct.
+
+Yes, that's correct.
+
+Now, about the time complexity. Worst case is O(n^2), same for average case, and best case O(n) with the optimization.
+
+So the code is correct. Now, write the code with the null check. But sometimes, people don't include the null check for simplicity. Let me think if the user wants that. Well, since it's about implementation, including the null check is better.
+
+So the code is as above. Let me write it again.
+
+Another point: The method is static. If someone wants to use it, they can call it from the class. The class is named BubbleSort. So the code is in a class.
+
+But perhaps the user wants the code as a standalone method. But in Java, it's part of a class.
+
+So the final code would be:
+
+public class BubbleSort {
+    public static void bubbleSort(int[] arr) {
+        if (arr == null) {
+            return;
+        }
+        int n = arr.length;
+        boolean swapped;
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+            if (!swapped) {
+                break;
+            }
+        }
+    }
+}
+
+But maybe adding a main method for testing purposes. For example:
+
+public static void main(String[] args) {
+    int[] arr = {5, 3, 8, 4, 2};
+    bubbleSort(arr);
+    // print sorted array
+}
+
+But the problem didn't ask for that. However, maybe the user wants a complete example. But the question says "implementation of BubbleSort", which is the method. So perhaps just the method.
+
+But to make it a complete code, maybe include the class and method. So the code above is correct.
+
+Another thing: Java code conventions. The class is named BubbleSort, method is named bubbleSort. Correct.
+
+So the code is correct. Now, I think that's the best implementation considering the optimizations and edge cases.
+</think>
+
+Here is a well-structured and optimized implementation of the **Bubble Sort** algorithm in Java. The implementation includes null safety, early termination for already sorted arrays, and proper formatting to follow Java best practices.
+
+---
+
+### ✅ Features of the Implementation:
+- **Null Safety**: The method checks if the input array is `null` and returns early if so.
+- **Early Termination**: If no swaps occur during a pass, the array is already sorted, and the algorithm exits early.
+- **Efficient Loop Bounds**: The inner loop avoids unnecessary comparisons by excluding the last `i` elements (already sorted) after each pass.
+- **Standard Java Naming Conventions**: Proper class and method naming.
+- **Static Method**: Makes it reusable across the codebase.
+
+---
+
+### ✅ Java Code Implementation
+
+```java
+public class BubbleSort {
+
+    public static void bubbleSort(int[] arr) {
+        // Return early if the input array is null
+        if (arr == null) {
+            return;
+        }
+
+        int n = arr.length;
+        boolean swapped;
+
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+
+            // Each pass bubbles the largest unsorted element to the end
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // Swap arr[j] and arr[j + 1]
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+
+            // If no swaps occurred, the array is already sorted
+            if (!swapped) {
+                break;
+            }
+        }
+    }
+
+    // Optional main method for testing purposes
+    public static void main(String[] args) {
+        int[] arr = {5, 3, 8, 4, 2};
+
+        System.out.println("Original array:");
+        printArray(arr);
+
+        bubbleSort(arr);
+
+        System.out.println("Sorted array:");
+        printArray(arr);
+    }
+
+    // Helper method to print the array
+    public static void printArray(int[] arr) {
+        for (int value : arr) {
+            System.out.print(value + " ");
+        }
+        System.out.println();
+    }
+}
+```
+
+---
+
+### ✅ Example Output
+
+Given the input array `[5, 3, 8, 4, 2]`, the program will output:
+
+```
+Original array:
+5 3 8 4 2 
+Sorted array:
+2 3 4 5 8 
+```
+
+---
+
+### ✅ Time Complexity
+
+- **Worst Case**: O(n²) — when the array is in reverse order.
+- **Best Case**: O(n) — when the array is already sorted.
+- **Average Case**: O(n²)
+
+---
+
+This implementation is efficient, readable, and adheres to best practices for Java development.

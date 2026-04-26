@@ -1,0 +1,303 @@
+<think>
+Okay, I need to write a QuickSort implementation in Java, following the same style as the given InsertionSort example. Let me think about how QuickSort works.
+
+First, QuickSort is a divide-and-conquer algorithm. It works by selecting a 'pivot' element and partitioning the array into elements less than the pivot and elements greater than the pivot. Then recursively sorting the sub-arrays.
+
+The InsertionSort example had a sort method that took an int array. For QuickSort, I'll need similar structure. Let me outline the steps.
+
+The main steps for QuickSort are:
+1. Choose a pivot element.
+2. Partition the array around the pivot.
+3. Recursively apply the above steps to the sub-arrays.
+
+The standard approach is to have a sort method that calls a helper method to perform the sorting. The helper method will handle the recursion and partitioning.
+
+In the InsertionSort example, the main method calls sort and then prints the array. Similarly, in QuickSort, I'll have a public static void sort(int[] arr) method.
+
+Now, for partitioning. The common method is to select the last element as the pivot. Then, rearrange the array so that all elements less than the pivot come before elements greater than it.
+
+Let me think about the partition function. It should return the index of the pivot element after partitioning. The steps would be:
+
+- Select the pivot (say, arr[high]).
+- Initialize an index i (starting at low -1).
+- Iterate j from low to high -1:
+   - If arr[j] is less than pivot, increment i and swap arr[i] with arr[j].
+- After j reaches high, swap arr[i+1] with arr[high] (the pivot), so that the pivot is in the correct place.
+- Return i+1 as the partition index.
+
+So, the QuickSort sort method will have recursive calls. Let me structure it.
+
+The public sort method might call a private helper method that takes low and high indices. For example:
+
+public static void sort(int[] arr) {
+    sort(arr, 0, arr.length - 1);
+}
+
+Then, the helper method handles the recursion.
+
+Wait, but in the InsertionSort example, the sort method is directly implemented. Maybe I should follow that. Let me check the original code again.
+
+In the given example, the sort method is public static void sort(int[] arr) and then the main calls it. So for QuickSort, I need to have the same structure. Therefore, the public sort method will call another sort method with low and high parameters.
+
+So, the code structure would be:
+
+public class QuickSort {
+    public static void sort(int[] arr) {
+        sort(arr, 0, arr.length - 1);
+    }
+
+    private static void sort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            sort(arr, low, pi - 1);
+            sort(arr, pi + 1, high);
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        // implementation here
+    }
+
+    public static void main(String[] args) {
+        // test code
+    }
+}
+
+Now, implementing the partition function. Let's pick the last element as pivot. Let me code that.
+
+In partition:
+- int pivot = arr[high];
+- int i = low - 1;
+- for (int j = low; j < high; j++) {
+   if (arr[j] <= pivot) {
+       i++;
+       swap arr[i] and arr[j]
+   }
+}
+swap arr[i+1] with arr[high], so the pivot is placed at i+1
+return i+1.
+
+Wait, but in Java, how to swap? For example, in the code, during the partition function, when I need to swap elements, I can create a helper method, but maybe inline it.
+
+So, in the partition function:
+
+private static int partition(int[] arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}
+
+That should work.
+
+Now, putting it all together.
+
+Let me test with the same array as in the InsertionSort example. Suppose the main method has the array {12, 11, 13, 5, 6}, then calls sort and prints.
+
+Wait, but in the example given for InsertionSort, the main method is part of the InsertionSort class. So the QuickSort's main method would be similar.
+
+Testing with that array, let's see how QuickSort would process it.
+
+But perhaps there's no problem here. Let me code the entire class.
+
+Now, the user wants the code to follow the same style and structure. So the class is named QuickSort, with a public static sort method taking an int array. The main method tests it.
+
+So the full code would be:
+
+public class QuickSort {
+    public static void sort(int[] arr) {
+        sort(arr, 0, arr.length - 1);
+    }
+
+    private static void sort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            sort(arr, low, pi - 1);
+            sort(arr, pi + 1, high);
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        return i + 1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6};
+        sort(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+
+Wait, but what about edge cases? For example, when the array is empty or has one element. But in the code, the sort method checks if low < high. So for an array with 0 or 1 element, the sort method does nothing.
+
+This should be correct.
+
+Let me test the example array. Let's walk through the example.
+
+Original array: {12, 11, 13, 5, 6}
+
+First call to sort, which calls the helper with low=0, high=4.
+
+Partition is called. Pivot is 6. Let's track the partition process.
+
+i starts at -1.
+
+j starts at 0 (value 12). Compare 12 <= 6? No. j increments.
+
+j=1 (11). 11 <=6? No. j increments.
+
+j=2 (13). No. j increments.
+
+j=3 (5). 5 <=6? Yes. i increments to 0. Swap arr[0] (12) with arr[3] (5). Now array is 5, 11, 13, 12, 6.
+
+j=4? No, because j goes up to high-1, which is 3. So loop ends.
+
+Now swap arr[i+1] (position 0+1=1) with arr[high]. arr[1] is 11, arr[4] is 6. Swap them. Now array is 5, 6, 13, 12, 11. The pivot is at index 1. So pi is 1.
+
+Now the next steps are to sort the left (low=0, high=0) and right (low=2, high=4).
+
+Sorting left (only one element). Then sorting the right.
+
+Let's take the next partition on low=2, high=4. The array is [5, 6, 13, 12, 11]. The pivot is 11. Now, i starts at 1 (low-1=2-1=1).
+
+j starts at 2 (value 13). Compare with pivot 11. 13 <=11? No. j=3: 12 <=11? No. j=4 is high, loop ends. So i remains 1. Swap i+1=2 with high. arr[2] is 13, arr[high] (4) is 11. Swap. Now array becomes [5, 6, 11, 12, 13]. pi is 2. Then sort left (low=2, high=1, which does nothing) and sort right (low=3, high=4).
+
+Partition for low=3, high=4. Pivot is 12. i starts at 2. j starts at 3. Check arr[3]=12 <=12? Yes. So i increments to 3. Swap with j (same position). Then j increments. Loop ends. Swap i+1 (4) with high (4). No change. pi is 4. Then sort left (low=3, high=3 (one element)) and right (low=5? which is beyond high). So done.
+
+The final array is [5, 6, 11, 12, 13], which is sorted. So the code works for this example.
+
+But wait, in the first partition, after the first swap, the array was modified. Let me check again.
+
+Another possible test case. What if the array is already sorted? Or reverse sorted?
+
+But the code should handle that. For example, if the array is in reverse order, the pivot selection (last element) would lead to worst-case scenario. But regardless, the code should work correctly, even if it's O(n²) time.
+
+So the code seems correct.
+
+Now, check if the code follows the same style. The given InsertionSort has a main method that creates the array, calls sort, and then prints each element. The QuickSort code does the same.
+
+Yes, so the code should meet the requirements.
+
+Another thing to note is that variables are named consistently. The InsertionSort uses variables like key, j, etc. In QuickSort, variables like pivot, i, j, pi, etc., which is fine.
+
+I think this should be correct.
+</think>
+
+Here is a well-structured and documented implementation of the **QuickSort** algorithm in Java, following the same style and structure as the provided `InsertionSort` example.
+
+---
+
+### ✅ Overview
+
+This implementation follows the **divide-and-conquer** strategy of QuickSort, where:
+
+1. A **pivot element** is selected (in this case, the last element of the subarray).
+2. The array is **partitioned** around the pivot such that all elements less than or equal to the pivot come before it, and all elements greater come after it.
+3. The **left and right subarrays** are sorted recursively using the same logic.
+
+---
+
+### 🧠 Algorithm Design
+
+- **Public `sort(int[] arr)`** method serves as the entry point and initiates sorting.
+- **Private `sort(int[] arr, int low, int high)`** performs the recursive sorting.
+- **Private `partition(int[] arr, int low, int high)`** handles the partitioning step and returns the index of the pivot after partitioning.
+
+---
+
+### ✅ Java Code Implementation
+
+```java
+public class QuickSort {
+    public static void sort(int[] arr) {
+        sort(arr, 0, arr.length - 1);
+    }
+
+    private static void sort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            sort(arr, low, pivotIndex - 1);  // Sort left subarray
+            sort(arr, pivotIndex + 1, high);  // Sort right subarray
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];  // Choose the last element as pivot
+        int i = low - 1;         // Index of the smaller element
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                // Swap arr[i] and arr[j]
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        // Swap arr[i+1] with pivot (arr[high])
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        return i + 1;  // Return the index of pivot
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 11, 13, 5, 6};
+        sort(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+---
+
+### 🧪 Sample Output
+
+For the input array `{12, 11, 13, 5, 6}`, the output will be:
+
+```
+5 6 11 12 13 
+```
+
+---
+
+### 📌 Notes
+
+- **Time Complexity**:
+  - **Best/Average**: `O(n log n)`
+  - **Worst**: `O(n²)` (in the case of already sorted input with poor pivot selection)
+- **Space Complexity**: `O(log n)` due to recursion stack depth.
+- **Stability**: Not stable by default — stability can be added if required.
+
+---
+
+This implementation follows the same clean, straightforward structure as the `InsertionSort` example, making it easy to understand and maintain.
