@@ -1,0 +1,122 @@
+**MergeSort Implementation in Java**
+=====================================
+
+### Overview
+
+MergeSort is a popular sorting algorithm that uses the divide-and-conquer technique to sort an array of elements. It works by dividing the array into smaller sub-arrays, sorting each sub-array, and then merging the sorted sub-arrays back together.
+
+### Implementation
+
+```java
+public class MergeSort {
+
+    /**
+     * Sorts an array of integers using the MergeSort algorithm.
+     *
+     * @param arr the array to be sorted
+     * @return the sorted array
+     */
+    public static int[] mergeSort(int[] arr) {
+        if (arr.length <= 1) {
+            return arr;
+        }
+
+        int mid = arr.length / 2;
+        int[] left = new int[mid];
+        int[] right = new int[arr.length - mid];
+
+        System.arraycopy(arr, 0, left, 0, mid);
+        System.arraycopy(arr, mid, right, 0, arr.length - mid);
+
+        left = mergeSort(left);
+        right = mergeSort(right);
+
+        return merge(left, right);
+    }
+
+    /**
+     * Merges two sorted arrays into a single sorted array.
+     *
+     * @param left  the first sorted array
+     * @param right the second sorted array
+     * @return the merged sorted array
+     */
+    private static int[] merge(int[] left, int[] right) {
+        int[] result = new int[left.length + right.length];
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) {
+                result[k] = left[i];
+                i++;
+            } else {
+                result[k] = right[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < left.length) {
+            result[k] = left[i];
+            i++;
+            k++;
+        }
+
+        while (j < right.length) {
+            result[k] = right[j];
+            j++;
+            k++;
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 8, 1, 9};
+        int[] sortedArr = mergeSort(arr);
+
+        System.out.println("Original Array:");
+        printArray(arr);
+
+        System.out.println("Sorted Array:");
+        printArray(sortedArr);
+    }
+
+    /**
+     * Prints an array of integers to the console.
+     *
+     * @param arr the array to be printed
+     */
+    private static void printArray(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+}
+```
+
+### Explanation
+
+1.  The `mergeSort` method takes an array of integers as input and returns the sorted array.
+2.  If the input array has one or zero elements, it is already sorted, so the method returns the array as is.
+3.  The array is divided into two halves, `left` and `right`, using the `System.arraycopy` method.
+4.  The `mergeSort` method is recursively called on the `left` and `right` arrays to sort them.
+5.  The `merge` method is used to merge the two sorted arrays, `left` and `right`, into a single sorted array.
+6.  The `merge` method uses three indices, `i`, `j`, and `k`, to keep track of the current position in the `left`, `right`, and `result` arrays, respectively.
+7.  The `merge` method compares elements from the `left` and `right` arrays and places the smaller element in the `result` array.
+8.  Once one of the arrays is exhausted, the remaining elements from the other array are appended to the `result` array.
+
+### Time Complexity
+
+*   Best-case: O(n log n)
+*   Average-case: O(n log n)
+*   Worst-case: O(n log n)
+
+### Space Complexity
+
+*   O(n)
+
+Note that the space complexity is O(n) because the `mergeSort` method creates new arrays to store the sorted sub-arrays, which requires additional space. However, the overall time complexity is O(n log n), which makes MergeSort an efficient sorting algorithm for large datasets.

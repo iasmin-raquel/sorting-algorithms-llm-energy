@@ -1,0 +1,111 @@
+**QuickSort Implementation in Java**
+=====================================
+
+Here is a high-quality implementation of the QuickSort algorithm in Java:
+
+```java
+public class QuickSort {
+
+    /**
+     * Sorts an array of integers using the QuickSort algorithm.
+     * 
+     * @param arr the array to be sorted
+     */
+    public static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+
+    /**
+     * Recursively sorts a subarray using the QuickSort algorithm.
+     * 
+     * @param arr   the array to be sorted
+     * @param low   the starting index of the subarray
+     * @param high  the ending index of the subarray
+     */
+    private static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    /**
+     * Partitions the array around a pivot element.
+     * 
+     * @param arr   the array to be partitioned
+     * @param low   the starting index of the subarray
+     * @param high  the ending index of the subarray
+     * @return      the index of the pivot element
+     */
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+        swap(arr, i + 1, high);
+        return i + 1;
+    }
+
+    /**
+     * Swaps two elements in the array.
+     * 
+     * @param arr  the array
+     * @param i    the index of the first element
+     * @param j    the index of the second element
+     */
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 8, 3, 1, 6, 4};
+        System.out.println("Original array:");
+        printArray(arr);
+        quickSort(arr);
+        System.out.println("Sorted array:");
+        printArray(arr);
+    }
+
+    /**
+     * Prints the elements of the array.
+     * 
+     * @param arr the array to be printed
+     */
+    private static void printArray(int[] arr) {
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+}
+```
+
+**Explanation**
+---------------
+
+This implementation of QuickSort uses the "Lomuto" partition scheme, which is a variation of the standard "Hoare" partition scheme that is slightly faster and more efficient in practice.
+
+Here's a step-by-step breakdown of how the algorithm works:
+
+1.  The `quickSort` method is the main entry point for the algorithm. It takes an array of integers as input and calls the recursive `quickSort` method to sort the entire array.
+2.  The recursive `quickSort` method takes three parameters: the array to be sorted, the starting index of the subarray, and the ending index of the subarray. It uses the `partition` method to divide the subarray into two parts: elements less than the pivot and elements greater than the pivot.
+3.  The `partition` method selects a pivot element from the subarray and rearranges the elements so that all elements less than the pivot are on the left of the pivot, and all elements greater than the pivot are on the right. The method returns the index of the pivot element.
+4.  The recursive `quickSort` method calls itself twice: once to sort the subarray of elements less than the pivot and once to sort the subarray of elements greater than the pivot.
+5.  The `swap` method is a helper method that swaps two elements in the array.
+
+**Time Complexity**
+------------------
+
+The time complexity of QuickSort is O(n log n) on average, although it can be O(n^2) in the worst case if the pivot is chosen poorly. However, with a good choice of pivot, the algorithm is generally very efficient and is widely used in practice.
+
+**Space Complexity**
+-------------------
+
+The space complexity of QuickSort is O(log n) because of the recursive function calls. However, this can be improved to O(1) by using an iterative implementation instead of a recursive one.

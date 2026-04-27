@@ -72,6 +72,4 @@ Sorted array:
 11 12 22 25 34 64 90 
 ```
 
----
-
-Let me know if you'd like a version that sorts in **descending order**, or one that uses **recursion**!
+Let me know if you'd like a version that sorts in descending order or handles custom objects!

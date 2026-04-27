@@ -1,0 +1,59 @@
+### BubbleSort Implementation in Java
+
+Here's a high-quality implementation of the BubbleSort algorithm in Java. This implementation follows the same style and structure as your provided InsertionSort example.
+
+```java
+public class BubbleSort {
+    /**
+     * Sorts an array of integers using the BubbleSort algorithm.
+     * 
+     * @param arr the array to be sorted
+     */
+    public static void sort(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // Swap arr[j] and arr[j + 1]
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {64, 34, 25, 12, 22, 11, 90};
+        System.out.println("Original array:");
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+
+        sort(arr);
+
+        System.out.println("Sorted array:");
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+### Explanation
+
+*   The `sort` method takes an array of integers as input and sorts it using the BubbleSort algorithm.
+*   The outer loop (`for (int i = 0; i < n - 1; i++)`) represents the number of passes through the array.
+*   The inner loop (`for (int j = 0; j < n - i - 1; j++)`) compares adjacent elements and swaps them if they are in the wrong order.
+*   After each pass, the largest element "bubbles" to the end of the array, which is why the inner loop's upper limit decreases by `i` in each iteration.
+
+### Time Complexity
+
+*   Best-case: O(n) when the input array is already sorted.
+*   Average-case: O(n^2) for random input arrays.
+*   Worst-case: O(n^2) when the input array is sorted in reverse order.
+
+### Space Complexity
+
+*   O(1) since BubbleSort only uses a constant amount of additional space for temporary swaps.

@@ -1,4 +1,4 @@
-Certainly! Below is a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
+Certainly! Here's a well-structured and efficient implementation of **Merge Sort** in **Java**. This implementation includes:
 
 - A `mergeSort` method that recursively splits the array.
 - A `merge` method that merges two sorted subarrays.
@@ -38,8 +38,6 @@ public class MergeSort {
     }
 
     // Merge function to merge two subarrays of array[]
-    // First subarray is array[left..mid]
-    // Second subarray is array[mid+1..right]
     public static void merge(int[] array, int left, int mid, int right) {
         // Find sizes of two subarrays to be merged
         int n1 = mid - left + 1;
@@ -55,12 +53,8 @@ public class MergeSort {
         for (int j = 0; j < n2; ++j)
             rightArray[j] = array[mid + 1 + j];
 
-        // Merge the temporary arrays
-
-        // Initial indexes of first and second subarrays
+        // Merge the temporary arrays back into array[left..right]
         int i = 0, j = 0;
-
-        // Initial index of merged subarray
         int k = left;
         while (i < n1 && j < n2) {
             if (leftArray[i] <= rightArray[j]) {
@@ -102,16 +96,13 @@ public class MergeSort {
 
 ### 🔍 Explanation
 
-- **Time Complexity**:  
-  - **Best Case**: O(n log n)  
-  - **Average Case**: O(n log n)  
-  - **Worst Case**: O(n log n)  
-
-- **Space Complexity**: O(n) due to the temporary arrays used during the merge process.
+- **`mergeSort(int[] array, int left, int right)`**: Recursively splits the array into halves until each subarray has one element.
+- **`merge(int[] array, int left, int mid, int right)`**: Merges two sorted subarrays into one sorted array.
+- **`printArray(int[] array)`**: A helper method to print the contents of the array.
 
 ---
 
-### ✅ Sample Output
+### 🧪 Sample Output
 
 ```
 Original array:
@@ -122,4 +113,4 @@ Sorted array:
 
 ---
 
-Let me know if you'd like a version that uses generics or handles `Object[]` instead of `int[]`.
+This implementation is **stable**, **efficient (O(n log n))**, and follows the **divide-and-conquer** strategy of merge sort. Let me know if you'd like a version that uses generics or handles `Object[]` arrays instead of `int[]`.
