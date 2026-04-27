@@ -7,11 +7,11 @@
   Arquivo salvo:  BubbleSort_run2.txt
 
 === BubbleSort | Rodada 3 ===
-  Tokens gerados: 639
+  Tokens gerados: 638
   Arquivo salvo:  BubbleSort_run3.txt
 
 === BubbleSort | Rodada 4 ===
-  Tokens gerados: 639
+  Tokens gerados: 638
   Arquivo salvo:  BubbleSort_run4.txt
 
 === BubbleSort | Rodada 5 ===
@@ -19,17 +19,34 @@
   Arquivo salvo:  BubbleSort_run5.txt
 
 === Comparação ===
-Pares IDÊNTICOS (10):
+Pares IDÊNTICOS (4):
   Run1 == Run2
-  Run1 == Run3
-  Run1 == Run4
   Run1 == Run5
-  Run2 == Run3
-  Run2 == Run4
   Run2 == Run5
   Run3 == Run4
-  Run3 == Run5
-  Run4 == Run5
 
-Pares DIFERENTES (0):
-  Nenhum par diferente.
+Pares DIFERENTES (6):
+  Run1 != Run3: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 63:
+      Run1: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and then print the sorted array.
+      Run3: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and print the sorted array.
+  Run1 != Run4: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 63:
+      Run1: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and then print the sorted array.
+      Run4: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and print the sorted array.
+  Run2 != Run3: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 63:
+      Run2: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and then print the sorted array.
+      Run3: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and print the sorted array.
+  Run2 != Run4: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 63:
+      Run2: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and then print the sorted array.
+      Run4: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and print the sorted array.
+  Run3 != Run5: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 63:
+      Run3: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and print the sorted array.
+      Run5: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and then print the sorted array.
+  Run4 != Run5: 1 linha(s) divergem, 0 linha(s) a mais/menos.
+    Linha 63:
+      Run4: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and print the sorted array.
+      Run5: 7.  In the `main` method, we create an example array, print it, sort it using the `bubbleSort` method, and then print the sorted array.
