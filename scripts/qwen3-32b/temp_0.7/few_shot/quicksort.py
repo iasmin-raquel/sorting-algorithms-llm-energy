@@ -41,7 +41,7 @@ public class InsertionSort {
 }
 ```
 
-Now, following the same style and structure, please write your best implementation of QuickSort in Java programming language."""
+Now, following the same style and structure, please write your best implementation of QuickSort in Java programming language. Just provide the code without any explanations or comments."""
 
 print("=== QuickSort | few_shot | temperatura=0.7 ===")
 
