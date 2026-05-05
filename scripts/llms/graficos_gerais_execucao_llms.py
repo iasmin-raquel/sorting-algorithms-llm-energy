@@ -14,7 +14,7 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-BASE_DIR      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR      = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 RESULTADOS    = os.path.join(BASE_DIR, "resultados")
 GRAFICOS_DIR  = os.path.join(RESULTADOS, "graficos_execucao")
 os.makedirs(GRAFICOS_DIR, exist_ok=True)

@@ -132,7 +132,7 @@ def main():
         print(f"Arquivo não encontrado: {java_path}")
         sys.exit(1)
 
-    base_dir = Path(__file__).resolve().parent.parent
+    base_dir = Path(__file__).resolve().parent.parent.parent
     try:
         partes = java_path.relative_to(base_dir / "algoritmos_gerados").parts
         modelo, temp, tecnica = partes[0], partes[1], partes[2]

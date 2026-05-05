@@ -8,7 +8,7 @@ Execução: python scripts/extrair_codigo.py
 import os
 import re
 
-BASE_DIR    = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR    = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SAIDA_DIR   = os.path.join(BASE_DIR, "saida")
 DESTINO_DIR = os.path.join(BASE_DIR, "algoritmos_gerados")
 
