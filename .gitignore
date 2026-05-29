@@ -10,6 +10,7 @@ __pycache__/
 *.pyo
 
 *.class
+*.png
 
 emissions.csv
 
@@ -19,6 +20,8 @@ logs/
 .claude/
 
 .vscode/
+
+algoritmos_benchmark/knucleotide-input25000000.txt
 
 .DS_Store
 Thumbs.db
