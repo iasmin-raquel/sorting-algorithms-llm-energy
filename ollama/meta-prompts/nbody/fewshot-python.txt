@@ -1,0 +1,109 @@
+You will generate a prompt for an LLM to implement the n-body problem from the Computer Language Benchmarks Game in Python code.
+
+Problem description:
+Simulate the orbits of Jovian planets under mutual gravitation.
+The output must be validatable with ndiff -abserr 1.0e-8 with N=1000.
+
+The following physical constants and initial conditions must be used exactly as given:
+
+Constants:
+- PI = 3.141592653589793
+- SOLAR_MASS = 4 * PI * PI
+- DAYS_PER_YEAR = 365.24
+
+Initial conditions (x, y, z, vx, vy, vz, mass):
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=SOLAR_MASS
+Jupiter:
+  x = 4.84143144246472090e+00
+  y = -1.16032004402742839e+00
+  z = -1.03622044471123109e-01
+  vx = 1.66007664274403694e-03 * DAYS_PER_YEAR
+  vy = 7.69901118419740425e-03 * DAYS_PER_YEAR
+  vz = -6.90460016972063023e-05 * DAYS_PER_YEAR
+  mass = 9.54791938424326609e-04 * SOLAR_MASS
+Saturn:
+  x = 8.34336671824457987e+00
+  y = 4.12479856412430479e+00
+  z = -4.03523417114321381e-01
+  vx = -2.76742510726862411e-03 * DAYS_PER_YEAR
+  vy = 4.99852801234917238e-03 * DAYS_PER_YEAR
+  vz = 2.30417297573763929e-05 * DAYS_PER_YEAR
+  mass = 2.85885980666130812e-04 * SOLAR_MASS
+Uranus:
+  x = 1.28943695621391310e+01
+  y = -1.51111514016986312e+01
+  z = -2.23307578892655734e-01
+  vx = 2.96460137564761618e-03 * DAYS_PER_YEAR
+  vy = 2.37847173959480950e-03 * DAYS_PER_YEAR
+  vz = -2.96589568540237556e-05 * DAYS_PER_YEAR
+  mass = 4.36624404335156298e-05 * SOLAR_MASS
+Neptune:
+  x = 1.53796971148509165e+01
+  y = -2.59193146099879641e+01
+  z = 1.79258772950371181e-01
+  vx = 2.68067772490389322e-03 * DAYS_PER_YEAR
+  vy = 1.62824170038242295e-03 * DAYS_PER_YEAR
+  vz = -9.51592254519715870e-05 * DAYS_PER_YEAR
+  mass = 5.15138902046611451e-05 * SOLAR_MASS
+
+You will generate a prompt using the Few-Shot Prompting technique. Definition: few-shot prompts provide the model with one or more examples of similar solved problems before presenting the target problem. The examples demonstrate the expected style and structure of the response without specifying the content of the solution. The following spectral-norm code must be included in the generated prompt as a demonstration:
+
+from itertools import repeat
+from math import sqrt
+from multiprocessing import Pool
+from sys import argv
+
+
+def eval_A(i, j):
+    ij = i + j
+    return ij * (ij + 1) // 2 + i + 1
+
+
+def A_sum(u, i):
+    return sum(u_j / eval_A(i, j) for j, u_j in enumerate(u))
+
+
+def At_sum(u, i):
+    return sum(u_j / eval_A(j, i) for j, u_j in enumerate(u))
+
+
+def multiply_AtAv(u):
+    r = range(len(u))
+
+    tmp = pool.starmap(
+        A_sum,
+        zip(repeat(u), r)
+    )
+    return pool.starmap(
+        At_sum,
+        zip(repeat(tmp), r)
+    )
+
+
+def main():
+    n = int(argv[1])
+    u = [1] * n
+
+    for _ in range(10):
+        v = multiply_AtAv(u)
+        u = multiply_AtAv(v)
+
+    vBv = vv = 0
+
+    for ue, ve in zip(u, v):
+        vBv += ue * ve
+        vv  += ve * ve
+
+    result = sqrt(vBv/vv)
+    print("{0:.9f}".format(result))
+
+
+if __name__ == '__main__':
+    with Pool(processes=4) as pool:
+        main()
+
+The generated prompt must ensure that the produced Python code:
+- Receives N as a command-line argument
+- Prints the initial and final energy in %.9f format
+- Adjusts the Sun's initial velocity so that the total momentum of the system is zero (offsetMomentum)
+- Uses the symplectic integrator order: update all velocities first, then update all positions

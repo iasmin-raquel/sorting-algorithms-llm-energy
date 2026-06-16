@@ -1,0 +1,13 @@
+modelo,estrategia,temperatura,linguagem,task_identity,physics_completeness,output_specification,language_correctness,ambiguity_level,total
+qwen3-1.7b,fewshot,0,python,1,1,2,2,1,7
+qwen3-1.7b,fewshot,0,java,2,1,1,1,1,6
+qwen3-1.7b,fewshot,0,cpp,2,2,2,3,2,11
+qwen3-1.7b,fewshot,0.7,python,2,1,2,2,1,8
+qwen3-1.7b,fewshot,0.7,java,2,1,2,2,1,8
+qwen3-1.7b,fewshot,0.7,cpp,3,2,2,3,2,12
+qwen3-1.7b,cot,0,python,2,1,1,1,1,6
+qwen3-1.7b,cot,0,java,2,2,2,2,1,9
+qwen3-1.7b,cot,0,cpp,2,2,1,2,1,8
+qwen3-1.7b,cot,0.7,python,2,1,1,2,1,7
+qwen3-1.7b,cot,0.7,java,2,2,1,2,1,8
+qwen3-1.7b,cot,0.7,cpp,2,1,1,2,1,7
