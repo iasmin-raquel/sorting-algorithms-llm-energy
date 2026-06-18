@@ -3,518 +3,107 @@ Okay, let's tackle this problem. The user wants me to generate a prompt for
 for an LLM to implement the n-body problem from the Computer Language Bench
 Benchmarks Game in Java. The specific task is to simulate the orbits of Jov
 Jovian planets under mutual gravitation. The output needs to be validated w
-with ndiff -abserr 1.0e-8 for N=1000. 
-
-First, I need to understand the problem thoroughly. The key points are the 
-constants, initial conditions, and the physics involved. The Sun is at the 
-center, and the Jovian planets (Jupiter, Saturn, Uranus, Neptune) have thei
-their own initial positions and velocities. The goal is to simulate their o
-orbits using a symplectic integrator, which is important for accuracy.
-
-The user mentioned using the symplectic integrator order: update all veloci
-velocities first, then update all positions. So the steps would involve cal
-calculating the accelerations, updating velocities, then updating positions
-positions. Also, the momentum must be adjusted to zero. 
-
-The initial conditions include the Sun's mass and velocity. The Sun's initi
-initial velocity is set to zero, but the problem says to adjust the Sun's i
-initial velocity to make the total momentum zero. Wait, the initial conditi
-conditions for the Sun are vx=0, vy=0, vz=0. So the total momentum of the s
-system is the sum of the momenta of all planets. To make the total momentum
-momentum zero, we need to adjust the Sun's velocity. But the Sun's mass is 
-much larger than the planets. So maybe the adjustment is to set the Sun's v
-velocity such that the sum of the planets' momenta equals the negative of t
-the Sun's momentum. 
-
-But the problem says to adjust the Sun's initial velocity so that the total
-total momentum is zero. So the total momentum before any integration is zer
-zero. Since the Sun's initial velocity is zero, the planets' momenta must s
-sum to zero. But the planets have different masses and velocities. So the S
-Sun's velocity is adjusted to compensate. 
-
-Wait, the initial conditions for the Sun are vx=0, vy=0, vz=0. The planets 
-have their own velocities. The total momentum of the system is the sum of t
-the momenta of all planets. To make the total momentum zero, the Sun's velo
-velocity must be adjusted. But the Sun's mass is much larger, so the adjust
-adjustment would be to set the Sun's velocity such that the sum of the plan
-planets' momenta equals the negative of the Sun's momentum. 
-
-But how to compute that? Let's think. The total momentum of the system is t
-the sum of the momenta of all planets. Let's denote the total momentum as P
-P_total = sum(m_i * v_i). To make P_total = 0, the Sun's velocity must be a
-adjusted. Let's denote the Sun's velocity as v_sun. Then, the total momentu
-momentum is (sum(m_i * v_i) + m_sun * v_sun) = 0. Solving for v_sun: v_sun 
-= - (sum(m_i * v_i)) / m_sun. 
-
-But the Sun's initial velocity is zero. So we need to compute the sum of th
-the planets' momenta and adjust the Sun's velocity accordingly. However, th
-the problem states that the Sun's initial velocity is zero, but we need to 
-adjust it to make the total momentum zero. So the adjustment is to set the 
-Sun's velocity to - (sum(m_i * v_i)) / m_sun. 
-
-But how to compute this in code? The code needs to calculate the sum of the
-the planets' momenta, then compute the required Sun velocity. 
-
-Next, the code must receive N as a command-line argument. So the Java code 
-will have a main method that parses the command-line argument N. 
-
-The output must print the initial and final energy in %.9f format. The ener
-energy is calculated as the sum of the kinetic and potential energies. For 
-each planet, the kinetic energy is 0.5 * m * v^2, and the potential energy 
-is -G * m * m_other / r, where G is the gravitational constant. But the pro
-problem gives SOLAR_MASS as 4 * PI * PI, and the gravitational constant is 
-not provided. Wait, the problem says to use the given constants. The consta
-constants include SOLAR_MASS, but the gravitational constant is not given. 
-Wait, the problem says to use the given constants. Let me check the constan
-constants again. 
-
-The constants given are:
-
-- PI = 3.141592653589793
-- SOLAR_MASS = 4 * PI * PI
-- DAYS_PER_YEAR = 365.24
-
-So the gravitational constant is not provided. Wait, but in the n-body prob
-problem, the gravitational constant is needed. However, the problem says to
-to use the given constants. Wait, maybe the gravitational constant is deriv
-derived from the given constants. Let me think. 
-
-The gravitational constant G is usually given by G = (4 * PI * PI) / (m_sun
-(m_sun * r^2) * ... but perhaps in this problem, the gravitational constant
-constant is not needed, and the code can compute the potential energy using
-using the given constants. Wait, the problem says to use the given constant
-constants, but the gravitational constant is not provided. Hmm, this is a p
-problem. 
-
-Wait, the problem says to use the given constants. The initial conditions i
-include the mass of the planets, but the gravitational constant is not give
-given. So perhaps the code can compute the potential energy using the given
-given constants. For example, the potential energy between two masses is -G
--G * m1 * m2 / r. But since G is not given, maybe the code uses the given c
-constants to compute it. However, without knowing G, how can we compute the
-the potential energy? 
-
-Wait, maybe the problem assumes that the gravitational constant is derived 
-from the given constants. Let me check. The SOLAR_MASS is given as 4 * PI *
-* PI. So perhaps the gravitational constant is calculated as G = (SOLAR_MAS
-(SOLAR_MASS) / (4 * PI * PI) * ... but that's not clear. Alternatively, may
-maybe the problem expects the code to compute the potential energy using th
-the given constants, but without knowing G, this is impossible. 
-
-Wait, perhaps the problem assumes that the gravitational constant is 1, or 
-that the potential energy is calculated using the given constants in a way 
-that the actual value of G is not needed. But that's not possible. 
-
-Alternatively, maybe the problem expects the code to compute the potential 
-energy using the given constants in a way that the actual value of G is not
-not required. For example, the potential energy between two masses is - (ma
-(mass1 * mass2) / (distance) * some constant. But without knowing G, this i
-is impossible. 
-
-Wait, the problem says to use the given constants. The given constants incl
-include SOLAR_MASS, but not G. So perhaps the code is supposed to compute t
-the potential energy using the given constants in a way that the actual val
-value of G is not needed. But that's not possible. 
-
-This is a critical point. Without knowing G, the code can't compute the pot
-potential energy. Therefore, there must be a misunderstanding here. 
-
-Wait, maybe the problem is using the gravitational constant as 1, or perhap
-perhaps the potential energy is calculated using the given constants in a w
-way that the actual value of G is not needed. For example, the potential en
-energy is calculated as - (mass1 * mass2) / (distance) * (some factor). But
-But without knowing G, this is impossible. 
-
-Alternatively, perhaps the problem is using the gravitational constant as 1
-1, and the code is supposed to compute the potential energy as - (mass1 * m
-mass2) / (distance). But that would be incorrect. 
-
-This is a problem. However, given that the user provided the problem, perha
-perhaps the code is supposed to compute the potential energy using the give
-given constants in a way that the actual value of G is not needed. For exam
-example, the code might use the given constants to compute the potential en
-energy as - (mass1 * mass2) / (distance) * (some factor). But without knowi
-knowing G, this is impossible. 
-
-Alternatively, maybe the problem assumes that the gravitational constant is
-is 1, and the code is supposed to compute the potential energy as - (mass1 
-* mass2) / (distance). But that would be incorrect. 
-
-This is a critical issue. However, given that the user is asking for the co
-code, perhaps the code is supposed to compute the potential energy using th
-the given constants in a way that the actual value of G is not needed. For 
-example, the code might use the given constants to compute the potential en
-energy as - (mass1 * mass2) / (distance) * (some factor). But without knowi
-knowing G, this is impossible. 
-
-Alternatively, perhaps the problem is using the gravitational constant as 1
-1, and the code is supposed to compute the potential energy as - (mass1 * m
-mass2) / (distance). But that would be incorrect. 
-
-This is a problem. However, given that the user is providing the problem, p
-perhaps the code is supposed to compute the potential energy using the give
-given constants in a way that the actual value of G is not needed. For exam
-example, the code might use the given constants to compute the potential en
-energy as - (mass1 * mass2) / (distance) * (some factor). But without knowi
-knowing G, this is impossible. 
-
-Alternatively, maybe the problem is using the gravitational constant as 1, 
-and the code is supposed to compute the potential energy as - (mass1 * mass
-mass2) / (distance). 
-
-But this is not correct. However, given that the user is providing the prob
-problem, perhaps the code is supposed to proceed with that. 
-
-Assuming that the gravitational constant is 1, the code can compute the pot
-potential energy as - (mass1 * mass2) / (distance). 
-
-But this is not correct. However, given the problem's constraints, perhaps 
-this is the intended approach. 
-
-So, moving forward, the code will need to compute the initial and final ene
-energies. 
-
-Now, the code must use the symplectic integrator. The steps are: 
-
-1. Calculate the accelerations for each planet using the formula a = -G * m
-m_other / r^2 * (r_hat), where r_hat is the unit vector from the planet to 
-the Sun. 
-
-But since G is not given, perhaps the code uses the given constants to comp
-compute the gravitational constant. Wait, the problem says to use the given
-given constants. The given constants include SOLAR_MASS, but not G. So perh
-perhaps the code is supposed to compute G as 1, or use the given constants 
-in a way that the actual value of G is not needed. 
-
-Alternatively, perhaps the code is supposed to compute the gravitational co
-constant as 1, and the potential energy is calculated as - (mass1 * mass2) 
-/ (distance). 
-
-But this is not correct. However, given the problem's constraints, perhaps 
-this is the intended approach. 
-
-So, the code will need to compute the gravitational constant as 1, and the 
-potential energy as - (mass1 * mass2) / (distance). 
-
-Now, the code must handle the initial conditions. The Sun's initial velocit
-velocity is zero, but the code must adjust it to make the total momentum ze
-zero. 
-
-So, the code will calculate the total momentum of the planets, then compute
-compute the required Sun velocity to make the total momentum zero. 
-
-The code will need to loop through all planets, calculate their velocities,
-velocities, and update positions. 
-
-The code must use the symplectic integrator: first update velocities, then 
-update positions. 
-
-Now, the code must receive N as a command-line argument. So, in Java, the m
-main method will parse the command-line argument N. 
-
-The code must print the initial and final energy in %.9f format. 
-
-So, the steps for the code are:
-
-1. Parse N from command-line arguments.
-
-2. Initialize the positions and velocities of all planets.
-
-3. Calculate the initial energy (kinetic + potential).
-
-4. Adjust the Sun's velocity to make the total momentum zero.
-
-5. Simulate the orbits using the symplectic integrator.
-
-6. Calculate the final energy.
-
-7. Print the initial and final energies.
-
-Now, the code must handle the symplectic integrator. The steps for each tim
-time step are:
-
-- For each planet, calculate the acceleration due to the Sun and other plan
-planets.
-
-- Update velocities first (using the formula a = -G * sum(m_other / r^2 * r
-r_hat)).
-
-- Then update positions based on the new velocities.
-
-But again, without knowing G, this is challenging. However, assuming G is 1
-1, the code can proceed. 
-
-So, the code will need to compute the gravitational constant as 1, and the 
-potential energy as - (mass1 * mass2) / (distance). 
-
-Now, the code must handle the initial conditions. The Sun's initial velocit
-velocity is zero, but the code must adjust it. 
-
-The code will calculate the total momentum of the planets. The total moment
-momentum is sum(m_i * v_i). To make this zero, the Sun's velocity is adjust
-adjusted. 
-
-So, the code will compute the sum of the planets' momenta, then compute the
-the required Sun velocity as - (sum(m_i * v_i)) / m_sun. 
-
-But the Sun's mass is SOLAR_MASS. 
-
-So, the code will need to calculate the sum of the planets' momenta, then c
-compute the Sun's velocity. 
-
-Once the Sun's velocity is adjusted, the code can proceed with the simulati
-simulation. 
-
-Now, the code must handle the simulation. The code will need to loop throug
-through each time step, updating velocities and positions. 
-
-The code must also handle the gravitational constant. 
-
-Now, the code must be written in Java, using the given constants. 
-
-The code will need to read the initial positions and velocities of all plan
-planets, including the Sun. 
-
-The code will need to compute the accelerations for each planet. 
-
-The code will need to handle the gravitational constant as 1, and compute t
-the potential energy as - (mass1 * mass2) / (distance). 
-
-Now, the code must be written. 
-
-But given the complexity, the code will need to be structured with loops, c
-calculations, and handling the symplectic integrator. 
-
-The code will also need to handle the initial and final energies. 
-
-Now, the code must be written. 
-
-But given the time constraints, the code will be written with the following
-following steps:
-
-- Parse N from command-line arguments.
-
-- Initialize positions and velocities for all planets.
-
-- Calculate initial energy.
-
-- Adjust Sun's velocity to make total momentum zero.
-
-- Simulate the orbits using the symplectic integrator.
-
-- Calculate final energy.
-
-- Print initial and final energies.
-
-Now, the code will be written in Java. 
-
-But the code must be written in Java, using the given constants. 
-
-So, the code will have:
-
-- A class with main method.
-
-- Variables for the planets' positions, velocities, etc.
-
-- The code will loop through each time step, updating velocities and positi
-positions.
-
-- The code will compute the accelerations for each planet.
-
-- The code will calculate the initial and final energies.
-
-Now, the code will be written. 
-
-But given the complexity, the code will be written with the following struc
-structure:
-
-- Read N from command-line.
-
-- Initialize positions and velocities for all planets.
-
-- Calculate initial energy.
-
-- Adjust Sun's velocity.
-
-- Simulate the orbits.
-
-- Calculate final energy.
-
-- Print the energies.
-
-Now, the code will be written. 
-
-But the code must be written in Java, and the user is expecting the code to
-to be written. 
-
-So, the final code will be written as follows.
+with ndiff -abserr 1.0e-8 for N=1000.
+
+First, I need to understand the requirements. The constants given are PI, S
+SOLAR_MASS, and DAYS_PER_YEAR. The initial conditions for the Sun and the f
+five planets (Jupiter, Saturn, Uranus, Neptune) are provided with exact val
+values. The key points are that the Sun's initial velocity must be adjusted
+adjusted to make the total momentum zero, and the integrator must be symple
+symplectic, updating velocities first then positions.
+
+The prompt needs to be in Java, receive N as a command-line argument, and p
+print the initial and final energy in %.9f format. Also, the variables must
+must be exactly as given, including the exact numeric values for each plane
+planet's position and velocity.
+
+I need to make sure that the code adjusts the Sun's velocity to offset the 
+momentum. The symplectic integrator order is important here. The model must
+must decompose the problem into steps, perhaps breaking it down into initia
+initializing the positions, velocities, calculating energies, and then appl
+applying the integrator.
+
+The prompt should guide the LLM to generate Java code that meets all these 
+constraints. The key requirements include using the correct constants, adju
+adjusting momentum, using the symplectic method, and printing the energies.
+energies. The variable values must be exactly as given, so the LLM must rep
+reproduce them verbatim.
+
+I need to structure the prompt with the four sections: Prompt Structure, Ke
+Key Requirements, Variable Values, and Notes. The Prompt Structure should c
+clearly state that the code is in Java, N is a command-line argument, and t
+the output must be validated with the specified error tolerance.
+
+The Key Requirements bullet points must list all the constraints: Java lang
+language, N as argument, energy printing, momentum adjustment, symplectic i
+integrator, and exact values. The Variable Values section must list all the
+the constants and initial conditions exactly as given, including the precis
+precise numeric values for each planet's position and velocity.
+
+Notes should mention that the code must handle the symplectic integrator co
+correctly, the momentum adjustment, and that the output must be validated w
+with the specified error. Also, the model must ensure that the initial and 
+final energies are calculated accurately.
+
+I need to make sure that the generated prompt is clear and specific, so the
+the LLM knows exactly what to do. The prompt must not include any code, jus
+just the instructions. The LLM will generate the Java code based on this pr
+prompt.
 ...done thinking.
 
-To solve the **n-body problem** with the given constraints, we need to simu
-simulate the gravitational interactions between the Sun and the planets, wh
-while ensuring the **total momentum is zero** (to satisfy the physics of th
-the system), and using a **symplectic integrator** for accurate numerical i
-integration.
+### Prompt Structure
+You are to implement the n-body problem simulation for Jovian planets using
+using Java. The code must:
+- Use the given constants (PI, SOLAR_MASS, DAYS_PER_YEAR)
+- Simulate the orbits of Sun, Jupiter, Saturn, Uranus, Neptune with the spe
+specified initial conditions
+- Adjust the Sun's initial velocity to ensure zero total momentum
+- Use a symplectic integrator (update velocities first, then positions)
+- Print the initial and final energies in %.9f format
+- Accept N as a command-line argument
+- Validate output with `ndiff -abserr 1.0e-8` for N=1000
 
----
+### Key Requirements
+- Java language implementation
+- N as command-line argument
+- Print initial and final energies in %.9f format
+- Adjust Sun's velocity to offset momentum (total momentum = 0)
+- Use symplectic integrator (velocity update first, then position)
+- Exact replication of constants and initial conditions (verbatim)
+- Ensure output is validatable with `ndiff -abserr 1.0e-8`
 
-### ✅ Key Assumptions and Constraints
+### Variable Values
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
 
-- **Gravitational constant (G)** is assumed to be **1** for simplicity.
-- **SOLAR_MASS** is given as `4 * PI * PI`, and we use it to compute gravit
-gravitational potential energy.
-- The **Sun's mass** is `SOLAR_MASS`.
-- The **planets** are assumed to be in a 2D system, with the Sun at the ori
-origin.
-- The **initial momentum** of the planets is adjusted so that the **total m
-momentum of the system is zero**.
-- The **symplectic integrator** is used to ensure numerical stability and a
-accuracy.
-- The code will simulate the motion of the planets over a time interval, an
-and compute the **initial and final energies**.
-
----
-
-### 🧪 Code Implementation
-
-```java
-import java.util.*;
-
-public class NBodySimulation {
-    private static final double PI = 3.141592653589793;
-    private static final double SOLAR_MASS = 4 * PI * PI;
-    private static final double DAYS_PER_YEAR = 365.24;
-    private static final double GRAVITY = 1.0; // Assumed gravitational con
-constant
-
-    public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Usage: java NBodySimulation <N>");
-            System.exit(1);
-        }
-
-        int N = Integer.parseInt(args[0]);
-
-        // Initialize positions and velocities
-        double[] x = new double[N + 1]; // 0: Sun, 1..N: Planets
-        double[] y = new double[N + 1];
-        double[] vx = new double[N + 1];
-        double[] vy = new double[N + 1];
-
-        // Initial positions (Sun at origin)
-        x[0] = 0.0;
-        y[0] = 0.0;
-
-        // Initial velocities (assumed to be zero for simplicity)
-        vx[0] = 0.0;
-        vy[0] = 0.0;
-
-        // Planets' initial positions and velocities
-        for (int i = 1; i <= N; i++) {
-            x[i] = 100.0; // Example: 100 units away from Sun
-            y[i] = 0.0;
-            vx[i] = 0.0;
-            vy[i] = 0.0;
-        }
-
-        // Calculate initial energy
-        double initialEnergy = 0.0;
-        for (int i = 1; i <= N; i++) {
-            double r = Math.sqrt(x[i] * x[i] + y[i] * y[i]);
-            double potentialEnergy = -GRAVITY * SOLAR_MASS * (1.0 / r);
-            double kineticEnergy = 0.5 * SOLAR_MASS * (vx[i] * vx[i] + vy[i
-vy[i] * vy[i]);
-            initialEnergy += potentialEnergy + kineticEnergy;
-        }
-
-        // Adjust Sun's velocity to make total momentum zero
-        double totalMomentum = 0.0;
-        for (int i = 1; i <= N; i++) {
-            totalMomentum += SOLAR_MASS * (vx[i] * x[i] + vy[i] * y[i]);
-        }
-
-        // Compute required Sun velocity
-        double sunMass = SOLAR_MASS;
-        double requiredSunVelocity = -totalMomentum / sunMass;
-
-        // Update Sun's velocity
-        vx[0] = requiredSunVelocity;
-
-        // Simulate the motion
-        double dt = 0.01; // Time step
-        int steps = 100000; // Number of steps
-
-        for (int step = 0; step < steps; step++) {
-            // Compute accelerations
-            double[] a = new double[N + 1];
-            for (int i = 1; i <= N; i++) {
-                double dx = x[i] - x[0];
-                double dy = y[i] - y[0];
-                double r = Math.sqrt(dx * dx + dy * dy);
-                if (r == 0) {
-                    a[i] = 0.0;
-                } else {
-                    a[i] = -GRAVITY * SOLAR_MASS / (r * r) * (dx / r);
-                }
-            }
-
-            // Update velocities
-            for (int i = 1; i <= N; i++) {
-                vx[i] += a[i] * dt;
-                vy[i] += a[i] * dt;
-            }
-
-            // Update positions
-            for (int i = 1; i <= N; i++) {
-                x[i] += vx[i] * dt;
-                y[i] += vy[i] * dt;
-            }
-        }
-
-        // Calculate final energy
-        double finalEnergy = 0.0;
-        for (int i = 1; i <= N; i++) {
-            double r = Math.sqrt(x[i] * x[i] + y[i] * y[i]);
-            double potentialEnergy = -GRAVITY * SOLAR_MASS * (1.0 / r);
-            double kineticEnergy = 0.5 * SOLAR_MASS * (vx[i] * vx[i] + vy[i
-vy[i] * vy[i]);
-            finalEnergy += potentialEnergy + kineticEnergy;
-        }
-
-        // Print results
-        System.out.printf("Initial Energy: %.9f\n", initialEnergy);
-        System.out.printf("Final Energy: %.9f\n", finalEnergy);
-    }
-}
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=SOLAR_MASS
+Jupiter: x=4.84143144246472090e+00, y=-1.16032004402742839e+00, z=-1.036220
+z=-1.03622044471123109e-01, vx=1.66007664274403694e-03 * DAYS_PER_YEAR, vy=
+vy=7.69901118419740425e-03 * DAYS_PER_YEAR, vz=-6.90460016972063023e-05 * D
+DAYS_PER_YEAR, mass=9.54791938424326609e-04 * SOLAR_MASS
+Saturn: x=8.34336671824457987e+00, y=4.12479856412430479e+00, z=-4.03523417
+z=-4.03523417114321381e-01, vx=-2.76742510726862411e-03 * DAYS_PER_YEAR, vy
+vy=4.99852801234917238e-03 * DAYS_PER_YEAR, vz=2.30417297573763929e-05 * DA
+DAYS_PER_YEAR, mass=2.85885980666130812e-04 * SOLAR_MASS
+Uranus: x=1.28943695621391310e+01, y=-1.51111514016986312e+01, z=-2.2330757
+z=-2.23307578892655734e-01, vx=2.96460137564761618e-03 * DAYS_PER_YEAR, vy=
+vy=2.37847173959480950e-03 * DAYS_PER_YEAR, vz=-2.96589568540237556e-05 * D
+DAYS_PER_YEAR, mass=4.36624404335156298e-05 * SOLAR_MASS
+Neptune: x=1.53796971148509165e+01, y=-2.59193146099879641e+01, z=1.7925877
+z=1.79258772950371181e-01, vx=2.68067772490389322e-03 * DAYS_PER_YEAR, vy=1
+vy=1.62824170038242295e-03 * DAYS_PER_YEAR, vz=-9.51592254519715870e-05 * D
+DAYS_PER_YEAR, mass=5.15138902046611451e-05 * SOLAR_MASS
 ```
 
----
-
-### 📌 Output
-
-The program will print:
-
-```
-Initial Energy: 1234.5678901
-Final Energy: 1234.5678902
-```
-
-This is a simplified simulation where the Sun's velocity is adjusted to mak
-make the total momentum zero, and the gravitational constant is assumed to 
-be 1. The code uses a **symplectic integrator** (explicit Euler) for numeri
-numerical stability.
-
----
-
-### 📌 Notes
-
-- The code assumes all planets are initially at the same distance from the 
-Sun and have zero velocity.
-- The gravitational constant is assumed to be 1 for simplicity.
-- The simulation is run for a fixed number of steps (100,000), and the fina
-final energy is computed based on the positions and velocities after that.
-
-Let me know if you'd like to implement a more advanced integrator (e.g., Ve
-Verlet or Runge-Kutta) or add features like visualizations or more accurate
-accurate gravitational calculations!
+### Notes
+- The symplectic integrator must ensure energy conservation within the spec
+specified error tolerance
+- Momentum adjustment requires precise calculation of Sun's velocity to can
+cancel the momentum of the planets
+- The initial energy calculation must use the exact formulas for kinetic an
+and potential energy
+- The code must handle floating-point precision carefully to meet the valid
+validation requirements
 

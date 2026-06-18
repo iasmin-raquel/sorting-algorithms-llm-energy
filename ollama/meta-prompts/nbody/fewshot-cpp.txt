@@ -151,8 +151,25 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-The generated prompt must ensure that the produced C++ code:
+The generated prompt must ensure that the C++ code that the target LLM will produce:
+- Is implemented in C++ (the generated prompt must explicitly state C++ as the target language)
 - Receives N as a command-line argument
 - Prints the initial and final energy in %.9f format
 - Adjusts the Sun's initial velocity so that the total momentum of the system is zero (offsetMomentum)
 - Uses the symplectic integrator order: update all velocities first, then update all positions
+
+IMPORTANT: Your output must be only the generated prompt text, ready to be sent to another LLM. Do not generate C++ code. Do not include your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of constants and initial conditions, reproduced verbatim with their exact numeric values for the Sun, Jupiter, Saturn, Uranus, and Neptune, so the target LLM receives every value directly]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known risks of ambiguity or expected model behavior]
