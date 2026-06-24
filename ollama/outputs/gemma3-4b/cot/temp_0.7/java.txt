@@ -1,0 +1,93 @@
+```text
+### Prompt Structure
+You are a helpful AI assistant tasked with generating Java code to simulate the n-body problem using the symplectic integrator. Your response should be precisely formatted and contain all necessary instructions for the LLM to produce correct and verifiable code.
+
+**Task:** Generate a complete Java program that simulates the orbits of the Sun, Jupiter, Saturn, Uranus, and Neptune under mutual gravitational attraction, utilizing a symplectic integrator with order 2. The program must accept 'N' (number of time steps) as a command-line argument. It should then print the initial and final energy of the system in percentage format (%.9f).
+
+**Instructions:**
+
+1.  **Language:** Write the code entirely in Java.
+2.  **Command Line Argument:** The program must accept 'N' as a command line argument, where N is the number of time steps to simulate.
+3.  **Constants:** Use the following constants (defined below) for all calculations. Ensure their values are accurately represented.
+4.  **Symplectic Integrator:** Implement a symplectic integrator order 2:
+    *   First, update the velocities of all bodies.
+    *   Then, update the positions of all bodies based on their new velocities.
+5.  **Momentum Preservation:** Adjust the Sun's initial velocity such that the total momentum of the system is zero (offsetMomentum). This ensures energy conservation over long simulations.
+6.  **Output:** Print the initial and final energy of the system in percentage format (%.9f) after N time steps.
+7.  **Units:** All calculations should be performed using SI units (meters, kilograms, seconds).
+8.  **Code Style:** Maintain a clean and well-documented Java code style for readability and maintainability.
+
+**Constants:**
+
+*   `PI = 3.141592653589793`
+*   `SOLAR_MASS = 4 * PI * PI` (kg)
+*   `DAYS_PER_YEAR = 365.24` (days)
+
+**Initial Conditions:**
+
+Sun:
+    *   x = 0, y = 0, z = 0, vx = 0, vy = 0, vz = 0, mass = `SOLAR_MASS`
+Jupiter:
+    *   x = 4.84143144246472090e+00, y = -1.16032004402742839e+00, z = -1.03622044471123109e-01, vx = 1.66007664274403694e-03 * `DAYS_PER_YEAR`, vy = 7.69901118419740425e-03 * `DAYS_PER_YEAR`, vz = -6.90460016972063023e-05 * `DAYS_PER_YEAR`, mass = 9.54791938424326609e-04 * `SOLAR_MASS`
+Saturn:
+    *   x = 8.34336671824457987e+00, y = 4.12479856412430479e+00, z = -4.03523417114321381e-01, vx = -2.76742510726862411e-03 * `DAYS_PER_YEAR`, vy = 4.99852801234917238e-03 * `DAYS_PER_YEAR`, vz = 2.30417297573763929e-05 * `DAYS_PER_YEAR`, mass = 2.85885980666130812e-04 * `SOLAR_MASS`
+Uranus:
+    *   x = 1.28943695621391310e+01, y = -1.51111514016986312e+01, z = -2.23307578892655734e-01, vx = 2.96460137564761618e-03 * `DAYS_PER_YEAR`, vy = 2.37847173959480950e-03 * `DAYS_PER_YEAR`, vz = -2.96589568540237556e-05 * `DAYS_PER_YEAR`, mass = 4.36624404335156298e-05 * `SOLAR_MASS`
+Neptune:
+    *   x = 1.53796971148509165e+01, y = -2.59193146099879641e+01, z = 1.79258772950371181e-01, vx = 2.68067772490389322e-03 * `DAYS_PER_YEAR`, vy = 1.62824170038242295e-03 * `DAYS_PER_YEAR`, vz = -9.51592254519715870e-05 * `DAYS_PER_YEAR`, mass = 5.15138902046611451e-05 * `SOLAR_MASS`
+
+### Key Requirements
+*   Java Language Only
+*   Command-line argument for N (number of time steps)
+*   Percentage format for energy output (%.9f)
+*   Symplectic integrator order 2
+*   Momentum preservation by adjusting Sun's initial velocity.
+*   Clear comments and documentation
+
+### Variable Values
+```json
+{
+  "PI": 3.141592653589793,
+  "SOLAR_MASS": 4.000000000000000e+06,
+  "DAYS_PER_YEAR": 365.24,
+  "Sun_x": 0.0,
+  "Sun_y": 0.0,
+  "Sun_z": 0.0,
+  "Sun_vx": 1.978666559965347e-08,
+  "Sun_vy": 9.881231154139565e-09,
+  "Sun_vz": -5.185771951575325e-13,
+  "Sun_mass": 1.989000000000000e+06,
+  "Jupiter_x": 4.84143144246472090e+00,
+  "Jupiter_y": -1.16032004402742839e+00,
+  "Jupiter_z": -1.03622044471123109e-01,
+  "Jupiter_vx": 1.66007664274403694e-03,
+  "Jupiter_vy": 7.69901118419740425e-03,
+  "Jupiter_vz": -6.90460016972063023e-05,
+  "Jupiter_mass": 1.89813144466419821e+07,
+  "Saturn_x": 8.34336671824457987e+00,
+  "Saturn_y": 4.12479856412430479e+00,
+  "Saturn_z": -4.03523417114321381e-01,
+  "Saturn_vx": -2.76742510726862411e-03,
+  "Saturn_vy": 4.99852801234917238e-03,
+  "Saturn_vz": 2.30417297573763929e-05,
+  "Saturn_mass": 5.68341086336658566e+26,
+  "Uranus_x": 1.28943695621391310e+01,
+  "Uranus_y": -1.51111514016986312e+01,
+  "Uranus_z": -2.23307578892655734e-01,
+  "Uranus_vx": 2.96460137564761618e-03,
+  "Uranus_vy": 2.37847173959480950e-03,
+  "Uranus_vz": -2.96589568540237556e-05,
+  "Uranus_mass": 1.02415093629260527e+27,
+  "Neptune_x": 1.53796971148509165e+01,
+  "Neptune_y": -2.59193146099879641e+01,
+  "Neptune_z": 1.79258772950371181e-01,
+  "Neptune_vx": 2.68067772490389322e-03,
+  "Neptune_vy": 1.62824170038242295e-03,
+  "Neptune_vz": -9.51592254519715870e-05,
+  "Neptune_mass": 3.08369344734340395e+27
+}
+```
+
+### Notes
+*   This prompt emphasizes the importance of using the symplectic integrator order 2 and adjusting the Sun's initial velocity to achieve momentum conservation. The specified percentage format for energy output provides a clear metric for assessing the accuracy of the simulation. Consider adding error handling to gracefully manage potential issues like division by zero or invalid command-line arguments.
+```

@@ -1,0 +1,49 @@
+### Prompt Structure
+You are an expert C++ code generator. Your task is to generate a complete C++ program that simulates the n-body problem with Jovian planets under mutual gravitation, aiming for validation using `ndiff -abserr 1.0e-8` with N=1000. The program must take the number of time steps 'N' as a command-line argument.  Follow these instructions precisely:
+
+First, think step by step about how to implement this simulation in C++.
+1. **Include Headers:** Start by including necessary headers like `<iostream>`, `<cmath>`, and potentially others for numerical calculations.
+2. **Define Constants:** Declare the constants provided (PI, SOLAR_MASS, DAYS_PER_YEAR) with their exact values.
+3. **Define Initial Conditions:** Define structures or classes to represent each planet (Sun, Jupiter, Saturn, Uranus, Neptune), storing their initial position (x, y, z) and velocity (vx, vy, vz) along with their mass.  Use the provided numerical values for all planets.
+4. **Symplectic Integration:** Implement a symplectic integrator to update the positions and velocities of the planets at each time step. Specifically:
+   - Update all velocities first.
+   - Then, update all positions based on the new velocities and gravitational forces.
+5. **Gravitational Force Calculation:** Calculate the gravitational force between two bodies using Newton's law of universal gravitation: `F = G * m1 * m2 / r^2`, where G is the gravitational constant (you can use PI * 6.6743e-11), m1 and m2 are the masses of the two bodies, and r is the distance between their centers.
+6. **Time Stepping:** Iterate for 'N' time steps, updating the positions and velocities of each planet at each step using the symplectic integrator.
+7. **Energy Calculation:** Calculate the total energy (kinetic + potential) of the system after each time step.  The potential energy is calculated based on the gravitational potential energy between all pairs of planets.
+8. **Output:** Print the initial and final energy in %.9f format.
+9. **Command-Line Argument:** Process the command-line argument 'N' to determine the number of time steps.
+10. **Momentum Offset:** Adjust the Sun’s initial velocity so that the total momentum of the system is zero (offsetMomentum). This is crucial for stability.
+
+Now, generate the C++ code based on these instructions.  The code should be well-commented to explain each step.
+
+### Key Requirements
+*   The generated code must be valid C++.
+*   The code must take 'N' as a command-line argument.
+*   The output must print the initial and final energy in %.9f format.
+*   The code must implement a symplectic integrator for time integration.
+*   The code must correctly calculate gravitational forces between planets.
+*   The code must use the provided constants and initial conditions exactly as specified.
+*   The code should be designed to achieve validation with `ndiff -abserr 1.0e-8` using N=1000.
+
+### Variable Values
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+Sun:
+  x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=4*PI*PI
+Jupiter:
+  x = 4.84143144246472090e+00, y = -1.16032004402742839e+00, z = -1.03622044471123109e-01, vx=1.66007664274403694e-03 * DAYS_PER_YEAR, vy=7.69901118419740425e-03 * DAYS_PER_YEAR, vz=-6.90460016972063023e-05 * DAYS_PER_YEAR, mass=9.54791938424326609e-04 * SOLAR_MASS
+Saturn:
+  x = 8.34336671824457987e+00, y = 4.12479856412430479e+00, z = -4.03523417114321381e-01, vx=-2.76742510726862411e-03 * DAYS_PER_YEAR, vy=4.99852801234917238e-03 * DAYS_PER_YEAR, vz=2.30417297573763929e-05 * DAYS_PER_YEAR, mass=2.85885980666130812e-04 * SOLAR_MASS
+Uranus:
+  x = 1.28943695621391310e+01, y = -1.51111514016986312e+01, z = -2.23307578892655734e-01, vx=2.96460137564761618e-03 * DAYS_PER_YEAR, vy=2.37847173959480950e-03 * DAYS_PER_YEAR, vz=-2.96589568540237556e-05 * DAYS_PER_YEAR, mass=4.36624404335156298e-05 * SOLAR_MASS
+Neptune:
+  x = 1.53796971148509165e+01, y = -2.59193146099879641e+01, z = 1.79258772950371181e-01, vx=2.68067772490389322e-03 * DAYS_PER_YEAR, vy=1.62824170038242295e-03 * DAYS_PER_YEAR, vz=-9.51592254519715870e-05 * DAYS_PER_YEAR, mass=5.15138902046611451e-05 * SOLAR_MASS
+```
+
+### Notes
+This prompt emphasizes a step-by-step approach to guide the LLM in generating the C++ code. The inclusion of specific instructions regarding symplectic integration and momentum offset is crucial for achieving the desired accuracy and stability.  The detailed variable values provide all necessary information for the LLM to construct the simulation accurately.
+

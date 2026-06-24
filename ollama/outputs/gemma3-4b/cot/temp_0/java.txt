@@ -1,0 +1,40 @@
+### Prompt Structure
+You are a helpful AI assistant tasked with generating Java code to simulate the n-body problem using the symplectic integrator. Your response should be structured as a detailed instruction set for an LLM to generate the complete Java program. The program must accurately implement the gravitational interactions between the Sun and the other planets (Jupiter, Saturn, Uranus, and Neptune) based on their initial positions and velocities. The code should handle command-line arguments, print the initial and final energy of the system in percentage format with 9 decimal places, and utilize a symplectic integrator to update the positions and velocities of all bodies over time. Specifically, you must guide the LLM to:
+
+1.  **Input Handling:** Accept an integer 'N' as a command-line argument, representing the number of integration steps.
+2.  **Constants:** Define all necessary physical constants (PI, SOLAR_MASS, DAYS_PER_YEAR) with their exact values.
+3.  **Initial Conditions:** Set up the initial positions and velocities for the Sun and each of the other planets (Jupiter, Saturn, Uranus, Neptune) according to the provided values.
+4.  **Symplectic Integrator:** Implement a symplectic integrator to update the positions and velocities of all bodies at each time step. The order of operations is crucial: first, update all velocities, then update all positions.
+5.  **Momentum Conservation:** Adjust the Sun's initial velocity so that the total momentum of the system is zero (offsetMomentum). This ensures conservation of linear momentum during the simulation.
+6.  **Energy Calculation:** Calculate the kinetic and potential energy of the system at each time step and compute the total energy.
+7.  **Output Formatting:** Print the initial and final energy in percentage format with 9 decimal places using the specified format specifier: %.9f.
+8.  **Java Code Generation:** Generate complete, runnable Java code that implements all of the above steps. The code should be well-commented to explain each step of the process.
+
+Now, generate the Java code based on these instructions.
+
+### Key Requirements
+*   The generated code must be written in Java.
+*   The code must accept an integer 'N' as a command-line argument.
+*   The code must calculate and print the initial and final energy of the system in percentage format with 9 decimal places.
+*   The code must implement a symplectic integrator for updating positions and velocities.
+*   The code must adjust the Sun’s initial velocity to zero out total momentum.
+*   The code should include clear comments explaining each step.
+
+### Variable Values
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=4.186e+07
+Jupiter: x = 4.84143144246472090e+00, y = -1.16032004402742839e+00, z = -1.03622044471123109e-01, vx = 1.66007664274403694e-03 * DAYS_PER_YEAR, vy = 7.69901118419740425e-03 * DAYS_PER_YEAR, vz = -6.90460016972063023e-05 * DAYS_PER_YEAR, mass = 1.898e+27
+Saturn: x = 8.34336671824457987e+00, y = 4.12479856412430479e+00, z = -4.03523417114321381e-01, vx = -2.76742510726862411e-03 * DAYS_PER_YEAR, vy = 4.99852801234917238e-03 * DAYS_PER_YEAR, vz = 2.30417297573763929e-05 * DAYS_PER_YEAR, mass = 5.683e+26
+Uranus: x = 1.28943695621391310e+01, y = -1.51111514016986312e+01, z = -2.23307578892655734e-01, vx = 2.96460137564761618e-03 * DAYS_PER_YEAR, vy = 2.37847173959480950e-03 * DAYS_PER_YEAR, vz = -2.96589568540237556e-05 * DAYS_PER_YEAR, mass = 1.450e+25
+Neptune: x = 1.53796971148509165e+01, y = -2.59193146099879641e+01, z = 1.79258772950371181e-01, vx = 2.68067772490389322e-03 * DAYS_PER_YEAR, vy = 1.62824170038242295e-03 * DAYS_PER_YEAR, vz = -9.51592254519715870e-05 * DAYS_PER_YEAR, mass = 4.900e+25
+```
+
+### Notes
+*   The symplectic integrator is a simple midpoint rule method that can be used to approximate the solution to the n-body problem. It's not particularly accurate but serves as a basic implementation for demonstration purposes.
+*   Careful attention must be paid to the order of operations in the integrator to ensure stability and accuracy.
+*   The code should handle potential numerical issues (e.g., overflow, underflow) that may arise during the calculations.
+*   This prompt emphasizes generating functional code rather than a highly optimized or robust simulation. The goal is to demonstrate understanding of the core concepts and implementation steps.
+

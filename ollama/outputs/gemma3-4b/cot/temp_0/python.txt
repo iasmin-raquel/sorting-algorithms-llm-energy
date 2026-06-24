@@ -1,0 +1,208 @@
+### Prompt Structure
+You are an expert Python code generator tasked with simulating the n-body problem using the Computer Language Benchmarks Game's Jovian planet simulation. Your goal is to generate a complete and executable Python script that accurately models the gravitational interactions between the Sun, Jupiter, Saturn, Uranus, and Neptune, achieving a validation accuracy of 1.0e-8 as measured by ndiff -abserr. The script must take the number of integration steps 'N' as a command-line argument.
+
+Here’s your step-by-step thought process:
+
+1.  **Initialization:** Begin by importing necessary libraries like `numpy` for numerical calculations. Define constants such as PI, SOLAR_MASS, and DAYS_PER_YEAR.
+2.  **Planet Data:** Store the initial positions (x, y, z) and velocities (vx, vy, vz) of the Sun, Jupiter, Saturn, Uranus, and Neptune according to the provided values. Also, store their respective masses. Ensure all numerical values are precisely as specified in the 'Variable Values' section below.
+3.  **Symplectic Integration:** Implement a symplectic integrator to update the positions and velocities of the planets at each time step. Specifically:
+    *   First, update all velocities based on the current positions and gravitational forces.
+    *   Then, update all positions based on the updated velocities.
+4.  **Momentum Conservation:** To ensure accurate long-term simulation, offset the Sun's initial velocity to make the total momentum of the system zero. Calculate this offsetMomentum value.
+5.  **Output:** After 'N' time steps, calculate and print the total energy (kinetic + potential) of the system in percentage format with 9 decimal places using the format string "%.9f".
+6.  **Command-Line Argument:** The script should accept the number of integration steps 'N' as a command-line argument.
+
+Now, generate the complete Python code based on this detailed thought process.
+
+```python
+#!/usr/bin/env python3
+
+import numpy as np
+
+# Constants
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+# Planet Data (as provided in the problem description)
+sun = {
+    'x': 0,
+    'y': 0,
+    'z': 0,
+    'vx': 0,
+    'vy': 0,
+    'vz': 0,
+    'mass': SOLAR_MASS
+}
+
+jupiter = {
+    'x': 4.84143144246472090e+00,
+    'y': -1.16032004402742839e+00,
+    'z': -1.03622044471123109e-01,
+    'vx': 1.66007664274403694e-03 * DAYS_PER_YEAR,
+    'vy': 7.69901118419740425e-03 * DAYS_PER_YEAR,
+    'vz': -6.90460016972063023e-05 * DAYS_PER_YEAR,
+    'mass': 9.54791938424326609e-04 * SOLAR_MASS
+}
+
+saturn = {
+    'x': 8.34336671824457987e+00,
+    'y': 4.12479856412430479e+00,
+    'z': -4.03523417114321381e-01,
+    'vx': -2.76742510726862411e-03 * DAYS_PER_YEAR,
+    'vy': 4.99852801234917238e-03 * DAYS_PER_YEAR,
+    'vz': 2.30417297573763929e-05 * DAYS_PER_YEAR,
+    'mass': 2.85885980666130812e-04 * SOLAR_MASS
+}
+
+uranus = {
+    'x': 1.28943695621391310e+01,
+    'y': -1.51111514016986312e+01,
+    'z': -2.23307578892655734e-01,
+    'vx': 2.96460137564761618e-03 * DAYS_PER_YEAR,
+    'vy': 2.37847173959480950e-03 * DAYS_PER_YEAR,
+    'vz': -2.96589568540237556e-05 * DAYS_PER_YEAR,
+    'mass': 4.36624404335156298e-05 * SOLAR_MASS
+}
+
+neptune = {
+    'x': 1.53796971148509165e+01,
+    'y': -2.59193146099879641e+01,
+    'z': 1.79258772950371181e-01,
+    'vx': 2.68067772490389322e-03 * DAYS_PER_YEAR,
+    'vy': 1.62824170038242295e-03 * DAYS_PER_YEAR,
+    'vz': -9.51592254519715870e-05 * DAYS_PER_YEAR,
+    'mass': 5.15138902046611451e-05 * SOLAR_MASS
+}
+
+# Calculate offsetMomentum
+offsetMomentum = 0  # Initialize offset momentum
+
+# Simulation parameters
+N = None # This will be passed as a command line argument
+dt = 1.0 * DAYS_PER_YEAR # Time step (adjust as needed)
+
+def calculate_force(pos1, pos2, mass1, mass2):
+    r = np.linalg.norm(np.array(pos1) - np.array(pos2))
+    F = G * mass1 * mass2 / r**3
+    return F
+
+def symplectic_integrator(positions, velocities, dt):
+    new_positions = positions.copy()
+    new_velocities = velocities.copy()
+
+    for i in range(len(positions)):
+        # Calculate force on this planet from all others
+        force = np.zeros(3)
+        for j in range(len(positions)):
+            if i != j:
+                force += calculate_force(positions[i], positions[j], sun['mass'], jupiter['mass'])
+
+        # Update velocity (symplectic integrator step)
+        new_velocities[i] += force * dt / jupiter['mass']
+
+        # Update position
+        new_positions[i] = positions[i] + new_velocities[i] * dt
+
+    return new_positions, new_velocities
+
+
+if __name__ == "__main__":
+    import sys
+    try:
+        N = int(sys.argv[1])
+    except (IndexError, ValueError):
+        print("Usage: python nbody.py <number of steps>")
+        exit()
+
+    # Initial conditions
+    positions = [sun, jupiter, saturn, uranus, neptune]
+    velocities = [sun['vx'], jupiter['vx'], saturn['vx'], uranus['vx'], neptune['vx']]
+
+    # Run the simulation
+    new_positions, new_velocities = symplectic_integrator(positions, velocities, dt)
+
+    # Calculate total energy
+    total_energy = 0
+    for i in range(len(new_positions)):
+        kinetic_energy = 0.5 * np.sum(new_velocities[i]**2)
+        potential_energy = -G * np.sum([mass / (np.linalg.norm(np.array(new_positions[i]) - np.array(pos))) for pos in positions if pos != new_positions[i]])
+        total_energy += kinetic_energy + potential_energy
+
+    print("Total Energy: %.9f" % total_energy)
+```
+
+### Key Requirements
+*   The code must be written in Python.
+*   It should take the number of integration steps 'N' as a command-line argument.
+*   It must print the total energy (kinetic + potential) of the system in percentage format with 9 decimal places using the format string "%.9f".
+*   The code must implement the symplectic integrator to update positions and velocities.
+*   The Sun's initial velocity should be offset to achieve zero total momentum.
+*   The simulation should run for 'N' steps, as specified by the command-line argument.
+
+### Variable Values
+```
+# Constants
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+# Planet Data (as provided in the problem description)
+sun = {
+    'x': 0,
+    'y': 0,
+    'z': 0,
+    'vx': 0,
+    'vy': 0,
+    'vz': 0,
+    'mass': SOLAR_MASS
+}
+
+jupiter = {
+    'x': 4.84143144246472090e+00,
+    'y': -1.16032004402742839e+00,
+    'z': -1.03622044471123109e-01,
+    'vx': 1.66007664274403694e-03 * DAYS_PER_YEAR,
+    'vy': 7.69901118419740425e-03 * DAYS_PER_YEAR,
+    'vz': -6.90460016972063023e-05 * DAYS_PER_YEAR,
+    'mass': 9.54791938424326609e-04 * SOLAR_MASS
+}
+
+saturn = {
+    'x': 8.34336671824457987e+00,
+    'y': 4.12479856412430479e+00,
+    'z': -4.03523417114321381e-01,
+    'vx': -2.76742510726862411e-03 * DAYS_PER_YEAR,
+    'vy': 4.99852801234917238e-03 * DAYS_PER_YEAR,
+    'vz': 2.30417297573763929e-05 * DAYS_PER_YEAR,
+    'mass': 2.85885980666130812e-04 * SOLAR_MASS
+}
+
+uranus = {
+    'x': 1.28943695621391310e+01,
+    'y': -1.51111514016986312e+01,
+    'z': -2.23307578892655734e-01,
+    'vx': 2.96460137564761618e-03 * DAYS_PER_YEAR,
+    'vy': 2.37847173959480950e-03 * DAYS_PER_YEAR,
+    'vz': -2.96589568540237556e-05 * DAYS_PER_YEAR,
+    'mass': 4.36624404335156298e-05 * SOLAR_MASS
+}
+
+neptune = {
+    'x': 1.53796971148509165e+01,
+    'y': -2.59193146099879641e+01,
+    'z': 1.79258772950371181e-01,
+    'vx': 2.68067772490389322e-03 * DAYS_PER_YEAR,
+    'vy': 1.62824170038242295e-03 * DAYS_PER_YEAR,
+    'vz': -9.51592254519715870e-05 * DAYS_PER_YEAR,
+    'mass': 5.15138902046611451e-05 * SOLAR_MASS
+}
+```
+
+### Notes
+*   The prompt emphasizes the use of chain-of-thought prompting to guide the LLM through the problem-solving process.
+*   The inclusion of specific constants and initial conditions ensures that the generated code will produce the correct results, as required by the benchmark.
+*   The symplectic integrator is a crucial element for long-term stability in n-body simulations. The prompt explicitly states the order of integration to be used.
+*   The command-line argument handling allows for flexibility in controlling the simulation's duration.
+*   The output formatting ensures that the results are presented in the desired format, facilitating comparison with the benchmark results.
+

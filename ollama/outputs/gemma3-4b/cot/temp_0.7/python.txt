@@ -1,0 +1,88 @@
+### Prompt Structure
+```
+You are an expert Python programmer tasked with implementing a simulation of the N-body problem involving Jovian planets. Your goal is to create code that accurately simulates the gravitational interactions between these bodies and outputs the initial and final energy of the system, formatted to nine decimal places. The code must be executable from the command line using the number of particles 'N'.  The simulation should adhere to the specified physical constants and initial conditions precisely. Employ a symplectic integrator for accurate time integration.
+
+First, think step-by-step about how to implement this simulation in Python. Consider the following:
+1.  Define all necessary constants (PI, SOLAR_MASS, DAYS_PER_YEAR) at the beginning of your script.
+2.  Represent each planet as an object with attributes for its position (x, y, z), velocity (vx, vy, vz), and mass.
+3.  Implement a function to calculate the gravitational force between two planets based on Newton's law of universal gravitation.
+4.  Implement a symplectic integrator (e.g., Velocity Verlet) to update the positions and velocities of the planets at each time step. Ensure you update all velocities *before* updating all positions within each iteration.
+5.  Handle the Sun as a central body, adjusting its initial velocity to zero momentum to make the system's total momentum equal to zero. This is crucial for energy conservation.
+6.  Take command-line argument N and use it as the number of particles in the simulation.
+7.  Calculate and print the initial and final energy of the system to nine decimal places using the %.9f format specifier.
+
+Now, write the Python code that implements this simulation. Your code must meet the following specifications exactly:
+
+*   The code should be executable from the command line.
+*   It should accept 'N' as a command-line argument.
+*   It should print the initial and final energy of the system in %.9f format.
+*   Adjust the Sun's initial velocity so that the total momentum of the system is zero (offsetMomentum).
+*   Use the symplectic integrator order: update all velocities first, then update all positions
+
+Here are the physical constants and initial conditions to use:
+
+Constants:
+- PI = 3.141592653589793
+- SOLAR_MASS = 4 * PI * PI
+- DAYS_PER_YEAR = 365.24
+
+Initial conditions (x, y, z, vx, vy, vz, mass):
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=SOLAR_MASS
+Jupiter:
+  x = 4.84143144246472090e+00
+  y = -1.16032004402742839e+00
+  z = -1.03622044471123109e-01
+  vx = 1.66007664274403694e-03 * DAYS_PER_YEAR
+  vy = 7.69901118419740425e-03 * DAYS_PER_YEAR
+  vz = -6.90460016972063023e-05 * DAYS_PER_YEAR
+  mass = 9.54791938424326609e-04 * SOLAR_MASS
+Saturn:
+  x = 8.34336671824457987e+00
+  y = 4.12479856412430479e+00
+  z = -4.03523417114321381e-01
+  vx = -2.76742510726862411e-03 * DAYS_PER_YEAR
+  vy = 4.99852801234917238e-03 * DAYS_PER_YEAR
+  vz = 2.30417297573763929e-05 * DAYS_PER_YEAR
+  mass = 2.85885980666130812e-04 * SOLAR_MASS
+Uranus:
+  x = 1.28943695621391310e+01
+  y = -1.51111514016986312e+01
+  z = -2.23307578892655734e-01
+  vx = 2.96460137564761618e-03 * DAYS_PER_YEAR
+  vy = 2.37847173959480950e-03 * DAYS_PER_YEAR
+  vz = -2.96589568540237556e-05 * DAYS_PER_YEAR
+  mass = 4.36624404335156298e-05 * SOLAR_MASS
+Neptune:
+  x = 1.53796971148509165e+01
+  y = -2.59193146099879641e+01
+  z = 1.79258772950371181e-01
+  vx = 2.68067772490389322e-03 * DAYS_PER_YEAR
+  vy = 1.62824170038242295e-03 * DAYS_PER_YEAR
+  vz = -9.51592254519715870e-05 * DAYS_PER_YEAR
+  mass = 5.15138902046611451e-05 * SOLAR_MASS
+
+```
+
+### Key Requirements
+*   The code must be written in Python.
+*   It must take the number of particles 'N' as a command-line argument.
+*   It must calculate and print the initial and final energy of the system to nine decimal places using the %.9f format specifier.
+*   The Sun's initial velocity must be adjusted so that the total momentum of the system is zero (offsetMomentum). This should be implemented as a variable for clarity.
+*   The symplectic integrator order (Velocity Verlet) should be used to update all velocities and positions at each time step, ensuring correct integration steps. The velocity updates must happen before the position updates in each iteration.
+
+### Variable Values
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=4.000000000000000e+01
+Jupiter: x = 4.84143144246472090e+00, y = -1.16032004402742839e+00, z = -1.03622044471123109e-01, vx = 1.66007664274403694e-03 * DAYS_PER_YEAR, vy = 7.69901118419740425e-03 * DAYS_PER_YEAR, vz = -6.90460016972063023e-05 * DAYS_PER_YEAR, mass = 9.54791938424326609e-04 * SOLAR_MASS
+Saturn: x = 8.34336671824457987e+00, y = 4.12479856412430479e+00, z = -4.03523417114321381e-01, vx = -2.76742510726862411e-03 * DAYS_PER_YEAR, vy = 4.99852801234917238e-03 * DAYS_PER_YEAR, vz = 2.30417297573763929e-05 * DAYS_PER_YEAR, mass = 2.85885980666130812e-04 * SOLAR_MASS
+Uranus: x = 1.28943695621391310e+01, y = -1.51111514016986312e+01, z = -2.23307578892655734e-01, vx = 2.96460137564761618e-03 * DAYS_PER_YEAR, vy = 2.37847173959480950e-03 * DAYS_PER_YEAR, vz = -2.96589568540237556e-05 * DAYS_PER_YEAR, mass = 4.36624404335156298e-05 * SOLAR_MASS
+Neptune: x = 1.53796971148509165e+01, y = -2.59193146099879641e+01, z = 1.79258772950371181e-01, vx = 2.68067772490389322e-03 * DAYS_PER_YEAR, vy = 1.62824170038242295e-03 * DAYS_PER_YEAR, vz = -9.51592254519715870e-05 * DAYS_PER_YEAR, mass = 5.15138902046611451e-05 * SOLAR_MASS
+```
+
+### Notes
+*   The prompt is designed to guide the LLM towards a complete and correct implementation of the N-body simulation. The chain-of-thought approach should encourage the model to systematically address each aspect of the problem.  The emphasis on symplectic integration and momentum conservation are crucial for accurate simulations. Ensure that the LLM understands the importance of updating velocities *before* positions in the Velocity Verlet algorithm.
+

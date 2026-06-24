@@ -1,0 +1,131 @@
+### Prompt Structure
+Implement the n-body problem simulating the orbits of Jovian planets under mutual gravitation in Java. The output must be validatable with ndiff -abserr 1.0e-8 with N=1000. Use the following physical constants and initial conditions exactly as given.
+
+**Constants:**
+* PI = 3.141592653589793
+* SOLAR_MASS = 4 * PI * PI
+* DAYS_PER_YEAR = 365.24
+
+**Initial Conditions:**
+* **Sun:** x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=SOLAR_MASS
+* **Jupiter:** x = 4.84143144246472090e+00, y = -1.16032004402742839e+00, z = -1.03622044471123109e-01, vx = 1.66007664274403694e-03 * DAYS_PER_YEAR, vy = 7.69901118419740425e-03 * DAYS_PER_YEAR, vz = -6.90460016972063023e-05 * DAYS_PER_YEAR, mass = 9.54791938424326609e-04 * SOLAR_MASS
+* **Saturn:** x = 8.34336671824457987e+00, y = 4.12479856412430479e+00, z = -4.03523417114321381e-01, vx = -2.76742510726862411e-03 * DAYS_PER_YEAR, vy = 4.99852801234917238e-03 * DAYS_PER_YEAR, vz = 2.30417297573763929e-05 * DAYS_PER_YEAR, mass = 2.85885980666130812e-04 * SOLAR_MASS
+* **Uranus:** x = 1.28943695621391310e+01, y = -1.51111514016986312e+01, z = -2.23307578892655734e-01, vx = 2.96460137564761618e-03 * DAYS_PER_YEAR, vy = 2.37847173959480950e-03 * DAYS_PER_YEAR, vz = -2.96589568540237556e-05 * DAYS_PER_YEAR, mass = 4.36624404335156298e-05 * SOLAR_MASS
+* **Neptune:** x = 1.53796971148509165e+01, y = -2.59193146099879641e+01, z = 1.79258772950371181e-01, vx = 2.68067772490389322e-03 * DAYS_PER_YEAR, vy = 1.62824170038242295e-03 * DAYS_PER_YEAR, vz = -9.51592254519715870e-05 * DAYS_PER_YEAR, mass = 5.15138902046611451e-05 * SOLAR_MASS
+
+The following spectral-norm code must be included in the solution as a demonstration:
+
+```java
+import java.text.DecimalFormat;
+
+public class spectralnorm {
+    private static final DecimalFormat formatter = new DecimalFormat("#.000000000");
+    private static final int NCPU = Runtime.getRuntime().availableProcessors();
+
+    public static void main(String[] args) throws InterruptedException {
+        final int n = args.length > 0 ? Integer.parseInt(args[0]) : 100;
+        final double[] u = new double[n];
+        for (int i = 0; i < n; i++)
+            u[i] = 1.0;
+        final double[] v = new double[n];
+        for (int i = 0; i < 10; i++) {
+            aTimesTransp(v, u);
+            aTimesTransp(u, v);
+        }
+
+        double vBv = 0.0, vv = 0.0;
+        for (int i = 0; i < n; i++) {
+            final double vi = v[i];
+            vBv += u[i] * vi;
+            vv += vi * vi;
+        }
+        System.out.println(formatter.format(Math.sqrt(vBv / vv)));
+    }
+
+    private static void aTimesTransp(double[] v, double[] u) throws InterruptedException {
+        final int n = u.length;
+        final Thread[] threads = new Thread[NCPU];
+        for (int i = 0; i < NCPU; i++) {
+            threads[i] = new Times(v, i * n / NCPU, (i + 1) * n / NCPU, u, false);
+            threads[i].start();
+        }
+        for (int i = 0; i < NCPU; i++)
+            threads[i].join();
+
+        for (int i = 0; i < NCPU; i++) {
+            threads[i] = new Times(v, i * n / NCPU, (i + 1) * n / NCPU, u, true);
+            threads[i].start();
+        }
+        for (int i = 0; i < NCPU; i++)
+            threads[i].join();
+    }
+
+    private final static class Times extends Thread {
+        private final double[] v, u;
+        private final int ii, n;
+        private final boolean transpose;
+
+        public Times(double[] v, int ii, int n, double[] u, boolean transpose) {
+            this.v = v;
+            this.u = u;
+            this.ii = ii;
+            this.n = n;
+            this.transpose = transpose;
+        }
+
+        @Override
+        public void run() {
+            for (int i = ii; i < n; i++) {
+                double vi = 0.0;
+                for (int j = 0; j < n; j++) {
+                    if (transpose)
+                        vi += u[j] / a(j, i);
+                    else
+                        vi += u[j] / a(i, j);
+                }
+                v[i] = vi;
+            }
+        }
+
+        private static int a(int i, int j) {
+            return (i + j) * (i + j + 1) / 2 + i + 1;
+        }
+    }
+}
+```
+
+The program should:
+
+*   Be implemented in Java.
+*   Receive N as a command-line argument.
+*   Print the initial and final energy in %.9f format.
+*   Adjust the Sun's initial velocity so that the total momentum of the system is zero (offsetMomentum).
+*   Use the symplectic integrator order: update all velocities first, then update all positions.
+
+### Key Requirements
+*   Java implementation
+*   Command-line argument for N
+*   Output format: %.9f for initial and final energy
+*   Zero total momentum (Sun's velocity adjusted)
+*   Symplectic integrator (velocity updates before position updates)
+*   Validates with ndiff -abserr 1.0e-8 using N=1000
+
+### Variable Values
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=4.000000000000000e+01
+Jupiter: x = 4.84143144246472090e+00, y = -1.16032004402742839e+00, z = -1.03622044471123109e-01, vx = 1.66007664274403694e-03 * 365.24, vy = 7.69901118419740425e-03 * 365.24, vz = -6.90460016972063023e-05 * 365.24, mass = 9.54791938424326609e-04 * 4.000000000000000e+01
+Saturn: x = 8.34336671824457987e+00, y = 4.12479856412430479e+00, z = -4.03523417114321381e-01, vx = -2.76742510726862411e-03 * 365.24, vy = 4.99852801234917238e-03 * 365.24, vz = 2.30417297573763929e-05 * 365.24, mass = 2.85885980666130812e-04 * 4.000000000000000e+01
+Uranus: x = 1.28943695621391310e+01, y = -1.51111514016986312e+01, z = -2.23307578892655734e-01, vx = 2.96460137564761618e-03 * 365.24, vy = 2.37847173959480950e-03 * 365.24, vz = -2.96589568540237556e-05 * 365.24, mass = 4.36624404335156298e-05 * 4.000000000000000e+01
+Neptune: x = 1.53796971148509165e+01, y = -2.59193146099879641e+01, z = 1.79258772950371181e-01, vx = 2.68067772490389322e-03 * 365.24, vy = 1.62824170038242295e-03 * 365.24, vz = -9.51592254519715870e-05 * 365.24, mass = 5.15138902046611451e-05 * 4.000000000000000e+01
+```
+
+### Notes
+*   The provided spectral-norm code is a simplified example and may not be the most efficient implementation for this problem. It's included to demonstrate the expected structure of the solution.
+*   Ensure that the initial velocities are correctly scaled by `DAYS_PER_YEAR`.
+*   The prompt emphasizes validation with ndiff -abserr 1.0e-8, which requires a high degree of accuracy in the calculations.
+*   Consider using a more robust integrator (e.g., Runge-Kutta) for improved stability and accuracy, although the provided code uses a simple symplectic integrator.
+

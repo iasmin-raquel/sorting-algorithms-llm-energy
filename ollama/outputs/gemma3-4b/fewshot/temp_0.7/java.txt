@@ -1,0 +1,63 @@
+### Prompt Structure
+Implement a Java program to simulate the n-body problem with Jovian planets under mutual gravitation. The simulation should be validated using ndiff -abserr 1.0e-8 with N=1000.
+
+The physical constants and initial conditions are as follows:
+
+Constants:
+- PI = 3.141592653589793
+- SOLAR_MASS = 4 * PI * PI
+- DAYS_PER_YEAR = 365.24
+
+Initial conditions (x, y, z, vx, vy, vz, mass):
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=SOLAR_MASS
+Jupiter:
+  x = 4.84143144246472090e+00
+  y = -1.16032004402742839e+00
+  z = -1.03622044471123109e-01
+  vx = 1.66007664274403694e-03 * DAYS_PER_YEAR
+  vy = 7.69901118419740425e-03 * DAYS_PER_YEAR
+  vz = -6.90460016972063023e-05 * DAYS_PER_YEAR
+  mass = 9.54791938424326609e-04 * SOLAR_MASS
+Saturn:
+  x = 8.34336671824457987e+00
+  y = 4.12479856412430479e+00
+  z = -4.03523417114321381e-01
+  vx = -2.76742510726862411e-03 * DAYS_PER_YEAR
+  vy = 4.99852801234917238e-03 * DAYS_PER_YEAR
+  vz = 2.30417297573763929e-05 * DAYS_PER_YEAR
+  mass = 2.85885980666130812e-04 * SOLAR_MASS
+Uranus:
+  x = 1.28943695621391310e+01
+  y = -1.51111514016986312e+01
+  z = -2.23307578892655734e-01
+  vx = 2.96460137564761618e-03 * DAYS_PER_YEAR
+  vy = 2.37847173959480950e-03 * DAYS_PER_YEAR
+  vz = -2.96589568540237556e-05 * DAYS_PER_YEAR
+  mass = 4.36624404335156298e-05 * SOLAR_MASS
+Neptune:
+  x = 1.53796971148509165e+01
+  y = -2.59193146099879641e+01
+  z = 1.79258772950371181e-01
+  vx = 2.68067772490389322e-03 * DAYS_PER_YEAR
+  vy = 1.62824170038242295e-03 * DAYS_PER_YEAR
+  vz = -9.51592254519715870e-05 * DAYS_PER_YEAR
+  mass = 5.15138902046611451e-05 * SOLAR_MASS
+
+The program should receive N as a command-line argument. The output should be printed in the format "Initial Energy: %.9f, Final Energy: %.9f".
+The program must adjust the Sun's initial velocity so that the total momentum of the system is zero (offsetMomentum). This can be achieved by adding or subtracting a small amount from the Sun's x-velocity.
+The symplectic integrator should be used to update all velocities first, then update all positions.
+
+### Key Requirements
+*   Java implementation.
+*   Command-line argument for N.
+*   Output in specified format with 9 decimal places.
+*   Zero total momentum by adjusting Sun's initial velocity.
+*   Symplectic integrator (update velocities before updating positions).
+
+### Variable Values
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=4.0E+01
+Jupiter: x = 4.84143144246472090E+00, y = -1.16032004402742839E+00, z = -1.03622044471123109E-01, vx = 1.66007664274403694E-03, vy = 7.69901118419740425E-03, vz = -6.90460016972063023E-05, mass = 9.54791938424326609E-04
+Saturn: x = 8.34336671824457987E+00, y = 4.12479856412430479E+00, z = -4.03523417114321381E-01, vx = -2.76742510726862411E-03, vy = 4.99852801234917238E-03, vz = 2.30417297573763929E-05, mass = 2.85885980666130812E-04
+Uranus: x = 1.28943695621391310E+01, y = -1.51111514016986312E+01, z = -2.23307578892655734E-01, vx = 2.96460137564761618E-03, vy = 2.37847173959480950E-03, vz = -2.96589568540237556E-05, mass = 4.36624404335156298E-05
+Neptune: x = 1.53796971148509165E+01, y = -2.59193146099879641E+01, z = 1.79258772950371181E-01, vx = 2.68067772490389322E-03, vy = 1.62824170038242295E-03, vz = -9.51592254519715870E-05, mass = 5.15138902046611451E-05
+
