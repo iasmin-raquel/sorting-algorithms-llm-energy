@@ -1,0 +1,64 @@
+nbody.cpp:20:54: error: ‘vector’ in namespace ‘std’ does not name a template type
+   20 | double calculateEnergy(const Planet& sun, const std::vector<Planet>& planets) {
+      |                                                      ^~~~~~
+nbody.cpp:3:1: note: ‘std::vector’ is defined in header ‘<vector>’; did you forget to ‘#include <vector>’?
+    2 | #include <cmath>
+  +++ |+#include <vector>
+    3 | 
+nbody.cpp:20:60: error: expected ‘,’ or ‘...’ before ‘<’ token
+   20 | double calculateEnergy(const Planet& sun, const std::vector<Planet>& planets) {
+      |                                                            ^
+nbody.cpp: In function ‘double calculateEnergy(const Planet&, int)’:
+nbody.cpp:22:31: error: ‘planets’ was not declared in this scope; did you mean ‘planet’?
+   22 |     for (const auto& planet : planets) {
+      |                               ^~~~~~~
+      |                               planet
+nbody.cpp: At global scope:
+nbody.cpp:29:45: error: ‘vector’ in namespace ‘std’ does not name a template type
+   29 | void offsetMomentum(Planet& sun, const std::vector<Planet>& planets) {
+      |                                             ^~~~~~
+nbody.cpp:29:40: note: ‘std::vector’ is defined in header ‘<vector>’; did you forget to ‘#include <vector>’?
+   29 | void offsetMomentum(Planet& sun, const std::vector<Planet>& planets) {
+      |                                        ^~~
+nbody.cpp:29:51: error: expected ‘,’ or ‘...’ before ‘<’ token
+   29 | void offsetMomentum(Planet& sun, const std::vector<Planet>& planets) {
+      |                                                   ^
+nbody.cpp: In function ‘void offsetMomentum(Planet&, int)’:
+nbody.cpp:31:31: error: ‘planets’ was not declared in this scope; did you mean ‘planet’?
+   31 |     for (const auto& planet : planets) {
+      |                               ^~~~~~~
+      |                               planet
+nbody.cpp: At global scope:
+nbody.cpp:38:40: error: ‘std::vector’ has not been declared
+   38 | void symplecticIntegrator(Planet& sun, std::vector<Planet>& planets, double dt) {
+      |                                        ^~~
+nbody.cpp:38:51: error: expected ‘,’ or ‘...’ before ‘<’ token
+   38 | void symplecticIntegrator(Planet& sun, std::vector<Planet>& planets, double dt) {
+      |                                                   ^
+nbody.cpp: In function ‘void symplecticIntegrator(Planet&, int)’:
+nbody.cpp:40:25: error: ‘planets’ was not declared in this scope; did you mean ‘planet’?
+   40 |     for (auto& planet : planets) {
+      |                         ^~~~~~~
+      |                         planet
+nbody.cpp:41:28: error: ‘dt’ was not declared in this scope
+   41 |         planet.vx += 0.5 * dt * (sun.mass / (planet.x - sun.x));
+      |                            ^~
+nbody.cpp:47:25: error: ‘planets’ was not declared in this scope; did you mean ‘planet’?
+   47 |     for (auto& planet : planets) {
+      |                         ^~~~~~~
+      |                         planet
+nbody.cpp:48:21: error: ‘dt’ was not declared in this scope
+   48 |         planet.x += dt * planet.vx;
+      |                     ^~
+nbody.cpp: In function ‘int main(int, char**)’:
+nbody.cpp:69:10: error: ‘vector’ is not a member of ‘std’
+   69 |     std::vector<Planet> planets;
+      |          ^~~~~~
+nbody.cpp:69:10: note: ‘std::vector’ is defined in header ‘<vector>’; did you forget to ‘#include <vector>’?
+nbody.cpp:69:23: error: expected primary-expression before ‘>’ token
+   69 |     std::vector<Planet> planets;
+      |                       ^
+nbody.cpp:69:25: error: ‘planets’ was not declared in this scope; did you mean ‘Planet’?
+   69 |     std::vector<Planet> planets;
+      |                         ^~~~~~~
+      |                         Planet

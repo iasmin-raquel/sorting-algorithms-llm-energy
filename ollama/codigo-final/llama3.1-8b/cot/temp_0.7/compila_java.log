@@ -1,0 +1,51 @@
+JovianPlanetsSimulation.java:56: error: cannot find symbol
+            if (planet != null && planet.getMass() > 0) {
+                                        ^
+  symbol:   method getMass()
+  location: variable planet of type Planet
+JovianPlanetsSimulation.java:58: error: cannot find symbol
+                    totalMomentum[i] += planet.getVelocity()[i] * planet.getMass();
+                                                                        ^
+  symbol:   method getMass()
+  location: variable planet of type Planet
+JovianPlanetsSimulation.java:86: error: cannot find symbol
+                if (planet != null && planet.getMass() > 0) {
+                                            ^
+  symbol:   method getMass()
+  location: variable planet of type Planet
+JovianPlanetsSimulation.java:93: error: cannot find symbol
+                if (planet != null && planet.getMass() > 0) {
+                                            ^
+  symbol:   method getMass()
+  location: variable planet of type Planet
+JovianPlanetsSimulation.java:105: error: cannot find symbol
+            if (planet != null && planet.getMass() > 0) {
+                                        ^
+  symbol:   method getMass()
+  location: variable planet of type Planet
+JovianPlanetsSimulation.java:116: error: cannot find symbol
+            if (planet != null && planet.getMass() > 0) {
+                                        ^
+  symbol:   method getMass()
+  location: variable planet of type Planet
+JovianPlanetsSimulation.java:121: error: cannot find symbol
+                energy += 0.5 * planet.getMass() * Arrays.stream(velocitySquared).sum();
+                                      ^
+  symbol:   method getMass()
+  location: variable planet of type Planet
+JovianPlanetsSimulation.java:128: error: cannot find symbol
+            if (p1 != null && p1.getMass() > 0) {
+                                ^
+  symbol:   method getMass()
+  location: variable p1 of type Planet
+JovianPlanetsSimulation.java:131: error: cannot find symbol
+                    if (p2 != null && p2.getMass() > 0) {
+                                        ^
+  symbol:   method getMass()
+  location: variable p2 of type Planet
+JovianPlanetsSimulation.java:137: error: cannot find symbol
+                        energy -= SOLAR_MASS * p1.getMass() / (Math.sqrt(distanceSquared) + 0.000001);
+                                                 ^
+  symbol:   method getMass()
+  location: variable p1 of type Planet
+10 errors

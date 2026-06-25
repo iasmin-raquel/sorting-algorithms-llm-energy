@@ -1,0 +1,53 @@
+nbody.cpp: In function ‘void symplecticIntegrator(Body*, int, double)’:
+nbody.cpp:33:36: error: ‘struct Body’ has no member named ‘ax’; did you mean ‘x’?
+   33 |         body.vx += 0.5 * dt * body.ax;
+      |                                    ^~
+      |                                    x
+nbody.cpp:34:36: error: ‘struct Body’ has no member named ‘ay’; did you mean ‘y’?
+   34 |         body.vy += 0.5 * dt * body.ay;
+      |                                    ^~
+      |                                    y
+nbody.cpp:35:36: error: ‘struct Body’ has no member named ‘az’; did you mean ‘z’?
+   35 |         body.vz += 0.5 * dt * body.az;
+      |                                    ^~
+      |                                    z
+nbody.cpp:51:22: error: ‘struct Body’ has no member named ‘ax’; did you mean ‘x’?
+   51 |                 body.ax += Fa[0];
+      |                      ^~
+      |                      x
+nbody.cpp:52:22: error: ‘struct Body’ has no member named ‘ay’; did you mean ‘y’?
+   52 |                 body.ay += Fa[1];
+      |                      ^~
+      |                      y
+nbody.cpp:53:22: error: ‘struct Body’ has no member named ‘az’; did you mean ‘z’?
+   53 |                 body.az += Fa[2];
+      |                      ^~
+      |                      z
+nbody.cpp:56:27: error: ‘struct Body’ has no member named ‘ax’; did you mean ‘x’?
+   56 |                 otherBody.ax -= Fa[0];
+      |                           ^~
+      |                           x
+nbody.cpp:57:27: error: ‘struct Body’ has no member named ‘ay’; did you mean ‘y’?
+   57 |                 otherBody.ay -= Fa[1];
+      |                           ^~
+      |                           y
+nbody.cpp:58:27: error: ‘struct Body’ has no member named ‘az’; did you mean ‘z’?
+   58 |                 otherBody.az -= Fa[2];
+      |                           ^~
+      |                           z
+nbody.cpp:63:36: error: ‘struct Body’ has no member named ‘ax’; did you mean ‘x’?
+   63 |         body.vx += 0.5 * dt * body.ax;
+      |                                    ^~
+      |                                    x
+nbody.cpp:64:36: error: ‘struct Body’ has no member named ‘ay’; did you mean ‘y’?
+   64 |         body.vy += 0.5 * dt * body.ay;
+      |                                    ^~
+      |                                    y
+nbody.cpp:65:36: error: ‘struct Body’ has no member named ‘az’; did you mean ‘z’?
+   65 |         body.vz += 0.5 * dt * body.az;
+      |                                    ^~
+      |                                    z
+nbody.cpp: In function ‘void calculateEnergy(Body*, int)’:
+nbody.cpp:84:32: error: ‘G’ was not declared in this scope
+   84 |             potentialEnergy -= G * bodies[i].mass * otherBody.mass / rMag2;
+      |                                ^
