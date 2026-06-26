@@ -1,0 +1,118 @@
+### Prompt Structure
+```
+Use Few-Shot Prompting to generate a Python implementation for simulating the n-body problem of the Jovian planets (Sun, Jupiter, Saturn, Uranus, Neptune) under mutual gravitational influence. The code must:
+
+1. Accept `N` as a command-line argument representing the number of time steps.
+2. Use a symplectic integrator with order: update all velocities first, then update positions.
+3. Compute and print initial total energy and kinetic energy in %.9f format before integration starts.
+4. Adjust Sun’s velocity to offset the system's net momentum (to zero) for stable dynamics.
+5. Include explicit symbolic constants for `PI`, `SOLAR_MASS`, and `DAYS_PER_YEAR` as given below.
+6. Return final total energy in %.9f format after completion.
+
+Use the following spectral-norm example structure (adjusting it to fit orbital mechanics):
+- Include `itertools.repeat` and `sys.argv` for command-line input handling.
+- Use a `Pool`-like multiprocessing approach for vectorized operations (no explicit parallelism needed in this case).
+- Calculate energy components (potential + kinetic) efficiently. Ensure the gravitational force is computed using pairwise contributions of mutual masses and positions.
+
+**Do not implement spectral-norm logic; focus on orbital mechanics.**
+
+---
+Example Template:
+```python
+import sys, math, itertools
+
+def initialize_position_velocity(masses, initial_states):
+    # [Implement momentum offset logic for Sun]
+
+def symplectic_integrator(n_steps):
+    # [Order 2 integrator: v → u → r]
+    ...
+```
+```
+
+---
+
+### Key Requirements
+- **Language:** Target strictly Python 3.9+ (no typos like `sys.argv` in earlier versions).
+- **Integrator Order:** Explicitly split into velocity (v) and position (r) updates.
+- **Momentum Offset:** Modify Sun’s initial velocity such that total system momentum is zero (e.g., via a correction term in the input data).
+- **Energy Outputs:**
+  - Print *initial* energy components (kinetic + potential) as %.9f values.
+  - Return *final* total energy after `N` steps as %.9f, without additional comments.
+- **Physics Constants:** Embed symbolic constants (`PI`, `SOLAR_MASS`, `DAYS_PER_YEAR`) verbatim from the problem description (do not round).
+- **Precision:** Use exact numeric values for initial conditions and forces; avoid floating-point approximations.
+- **Efficiency:** Avoid brute-force force calculations for pairwise interactions. Streamline energy updates with O(N²) complexity (e.g., accumulate potential energy during integration).
+
+---
+
+### Variable Values
+**Constants:**
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+```
+
+**Initial Conditions (x, y, z, vx, vy, vz, mass):**
+---
+**Sun:**
+```
+x=0, y=0, z=0,
+vx=0, vy=0, vz=0,
+mass=SOLAR_MASS
+```
+---
+**Jupiter:**
+```
+x = 4.8414314424647209e+00, y=-1.16032004402742839e-00, z=-1.03622044471123109e-01,
+vx=1.66007664274403694e-03 * DAYS_PER_YEAR, vy=7.69901118419740425e-03 * DAYS_PER_YEAR,
+vz=-6.90460016972063023e-05 * DAYS_PER_YEAR,
+mass=9.54791938424326609e-04 * SOLAR_MASS
+```
+---
+**Saturn:**
+```
+x = 8.34336671824457987e+00, y=4.12479856412430479e+00, z=-4.03523417114321381e-01,
+vx=-2.76742510726862411e-03 * DAYS_PER_YEAR, vy=4.99852801234917238e-03 * DAYS_PER_YEAR,
+vz=2.30417297573763929e-05 * DAYS_PER_YEAR,
+mass=2.85885980666130812e-04 * SOLAR_MASS
+```
+---
+**Uranus:**
+```
+x = 1.28943695621391310e+01, y=-1.51111514016986312e+01, z=-2.23307578892655734e-01,
+vx=2.96460137564761618e-03 * DAYS_PER_YEAR, vy=2.37847173959480950e-03 * DAYS_PER_YEAR,
+vz=-2.96589568540237556e-05 * DAYS_PER_YEAR,
+mass=4.36624404335156298e-05 * SOLAR_MASS
+```
+---
+**Neptune:**
+```
+x = 1.53796971148509165e+01, y=-2.59193146099879641e+01, z=1.79258772950371181e-01,
+vx=2.68067772490389322e-03 * DAYS_PER_YEAR, vy=1.62824170038242295e-03 * DAYS_PER_YEAR,
+vz=-9.51592254519715870e-05 * DAYS_PER_YEAR,
+mass=5.15138902046611451e-05 * SOLAR_MASS
+```
+
+---
+
+### Notes
+1. **Ambiguity in Integrator Design:**
+   - The symplectic integrator structure should clarify whether velocities (`v`) are updated as position derivatives (explicitly `v = r / dt`) or included in a modified acceleration formula.
+   - Averaging accelerations over steps may be necessary to avoid divergence near close encounters.
+
+2. **Efficiency Pitfalls:**
+   - The problem requires O(N²) force computations per step; avoid redundant calculations when updating kinetic/potential energy. Use vectorized operations where possible (e.g., sum pairwise forces).
+
+3. **Momentum Correction:**
+   - Offsetting Sun’s momentum requires solving for `vx_sun` such that:
+     ```
+     Σ mass_i * v_total = 0
+     ```
+   - The correction term should be added *before* energy calculations but after initial state assignment.
+
+4. **Precision Handling:**
+   - The target LLM must avoid rounding constants or initial velocities; maintain 16-20 decimal digits in intermediate steps to meet `ndiff` validation (e.g., use Python’s `Decimal` for force calculations).
+
+5. **Output Validation:**
+   - The prompt ensures energy output includes both *kinetic* and *potential*, but must explicitly separate them per the problem’s "total energy" requirement.

@@ -1,0 +1,72 @@
+ ### Prompt Structure
+```java
+import java.text.DecimalFormat;
+import java.util.Arrays;
+
+public class NBodyProblem {
+    private static final DecimalFormat formatter = new DecimalFormat("#.##");
+    private static final int NCPU = Runtime.getRuntime().availableProcessors();
+
+    public static void main(String[] args) throws InterruptedException {
+        final int N = Integer.parseInt(args[0]);
+        final double[] initialPositions = new double[]{0, 4.84143144246472090e+00, 8.34336671824457987e+00, 1.28943695621391310e+01, 1.53796971148509165e+01};
+        final double[] initialVelocities = new double[]{0, -1.16032004402742839e+00, -4.12479856412430479e+00, 2.96460137564761618e-03 * DAYS_PER_YEAR, 2.68067772490389322e-03 * DAYS_PER_YEAR};
+        final double[] masses = new double[]{SOLAR_MASS, 9.54791938424326609e-04 * SOLAR_MASS, 2.85885980666130812e-04 * SOLAR_MASS, 4.36624404335156298e-05 * SOLAR_MASS, 5.15138902046611451e-05 * SOLAR_MASS};
+        offsetMomentum(initialVelocities);
+
+        double[] positions = Arrays.copyOf(initialPositions, N);
+        double[] velocities = Arrays.copyOf(initialVelocities, N);
+        double[] massesCopy = Arrays.copyOf(masses, N);
+
+        for (int step = 0; step < 1000; step++) {
+            updateVelocities(positions, velocities, massesCopy);
+            updatePositions(positions, velocities, massesCopy);
+        }
+
+        double initialEnergy = calculateTotalEnergy(positions, velocities, masses);
+        double finalEnergy = calculateTotalEnergy(positions, velocities, masses);
+
+        System.out.printf("Initial Energy: %.9f%n", initialEnergy);
+        System.out.printf("Final Energy: %.9f%n", finalEnergy);
+    }
+
+    private static void offsetMomentum(double[] velocities) {
+        // Calculate the total momentum of the system and adjust the Sun's velocity accordingly
+    }
+
+    private static void updateVelocities(double[] positions, double[] velocities, double[] masses) {
+        // Implement a symplectic integrator order: update all velocities first, then update all positions
+    }
+
+    private static void updatePositions(double[] positions, double[] velocities, double[] masses) {
+        // Implement a symplectic integrator order: update all velocities first, then update all positions
+    }
+
+    private static double calculateTotalEnergy(double[] positions, double[] velocities, double[] masses) {
+        // Calculate the total energy of the system using the kinetic and potential energies
+    }
+}
+```
+
+### Key Requirements
+- The code should be written in Java.
+- The program accepts N as a command-line argument.
+- The initial and final energy should be printed in %.9f format.
+- The Sun's initial velocity should be adjusted so that the total momentum of the system is zero (offsetMomentum).
+- The symplectic integrator order should be used: update all velocities first, then update all positions.
+
+### Variable Values
+```java
+private static final double PI = 3.141592653589793;
+private static final double SOLAR_MASS = 4 * Math.PI * Math.PI;
+private static final double DAYS_PER_YEAR = 365.24;
+
+// Initial conditions (x, y, z, vx, vy, vz, mass)
+private static final double[] initialPositions = new double[]{0, 4.84143144246472090e+00, 8.34336671824457987e+00, 1.28943695621391310e+01, 1.53796971148509165e+01};
+private static final double[] initialVelocities = new double[]{0, -1.16032004402742839e+00, -4.12479856412430479e+00, 2.96460137564761618e-03 * DAYS_PER_YEAR, 2.68067772490389322e-03 * DAYS_PER_YEAR};
+private static final double[] masses = new double[]{SOLAR_MASS, 9.54791938424326609e-04 * SOLAR_MASS, 2.85885980666130812e-04 * SOLAR_MASS, 4.36624404335156298e-05 * SOLAR_MASS, 5.15138902046611451e-05 * SOLAR_MASS};
+```
+
+### Notes
+- The provided spectral-norm code is included as a demonstration of the expected style and structure for the solution. However, it's not necessary to use it in this specific problem.
+- The target LLM should produce Java code that simulates the orbits of Jovian planets under mutual gravitation, with the output validatable using ndiff -abserr 1.0e-8 with N=1000.

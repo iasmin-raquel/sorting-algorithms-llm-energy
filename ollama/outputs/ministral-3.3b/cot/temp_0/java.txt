@@ -1,0 +1,114 @@
+### Prompt Structure
+
+Act as a senior software engineer tasked with designing a Java implementation for simulating the n-body problem specifically for Jovian planets under mutual gravitational influence. The goal is to produce code that adheres strictly to the Computer Language Benchmarks Game (CLB) criteria, ensuring numerical accuracy validated by `ndiff -abserr 1.0e-8` with N=1000 iterations.
+
+Begin by breaking down the problem into clear, logical steps:
+
+1. **Define Constants and Physical Parameters**:
+   - Include all provided constants (`PI`, `SOLAR_MASS`, `DAYS_PER_YEAR`) exactly as given.
+   - Ensure these are used consistently throughout the code to avoid precision errors.
+
+2. **Initial Conditions Setup**:
+   - Parse and store initial positions (x, y, z) and velocities (vx, vy, vz) for each planet (Sun, Jupiter, Saturn, Uranus, Neptune).
+   - Include mass values for each body.
+   - Implement a method to adjust the Sun’s velocity (`offsetMomentum`) so that the total momentum of the system remains zero.
+
+3. **Symplectic Integrator Implementation**:
+   - Use a symplectic integrator (specifically: update velocities first, then positions).
+   - Break down the integration into two phases:
+     - Phase 1: Update all velocities based on pairwise gravitational forces.
+     - Phase 2: Update all positions using the new velocity values.
+
+4. **Energy Calculation**:
+   - Compute and print the initial and final total energy of the system (kinetic + potential) with precision to 9 decimal places (`%.9f`).
+   - Ensure energy conservation is validated within the required tolerance.
+
+5. **Command-Line Argument Handling**:
+   - The program must accept `N` as a command-line argument, representing the number of integration steps.
+   - Validate that `N` is a positive integer before proceeding.
+
+6. **Precision and Validation**:
+   - Use double precision floating-point arithmetic to ensure accuracy.
+   - Ensure all calculations respect the provided constants and initial conditions exactly.
+
+7. **Output Format**:
+   - Print the initial energy followed by the final energy, each formatted as `%.9f`.
+
+8. **Code Structure**:
+   - Organize code into logical methods (e.g., `calculateGravitationalForce`, `updateVelocities`, `updatePositions`).
+   - Use helper classes or structs to represent celestial bodies and their properties.
+
+---
+
+### Key Requirements
+- **Language**: Explicitly target Java.
+- **Input Handling**: Accept `N` as a command-line argument (e.g., `java <ClassName> 1000`).
+- **Momentum Conservation**: Adjust the Sun’s velocity to ensure total system momentum is zero.
+- **Symplectic Integrator Order**:
+  - Update velocities first, then positions.
+- **Energy Validation**: Output initial and final energy with precision to 9 decimal places (`%.9f`).
+- **Precision**: Use `double` for all floating-point calculations; avoid rounding errors.
+- **No External Dependencies**: Implement all logic within the provided constants and initial conditions.
+
+---
+
+### Variable Values
+
+**Constants**:
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+```
+
+**Initial Conditions (Sun, Jupiter, Saturn, Uranus, Neptune)**:
+```
+Sun:
+x = 0, y = 0, z = 0,
+vx = 0, vy = 0, vz = 0,
+mass = SOLAR_MASS
+
+Jupiter:
+x = 4.84143144246472090e+00
+y = -1.16032004402742839e+00
+z = -1.03622044471123109e-01
+vx = 1.66007664274403694e-03 * DAYS_PER_YEAR
+vy = 7.69901118419740425e-03 * DAYS_PER_YEAR
+vz = -6.90460016972063023e-05 * DAYS_PER_YEAR
+mass = 9.54791938424326609e-04 * SOLAR_MASS
+
+Saturn:
+x = 8.34336671824457987e+00
+y = 4.12479856412430479e+00
+z = -4.03523417114321381e-01
+vx = -2.76742510726862411e-03 * DAYS_PER_YEAR
+vy = 4.99852801234917238e-03 * DAYS_PER_YEAR
+vz = 2.30417297573763929e-05 * DAYS_PER_YEAR
+mass = 2.85885980666130812e-04 * SOLAR_MASS
+
+Uranus:
+x = 1.28943695621391310e+01
+y = -1.51111514016986312e+01
+z = -2.23307578892655734e-01
+vx = 2.96460137564761618e-03 * DAYS_PER_YEAR
+vy = 2.37847173959480950e-03 * DAYS_PER_YEAR
+vz = -2.96589568540237556e-05 * DAYS_PER_YEAR
+mass = 4.36624404335156298e-05 * SOLAR_MASS
+
+Neptune:
+x = 1.53796971148509165e+01
+y = -2.59193146099879641e+01
+z = 1.79258772950371181e-01
+vx = 2.68067772490389322e-03 * DAYS_PER_YEAR
+vy = 1.62824170038242295e-03 * DAYS_PER_YEAR
+vz = -9.51592254519715870e-05 * DAYS_PER_YEAR
+mass = 5.15138902046611451e-05 * SOLAR_MASS
+```
+
+---
+
+### Notes
+- **Ambiguity in Velocity Adjustment**: The prompt should clarify whether the Sun’s velocity adjustment is done via a single offset or distributed across all bodies (e.g., redistributing momentum among planets). Clarify that the goal is to set the Sun’s velocity such that the total system momentum is zero, leaving other velocities unchanged.
+- **Symplectic Integrator**: Emphasize that the integrator must strictly follow the order: update velocities first, then positions. This avoids numerical instability and ensures energy conservation.
+- **Precision Handling**: Use `BigDecimal` or careful arithmetic to avoid floating-point errors during force calculations (e.g., gravitational forces involve division by distance squared).
+- **Edge Cases**: Ensure the program handles invalid `N` gracefully (e.g., negative or zero values) without crashing.

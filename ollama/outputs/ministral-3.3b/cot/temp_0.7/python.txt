@@ -1,0 +1,95 @@
+### Prompt Structure
+Act as a Python coding assistant tasked with implementing the n-body problem for the Jovian planets under mutual gravitational forces. Follow these instructions strictly:
+
+1. **Language and Requirements**:
+   Write a Python script that accepts `N` (number of time steps) as a command-line argument.
+   The script must:
+   - Initialize positions (`x, y, z`) and velocities (`vx, vy, vz`) for the Sun, Jupiter, Saturn, Uranus, and Neptune using the provided constants and initial conditions.
+   - Use a symplectic integrator with the order: **update all velocities first (Leapfrog scheme), then update all positions** to numerically integrate gravitational forces.
+   - Compute and print total energy at the start (`E_initial`) and after `N` steps (`E_final`), formatted to 9 decimal places (`%.9f`).
+   - Apply an offset momentum correction to the Sun’s initial velocity so that the total momentum of the system remains zero throughout the simulation.
+
+2. **Physics Implementation**:
+   Use Newtonian gravity where gravitational force between two bodies is given by:
+   \[
+   F = G \frac{m_1 m_2}{r^3} (-\mathbf{r}_2 + \mathbf{r}_1)
+   \]
+   For consistency, use \(G = 4\pi^2\) and convert velocities to days per year. Integrate forces in the body-centered coordinate system to eliminate the Sun’s direct gravitational influence on itself.
+
+3. **Output Validation**:
+   Ensure the script outputs values that pass `ndiff -abserr 1.0e-8` with `N=1000`. Report final energy differences between `E_initial` and `E_final` as a percentage of `E_initial`.
+
+4. Structure:
+   - Use `sys.argv` to parse `N` from the command line.
+   - Print initial energy, update all velocities for half a timestep, iterate `N/2` steps, then update positions for the remaining half-step.
+
+5. Debugging Tips:
+   If the script fails, ensure gravitational forces are correctly scaled by \(m_1 m_2\) and divided by \(r^3\). Verify numerical stability by monitoring energy loss to machine precision (≤ 1e-8).
+
+---
+### Key Requirements
+- **Symplectic Integrator**: Update velocities before positions.
+- **Zero Total Momentum**: Adjust Sun’s initial velocity (`vx`, `vy`) so that \(\sum m_i v_{ix} = \sum m_i v_{iy} = 0\).
+- **Precision Handling**:
+   - Use `%.9f` formatting for energy output.
+   - Ensure numerical stability with a tolerance of \(1.0e-8\) (matching `ndiff` criteria).
+- **Physics Constants**: Hardcode exact values provided in the prompt; do not derive or approximate.
+
+---
+
+### Variable Values
+**Constants:**
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+G = 4 * PI * PI  # Scaled for convenience in equations.
+```
+
+**Initial Positions and Velocities (for Sun, Jupiter, Saturn, Uranus, Neptune):**
+```
+Sun:
+    x=0, y=0, z=0,
+    vx=?, vy=?, vz=? (to be adjusted via offsetMomentum),
+    mass=SOLAR_MASS
+
+Jupiter:
+    x = 4.8414314424647209e+00, y = -1.16032004402742839e+00, z = -1.03622044471123109e-01,
+    vx = 1.66007664274403694e-03 * DAYS_PER_YEAR, vy = 7.69901118419740425e-03 * DAYS_PER_YEAR,
+    vz = -6.90460016972063023e-05 * DAYS_PER_YEAR,
+    mass = 9.54791938424326609e-04 * SOLAR_MASS
+
+Saturn:
+    x = 8.34336671824457987e+00, y = 4.12479856412430479e+00, z = -4.03523417114321381e-01,
+    vx = -2.76742510726862411e-03 * DAYS_PER_YEAR, vy = 4.99852801234917238e-03 * DAYS_PER_YEAR,
+    vz = 2.30417297573763929e-05 * DAYS_PER_YEAR,
+    mass = 2.85885980666130812e-04 * SOLAR_MASS
+
+Uranus:
+    x = 1.28943695621391310e+01, y = -1.51111514016986312e+01, z = -2.23307578892655734e-01,
+    vx = 2.96460137564761618e-03 * DAYS_PER_YEAR, vy = 2.37847173959480950e-03 * DAYS_PER_YEAR,
+    vz = -2.96589568540237556e-05 * DAYS_PER_YEAR,
+    mass = 4.36624404335156298e-05 * SOLAR_MASS
+
+Neptune:
+    x = 1.53796971148509165e+01, y = -2.59193146099879641e+01, z = 1.79258772950371181e-01,
+    vx = 2.68067772490389322e-03 * DAYS_PER_YEAR, vy = 1.62824170038242295e-03 * DAYS_PER_YEAR,
+    vz = -9.51592254519715870e-05 * DAYS_PER_YEAR,
+    mass = 5.15138902046611451e-05 * SOLAR_MASS
+```
+
+---
+### Notes
+1. **Ambiguity Handling**:
+   - The prompt ensures the LLM explicitly constructs a symplectic integrator, avoiding "hidden" non-leapfrog schemes.
+   - Momentum correction is framed as an adjustment to **only** `Sun.vx` and `Sun.vy`, not `vz`, to preserve z-directional symmetry (since gravitational forces in z=0 are trivial).
+
+2. **Precision Guarantees**:
+   - The use of `%.9f` guarantees machine-precision alignment with `ndiff`. Floating-point arithmetic is assumed to obey IEEE 754, but no explicit libraries (e.g., `mpmath`) are enforced unless the LLM introduces them *solicitedly*.
+
+3. **Expected Output Format**:
+   ```
+   Initial energy: E_initial%
+   Final energy: E_final%
+   ```
+   where percentages imply `E_final/E_initial`. The script should compute both energies in units of `SOLAR_MASS * DAYS_PER_YEAR^2` and normalize by dividing by the total initial kinetic + potential energy.

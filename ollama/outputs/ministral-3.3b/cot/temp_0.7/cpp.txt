@@ -1,0 +1,115 @@
+---
+
+### **Prompt Structure**
+Act as a C++ programming expert tasked with designing an efficient implementation of the n-body problem for the Jovian planets under gravitational mutual interactions. You must adhere strictly to the given specifications while ensuring precision in calculations and numerical stability.
+
+**Step-by-Step Reasoning:**
+
+1. **Define Constants:**
+   - Use `PI = 3.141592653589793` as specified.
+   - Define `SOLAR_MASS = 4 * PI * PI` to compute reduced mass units correctly.
+
+2. **Initial Conditions Setup:**
+   Provide exact initial positions (`x, y, z`), velocities (`vx, vy, vz`) scaled by `DAYS_PER_YEAR`, and masses for the Sun, Jupiter, Saturn, Uranus, and Neptune.
+   - Ensure the total momentum of the system is nullified by adjusting the Sun’s velocity (e.g., via an offset) if necessary.
+
+3. **Numerical Integration:**
+   Implement a symplectic integrator of order 2 or higher:
+   - **Velocity Update Phase:** Compute gravitational accelerations using pairwise interactions.
+   - **Position Update Phase:** Advance positions based on updated velocities.
+
+4. **Output Formatting:**
+   - Print the initial and final energy (kinetic + potential) as percentages, formatted with precision to `.9f` (e.g., `52341.78690`).
+
+5. **Algorithm Structure:**
+   - Use a time-stepping loop (`for` over `N = N_steps`).
+   - Apply symplectic updates iteratively: velocities first → positions second.
+   - Avoid explicit momentum conservation checks (focus on energy validation via `ndiff`).
+
+---
+
+### **Key Requirements**
+- **Language:** Only C++; no other syntax or libraries allowed.
+- **Input Handling:**
+  Take `N` (number of integration steps) as a command-line argument (`int N`). Ignore other arguments.
+- **Symplectic Integrator:** Update velocities first, then positions. Ensure stability for orbits over 1000+ steps.
+- **Precision:** Output energy values with `.9f` format for floating-point comparisons (e.g., `printf("%.9f\n", energy)`).
+- **Momentum Adjustment:**
+  Derive a velocity offset (`offsetMomentum`) for the Sun so that total system momentum remains zero after initialization (use initial conditions).
+- **Validation:** Results must match `ndiff -abserr 1.0e-8` on energy when N = 1000.
+- **Data Structures:**
+  Define a struct/class for bodies (positions, velocities, masses) to modularize calculations.
+
+---
+
+### **Variable Values**
+**Constants:**
+```cpp
+const double PI = 3.141592653589793;
+const double SOLAR_MASS = 4 * PI * PI;
+const double DAYS_PER_YEAR = 365.24;
+```
+
+**Initial Conditions (Positions × Velocities × Masses):**
+- **Sun:**
+  `x=0, y=0, z=0`; `vx=0, vy=0, vz=0`; `mass = SOLAR_MASS`.
+  *(Velocity offset: to be computed as `offsetMomentum`).*
+
+- **Jupiter:**
+  ```
+  x = 4.84143144246472090e+00
+  y = -1.16032004402742839e+00
+  z = -1.03622044471123109e-01
+  vx = 1.66007664274403694e-03 * DAYS_PER_YEAR
+  vy = 7.69901118419740425e-03 * DAYS_PER_YEAR
+  vz = -6.90460016972063023e-05 * DAYS_PER_YEAR
+  mass = 9.54791938424326609e-04 * SOLAR_MASS
+  ```
+
+- **Saturn:**
+  ```
+  x = 8.34336671824457987e+00
+  y = 4.12479856412430479e+00
+  z = -4.03523417114321381e-01
+  vx = -2.76742510726862411e-03 * DAYS_PER_YEAR
+  vy = 4.99852801234917238e-03 * DAYS_PER_YEAR
+  vz = 2.30417297573763929e-05 * DAYS_PER_YEAR
+  mass = 2.85885980666130812e-04 * SOLAR_MASS
+  ```
+
+- **Uranus:**
+  ```
+  x = 1.28943695621391310e+01
+  y = -1.51111514016986312e+01
+  z = -2.23307578892655734e-01
+  vx = 2.96460137564761618e-03 * DAYS_PER_YEAR
+  vy = 2.37847173959480950e-03 * DAYS_PER_YEAR
+  vz = -2.96589568540237556e-05 * DAYS_PER_YEAR
+  mass = 4.36624404335156298e-05 * SOLAR_MASS
+  ```
+
+- **Neptune:**
+  ```
+  x = 1.53796971148509165e+01
+  y = -2.59193146099879641e+01
+  z = 1.79258772950371181e-01
+  vx = 2.68067772490389322e-03 * DAYS_PER_YEAR
+  vy = 1.62824170038242295e-03 * DAYS_PER_YEAR
+  vz = -9.51592254519715870e-05 * DAYS_PER_YEAR
+  mass = 5.15138902046611451e-05 * SOLAR_MASS
+  ```
+
+---
+
+### **Notes**
+- **Precision Handling:**
+  The prompt assumes the target LLM will use `double` for all calculations and explicitly checks energy outputs to `ndiff -abserr 1.0e-8`. Overly aggressive rounding is discouraged; intermediate steps may require higher precision (e.g., `long double`).
+
+- **Edge Cases:**
+  - For small time steps, ensure numerical stability by scaling gravitational forces appropriately.
+  - The Sun’s offset velocity should be derived analytically to zero the total momentum of all bodies (including the Sun). Avoid ad-hoc adjustments in the integrator.
+
+- **Performance:** The LLM is not instructed to optimize for speed but correctness; `N=1000` steps require accurate integration per gravitational pairwise interactions.
+
+- **Symplectic Integrator:**
+  The order-2 update sequence (velocities → positions) is critical. Higher-order methods may be implied but should not deviate from the given structure.

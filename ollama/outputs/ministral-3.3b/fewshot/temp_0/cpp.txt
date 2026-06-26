@@ -1,0 +1,98 @@
+### Prompt Structure
+
+**Generate a C++ implementation of the n-body problem for Jovian planets under mutual gravitational influence. The code must:**
+
+1. Take `N` (number of time steps) as a command-line argument.
+2. Use a symplectic integrator with two phases: first update all velocities, then update all positions.
+3. Adjust the Sun’s initial velocity to ensure total system momentum is zero (`offsetMomentum`).
+4. Print the initial and final energy of the system in `%.9f` format.
+5. Include all provided physical constants (`PI`, `SOLAR_MASS`, `DAYS_PER_YEAR`) and initial conditions for the Sun, Jupiter, Saturn, Uranus, and Neptune exactly as given.
+
+**Structure:**
+- Use a vector or array to store positions (x,y,z) and velocities (vx,vy,vz) of each body.
+- Implement gravitational forces using Newton’s law: \( F = G \frac{m_1 m_2}{r^3} \).
+- For velocity updates, use the current acceleration values.
+- For position updates, integrate velocities over time steps.
+- Output initial energy (kinetic + potential) and final energy after `N` steps.
+
+**Example structure:**
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+struct Body {
+    double x, y, z;  // Position
+    double vx, vy, vz;  // Velocity
+    double mass;
+};
+
+void computeForces(const std::vector<Body>& bodies, std::vector<double>& accel) {
+    // Compute pairwise gravitational forces and store in `accel`.
+}
+
+void updateVelocities(const std::vector<Body>& bodies, const std::vector<double>& accel, double dt) {
+    // Update velocities using current accelerations.
+}
+
+void updatePositions(std::vector<Body>& bodies, const std::vector<double>& velUpdates, double dt) {
+    // Update positions using updated velocities.
+}
+
+int main(int argc, char* argv[]) {
+    int N = (argc >= 2) ? atoi(argv[1]) : 1000;
+    // Initialize bodies with given constants and initial conditions.
+    // Adjust Sun’s velocity to zero total momentum (`offsetMomentum`).
+    double dt = ...;  // Time step size (e.g., 1/DAYS_PER_YEAR)
+    computeForces(...);  // Compute initial forces/accelerations.
+    updateVelocities(...);  // Update velocities first.
+    updatePositions(...);  // Update positions second.
+
+    // Calculate and print initial energy.
+    double initialEnergy = ...;
+    std::cout << "Initial Energy: " << initialEnergy << "\n";
+
+    for (int i = 0; i < N; ++i) {
+        computeForces(...);
+        updateVelocities(...);
+        updatePositions(...);
+    }
+
+    // Calculate and print final energy.
+    double finalEnergy = ...;
+    std::cout << "Final Energy:   " << finalEnergy << "\n";
+    return 0;
+}
+```
+
+---
+
+### Key Requirements
+- **Language:** Explicitly target C++ (no other language).
+- **Input:** Accept `N` as a command-line argument.
+- **Momentum Zeroing:** Adjust Sun’s velocity to ensure total system momentum is zero (`offsetMomentum`).
+- **Symplectic Integrator:** Update velocities first, then positions in each timestep.
+- **Energy Output:** Print initial and final energy with 9 decimal places (`%.9f`).
+- **Precision:** Use `1.0e-8` tolerance for validation (match `ndiff -abserr 1.0e-8`).
+- **Constants/Initial Conditions:** Use exact values provided below.
+- **No External Dependencies:** Only standard C++ libraries (`<iostream>`, `<vector>`, `<cmath>`).
+
+---
+
+### Variable Values
+**Physical Constants:**
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+```
+
+**Initial Conditions (Sun, Jupiter, Saturn, Uranus, Neptune):**
+*(Exact values as given in the problem statement.)*
+
+---
+### Notes
+- **Time Step:** Assume `dt = 1/DAYS_PER_YEAR` for stability (adjust if needed).
+- **Ambiguity Risk:** Clarify whether to use explicit or implicit handling of forces/accelerations. The prompt assumes explicit updates.
+- **Performance:** No parallelization is required, but the symplectic integrator structure should be clear.
+- **Energy Calculation:** Include both kinetic (`0.5 * mass * velocity^2`) and potential (`G * m1m2 / r`) terms.

@@ -1,0 +1,113 @@
+### Prompt Structure
+You are tasked with generating a Python implementation of the n-body problem for simulating the orbits of Jovian planets (Sun, Jupiter, Saturn, Uranus, Neptune) under mutual gravitational forces. The code must:
+
+1. Accept `N` as a command-line argument.
+2. Use a symplectic integrator with two phases: first update all velocities based on current positions and masses, then update all positions based on updated velocities and masses.
+3. Adjust the Sun’s initial velocity to ensure zero total momentum in the system (offsetMomentum).
+4. Compute and print the **initial** and **final** energy of the system (kinetic + potential) with a precision of 9 decimal places (`%.9f`).
+5. Use the provided physical constants exactly as given:
+   - `PI = 3.141592653589793`
+   - `SOLAR_MASS = 4 * PI * PI`
+   - `DAYS_PER_YEAR = 365.24`
+
+**Example of a valid solution structure:**
+```python
+import sys, math
+
+def main():
+    N = int(sys.argv[1])
+    # Define constants and initial conditions (see below)
+    # Implement symplectic integrator with offsetMomentum adjustment
+    # Compute energy at start and end of simulation
+    print(f"{initial_energy:.9f}")  # Initial energy
+    print(f"{final_energy:.9f}")   # Final energy
+
+if __name__ == "__main__":
+    main()
+```
+
+**Key constraints:**
+- Use **exact** values from the provided constants and initial conditions.
+- Do not hardcode any physics beyond gravitational forces (use `G = 1` implicitly via mass scaling).
+- Avoid explicit parallelization unless necessary for performance; focus on correctness first.
+
+---
+
+### Key Requirements
+- **Language:** Python only.
+- **Input:** Command-line argument `N` (number of time steps).
+- **Output:** Two lines: initial and final energy, formatted as `%.9f`.
+- **Integrator:** Symplectic Euler (velocity-first then position-update).
+- **Momentum offset:** Adjust Sun’s velocity to zero total momentum.
+- **Precision:** Validate with `ndiff -abserr 1.0e-8` for `N=1000`.
+- **No external libraries** beyond Python standard library (`math`, `sys`).
+
+---
+
+### Variable Values
+#### Constants:
+```python
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+```
+
+#### Initial Conditions (Sun, Jupiter, Saturn, Uranus, Neptune):
+**Sun:**
+```python
+x = [0.0], y = [0.0], z = [0.0]
+vx = [0.0], vy = [0.0], vz = [0.0]
+mass = [SOLAR_MASS]
+```
+
+**Jupiter:**
+```python
+x = [4.84143144246472090e+00],
+y = [-1.16032004402742839e+00],
+z = [-1.03622044471123109e-01]
+vx = [1.66007664274403694e-03 * DAYS_PER_YEAR],
+vy = [7.69901118419740425e-03 * DAYS_PER_YEAR],
+vz = [-6.90460016972063023e-05 * DAYS_PER_YEAR]
+mass = [9.54791938424326609e-04 * SOLAR_MASS]
+```
+
+**Saturn:**
+```python
+x = [8.34336671824457987e+00],
+y = [4.12479856412430479e+00],
+z = [-4.03523417114321381e-01]
+vx = [-2.76742510726862411e-03 * DAYS_PER_YEAR],
+vy = [4.99852801234917238e-03 * DAYS_PER_YEAR],
+vz = [2.30417297573763929e-05 * DAYS_PER_YEAR]
+mass = [2.85885980666130812e-04 * SOLAR_MASS]
+```
+
+**Uranus:**
+```python
+x = [1.28943695621391310e+01],
+y = [-1.51111514016986312e+01],
+z = [-2.23307578892655734e-01]
+vx = [2.96460137564761618e-03 * DAYS_PER_YEAR],
+vy = [2.37847173959480950e-03 * DAYS_PER_YEAR],
+vz = [-2.96589568540237556e-05 * DAYS_PER_YEAR]
+mass = [4.36624404335156298e-05 * SOLAR_MASS]
+```
+
+**Neptune:**
+```python
+x = [1.53796971148509165e+01],
+y = [-2.59193146099879641e+01],
+z = [1.79258772950371181e-01]
+vx = [2.68067772490389322e-03 * DAYS_PER_YEAR],
+vy = [1.62824170038242295e-03 * DAYS_PER_YEAR],
+vz = [-9.51592254519715870e-05 * DAYS_PER_YEAR]
+mass = [5.15138902046611451e-05 * SOLAR_MASS]
+```
+
+---
+
+### Notes
+1. **Ambiguity in `offsetMomentum`:** The prompt assumes the Sun’s velocity is adjusted to cancel total momentum, but does not specify how (e.g., scaling by mass or vectorially). Clarify if the LLM must implement this explicitly.
+2. **Energy Calculation:** Include both kinetic (`0.5 * sum(mass_i * v^2)`) and potential (`-G * sum(mass_i / r_ij)`) terms, where `r_ij` is pairwise distance between bodies.
+3. **Time Step:** Assume a fixed timestep (e.g., `dt = 1.0`) unless specified otherwise; the LLM should derive it from initial conditions if needed.
+4. **Symplectic Integrator:** Emphasize that velocities must update *before* positions, and use explicit formulas for gravitational acceleration (`a_i = G * sum(m_j / r_ij^2) * (r_ij - r_i)`).

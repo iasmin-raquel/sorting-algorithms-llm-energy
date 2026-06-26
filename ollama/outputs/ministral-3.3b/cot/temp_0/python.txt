@@ -1,0 +1,100 @@
+### Prompt Structure
+
+You are tasked with generating a Python implementation of the n-body problem for simulating the orbits of Jovian planets under mutual gravitational forces. The code must adhere to the following specifications:
+
+1. **Language**: Write the solution in pure Python.
+2. **Command-line Argument Handling**: Accept `N` (number of time steps) as a command-line argument, e.g., `python script.py 1000`.
+3. **Symplectic Integrator**: Implement an order-2 symplectic integrator where velocities are updated first, followed by positions.
+4. **Momentum Conservation**: Adjust the Sun’s initial velocity so that the total momentum of the system is zero (denoted as `offsetMomentum`).
+5. **Output Requirements**:
+   - Print the initial and final energy in %.9f format (e.g., `Initial Energy: 123456789.0000000`, `Final Energy: 123456789.0000000`).
+6. **Precision**: Ensure numerical stability and accuracy to validate with `ndiff -abserr 1.0e-8` for N=1000.
+7. **Physics Constants**:
+   - Use the provided constants: `PI`, `SOLAR_MASS`, and `DAYS_PER_YEAR`.
+   - Gravitational force is proportional to \( \frac{G m_1 m_2}{r^3} \), where \( G = 4\pi^2 \) (since \( G = \frac{4\pi^2}{DAYS\_PER\_YEAR^2} \)).
+
+**Decomposition for Chain-of-Thought**:
+- First, derive the gravitational force formula between two bodies using the given constants.
+- Explain how to compute total momentum and adjust the Sun’s velocity (`offsetMomentum`) to enforce zero net momentum.
+- Outline the symplectic integrator steps: update velocities first (using central differences), then positions (using forward Euler).
+- Discuss energy conservation checks, including kinetic and potential energy contributions.
+
+**Code Structure**:
+- Define a class `JovianSystem` with methods for:
+  - Computing gravitational forces (`compute_forces`).
+  - Updating velocities (`update_velocities`).
+  - Updating positions (`update_positions`).
+  - Calculating total energy (kinetic + potential) at each step.
+- Use a loop to iterate `N` times, applying the symplectic integrator.
+
+---
+
+### Key Requirements
+- **Explicit Python**: No pseudocode or other languages; only Python syntax.
+- **Command-line Argument**: Parse `sys.argv[1]` for `N`.
+- **Symplectic Integrator Order**: Velocities → Positions (no mixed updates).
+- **Momentum Adjustment**: Compute `offsetMomentum` as the negative of total initial momentum divided by Sun’s mass.
+- **Energy Output**: Print formatted energy values with 9 decimal places.
+- **Precision**: Avoid floating-point errors beyond \(10^{-8}\) for N=1000 validation.
+
+---
+
+### Variable Values
+**Constants**:
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+```
+
+**Initial Conditions (Sun, Jupiter, Saturn, Uranus, Neptune)**:
+```
+Sun:
+x=0, y=0, z=0,
+vx=0, vy=0, vz=0,
+mass=SOLAR_MASS
+
+Jupiter:
+x = 4.84143144246472090e+00
+y = -1.16032004402742839e+00
+z = -1.03622044471123109e-01
+vx = 1.66007664274403694e-03 * DAYS_PER_YEAR
+vy = 7.69901118419740425e-03 * DAYS_PER_YEAR
+vz = -6.90460016972063023e-05 * DAYS_PER_YEAR
+mass = 9.54791938424326609e-04 * SOLAR_MASS
+
+Saturn:
+x = 8.34336671824457987e+00
+y = 4.12479856412430479e+00
+z = -4.03523417114321381e-01
+vx = -2.76742510726862411e-03 * DAYS_PER_YEAR
+vy = 4.99852801234917238e-03 * DAYS_PER_YEAR
+vz = 2.30417297573763929e-05 * DAYS_PER_YEAR
+mass = 2.85885980666130812e-04 * SOLAR_MASS
+
+Uranus:
+x = 1.28943695621391310e+01
+y = -1.51111514016986312e+01
+z = -2.23307578892655734e-01
+vx = 2.96460137564761618e-03 * DAYS_PER_YEAR
+vy = 2.37847173959480950e-03 * DAYS_PER_YEAR
+vz = -2.96589568540237556e-05 * DAYS_PER_YEAR
+mass = 4.36624404335156298e-05 * SOLAR_MASS
+
+Neptune:
+x = 1.53796971148509165e+01
+y = -2.59193146099879641e+01
+z = 1.79258772950371181e-01
+vx = 2.68067772490389322e-03 * DAYS_PER_YEAR
+vy = 1.62824170038242295e-03 * DAYS_PER_YEAR
+vz = -9.51592254519715870e-05 * DAYS_PER_YEAR
+mass = 5.15138902046611451e-05 * SOLAR_MASS
+```
+
+---
+
+### Notes
+- **Ambiguity Risk**: Ensure the LLM interprets "symplectic integrator" strictly as velocity-first → position-second (no mixed updates). Avoid implicit assumptions like leapfrog.
+- **Precision Handling**: Use `numpy` or manual loops for vectorized operations if needed, but enforce exact arithmetic where possible (e.g., avoid rounding intermediate steps).
+- **Momentum Adjustment**: The offset must be applied to the Sun’s velocity only; other bodies’ velocities remain unchanged during initialization.
+- **Energy Calculation**: Include both kinetic (\( \frac{1}{2}mv^2 \)) and potential (\( -\sum_{i<j} G \frac{m_i m_j}{r_{ij}} \)) terms.

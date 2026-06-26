@@ -1,0 +1,102 @@
+### Prompt Structure
+
+---
+**Few-Shot Example:**
+
+*Given an N-body simulation in Java for a system with n bodies (where each body has coordinates and velocities), integrate their orbits using a symplectic integrator. The code should accept a command-line argument `N` representing the number of steps or time increments, print the initial and final energy percentages with precision %.9f, and adjust momentum conservation where necessary.*
+
+Here is an example spectral norm computation, demonstrating parallel processing and floating-point accuracy:
+```java
+import java.text.DecimalFormat;
+
+// Example code structure for matrix operations (illustrative)
+public class SpectralNormExample {
+    public static void main(String[] args) {
+        final int n = Integer.parseInt(args[0]);
+        // ... parallel spectral norm computation as in the original snippet ...
+    }
+}
+```
+
+**Task: Implement a N-body simulation for Jovian planets under mutual gravitational attraction. Use the same constants and initial conditions provided, with these specifications:**
+1. **Input Handling:** Accept `N` (number of time steps) from command-line arguments.
+2. **Symplectic Integrator:** Follow this sequence:
+   - Update all velocities first,
+   - Then update all positions based on accumulated gravitational forces.
+3. **Momentum Adjustment:** Offset the Sun’s initial velocity to ensure zero total system momentum.
+4. **Output Formatting:** Print initial and final energy percentages with %.9f precision.
+5. **Precision:** Ensure numerical stability using at least 8 significant digits (error tolerance: ≤1e-8).
+
+---
+
+### Key Requirements
+- **Language:** Strictly Java.
+- **Command-line Argument:** `N` must be parsed as an integer, passed to the simulator.
+- **Symplectic Integration Order:** Velocity updates first, position updates second.
+- **Zero Total Momentum:** Dynamically correct Sun’s velocity for exact momentum conservation.
+- **Energy Output:** Print initial and final gravitational potential energy (normalized as %) using `%9f`.
+- **Precision Handling:** Avoid floating-point errors exceeding 1e-8 via careful arithmetic or iterative checks.
+- **No External Dependencies:** Only standard Java libraries (`java.lang`, `math`, I/O) are allowed.
+
+---
+### Variable Values
+**Constants:**
+```java
+private static final double PI = 3.141592653589793;
+private static final double SOLAR_MASS = 4 * Math.PI * Math.PI;
+private static final double DAYS_PER_YEAR = 365.24;
+```
+
+**Initial Conditions:**
+- **Sun:**
+  ```java
+  x=0, y=0, z=0,
+  vx=0, vy=0, vz=0,
+  mass=SOLAR_MASS
+  ```
+- **Jupiter:**
+  ```java
+  x = 4.84143144246472090e+00,
+  y = -1.16032004402742839e+00,
+  z = -1.03622044471123109e-01,
+  vx = 1.66007664274403694e-03 * DAYS_PER_YEAR,
+  vy = 7.69901118419740425e-03 * DAYS_PER_YEAR,
+  vz = -6.90460016972063023e-05 * DAYS_PER_YEAR,
+  mass = 9.54791938424326609e-04 * SOLAR_MASS
+  ```
+- **Saturn:**
+  ```java
+  x = 8.34336671824457987e+00,
+  y = 4.12479856412430479e+00,
+  z = -4.03523417114321381e-01,
+  vx = -2.76742510726862411e-03 * DAYS_PER_YEAR,
+  vy = 4.99852801234917238e-03 * DAYS_PER_YEAR,
+  vz = 2.30417297573763929e-05 * DAYS_PER_YEAR,
+  mass = 2.85885980666130812e-04 * SOLAR_MASS
+  ```
+- **Uranus:**
+  ```java
+  x = 1.28943695621391310e+01,
+  y = -1.51111514016986312e+01,
+  z = -2.23307578892655734e-01,
+  vx = 2.96460137564761618e-03 * DAYS_PER_YEAR,
+  vy = 2.37847173959480950e-03 * DAYS_PER_YEAR,
+  vz = -2.96589568540237556e-05 * DAYS_PER_YEAR,
+  mass = 4.36624404335156298e-05 * SOLAR_MASS
+  ```
+- **Neptune:**
+  ```java
+  x = 1.53796971148509165e+01,
+  y = -2.59193146099879641e+01,
+  z = 1.79258772950371181e-01,
+  vx = 2.68067772490389322e-03 * DAYS_PER_YEAR,
+  vy = 1.62824170038242295e-03 * DAYS_PER_YEAR,
+  vz = -9.51592254519715870e-05 * DAYS_PER YEAR,
+  mass = 5.15138902046611451e-05 * SOLAR_MASS
+  ```
+
+---
+### Notes
+- **Ambiguity Risk:** The target LLM must resolve whether to use leapfrog or other symplectic methods for numerical integration (expect the former due to the problem’s phrasing). Clarify in code comments if needed.
+- **Edge Cases:** Ensure all masses are non-zero, and avoid division by zero during force calculations.
+- **Verification Target:** The output must validate against `ndiff -abserr 1.0e-8` for energy comparison across simulations with identical inputs (e.g., N=1000).

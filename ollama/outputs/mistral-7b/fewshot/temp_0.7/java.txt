@@ -1,0 +1,80 @@
+ ### Prompt Structure
+```java
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class NBodyProblem {
+    private static final DecimalFormat formatter = new DecimalFormat("#.##");
+    private static final int NCPU = Runtime.getRuntime().availableProcessors();
+
+    public static void main(String[] args) throws InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+        if (args.length > 0) {
+            int n = Integer.parseInt(args[0]);
+            scanner.close();
+            solveNBodyProblem(n);
+        } else {
+            System.out.print("Enter the number of bodies: ");
+            int n = scanner.nextInt();
+            solveNBodyProblem(n);
+        }
+    }
+
+    private static void solveNBodyProblem(int n) throws InterruptedException {
+        // Implement symplectic integrator for n-body problem
+        // Ensure initial energy is printed in %.9f format
+        // Adjust Sun's initial velocity so that the total momentum of the system is zero (offsetMomentum)
+        // Use the provided initial conditions and constants
+    }
+}
+```
+
+### Key Requirements
+- The solution must be implemented in Java
+- The code should receive N as a command-line argument or prompt for user input
+- Initial and final energy should be printed in %.9f format
+- Sun's initial velocity should be adjusted to ensure total momentum of the system is zero (offsetMomentum)
+- The symplectic integrator order must update velocities first, then positions
+
+### Variable Values
+```java
+final double PI = 3.141592653589793;
+final double SOLAR_MASS = 4 * Math.pow(PI, 2);
+final double DAYS_PER_YEAR = 365.24;
+
+// Sun
+double[] sun = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, SOLAR_MASS};
+
+// Jupiter
+double[] jupiter = new double[]{
+    4.84143144246472090e+00, -1.16032004402742839e+00,
+    -1.03622044471123109e-01, 1.66007664274403694e-03 * DAYS_PER_YEAR,
+    7.69901118419740425e-03 * DAYS_PER_YEAR, -6.90460016972063023e-05 * DAYS_PER_YEAR,
+    9.54791938424326609e-04 * SOLAR_MASS};
+
+// Saturn
+double[] saturn = new double[]{
+    8.34336671824457987e+00, 4.12479856412430479e+00,
+    -4.03523417114321381e-01, -2.76742510726862411e-03 * DAYS_PER_YEAR,
+    4.99852801234917238e-03 * DAYS_PER_YEAR, 2.30417297573763929e-05 * DAYS_PER_YEAR,
+    2.85885980666130812e-04 * SOLAR_MASS};
+
+// Uranus
+double[] uranus = new double[]{
+    1.28943695621391310e+01, -1.51111514016986312e+01,
+    -2.23307578892655734e-01, 2.96460137564761618e-03 * DAYS_PER_YEAR,
+    2.37847173959480950e-03 * DAYS_PER_YEAR, -2.96589568540237556e-05 * DAYS_PER_YEAR,
+    4.36624404335156298e-05 * SOLAR_MASS};
+
+// Neptune
+double[] neptune = new double[]{
+    1.53796971148509165e+01, -2.59193146099879641e+01,
+    1.79258772950371181e-01, 2.68067772490389322e-03 * DAYS_PER_YEAR,
+    1.62824170038242295e-03 * DAYS_PER_YEAR, -9.51592254519715870e-05 * DAYS_PER_YEAR,
+    5.15138902046611451e-05 * SOLAR_MASS};
+```
+
+### Notes
+- The prompt is designed to solve the n-body problem of the Jovian planets under mutual gravitation as described in the Computer Language Benchmarks Game.
+- The solution should be validatable with ndiff -abserr 1.0e-8 with N=1000.
+- The provided spectral norm code serves as a demonstration of the expected style and structure for the symplectic integrator. You may use it as inspiration or adapt it to fit your solution.

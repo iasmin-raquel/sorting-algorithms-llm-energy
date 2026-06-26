@@ -1,0 +1,80 @@
+ ### Prompt Structure
+```cpp
+#include <cmath>
+#include <cstdlib>
+#include <cstdio>
+#include <sched.h>
+#include <omp.h>
+#include <emmintrin.h>
+
+// Function to implement n-body problem with symplectic integrator order: update all velocities first, then update all positions
+void SimulateNBody(int N, double dt);
+
+int main(int argc, char *argv[]) {
+    int N = ((argc >= 2) ? atoi(argv[1]) : 1000); // Use command-line argument or default to 1000
+    double initialEnergy = CalculateInitialEnergy(); // Calculate initial energy
+    SimulateNBody(N, dt); // Implement n-body simulation for given N and dt
+    double finalEnergy = CalculateFinalEnergy(); // Calculate final energy
+    printf("Initial Energy: %.9f\n", initialEnergy);
+    printf("Final Energy: %.9f\n", finalEnergy);
+    return 0;
+}
+```
+
+### Key Requirements
+- The generated code must be implemented in C++.
+- The program accepts an integer command-line argument N, which represents the number of time steps to simulate the n-body problem.
+- The initial and final energy should be printed in %.9f format.
+- The Sun's initial velocity should be adjusted so that the total momentum of the system is zero (offsetMomentum).
+- Use the symplectic integrator order: update all velocities first, then update all positions.
+
+### Variable Values
+```cpp
+// Constants
+const double PI = 3.141592653589793;
+const double SOLAR_MASS = 4 * PI * PI;
+const double DAYS_PER_YEAR = 365.24;
+
+// Initial conditions (x, y, z, vx, vy, vz, mass)
+double sun[] = {0, 0, 0, 0, 0, 0, SOLAR_MASS}; // Sun
+double jupiter[] = {
+    4.84143144246472090e+00,
+    -1.16032004402742839e+00,
+    -1.03622044471123109e-01,
+    1.66007664274403694e-03 * DAYS_PER_YEAR,
+    7.69901118419740425e-03 * DAYS_PER_YEAR,
+    -6.90460016972063023e-05 * DAYS_PER_YEAR,
+    9.54791938424326609e-04 * SOLAR_MASS
+}; // Jupiter
+double saturn[] = {
+    8.34336671824457987e+00,
+    4.12479856412430479e+00,
+    -4.03523417114321381e-01,
+    -2.76742510726862411e-03 * DAYS_PER_YEAR,
+    4.99852801234917238e-03 * DAYS_PER_YEAR,
+    -2.30417297573763929e-05 * DAYS_PER_YEAR,
+    2.85885980666130812e-04 * SOLAR_MASS
+}; // Saturn
+double uranus[] = {
+    1.28943695621391310e+01,
+    -1.51111514016986312e+01,
+    -2.23307578892655734e-01,
+    2.96460137564761618e-03 * DAYS_PER_YEAR,
+    2.37847173959480950e-03 * DAYS_PER_YEAR,
+    -2.96589568540237556e-05 * DAYS_PER_YEAR,
+    4.36624404335156298e-05 * SOLAR_MASS
+}; // Uranus
+double neptune[] = {
+    1.53796971148509165e+01,
+    -2.59193146099879641e+01,
+    1.79258772950371181e-01,
+    2.68067772490389322e-03 * DAYS_PER_YEAR,
+    1.62824170038242295e-03 * DAYS_PER_YEAR,
+    -9.51592254519715870e-05 * DAYS_PER_YEAR,
+    5.15138902046611451e-05 * SOLAR_MASS
+}; // Neptune
+```
+
+### Notes
+- The given spectral-norm code can be used as a reference for optimized vector operations in C++, but it is not necessary to replicate this specific implementation.
+- The generated LLM should produce an n-body simulation program that solves the problem specified in the prompt.

@@ -1,0 +1,91 @@
+### Prompt Structure
+
+You are tasked with generating a C++ implementation for simulating the n-body problem specifically for the Jovian planets under mutual gravitational influence. The code must adhere to the following requirements:
+
+1. **Language**: Implement this in pure C++.
+2. **Command-line Argument Handling**: Accept an integer `N` as a command-line argument, representing the number of time steps or iterations for the simulation.
+3. **Symplectic Integrator**: Use a symplectic integrator with the following order: first update all velocities based on current positions and masses, then update all positions based on updated velocities and gravitational forces.
+4. **Momentum Conservation**: Adjust the Sun’s initial velocity so that the total momentum of the system is zero (this should be handled in the initialization phase).
+5. **Output Formatting**:
+   - Print the initial energy of the system with a precision of 9 decimal places (`%.9f`).
+   - Print the final energy after `N` time steps with the same precision.
+6. **Precision**: Ensure numerical stability and accuracy to validate against `ndiff -abserr 1.0e-8` with `N=1000`.
+
+### Key Requirements
+- Use the provided physical constants (`PI`, `SOLAR_MASS`, `DAYS_PER_YEAR`) exactly as given.
+- Implement gravitational forces using Newton’s law of gravitation, accounting for mutual interactions between all bodies (including the Sun).
+- Avoid hardcoding any values; derive them from the initial conditions and constants.
+- Use a time step size that is consistent with the provided velocity units (velocity scaled by `DAYS_PER_YEAR`).
+- Handle floating-point arithmetic carefully to avoid catastrophic cancellation or numerical instability.
+
+### Variable Values
+
+**Constants:**
+```
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+```
+
+**Initial Conditions (Sun, Jupiter, Saturn, Uranus, Neptune):**
+
+#### Sun:
+```
+x = 0,
+y = 0,
+z = 0,
+vx = 0,
+vy = 0,
+vz = 0,
+mass = SOLAR_MASS
+```
+
+#### Jupiter:
+```
+x = 4.84143144246472090e+00,
+y = -1.16032004402742839e+00,
+z = -1.03622044471123109e-01,
+vx = 1.66007664274403694e-03 * DAYS_PER_YEAR,
+vy = 7.69901118419740425e-03 * DAYS_PER_YEAR,
+vz = -6.90460016972063023e-05 * DAYS_PER_YEAR,
+mass = 9.54791938424326609e-04 * SOLAR_MASS
+```
+
+#### Saturn:
+```
+x = 8.34336671824457987e+00,
+y = 4.12479856412430479e+00,
+z = -4.03523417114321381e-01,
+vx = -2.76742510726862411e-03 * DAYS_PER_YEAR,
+vy = 4.99852801234917238e-03 * DAYARTS_PER_YEAR,
+vz = 2.30417297573763929e-05 * DAYS_PER_YEAR,
+mass = 2.85885980666130812e-04 * SOLAR_MASS
+```
+
+#### Uranus:
+```
+x = 1.28943695621391310e+01,
+y = -1.51111514016986312e+01,
+z = -2.23307578892655734e-01,
+vx = 2.96460137564761618e-03 * DAYS_PER_YEAR,
+vy = 2.37847173959480950e-03 * DAYS_PER_YEAR,
+vz = -2.96589568540237556e-05 * DAYS_PER_YEAR,
+mass = 4.36624404335156298e-05 * SOLAR_MASS
+```
+
+#### Neptune:
+```
+x = 1.53796971148509165e+01,
+y = -2.59193146099879641e+01,
+z = 1.79258772950371181e-01,
+vx = 2.68067772490389322e-03 * DAYS_PER_YEAR,
+vy = 1.62824170038242295e-03 * DAYS_PER_YEAR,
+vz = -9.51592254519715870e-05 * DAYS_PER_YEAR,
+mass = 5.15138902046611451e-05 * SOLAR_MASS
+```
+
+### Notes
+- The symplectic integrator must be implemented carefully to avoid numerical drift or instability, especially for high precision (`1.0e-8`).
+- Ensure the time step size is chosen such that the simulation remains stable and accurate over `N=1000` steps.
+- The prompt assumes the target LLM will handle floating-point arithmetic correctly (avoiding catastrophic cancellation) and will implement a robust symplectic integrator.
+- The prompt does not specify an explicit time step size, but it should be derived from the given velocity units (`DAYS_PER_YEAR`). The LLM must infer this implicitly.

@@ -1,0 +1,56 @@
+ ### Prompt Structure
+Here is a Python code prompt that simulates the n-body problem for the Jovian planets under mutual gravitation, using a symplectic integrator. The output will be validatable with `ndiff -abserr 1.0e-8` with N=1000. The Sun's initial velocity is adjusted so that the total momentum of the system is zero.
+
+```python
+#!/usr/bin/env python3
+import math
+import itertools
+import sys
+import multiprocessing
+
+def ... [implement the functions as in the spectral-norm example]
+
+def main():
+    N = int(sys.argv[1])
+    u = [... initialize the list of velocities and positions for each planet]
+
+    # Adjust the Sun's initial velocity so that the total momentum is zero
+    offsetMomentum(u, 'Sun')
+
+    for _ in range(10):
+        v = multiply_AtAv(u)
+        u = multiply_AtAv(v)
+
+    vBv, vv = calculate_energy(u)
+    print("Initial Energy: {:.9f}".format(vBv))
+    print("Final Energy:   {:.9f}".format(vv))
+
+if __name__ == '__main__':
+    with multiprocessing.Pool(processes=4) as pool:
+        main()
+```
+
+### Key Requirements
+- The generated code must be written in Python
+- It should receive N as a command-line argument
+- The initial and final energy must be printed in %.9f format
+- The Sun's initial velocity should be adjusted so that the total momentum of the system is zero (using an offsetMomentum function)
+- The symplectic integrator order should update all velocities first, then update all positions
+
+### Variable Values
+Constants:
+- PI = 3.141592653589793
+- SOLAR_MASS = 4 * math.pi * math.pi
+- DAYS_PER_YEAR = 365.24
+
+Initial conditions (x, y, z, vx, vy, vz, mass) for planets:
+Sun: x=0, y=0, z=0, vx=0, vy=0, vz=0, mass=SOLAR_MASS
+Jupiter: ... [copy the exact initial conditions values from the problem description]
+Saturn: ... [copy the exact initial conditions values from the problem description]
+Uranus: ... [copy the exact initial conditions values from the problem description]
+Neptune: ... [copy the exact initial conditions values from the problem description]
+
+### Notes
+- The provided spectral-norm code is a demonstration of matrix multiplication. You can use its structure to implement the functions needed for this prompt, such as offsetMomentum and calculate_energy.
+- The symplectic integrator used in the spectral-norm example updates velocities first, then positions. This order should be preserved in your implementation.
+- The constants and initial conditions provided are exact values from the problem description. Make sure to use them as is when defining the planets' properties.

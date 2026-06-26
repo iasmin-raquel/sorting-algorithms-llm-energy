@@ -1,0 +1,135 @@
+### **Prompt Structure**
+**Generate C++ code to simulate the n-body problem for Jovian planets under mutual gravitation.**
+The program should:
+1. Take `N` (number of time steps) as a command-line argument.
+2. Print initial and final energy (`%.9f` format).
+3. Adjust the Sun’s velocity to enforce **total momentum = 0** (via `offsetMomentum`).
+4. Use a **symplectic integrator** with order: first update all velocities, then update positions.
+5. Use the given constants (`PI`, `SOLAR_MASS`, `DAYS_PER_YEAR`) exactly as provided.
+
+The code must:
+- Implement acceleration via gravitational forces (directly proportional to `(mass1 * mass2) / distance^3`).
+- Avoid explicit time loops for efficiency; instead, compute delta-time implicitly.
+- Validate with `ndiff -abserr 1.0e-8` after `N=1000` steps.
+
+**Example structure:**
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+// Constants
+const double PI = 3.141592653589793;
+const double SOLAR_MASS = 4 * PI * PI;
+
+// Input: N (time steps)
+int main(int argc, char* argv[]) {
+    int N = ...; // Read from CLI
+
+    // Initialize bodies (Sun + Jupiter + Saturn + Uranus + Neptune)
+    std::vector<Body> planets;
+
+    // Integrator:
+    // 1. Update velocities (symplectic step)
+    // 2. Update positions
+    for (int i = 0; i < N; ++i) {
+        computeVelocities(planets); // Uses offsetMomentum
+        updatePositions(planets);
+    }
+
+    // Output: initial + final energy
+    double totalEnergyInitial = ...;
+    double totalEnergyFinal = ...;
+    std::cout << "%.9f %.9f" << std::endl;
+
+    return 0;
+}
+```
+
+---
+
+### **Key Requirements**
+- **Language**: C++ (strict syntax, no Python/fortran-style code).
+- **Momentum Conservation**: Adjust Sun’s velocity to zero net momentum.
+- **Symplectic Integrator**:
+  - Velocity update before position update (order 4+ accuracy).
+  - Do not use explicit time steps; let `N` define simulation length implicitly.
+- **Precision**: Energy validation at `1.0e-8`.
+- **No External Dependencies**: Only standard C++ headers (`<iostream>`, `<vector>`, `<cmath>`).
+- **Input Handling**: CLI argument for `N`.
+
+---
+
+### **Variable Values**
+**Constants:**
+```cpp
+const double PI = 3.141592653589793;
+const double SOLAR_MASS = 4 * PI * PI;
+const double DAYS_PER_YEAR = 365.24;
+```
+
+**Initial Conditions (x,y,z,vx,vy,vz,mass):**
+---
+**Sun:**
+```
+x=0, y=0, z=0,
+vx=?, vy=?, vz=? *(to be adjusted by offsetMomentum),
+mass=SOLAR_MASS
+```
+---
+
+**Jupiter:**
+```
+x = 4.8414314424647209e+00,
+y = -1.16032004402742839e-00,
+z = -1.03622044471123109e-01,
+vx = 1.66007664274403694e-03 * DAYS_PER_YEAR,
+vy = 7.69901118419740425e-03 * DAYS_PER_YEAR,
+vz = -6.90460016972063023e-05 * DAYS_PER_YEAR,
+mass = 9.54791938424326609e-04 * SOLAR_MASS
+```
+---
+
+**Saturn:**
+```
+x = 8.34336671824457987e+00,
+y = 4.12479856412430479e+00,
+z = -4.03523417114321381e-01,
+vx = -2.76742510726862411e-03 * DAYS_PER_YEAR,
+vy = 4.99852801234917238e-03 * DAYS_PER_YEAR,
+vz = 2.30417297573763929e-05 * DAYS_PER_YEAR,
+mass = 2.85885980666130812e-04 * SOLAR_MASS
+```
+---
+
+**Uranus:**
+```
+x = 1.28943695621391310e+01,
+y = -1.51111514016986312e-01,
+z = -2.23307578892655734e-01,
+vx = 2.96460137564761618e-03 * DAYS_PER_YEAR,
+vy = 2.37847173959480950e-03 * DAYS_PER_YEAR,
+vz = -2.96589568540237556e-05 * DAYS_PER_YEAR,
+mass = 4.36624404335156298e-05 * SOLAR_MASS
+```
+---
+
+**Neptune:**
+```
+x = 1.53796971148509165e+01,
+y = -2.59193146099879641e-01,
+z = 1.79258772950371181e-01,
+vx = 2.68067772490389322e-03 * DAYS_PER_YEAR,
+vy = 1.62824170038242295e-03 * DAYS_PER_YEAR,
+vz = -9.51592254519715870e-05 * DAYS_PER_YEAR,
+mass = 5.15138902046611451e-05 * SOLAR_MASS
+```
+
+---
+### **Notes**
+1. **Symplectic Integrator**: The order must be explicit (velocities first, then positions). Assume `dt=1/DAYS_PER_YEAR` for simplicity unless otherwise noted.
+2. **Energy Calculation**:
+   - Initial: Sum of kinetic (`0.5 * m |v|^2`) + potential (`-G * sum_{i<j} [m_i m_j / r_ij]`).
+   - Final: Repeat after `N` steps (adjust `dt` if needed).
+3. **Ambiguity Risk**: The prompt avoids explicit time-stepping by letting `N` define "1 year" as a discrete unit—LLM must infer this implicitly.
+4. **Performance**: Avoid nested loops; use parallelization or vectorization for gravitational force computation (e.g., `omp` or SIMD).

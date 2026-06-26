@@ -1,0 +1,130 @@
+ ### Prompt Structure
+```python
+# N-body simulation of Jovian planets under mutual gravitation in Python
+
+import math
+from itertools import repeat
+from multiprocessing import Pool
+from sys import argv
+
+def gravity_force(i, j, m):
+    # Calculate the gravitational force between two bodies i and j with mass m
+    r = math.sqrt((x[i] - x[j])**2 + (y[i] - y[j])**2 + (z[i] - z[j])**2)
+    G = 6.67430e-11
+    return m[i] * m[j] * G / r**2
+
+def update_velocities(u, v):
+    # Update velocities using symplectic integrator order
+    for i in range(len(u)):
+        sum_force = 0
+        for j, f in enumerate(gravity_force(i, j, m)):
+            if i != j:
+                sum_force += f
+        v[i] += sum_force * DAYS_PER_YEAR / SOLAR_MASS
+
+def update_positions(u, v):
+    # Update positions using symplectic integrator order
+    for i in range(len(u)):
+        x[i] += v[i] * DAYS_PER_YEAR
+        y[i] += v[i + len(v)] * DAYS_PER_YEAR
+        z[i] += v[i + 2 * len(v)] * DAYS_PER_YEAR
+
+def calculate_energy():
+    # Calculate the total energy of the system
+    kinetic = 0
+    potential = 0
+    for i in range(len(u)):
+        kinetic += 0.5 * m[i] * (v[i]**2 + v[i+len(v)]**2 + v[i+2*len(v)]**2)
+        potential -= G * m[i] * sum([m[j] for j in range(len(u)) if i != j]) / math.sqrt((x[i] - x[j])**2 + (y[i] - y[j])**2 + (z[i] - z[j])**2)
+    return kinetic, potential
+
+def offset_momentum():
+    # Adjust the Sun's initial velocity so that the total momentum of the system is zero
+    total_momentum = sum([m[i] * (v[i] + v[i+len(v)] + v[i+2*len(v)]) for i in range(len(u))])
+    sun_velocity_offset = -total_momentum / m[0]
+    v[0] += sun_velocity_offset
+    v[0+len(v)] += sun_velocity_offset
+    v[0+2*len(v)] += sun_velocity_offset
+
+def main():
+    n = int(argv[1])
+    u = [0] * 3 * len(m)
+    v = [0] * 3 * len(m)
+
+    offset_momentum()
+
+    for _ in range(10):
+        update_velocities(u, v)
+        update_positions(u, v)
+
+    initial_energy, final_energy = calculate_energy()
+    print("Initial energy: {:.9f}".format(initial_energy))
+    print("Final energy: {:.9f}".format(final_energy))
+
+if __name__ == '__main__':
+    with Pool(processes=4) as pool:
+        main()
+```
+
+### Key Requirements
+- The Python code must implement the N-body problem for the Jovian planets under mutual gravitation.
+- The code should use a symplectic integrator order to update velocities and positions.
+- The code should receive N as a command-line argument.
+- The initial and final energy of the system should be printed in %.9f format.
+- The Sun's initial velocity should be adjusted so that the total momentum of the system is zero.
+
+### Variable Values
+```python
+PI = 3.141592653589793
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+# Sun
+x = [0]
+y = [0]
+z = [0]
+vx = [0]
+vy = [0]
+vz = [0]
+mass = [SOLAR_MASS]
+
+# Jupiter
+x = x + [4.84143144246472090e+00]
+y = y + [-1.16032004402742839e+00]
+z = z + [-1.03622044471123109e-01]
+vx = vx + [1.66007664274403694e-03 * DAYS_PER_YEAR]
+vy = vy + [7.69901118419740425e-03 * DAYS_PER_YEAR]
+vz = vz + [-6.90460016972063023e-05 * DAYS_PER_YEAR]
+mass = mass + [9.54791938424326609e-04 * SOLAR_MASS]
+
+# Saturn
+x = x + [8.34336671824457987e+00]
+y = y + [4.12479856412430479e+00]
+z = z + [-4.03523417114321381e-01]
+vx = vx + [-2.76742510726862411e-03 * DAYS_PER_YEAR]
+vy = vy + [4.99852801234917238e-03 * DAYS_PER_YEAR]
+vz = vz + [2.30417297573763929e-05 * DAYS_PER_YEAR]
+mass = mass + [2.85885980666130812e-04 * SOLAR_MASS]
+
+# Uranus
+x = x + [1.28943695621391310e+01]
+y = y + [-1.51111514016986312e+01]
+z = z + [-2.23307578892655734e-01]
+vx = vx + [2.96460137564761618e-03 * DAYS_PER_YEAR]
+vy = vy + [2.37847173959480950e-03 * DAYS_PER_YEAR]
+vz = vz + [-2.96589568540237556e-05 * DAYS_PER_YEAR]
+mass = mass + [4.36624404335156298e-05 * SOLAR_MASS]
+
+# Neptune
+x = x + [1.53796971148509165e+01]
+y = y + [-2.59193146099879641e+01]
+z = z + [1.79258772950371181e-01]
+vx = vx + [2.68067772490389322e-03 * DAYS_PER_YEAR]
+vy = vy + [1.62824170038242295e-03 * DAYS_PER_YEAR]
+vz = vz + [-9.51592254519715870e-05 * DAYS_PER_YEAR]
+mass = mass + [5.15138902046611451e-05 * SOLAR_MASS]
+```
+
+### Notes
+- The provided spectral-norm code is included as a demonstration of the expected style and structure of the response without specifying the content of the solution.
+- The generated prompt does not include any specific instructions for handling errors or edge cases, as it focuses on implementing the N-body problem with the given constraints.

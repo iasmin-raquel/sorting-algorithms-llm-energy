@@ -1,0 +1,124 @@
+### Prompt Structure
+
+**Few-Shot Example (Spectral Norm Calculation):**
+You are tasked with implementing a Java program that performs numerical integration for the N-body problem involving Jovian planets under mutual gravitational forces. Below is an example of a spectral norm calculation in Java, demonstrating structure and style:
+
+```java
+import java.text.DecimalFormat;
+
+public class SpectralNormExample {
+    private static final DecimalFormat formatter = new DecimalFormat("#.000000000");
+
+    public static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        // Initialization and computation logic for spectral norm
+        System.out.println(formatter.format(result));
+    }
+}
+```
+
+**Your Task:**
+Implement a Java program that simulates the orbits of Jovian planets (Sun, Jupiter, Saturn, Uranus, Neptune) under mutual gravitational forces. The code must:
+1. Accept `N` as a command-line argument.
+2. Use a symplectic integrator with order: update velocities first, then positions.
+3. Adjust the Sun’s initial velocity to ensure total system momentum is zero (`offsetMomentum`).
+4. Print the initial and final energy of the system in %.9f format.
+
+**Key Features:**
+- Use gravitational forces between all bodies (including the Sun).
+- Apply a time step of `1e-6` days.
+- Output must be validated with `ndiff -abserr 1.0e-8` for N=1000 iterations.
+
+---
+
+### Key Requirements
+- **Language:** Java only.
+- **Command-line Argument:** Must parse `N` (number of iterations).
+- **Symplectic Integrator Order:**
+  - Update all velocities first (`Δv = F * Δt`).
+  - Update all positions second (`Δr = v * Δt`).
+- **Momentum Conservation:** Adjust Sun’s velocity to zero net momentum.
+- **Energy Output:** Print initial and final energy in %.9f format (e.g., `0.123456789%`, `0.123456788%**).
+- **Precision:** Use double-precision arithmetic; avoid floating-point errors beyond 1e-8.
+- **Gravitational Force:** Compute pairwise forces using Newton’s law of gravitation (`F = G * m1 * m2 / r²`).
+- **Time Step:** Fixed at `1e-6` days (no adaptive stepping).
+
+---
+
+### Variable Values
+**Constants:**
+```java
+private static final double PI = 3.141592653589793;
+private static final double SOLAR_MASS = 4 * PI * PI;
+private static final double DAYS_PER_YEAR = 365.24;
+```
+
+**Initial Conditions (Sun, Jupiter, Saturn, Uranus, Neptune):**
+```java
+// Sun:
+double[] sunPos = {0.0, 0.0, 0.0};
+double[] sunVel = {0.0, 0.0, 0.0};
+double sunMass = SOLAR_MASS;
+
+// Jupiter:
+double[] jupiterPos = {
+    4.84143144246472090e+00,
+    -1.16032004402742839e+00,
+    -1.03622044471123109e-01
+};
+double[] jupiterVel = {
+    1.66007664274403694e-03 * DAYS_PER_YEAR,
+    7.69901118419740425e-03 * DAYS_PER_YEAR,
+    -6.90460016972063023e-05 * DAYS_PER_YEAR
+};
+double jupiterMass = 9.54791938424326609e-04 * SOLAR_MASS;
+
+// Saturn:
+double[] saturnPos = {
+    8.34336671824457987e+00,
+    4.12479856412430479e+00,
+    -4.03523417114321381e-01
+};
+double[] saturnVel = {
+    -2.76742510726862411e-03 * DAYS_PER_YEAR,
+    4.99852801234917238e-03 * DAYS_PER_YEAR,
+    2.30417297573763929e-05 * DAYS_PER_YEAR
+};
+double saturnMass = 2.85885980666130812e-04 * SOLAR_MASS;
+
+// Uranus:
+double[] uranusPos = {
+    1.28943695621391310e+01,
+    -1.51111514016986312e+01,
+    -2.23307578892655734e-01
+};
+double[] uranusVel = {
+    2.96460137564761618e-03 * DAYS_PER_YEAR,
+    2.37847173959480950e-03 * DAYS_PER_YEAR,
+    -2.96589568540237556e-05 * DAYS_PER_YEAR
+};
+double uranusMass = 4.36624404335156298e-05 * SOLAR_MASS;
+
+// Neptune:
+double[] neptunePos = {
+    1.53796971148509165e+01,
+    -2.59193146099879641e+01,
+    1.79258772950371181e-01
+};
+double[] neptuneVel = {
+    2.68067772490389322e-03 * DAYS_PER_YEAR,
+    1.62824170038242295e-03 * DAYS_PER_YEAR,
+    -9.51592254519715870e-05 * DAYS_PER_YEAR
+};
+double neptuneMass = 5.15138902046611451e-05 * SOLAR_MASS;
+```
+
+---
+
+### Notes
+1. **Symplectic Integrator:** The integrator must follow the order: velocities updated first, then positions. This ensures long-term stability.
+2. **Momentum Adjustment:** The Sun’s velocity will be adjusted post-initialization to zero net momentum (e.g., via `offsetMomentum()`).
+3. **Energy Calculation:** Total energy includes kinetic (`0.5 * Σ m_i v_i²`) and potential (`Σ -G * m_i m_j / r_ij`).
+4. **Precision:** Use `double` for all calculations; avoid rounding errors in intermediate steps.
+5. **Ambiguity Risk:** The prompt assumes the LLM will handle array indexing (e.g., `pos[i]` for 3D vectors) and nested loops for pairwise forces. Clarify if the target model requires explicit loop constructs or vectorized operations.
+6. **Output Format:** Ensure energy is printed as a percentage of total mass-energy (e.g., `KE + PE` normalized to `SOLAR_MASS`).
