@@ -1,0 +1,4 @@
+FROM stable-code:3b
+PARAMETER temperature 0
+PARAMETER num_predict 4096
+PARAMETER num_ctx 8192

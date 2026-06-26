@@ -1,0 +1,31 @@
+nbody.cpp: In function ‘void updateVelocities(const std::vector<Planet>&, double)’:
+nbody.cpp:48:27: error: assignment of member ‘Planet::vx’ in read-only object
+   48 |             planets[i].vx -= planets[j].mass * (dx / r3) * dt;
+nbody.cpp:49:27: error: assignment of member ‘Planet::vy’ in read-only object
+   49 |             planets[i].vy -= planets[j].mass * (dy / r3) * dt;
+nbody.cpp:50:27: error: assignment of member ‘Planet::vz’ in read-only object
+   50 |             planets[i].vz -= planets[j].mass * (dz / r3) * dt;
+nbody.cpp:51:27: error: assignment of member ‘Planet::vx’ in read-only object
+   51 |             planets[j].vx += planets[i].mass * (dx / r3) * dt;
+nbody.cpp:52:27: error: assignment of member ‘Planet::vy’ in read-only object
+   52 |             planets[j].vy += planets[i].mass * (dy / r3) * dt;
+nbody.cpp:53:27: error: assignment of member ‘Planet::vz’ in read-only object
+   53 |             planets[j].vz += planets[i].mass * (dz / r3) * dt;
+nbody.cpp: In function ‘void updatePositions(const std::vector<Planet>&, double)’:
+nbody.cpp:60:18: error: assignment of member ‘Planet::x’ in read-only object
+   60 |         planet.x += planet.vx * dt;
+      |         ~~~~~~~~~^~~~~~~~~~~~~~~~~
+nbody.cpp:61:18: error: assignment of member ‘Planet::y’ in read-only object
+   61 |         planet.y += planet.vy * dt;
+      |         ~~~~~~~~~^~~~~~~~~~~~~~~~~
+nbody.cpp:62:18: error: assignment of member ‘Planet::z’ in read-only object
+   62 |         planet.z += planet.vz * dt;
+      |         ~~~~~~~~~^~~~~~~~~~~~~~~~~
+nbody.cpp: In function ‘int main(int, char**)’:
+nbody.cpp:98:37: error: ‘setprecision’ is not a member of ‘std’
+   98 |     std::cout << std::fixed << std::setprecision(9) << (initialEnergy / finalEnergy * 100.0) << std::endl;
+      |                                     ^~~~~~~~~~~~
+nbody.cpp:5:1: note: ‘std::setprecision’ is defined in header ‘<iomanip>’; did you forget to ‘#include <iomanip>’?
+    4 | #include <algorithm>
+  +++ |+#include <iomanip>
+    5 | 

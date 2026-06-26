@@ -1,0 +1,8 @@
+nbody.cpp: In function ‘int main(int, char**)’:
+nbody.cpp:109:23: error: ‘setprecision’ is not a member of ‘std’
+  109 |     std::cout << std::setprecision(9) << (initialEnergy / SOLAR_MASS * 100) << " "
+      |                       ^~~~~~~~~~~~
+nbody.cpp:5:1: note: ‘std::setprecision’ is defined in header ‘<iomanip>’; did you forget to ‘#include <iomanip>’?
+    4 | #include <cstdlib>
+  +++ |+#include <iomanip>
+    5 | 
