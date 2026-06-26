@@ -1,4 +1,4 @@
-FROM stable-code:3b
-PARAMETER temperature 0
+FROM mistral:7b
+PARAMETER temperature 0.7
 PARAMETER num_predict 4096
 PARAMETER num_ctx 8192
