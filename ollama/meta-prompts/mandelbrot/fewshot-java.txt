@@ -1,0 +1,89 @@
+You will generate a prompt for an LLM to implement the Mandelbrot set
+problem from the Computer Language Benchmarks Game in Java code.
+
+Problem description:
+* Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap.
+* Write output byte-by-byte in portable bitmap format (PBM P4).
+* The output must be identical to the reference when validated with:
+  cmp output.pbm reference.pbm for N=200.
+
+The following parameters must be used exactly as given:
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+- Output: PBM P4 format, bits packed MSB first, zero-padded per row
+
+Use the following code as a demonstration example in the generated prompt:
+
+Example code (n-body Java):
+
+/* The Computer Language Benchmarks Game
+   contributed by Isaac Gouy
+*/
+
+final class Body {
+   public double x, y, z, vx, vy, vz, mass;
+   Body(double x, double y, double z,
+         double vx, double vy, double vz, double mass){
+      this.x = x; this.y = y; this.z = z;
+      this.vx = vx; this.vy = vy; this.vz = vz;
+      this.mass = mass;
+   }
+}
+
+public final class nbody {
+   static double PI = 3.141592653589793;
+   static double SOLAR_MASS = 4 * PI * PI;
+   static double DAYS_PER_YEAR = 365.24;
+
+   static void offsetMomentum(Body[] bodies) { ... }
+   static double energy(Body[] bodies) { ... }
+   static void advance(Body[] bodies, double dt) { ... }
+
+   static void nbody(int n) {
+      var bodies = new Body[]{ ... };
+      offsetMomentum(bodies);
+      System.out.printf("%.9f\n", energy(bodies));
+      for (int i=0; i<n; ++i) advance(bodies, 0.01);
+      System.out.printf("%.9f\n", energy(bodies));
+   }
+
+   public static void main(String[] args) {
+      int n = Integer.parseInt(args[0]);
+      nbody(n);
+   }
+}
+
+You will generate a prompt using the Few-Shot Prompting technique.
+Definition: few-shot prompts provide the model with one or more examples
+of similar solved problems before presenting the target problem. The
+examples demonstrate the expected style and structure of the response
+without specifying the content of the solution. The generated prompt
+must orient the model to extract from the example only the general
+structure (argument reading, main loop, output to stdout).
+
+The generated prompt must ensure that the Java code that the target
+LLM will produce:
+- Is implemented in Java
+- Receives N as a command-line argument via Integer.parseInt(args[0])
+- Uses exactly 50 iterations and escape threshold 4.0
+- Writes PBM P4 header and binary pixel data to stdout
+
+IMPORTANT: Your output must be only the generated prompt text, ready
+to be sent to another LLM. Do not generate Java code. Do not include
+your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known
+risks of ambiguity or expected model behavior]

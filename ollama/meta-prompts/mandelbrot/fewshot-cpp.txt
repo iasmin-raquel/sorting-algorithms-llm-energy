@@ -1,0 +1,89 @@
+You will generate a prompt for an LLM to implement the Mandelbrot set
+problem from the Computer Language Benchmarks Game in C++ code.
+
+Problem description:
+* Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap.
+* Write output byte-by-byte in portable bitmap format (PBM P4).
+* The output must be identical to the reference when validated with:
+  cmp output.pbm reference.pbm for N=200.
+
+The following parameters must be used exactly as given:
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+- Output: PBM P4 format, bits packed MSB first, zero-padded per row
+
+Use the following code as a demonstration example in the generated prompt:
+
+Example code (n-body C++):
+
+/*
+ * The Computer Language Benchmarks Game
+ * contributed by Jeffrey Beu
+ * modified by Danny Angelo Carminati Grein
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+namespace {
+struct body {
+  double x, y, z;
+  double vx, vy, vz;
+  const double mass;
+};
+
+const double pi = 3.141592653589793;
+const double solar_mass = 4 * pi * pi;
+const double days_per_year = 365.24;
+const double dt = 0.01;
+
+[... resto do código C++ do n-body ...]
+
+}
+
+int main(int,char** argv) {
+  auto solar_system = construct_tuple(sun,jupiter,saturn,uranus,neptune);
+  offset(solar_system);
+  printf("%.9f\n", energy(solar_system));
+  int n = atoi(argv[1]);
+  for (int i = 1; i <= n; i++) advance(solar_system);
+  printf("%.9f\n", energy(solar_system));
+  return 0;
+}
+
+You will generate a prompt using the Few-Shot Prompting technique.
+Definition: few-shot prompts provide the model with one or more examples
+of similar solved problems before presenting the target problem. The
+examples demonstrate the expected style and structure of the response
+without specifying the content of the solution. The generated prompt
+must orient the model to extract from the example only the general
+structure (argument reading, main loop, output to stdout). Do not
+replicate the template metaprogramming style of the example.
+
+The generated prompt must ensure that the C++ code that the target
+LLM will produce:
+- Is implemented in C++
+- Receives N as a command-line argument
+- Uses exactly 50 iterations and escape threshold 4.0
+- Writes PBM P4 header and binary pixel data to stdout
+
+IMPORTANT: Your output must be only the generated prompt text, ready
+to be sent to another LLM. Do not generate C++ code. Do not include
+your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known
+risks of ambiguity or expected model behavior]

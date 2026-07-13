@@ -1,0 +1,46 @@
+You will generate a prompt for an LLM to implement the Mandelbrot set 
+problem from the Computer Language Benchmarks Game in Java code.
+
+Problem description:
+* Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap.
+* Write output byte-by-byte in portable bitmap format (PBM P4).
+* The output must be identical to the reference when validated with:
+  cmp output.pbm reference.pbm for N=200.
+
+The following parameters must be used exactly as given:
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+- Output: PBM P4 format, bits packed MSB first, zero-padded per row
+
+You will generate a prompt using the Chain-of-Thought Prompting 
+technique. Definition: chain-of-thought prompts encourage the model 
+to decompose the problem into intermediate reasoning steps before 
+producing the final response. The model is guided to "think out loud", 
+describing its reasoning step by step before generating the code.
+
+The generated prompt must ensure that the Java code that the target 
+LLM will produce:
+- Is implemented in Java
+- Receives N as a command-line argument via Integer.parseInt(args[0])
+- Uses exactly 50 iterations and escape threshold 4.0
+- Writes PBM P4 header and binary pixel data to stdout
+
+IMPORTANT: Your output must be only the generated prompt text, ready 
+to be sent to another LLM. Do not generate Java code. Do not include 
+your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known 
+risks of ambiguity or expected model behavior]
