@@ -1,0 +1,86 @@
+```text
+### Prompt Structure
+Here are some examples of solving problems from the Computer Language Benchmarks Game:
+
+**Example 1:**
+
+/* The Computer Language Benchmarks Game
+   contributed by Isaac Gouy
+*/
+
+final class Body {
+   public double x, y, z, vx, vy, vz, mass;
+   Body(double x, double y, double z,
+         double vx, double vy, double vz, double mass){
+      this.x = x; this.y = y; this.z = z;
+      this.vx = vx; this.vy = vy; this.vz = vz;
+      this.mass = mass;
+   }
+}
+
+public final class nbody {
+   static double PI = 3.141592653589793;
+   static double SOLAR_MASS = 4 * PI * PI;
+   static double DAYS_PER_YEAR = 365.24;
+
+   static void offsetMomentum(Body[] bodies) { ... }
+   static double energy(Body[] bodies) { ... }
+   static void advance(Body[] bodies, double dt) { ... }
+
+   static void nbody(int n) {
+      var bodies = new Body[]{ ... };
+      offsetMomentum(bodies);
+      System.out.printf("%.9f\n", energy(bodies));
+      for (int i=0; i<n; ++i) advance(bodies, 0.01);
+      System.out.printf("%.9f\n", energy(bodies));
+   }
+
+   public static void main(String[] args) {
+      int n = Integer.parseInt(args[0]);
+      nbody(n);
+   }
+}
+
+**Example 2:**
+
+/* ... (Similar code structure with different algorithm details) ... */
+
+Now, implement the Mandelbrot set:
+
+public class Mandelbrot {
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]);
+        int maxIterations = 50;
+        double escapeThreshold = 4.0;
+        double realMin = -1.5;
+        double realMax = 0.5;
+        double imaginaryMin = -1.0;
+        double imaginaryMax = 1.0;
+
+        // ... (Your Java code here) ...
+    }
+}
+```
+
+### Key Requirements
+*   The generated code must be in Java.
+*   It should receive the size of the bitmap (`N`) as a command-line argument using `Integer.parseInt(args[0])`.
+*   It must use exactly 50 iterations for each point in the complex plane.
+*   The escape threshold must be set to 4.0.
+*   The code should plot the Mandelbrot set within the region defined by: real values between [-1.5, 0.5] and imaginary values between [-1.0, 1.0].
+*   The output must be in PBM P4 format (header + binary data) written byte-by-byte to standard output.
+*   The output must include the PBM header with the correct dimensions and color map information. The pixel data should be packed MSB first and zero-padded per row.
+*   The final output should be identical to the reference when validated using `cmp output.pbm reference.pbm for N=200`.
+
+### Variable Values
+*   `N`: Bitmap size (integer, read from command line)
+*   `maxIterations`: 50
+*   `escapeThreshold`: 4.0
+*   `realMin`: -1.5
+*   `realMax`: 0.5
+*   `imaginaryMin`: -1.0
+*   `imaginaryMax`: 1.0
+
+### Notes
+The prompt emphasizes extracting the general structure of similar examples, specifically focusing on argument parsing, main loop execution, and standard output generation without including algorithm-specific implementation details.  The example code provided serves as a template for the expected format and demonstrates how command line arguments are processed. It is crucial that the LLM understands the need to generate complete, runnable Java code that adheres to all the specified requirements regarding parameters and output format.
+```

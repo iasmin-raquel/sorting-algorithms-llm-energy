@@ -1,0 +1,19 @@
+### Prompt Structure
+Write a Java program that plots the Mandelbrot set using the given parameters and writes the output in PBM P4 format to stdout. The program should receive N as a command-line argument via `Integer.parseInt(args[0])`.
+
+### Key Requirements
+- The solution must be implemented in Java.
+- The program should accept an integer N as a command-line argument.
+- The code should use exactly 50 iterations and an escape threshold of 4.0.
+- The output should be written in PBM P4 format, with bits packed MSB first and zero-padded per row.
+- The plot region should be real in [-1.5, 0.5], imaginary in [-1.0, 1.0].
+
+### Variable Values
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region (real): [-1.5, 0.5]
+- Plot region (imaginary): [-1.0, 1.0]
+- Output format: PBM P4
+
+### Notes
+The solution should follow the structure and style demonstrated in the example code provided, focusing on the general structure (argument reading, main loop, output to stdout) rather than the specific content of the solution. The generated LLM response will not include any Java code.

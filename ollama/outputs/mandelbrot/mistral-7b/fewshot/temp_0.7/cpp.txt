@@ -1,0 +1,26 @@
+### Prompt Structure
+Here's a prompt that encourages the target LLM to write a C++ program for plotting the Mandelbrot set in PBM P4 format based on the example provided:
+
+```
+Write a C++ program that plots the Mandelbrot set using 50 iterations and an escape threshold of 4.0, as specified by the Computer Language Benchmarks Game. The program should receive N as a command-line argument, where N represents the resolution (number of pixels in each dimension). Write output byte-by-byte in PBM P4 format, with bits packed MSB first and zero-padded per row.
+
+The program must be identical to the reference when validated with:
+  cmp output.pbm reference.pbm for N=200.
+```
+
+### Key Requirements
+- The program should be written in C++
+- It must receive N as a command-line argument
+- The program should use exactly 50 iterations and an escape threshold of 4.0
+- The output should be in PBM P4 format, with bits packed MSB first and zero-padded per row
+- The output should be written byte-by-byte to stdout
+
+### Variable Values
+- Iteration limit: 50
+- Escape threshold: 4.0
+- Plot region (real): [-1.5, 0.5]
+- Plot region (imaginary): [-1.0, 1.0]
+- Output format: PBM P4
+
+### Notes
+This prompt is designed to encourage the model to extract the general structure from the provided example and apply it to the Mandelbrot set problem. The output should not include any unnecessary details or deviate significantly from the style of the example code. It's important to note that this prompt does not enforce the use of template metaprogramming, as requested.

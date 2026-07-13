@@ -1,0 +1,33 @@
+### Prompt Structure
+You are an expert Python programmer tasked with implementing the Mandelbrot set problem from the Computer Language Benchmarks Game. Your goal is to generate a complete, executable Python script that plots the Mandelbrot set within the specified region and writes the output in PBM P4 format to standard output. Follow these steps:
+
+1.  **Initialization:** Start by importing necessary libraries (e.g., `sys`, `math`). Handle command-line arguments for N.
+2.  **Parameter Definition:** Set the maximum iterations to 50 and the escape threshold to 4.0, as specified in the problem description.
+3.  **Plot Region:** Define the plotting region for the real part ([-1.5, 0.5]) and imaginary part ([-1.0, 1.0]).
+4.  **Mandelbrot Calculation:** Implement the Mandelbrot set calculation using a nested loop structure. For each complex number `c`, iterate up to 50 times, calculating `z` iteratively according to `z = z*z + c`. If `abs(z) > 4.0`, mark the point as an escape.
+5.  **Bitmap Generation:** Create a 2D array (or list of lists) to represent the bitmap. Each element in the array will indicate whether the corresponding pixel belongs to the Mandelbrot set (0) or is an escape (1).
+6.  **PBM P4 Output:** Write the output in PBM P4 format, starting with the header: "P4\n" followed by the width and height of the image, then the binary pixel data where each byte represents a row of pixels (0s and 1s). Ensure MSB packing and zero-padding per row as required. Output should be written to standard output (stdout).
+7.  **Command Line Argument Handling:** Take N as an argument from the command line using `int(sys.argv[1])`.
+
+Now, write the Python code to fulfill these steps. Ensure that your code is well-commented and adheres strictly to all specified constraints.
+
+### Key Requirements
+*   The script must be written in Python 3.
+*   It must accept an integer argument `N` representing the size of the bitmap (width and height).
+*   The maximum iterations for the Mandelbrot calculation must be set to 50.
+*   The escape threshold must be set to 4.0.
+*   The plotting region must be [-1.5, 0.5] for the real part and [-1.0, 1.0] for the imaginary part.
+*   The output format must be PBM P4 (Portable Bitmap).
+*   The header of the PBM P4 file ("P4\nwidth height") must be written to standard output as text.
+*   The pixel data must be written in binary format, with MSB packing and zero-padding per row.
+*   The width and height are determined by N.
+*   The script should handle the command line argument correctly.
+
+### Variable Values
+*   Maximum iterations: 50
+*   Escape threshold: 4.0
+*   Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+*   Output format: PBM P4 (bits packed MSB first, zero-padded per row)
+
+### Notes
+This prompt emphasizes chain-of-thought prompting to guide the LLM towards a correct implementation. The detailed breakdown of steps is crucial for ensuring that the model understands the requirements and generates code that adheres to all constraints, particularly the specific output format (PBM P4).  The inclusion of parameter values explicitly reinforces these critical aspects. The prompt avoids giving away the code directly and instead focuses on instructing the LLM through a logical process.

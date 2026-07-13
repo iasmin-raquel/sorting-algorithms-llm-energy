@@ -1,0 +1,41 @@
+### Prompt Structure
+```text
+You are an expert Java code generator specializing in implementing algorithms from the Computer Language Benchmarks Game. You will be provided with a problem description and one or more example solutions. Your task is to generate a complete, executable Java solution that precisely addresses the problem description, mirroring the style and structure of the examples.
+
+Here's an example:
+
+**Problem Description:** Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap. Write output byte-by-byte in portable bitmap format (PBM P4). The output must be identical to the reference when validated with: cmp output.pbm reference.pbm for N=200.
+
+**Maximum iterations:** 50
+**Escape threshold:** 4.0
+**Plot region:** real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+**Output:** PBM P4 format, bits packed MSB first, zero-padded per row
+
+```
+
+Now, solve the following problem:
+
+**Problem Description:** Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap. Write output byte-by-byte in portable bitmap format (PBM P4). The output must be identical to the reference when validated with: cmp output.pbm reference.pbm for N=200.
+
+**Maximum iterations:** 50
+**Escape threshold:** 4.0
+**Plot region:** real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+**Output:** PBM P4 format, bits packed MSB first, zero-padded per row
+
+```
+
+### Key Requirements
+*   The generated code must be valid Java and executable.
+*   It should receive the value of `N` as a command-line argument using `Integer.parseInt(args[0])`.
+*   It must precisely implement the Mandelbrot set calculation with 50 iterations and an escape threshold of 4.0.
+*   The output format must be PBM P4, including the header and binary pixel data written to standard output (stdout). The bits should be packed MSB first, and rows should be zero-padded.
+*   The code should handle potential errors gracefully (e.g., invalid input for N).
+
+### Variable Values
+*   `N`:  Integer representing the size of the bitmap (N x N) - taken from command line argument.
+*   `Maximum iterations`: 50
+*   `Escape threshold`: 4.0
+*   `Plot region`: Real in [-1.5, 0.5], Imaginary in [-1.0, 1.0]
+
+### Notes
+The model should focus on generating the core logic for the Mandelbrot set calculation and bitmap output, following the provided example's structure closely.  It is crucial that the generated code adheres to the specified PBM P4 format requirements (MSB packing, zero-padding). The prompt emphasizes a few-shot approach; therefore, the model should primarily learn from the given example’s structure rather than detailed algorithmic instructions.

@@ -1,0 +1,44 @@
+### Prompt Structure
+Here is a prompt that demonstrates the structure for implementing the Mandelbrot set problem in C++. The example provided does not relate to the Mandelbrot set but serves as a guide for the expected style and structure of the response.
+
+```cpp
+/*
+ * The Computer Language Benchmarks Game
+ * contributed by [Your Name]
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+namespace {
+    // Define necessary structures and constants
+}
+
+int main(int argc, char** argv) {
+    int N = atoi(argv[1]);
+    // Initialize variables and data structures
+
+    for (int i = 0; i < N; ++i) {
+        // Implement the Mandelbrot set calculation here
+    }
+
+    // Write PBM P4 header and binary pixel data to stdout
+}
+```
+
+### Key Requirements
+- The solution must be implemented in C++.
+- The code should receive N as a command-line argument.
+- It must use exactly 50 iterations and an escape threshold of 4.0.
+- Write PBM P4 header and binary pixel data to stdout.
+
+### Variable Values
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region (real): [-1.5, 0.5]
+- Plot region (imaginary): [-1.0, 1.0]
+- Output format: PBM P4
+
+### Notes
+The provided example code is not related to the Mandelbrot set problem. The generated prompt should focus on extracting the general structure from the example, without replicating its template metaprogramming style. The output must be only the generated prompt text, ready to be sent to another LLM.

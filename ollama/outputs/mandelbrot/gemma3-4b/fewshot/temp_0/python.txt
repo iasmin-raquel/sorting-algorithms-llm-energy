@@ -1,0 +1,130 @@
+### Prompt Structure
+```text
+You are an expert Python programmer specializing in image generation and computer science benchmarks. You will implement the Mandelbrot set problem from the Computer Language Benchmarks Game.
+
+Here are three examples demonstrating the desired output structure:
+
+Example 1:
+```python
+# The Computer Language Benchmarks Game
+from math import sqrt
+import sys
+
+PI = 3.14159265358979323
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+class Body:
+  def __init__(self, x, y, z, vx, vy, vz, mass):
+    self.x = x; self.y = y; self.z = z
+    self.vx = vx; self.vy = vy; self.vz = vz
+    self.mass = mass
+
+def offset_momentum(bodies): ...
+def energy(bodies): ...
+def advance(bodies, dt): ...
+
+def nbody(n):
+  bodies = [ Body(...), ... ]
+  offset_momentum(bodies)
+  print("%.9f" % energy(bodies))
+  for i in range(n):
+    advance(bodies, 0.01)
+  print("%.9f" % energy(bodies))
+
+if __name__ == '__main__':
+  main(int(sys.argv[1]))
+```
+
+Example 2:
+```python
+# The Computer Language Benchmarks Game
+from math import sqrt
+import sys
+
+PI = 3.14159265358979323
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+class Body:
+  def __init__(self, x, y, z, vx, vy, vz, mass):
+    self.x = x; self.y = y; self.z = z
+    self.vx = vx; self.vy = vy; self.vz = vz
+    self.mass = mass
+
+def offset_momentum(bodies): ...
+def energy(bodies): ...
+def advance(bodies, dt): ...
+
+def nbody(n):
+  bodies = [ Body(...), ... ]
+  offset_momentum(bodies)
+  print("%.9f" % energy(bodies))
+  for i in range(n):
+    advance(bodies, 0.01)
+  print("%.9f" % energy(bodies))
+
+if __name__ == '__main__':
+  main(int(sys.argv[1]))
+```
+
+Example 3:
+```python
+# The Computer Language Benchmarks Game
+from math import sqrt
+import sys
+
+PI = 3.14159265358979323
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+class Body:
+  def __init__(self, x, y, z, vx, vy, vz, mass):
+    self.x = x; self.y = y; self.z = z
+    self.vx = vx; self.vy = vy; self.vz = vz
+    self.mass = mass
+
+def offset_momentum(bodies): ...
+def energy(bodies): ...
+def advance(bodies, dt): ...
+
+def nbody(n):
+  bodies = [ Body(...), ... ]
+  offset_momentum(bodies)
+  print("%.9f" % energy(bodies))
+  for i in range(n):
+    advance(bodies, 0.01)
+  print("%.9f" % energy(bodies))
+
+if __name__ == '__main__':
+  main(int(sys.argv[1]))
+```
+
+Now, implement the Mandelbrot set problem as described below:
+
+Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap. Write output byte-by-byte in portable bitmap format (PBM P4). The output must be identical to the reference when validated with: cmp output.pbm reference.pbm for N=200.
+
+Maximum iterations: 50
+Escape threshold: 4.0
+Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+Output: PBM P4 format, bits packed MSB first, zero-padded per row
+
+```
+
+### Key Requirements
+*   The code must be written in Python.
+*   It should receive the size of the bitmap (N) as a command-line argument via `int(sys.argv[1])`.
+*   It must use exactly 50 iterations and an escape threshold of 4.0.
+*   It needs to generate PBM P4 header text and binary pixel data to stdout. The output should be byte-by-byte, packed MSB first, with zero padding per row.
+
+### Variable Values
+*   `N`: Command-line argument representing the bitmap size (integer).
+*   `max_iterations`: 50
+*   `escape_threshold`: 4.0
+*   `real_min`: -1.5
+*   `real_max`: 0.5
+*   `imag_min`: -1.0
+*   `imag_max`: 1.0
+
+### Notes
+*   Focus on the structure and output format of the example code provided.  Do not include any unnecessary comments or explanations in the generated code. The goal is to produce a functional implementation based solely on the examples.

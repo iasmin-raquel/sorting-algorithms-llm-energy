@@ -1,0 +1,61 @@
+### **Prompt Structure**
+Act as an expert systems designer. Decompose the Mandelbrot set generation problem into clear, step-by-step reasoning tasks for a Java implementation.
+
+1. **Problem Breakdown:**
+   - First, explain how to implement the Mandelbrot algorithm in Java for an N×N grid using exactly 50 iterations and an escape threshold of 4.0.
+   - Define how to map complex numbers (c) from the plotted region `[-1.5, 0.5]` for real parts and `[-1.0, 1.0]` for imaginary parts onto pixels in the output bitmap.
+   - Iterate over every pixel coordinate, generate a corresponding complex number (z₀ = c), and simulate its orbit under zₙ₊₁ = zₙ² + c.
+   - Track iterations until either reaching max_iterations (50) or |z| > escape_threshold (4.0).
+   - Record a pixel as "on" the Mandelbrot set if it converges (i.e., escapes after 50 iterations).
+
+2. **Output Format:**
+   - Describe how to generate PBM P4 header:
+     - First line: `P4` (no space)
+     - Second line: N, formatted with leading zeros (e.g., 200 becomes `200`, but if N=123 → `123`)
+   - For pixel data, use bits packed MSB-first, zero-padded per row, and write to stdout in binary mode.
+
+3. **Java-Specific Constraints:**
+   - Use a command-line argument `N` via `Integer.parseInt(args[0])`.
+   - Iterate over complex numbers using nested loops for rows (imaginary) and columns (real).
+   - Utilize Java’s BigDecimal or equivalent to handle precise complex arithmetic with no floating-point errors.
+   - For binary output, emit bytes directly (avoid printing strings/characters).
+
+4. **Example Validation:**
+   - Provide a 2×2 N=2 case (pseudo-Mandelbrot grid) for reference:
+     ```
+     c0+0i → escapes? (answer: yes/no)
+     c1+0i → ...
+     ```
+   - Validate with `cmp output.pbm reference.pbm` for N=200, ensuring both formats match exactly.
+
+5. **Edge Cases:**
+   - Handle floating-point precision carefully. Use BigDecimal or a similar numeric type to avoid rounding errors.
+   - Explicitly note that PBM MSB-first packing means the last bit of each byte is the first pixel in the row.
+
+---
+
+### **Key Requirements**
+- **Language:** Pure Java (no libraries like JMandelbrot or custom modules).
+- **Input Handling:** Single argument `N` parsed as integer; exit with non-zero code if invalid.
+- **Algorithm Accuracy:** Exactly 50 iterations, escape threshold of 4.0.
+- **Output Format:** Strict PBM P4 compliance; binary output with no metadata.
+- **No Guessing:** Must match reference for N=200 byte-for-byte.
+
+---
+### **Variable Values**
+- **Max Iterations:** `50`
+- **Escape Threshold:** `4.0` (exact value, use IEEE 754 representation)
+- **Plot Region:**
+  - Real: `[-1.5, 0.5]` → Step size = `(0.5 - (-1.5))/N = 0.1`
+  - Imaginary: `[-1.0, 1.0]` → Step size = `(1.0 - (-1.0))/N = 2/N`
+- **Output:** PBM P4 (binary), no ASCII escape codes.
+
+---
+### **Notes**
+- Mandelbrot set values are **not** grayscale or color-based; each pixel is a binary value (`0` for outside, `1` for inside).
+- PBM MSB-first packing requires careful byte manipulation. Example: For N=2, pixels at rows 0/1 and columns 0/1 generate 4 bits:
+  ```
+  Bit order (MSB first): [C0I0][C0I1][C1I0][C1I1]
+  ```
+- Avoid premature optimizations like skipping checks early; enforce all 50 iterations for consistency.
+- If the LLM struggles with complex arithmetic, prompt it to use iterative squaring (`zₙ = (zₙ₋₂ + c)²`) to reduce precision loss.

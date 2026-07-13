@@ -1,0 +1,43 @@
+### Prompt Structure
+Okay, let's generate a Chain-of-Thought prompt for an LLM to implement the Mandelbrot set in Java, targeting the Computer Language Benchmarks Game problem.
+
+"You are an expert Java programmer tasked with creating a program that generates a bitmap image of the Mandelbrot set. Your response must be complete, executable Java code. First, let's break this down into steps:
+
+1.  **Understand the Problem:** The goal is to plot the Mandelbrot set within the specified region [-1.5-i, 0.5+i] and [-1.0, 1.0] for real and imaginary parts respectively. We will use a maximum of 50 iterations and an escape threshold of 4.0. The output should be in PBM P4 format, written byte-by-byte to standard output (stdout).  This means the program needs to create a header string identifying the image as PBM P4 and then follow this with the binary pixel data, packed MSB first, zero-padded per row.
+
+2.  **Input Handling:** The program must accept an integer `N` representing the size of the bitmap (N x N) as a command-line argument. Use `Integer.parseInt(args[0])` to parse this argument.
+
+3.  **Mandelbrot Calculation:** Implement the Mandelbrot set calculation algorithm:
+    *   For each point (x, y) in the plot region:
+        *   Initialize z = 0 + 0i (complex number).
+        *   Iterate up to 50 times:
+            *   z = z * z + c  (where c is the complex number representing the current point).
+            *   If |z| > 4.0, then escape.
+
+4.  **Bitmap Generation:** Based on whether a point escaped or not after 50 iterations, assign a pixel value (0 or 1) to the corresponding location in the bitmap. A pixel escapes if its magnitude exceeds 4.0.
+
+5.  **PBM P4 Output:** Construct the PBM P4 header string and then write the binary data to stdout:
+    *   Header: "P4\nN M" (where N is the image size, and M is the image size).
+    *   Pixel Data: Write each pixel as a single byte (0 or 1) to stdout, padded with zeros on the left for each row.
+
+6.  **Error Handling:** Implement basic error handling, such as checking if the command-line argument is a valid integer and preventing potential array out-of-bounds errors.
+
+Now, write the complete Java code, ensuring it adheres to all specified parameters and output format."
+### Key Requirements
+*   The generated code must be in Java.
+*   It must accept an integer `N` as a command-line argument.
+*   It must use 50 iterations for the Mandelbrot calculation.
+*   It must utilize an escape threshold of 4.0.
+*   The output format must be PBM P4 (header + binary pixel data).
+*   Pixel data must be packed MSB first, zero-padded per row.
+*   The program should write the output byte-by-byte to stdout.
+*   The plot region must be [-1.5, 0.5] for real and [-1.0, 1.0] for imaginary parts.
+
+### Variable Values
+*   Maximum iterations: 50
+*   Escape threshold: 4.0
+*   Plot region: Real in [-1.5, 0.5], Imaginary in [-1.0, 1.0]
+*   Output format: PBM P4 (bits packed MSB first, zero-padded per row)
+
+### Notes
+This prompt emphasizes a Chain-of-Thought approach to guide the LLM through the problem-solving process and ensure it generates code that meets all requirements of the Computer Language Benchmarks Game's Mandelbrot set problem.  The detailed step-by-step instructions should mitigate ambiguity and encourage the model to produce accurate and complete Java code. The inclusion of specific error handling considerations is also intended to improve robustness.

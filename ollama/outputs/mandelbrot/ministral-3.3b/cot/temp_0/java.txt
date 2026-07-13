@@ -1,0 +1,53 @@
+### Prompt Structure
+Think step-by-step about how to implement the Mandelbrot set visualization in Java for the Computer Language Benchmarks Game. The task involves generating a bitmap representation of the Mandelbrot set over an N×N grid within the specified region, then encoding it in PBM P4 format.
+
+1. **Decompose the problem into logical steps**:
+   - Define the input parameters and their constraints.
+   - Explain how to map each complex number (c) in the plot region to a pixel coordinate (i,j).
+   - Describe the Mandelbrot iteration algorithm, including the escape test.
+   - Outline how to pack bits for PBM P4 output efficiently.
+   - Detail the exact Java implementation requirements, such as command-line argument handling and file/output formatting.
+
+2. **Chain-of-thought reasoning**:
+   - Start with reading `N` from command line arguments.
+   - Iterate over each pixel (i,j) in an N×N grid, mapping it to a complex number `c = x + y*i`, where:
+     - Real part `x` ranges linearly from `-1.5` to `0.5`.
+     - Imaginary part `y` ranges linearly from `-1.0` to `1.0`.
+   - For each `c`, compute the Mandelbrot iteration sequence up to 50 steps, checking if it escapes (magnitude > 4).
+   - Assign a bit value (0 or 1) based on whether the point is in the set (iterations ≤ 50) or not.
+   - Pack bits into bytes for PBM P4 output, ensuring zero-padding and MSB-first order.
+
+3. **Construct Java code adhering to these steps**:
+   - Use `Integer.parseInt(args[0])` to get `N`.
+   - Initialize a 2D array of booleans (or integers) to track iteration counts.
+   - Implement the Mandelbrot function with exact parameters:
+     - Max iterations: 50
+     - Escape threshold: 4.0
+   - Write PBM P4 header (`P4` followed by `N N`) and binary pixel data, packing bits correctly.
+
+### Key Requirements
+- **Language**: Pure Java (no external libraries except standard I/O).
+- **Input Handling**:
+  - Command-line argument `N` must be parsed via `Integer.parseInt(args[0])`.
+- **Algorithm Parameters**:
+  - Exactly 50 iterations per point.
+  - Escape threshold = 4.0.
+- **Output Format**:
+  - PBM P4 header: `P4` followed by `N N` (no newline).
+  - Binary pixel data: bits packed MSB-first, zero-padded per row.
+- **Precision**: Linear interpolation for complex number mapping to pixels.
+- **Edge Cases**: Handle invalid `N` (e.g., ≤0) gracefully or exit with error.
+
+### Variable Values
+- **Maximum iterations**: 50
+- **Escape threshold**: 4.0
+- **Plot region**:
+  - Real axis: [-1.5, 0.5]
+  - Imaginary axis: [-1.0, 1.0]
+- **Output format**: PBM P4 (bits packed MSB-first, zero-padded rows).
+
+### Notes
+- The Mandelbrot set is defined as points `c` where the sequence `z_{n+1} = z_n^2 + c` does not escape to infinity within 50 iterations.
+- Bit packing requires careful handling of row boundaries and byte alignment. Ensure trailing zeros are added for each row to maintain MSB-first order.
+- For N=200, validate output against the reference using `cmp` (e.g., `diff` or custom script) to ensure correctness.
+- Avoid floating-point precision errors by using exact arithmetic or rounding during iteration checks.

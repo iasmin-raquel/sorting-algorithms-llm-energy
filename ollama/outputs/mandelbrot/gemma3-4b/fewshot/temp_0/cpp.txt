@@ -1,0 +1,59 @@
+### Prompt Structure
+```
+You are an expert C++ code generator. Your task is to generate C++ code that implements the Mandelbrot set visualization based on the Computer Language Benchmarks Game problem description.  The code should follow the structure demonstrated in the example provided, focusing on argument parsing, iteration logic, and output formatting.
+
+Here's an example of the expected structure:
+
+```cpp
+#include <iostream>
+#include <cmath>
+#include <cstdlib> // for atoi
+
+int main(int argc, char** argv) {
+  // Argument parsing (e.g., N from command line)
+  int n = atoi(argv[1]); 
+
+  // Mandelbrot set calculation loop (50 iterations max)
+  for (int i = 0; i < 50; ++i) {
+    // ... Mandelbrot iteration logic here ...
+  }
+
+  // Output to stdout in PBM P4 format
+  std::cout << "P4" << std::endl;
+  std::cout << n << " " << n << std::endl;
+  std::cout << "0";
+  for (int y = 0; y < n; ++y) {
+    for (int x = 0; x < n; ++x) {
+      // ... pixel data calculation and output here ...
+    }
+  }
+  std::cout << std::endl;
+
+  return 0;
+}
+```
+Now, generate the C++ code to implement the Mandelbrot set visualization according to the problem description.
+```
+
+### Key Requirements
+*   The generated code must be valid C++.
+*   It should receive the value of `N` (the bitmap size) as a command-line argument.
+*   It must use exactly 50 iterations for the Mandelbrot calculation.
+*   The escape threshold must be set to 4.0.
+*   The plotting region is [-1.5, 0.5] for real and [-1.0, 1.0] for imaginary.
+*   The output format must be PBM P4 (header + binary pixel data).
+*   The code should write the header "P4" followed by the dimensions of the bitmap (N x N) and a single '0' to the standard output.
+*   Pixel data should be written byte-by-byte, MSB first, with zero-padding per row.
+*   The code must include necessary headers like `<iostream>`, `<cmath>`, and `<cstdlib>`.
+
+### Variable Values
+*   Maximum iterations: 50
+*   Escape threshold: 4.0
+*   Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+*   Output format: PBM P4 (bits packed MSB first, zero-padded per row)
+*   N: Command-line argument (integer)
+
+### Notes
+*   The model should focus on generating the core logic for the Mandelbrot set calculation and output formatting, mirroring the example provided.  It does not need to implement the full Mandelbrot algorithm itself; it should use a simple iteration loop.
+*   Error handling (e.g., checking if `N` is a valid integer) is not required in this prompt.
+*   The model's output should be primarily focused on the structure and formatting of the C++ code, not on providing detailed explanations or comments within the generated code itself.

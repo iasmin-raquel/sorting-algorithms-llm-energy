@@ -1,0 +1,38 @@
+### Prompt Structure
+You are an expert Python programmer tasked with implementing the Mandelbrot set problem from the Computer Language Benchmarks Game. Your goal is to generate a complete Python script that plots the Mandelbrot set within the specified region and writes the output in PBM P4 format to standard output. Follow these steps carefully:
+
+1.  **Initialization:** Start by importing necessary libraries like `sys` for command-line argument parsing, `math` for mathematical calculations, and potentially `numpy` if you choose to optimize performance (though pure Python is acceptable).
+2.  **Command-Line Argument Parsing:** Accept the size of the bitmap (`N`) as a command-line argument using `int(sys.argv[1])`. This determines the dimensions of the output image.
+3.  **Parameter Definition:** Set the maximum iterations to 50 and the escape threshold to 4.0, as specified in the problem description. These are crucial for determining whether a point belongs to the Mandelbrot set.
+4.  **Plot Region Definition:** Define the plot region for the real part of the complex plane as [-1.5, 0.5] and the imaginary part as [-1.0, 1.0]. This defines the area where you will calculate the Mandelbrot set.
+5.  **Mandelbrot Calculation:** Implement the core Mandelbrot calculation logic. For each point (x, y) in the defined region:
+    *   Calculate `c = complex(-1.5 + x, -1.0 + y)`
+    *   Initialize `z = 0`
+    *   Iterate up to 50 times: `z = z**2 + c`
+    *   If `abs(z) > 4.0`, the point escapes and is considered outside the Mandelbrot set.
+6.  **Bitmap Generation:** Create a 2D list (or NumPy array if you choose to use it) representing the bitmap. Each element in the list should be either 0 or 1, indicating whether the corresponding pixel belongs to the Mandelbrot set (1) or not (0).
+7.  **PBM P4 Output:** Write the output in PBM P4 format to standard output:
+    *   Start with the header: `"P4\n"`. This indicates a monochrome bitmap with 256 gray levels.
+    *   Write the width and height of the image (N x N) followed by a newline character: `f"{N}\n{N}"`
+    *   Iterate through each row and column of the bitmap, writing either "0" or "1" for each pixel, separated by spaces.  Ensure zero-padding per row.
+8. **Error Handling:** Include basic error handling to ensure that N is a positive integer.
+
+Now, write the complete Python code based on these steps. The output should be identical to the reference when validated using `cmp output.pbm reference.pbm for N=200`.
+
+### Key Requirements
+*   The code must be written in Python.
+*   It must accept the bitmap size (N) as a command-line argument.
+*   It must use exactly 50 iterations and an escape threshold of 4.0.
+*   It must output the Mandelbrot set in PBM P4 format to standard output, including the header and binary pixel data.
+*   The plot region should be [-1.5-i, 0.5+i] for real and [-1.0-i, 1.0+i] for imaginary parts.
+*   Zero padding must be applied per row in the PBM output.
+
+### Variable Values
+*   Maximum iterations: 50
+*   Escape threshold: 4.0
+*   Plot region (real): [-1.5, 0.5]
+*   Plot region (imaginary): [-1.0, 1.0]
+*   Output format: PBM P4
+
+### Notes
+This prompt emphasizes a step-by-step approach to guide the LLM in generating the correct code. The inclusion of specific instructions regarding output formatting and parameter values is crucial for achieving the desired result.  The use of chain-of-thought prompting helps ensure that the model understands the problem's requirements fully before attempting to generate the solution.

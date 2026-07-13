@@ -1,0 +1,96 @@
+### Prompt Structure
+You are to implement the Mandelbrot set in Java, following the Computer Language Benchmarks Game's structure. The code must:
+- Plot the Mandelbrot set with real range [-1.5, 0.5] and imaginary range [-1.0, 1.0] on an N-by-N bitmap.
+- Use exactly 50 iterations and escape threshold 4.0.
+- Output PBM P4 format with MSB-first packing and zero-padding per row.
+- Match the reference output for N=200.
+
+### Key Requirements
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
+- Output: PBM P4 format (header + binary pixel data)
+- MSB-first packing, zero-padded per row
+- Match reference for N=200
+
+### Variable Values
+- N: 200
+- Iterations: 50
+- Escape threshold: 4.0
+- Plot region: real min=-1.5, real max=0.5, imag min=-1.0, imag max=1.0
+- Output format: PBM P4 (header + 8-bit binary data)
+
+### Notes
+- Coordinate system must be handled correctly (real x-axis from -1.5 to 0.5, imaginary y-axis from -1.0 to 1.0)
+- PBM P4 requires proper header (PBM P4) and correct bit packing (MSB first, zero-padded rows)
+- Ensure output matches reference for N=200, including pixel count and format
+
+```java
+/* The Computer Language Benchmarks Game
+   contributed by [Your Name]
+*/
+
+class Mandelbrot {
+    static final int N = 200;
+    static final int ITERATIONS = 50;
+    static final double ESCAPE_THRESHOLD = 4.0;
+
+    static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        plotMandelbrot(n);
+    }
+
+    static void plotMandelbrot(int n) {
+        // Initialize bitmap
+        byte[][] bitmap = new byte[n][n];
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                // Convert coordinates to pixel index
+                int idx = x + y * n;
+                // Compute Mandelbrot value
+                int iterations = 0;
+                double cx = (-1.5 + (double)x / n) * 2.0; // real axis
+                double cy = (1.0 - (double)y / n) * 2.0; // imaginary axis
+                while (iterations < ITERATIONS && (cx * cx + cy * cy) < ESCAPE_THRESHOLD) {
+                    double nx = cx * cx - cy * cy + (-1.5 + (double)x / n) * 2.0;
+                    double ny = 2.0 * cx * cy;
+                    cx = nx;
+                    cy = ny;
+                    iterations++;
+                }
+                // Pack MSB first, zero-padded per row
+                bitmap[y][x] = (byte) (iterations > ITERATIONS ? 255 : (iterations % 8) << 24);
+            }
+        }
+
+        // Output PBM P4 header
+        System.out.println("PBM P4");
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                System.out.print(bitmap[y][x]);
+            }
+            System.out.println();
+        }
+    }
+}
+```
+
+### Key Requirements
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
+- Output: PBM P4 format (header + binary data)
+- MSB-first packing, zero-padded rows
+- Match reference for N=200
+
+### Variable Values
+- N: 200
+- Iterations: 50
+- Escape threshold: 4.0
+- Plot region: real min=-1.5, real max=0.5, imag min=-1.0, imag max=1.0
+- Output format: PBM P4 (header + 8-bit binary data)
+
+### Notes
+- Coordinate system must be handled correctly (real x-axis from -1.5 to 0.5, imaginary y-axis from -1.0 to 1.0)
+- PBM P4 requires proper header (PBM P4) and correct bit packing (MSB first, zero-padded rows)
+- Ensure output matches reference for N=200, including pixel count and format

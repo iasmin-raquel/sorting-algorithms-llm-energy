@@ -1,0 +1,20 @@
+### Prompt Structure
+Write a C++ program that plots the Mandelbrot set using given parameters and outputs PBM P4 format data to stdout. The program should receive N as a command-line argument.
+
+### Key Requirements
+1. Implemented in C++
+2. Receives N as a command-line argument
+3. Uses exactly 50 iterations and escape threshold 4.0
+4. Writes PBM P4 header and binary pixel data to stdout
+
+### Variable Values
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region (real): [-1.5, 0.5]
+- Plot region (imaginary): [-1.0, 1.0]
+- Output format: PBM P4
+- Bit packing: MSB first
+- Zero-padding per row
+
+### Notes
+The output should be identical to the reference when validated with `cmp output.pbm reference.pbm` for N=200. Keep in mind that the provided prompt is a clear and concise instruction for generating the desired C++ code, but it does not guide the model to "think out loud" or describe reasoning steps as part of the Chain-of-Thought Prompting technique. This is intentionally designed for brevity in this specific context.

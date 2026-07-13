@@ -1,0 +1,25 @@
+### Prompt Structure
+Okay, let's generate a C++ program to implement the Mandelbrot set and output it in PBM P4 format. I want you to think step by step through the process. First, we need to define the parameters for the Mandelbrot calculation: maximum iterations (50), escape threshold (4.0), plot region (-1.5 to 0.5 for real part, -1.0 to 1.0 for imaginary part), and the output format (PBM P4).  Then, we'll outline the core logic of the Mandelbrot calculation – iterating through complex numbers, checking if they escape the defined region, and writing the pixel data to standard output in the specified format. Finally, ensure the code takes N as a command-line argument and generates an image of size N x N.  Remember to include the PBM header with the correct dimensions and color type (P4).
+
+Now, write the C++ code.
+### Key Requirements
+*   The generated C++ code must be complete and executable.
+*   It should take the image size `N` as a command-line argument.
+*   It must use exactly 50 iterations for the Mandelbrot calculation.
+*   The escape threshold must be set to 4.0.
+*   The plot region must be [-1.5, 0.5] for the real part and [-1.0, 1.0] for the imaginary part.
+*   The output format must be PBM P4 (Portable Bitmap - Pixel 4), with MSB packing and zero-padding per row.
+*   The code should write the pixel data byte-by-byte to standard output.
+*   The generated image size `N` should be a positive integer.
+*   The program must produce identical output when compared against the reference PBM P4 image for N=200, as specified in the problem description.
+
+### Variable Values
+*   Maximum iterations: 50
+*   Escape threshold: 4.0
+*   Real part plot region: [-1.5, 0.5]
+*   Imaginary part plot region: [-1.0, 1.0]
+*   Output format: PBM P4 (MSB packing, zero-padded per row)
+*   Command-line argument: N (image size - a positive integer)
+
+### Notes
+This prompt emphasizes the need for a chain-of-thought approach to guide the LLM in generating correct and complete C++ code. The specific parameter values are crucial for adhering to the Computer Language Benchmarks Game requirements.  The inclusion of "MSB packing" and "zero-padded per row" is important for ensuring the output format is precisely as required. The emphasis on byte-by-byte output and comparison with a reference image highlights the need for careful attention to detail in the code's implementation.

@@ -1,0 +1,65 @@
+### Prompt Structure
+**Think step-by-step about how to generate a Python script that computes the Mandelbrot set for an N×N grid within the specified region and outputs it in PBM P4 format. Break down the problem into these key phases:**
+
+1. **Input Handling:**
+   - Parse `sys.argv` to extract `N`, ensuring it is validated as an integer.
+   - Define constants: `MAX_ITERATIONS = 50`, `ESCAPE_THRESHOLD = 4.0`.
+   - Validate that the input region matches exactly:
+     - Real axis: `[-1.5, 0.5]` (inclusive bounds).
+     - Imaginary axis: `[-1.0, 1.0]`.
+
+2. **Grid Initialization:**
+   - Create an N×N grid of complex numbers (`c`) covering the specified region.
+   - For each pixel `(i,j)`, compute the corresponding real and imaginary coordinates:
+     ```
+     real = -1.5 + (0.5 + 1.5) * i / (N - 1)
+     imag = -1.0 + (1.0 + 1.0) * j / (N - 1)
+     ```
+
+3. **Mandelbrot Iteration Logic:**
+   - For each `c`, iterate over `z = 0` and compute:
+     ```
+     z_new = z² + c
+     ```
+   - Stop iterating if `|z| > ESCAPE_THRESHOLD` or reach `MAX_ITERATIONS`.
+   - Track the iteration count for each pixel.
+
+4. **PBM P4 Output:**
+   - Write a header line: `"P4"` (no whitespace).
+   - Follow with two integers: `N` (width) and `1` (grayscale, bits per pixel).
+   - For each row:
+     - Pack 8 pixels into a byte (MSB-first), zero-padded if necessary.
+     - Use the iteration count as grayscale value (0–50 → 0–255 scaling).
+
+**Constraints:**
+- Do not hardcode any values except those explicitly required by the problem.
+- Ensure binary pixel data is written in raw bytes, with no extra whitespace or metadata.
+
+---
+
+### Key Requirements
+- **Language:** Pure Python 3.x (no external libraries).
+- **Command-line Argument:** `N` must be passed as an integer via `sys.argv[1]`.
+- **Precision:** Use floating-point arithmetic for complex number calculations.
+- **Output Format:**
+  - Header: Exactly `"P4"` followed by newline.
+  - Pixel data: Binary bytes, packed MSB-first (e.g., `0xAA` = 6 bits of pixel 1 + 2 bits of pixel 2).
+- **Edge Cases:** Handle invalid `N` (e.g., non-integer or ≤ 0) gracefully by exiting with an error message.
+
+---
+
+### Variable Values
+| Parameter          | Value               |
+|--------------------|---------------------|
+| Maximum Iterations  | `50`                |
+| Escape Threshold   | `4.0`               |
+| Real Axis Range    | `[-1.5, 0.5]`       |
+| Imaginary Axis Range| `[-1.0, 1.0]`       |
+
+---
+
+### Notes
+- **Ambiguity Risk:** The PBM P4 header specification is minimal; ensure the LLM strictly adheres to `"P4"` (no extra characters).
+- **Performance Note:** For N=200, this requires ~40k iterations total. Optimize by avoiding redundant calculations (e.g., precompute grid spacing).
+- **Binary Output:** The pixel data must be written as raw bytes; avoid converting to strings or other formats.
+- **Validation:** The output must match the reference exactly for N=200, including bit-packing and scaling.

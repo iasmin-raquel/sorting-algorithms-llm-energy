@@ -1,0 +1,20 @@
+### Prompt Structure
+Write a C++ program that takes N as a command-line argument and generates the Mandelbrot set in PBM P4 format. The program should use 50 iterations and an escape threshold of 4.0, plotting the region real in [-1.5, 0.5], imaginary in [-1.0, 1.0]. The output should be written byte-by-byte with bits packed MSB first, zero-padded per row.
+
+### Key Requirements
+- The program must be implemented in C++
+- The program should receive N as a command-line argument
+- The program must use exactly 50 iterations and an escape threshold of 4.0
+- The output format should be PBM P4 with bits packed MSB first, zero-padded per row
+- The plot region should be real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+
+### Variable Values
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region (real): [-1.5, 0.5]
+- Plot region (imaginary): [-1.0, 1.0]
+- Output format: PBM P4
+- Bit packing: MSB first, zero-padded per row
+
+### Notes
+Ensure that the output is identical to the reference when validated with "cmp output.pbm reference.pbm" for N=200. The model should generate code that follows these constraints closely to ensure accurate results.

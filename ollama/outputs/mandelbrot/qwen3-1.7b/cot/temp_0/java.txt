@@ -1,0 +1,27 @@
+### Prompt Structure
+You are to implement the Mandelbrot set in Java according to the following specifications:  
+- Read integer N from command-line arguments.  
+- Plot the Mandelbrot set within the region [-1.5, 0.5] × [-1.0, 1.0].  
+- Use 50 iterations and escape threshold 4.0.  
+- Output in PBM P4 format (header + binary pixel data).  
+- Ensure output matches the reference file when compared with `cmp output.pbm reference.pbm` for N=200.  
+
+### Key Requirements  
+- Java code must take N as a command-line argument.  
+- Maximum iterations: 50.  
+- Escape threshold: 4.0.  
+- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0].  
+- PBM P4 format: header with dimensions N×N, bits packed MSB-first, zero-padded per row.  
+- Output must exactly match the reference file for N=200.  
+
+### Variable Values  
+- N: integer parsed from command-line argument.  
+- Iterations: 50.  
+- Escape threshold: 4.0.  
+- Plot region: real min=-1.5, real max=0.5; imaginary min=-1.0, imaginary max=1.0.  
+
+### Notes  
+- The model must ensure correct handling of PBM P4 format, including proper header and pixel data formatting.  
+- Precision is critical: exact iteration count and threshold must be enforced.  
+- Zero-padding per row ensures compatibility with the reference file.  
+- Ambiguity in PBM format requirements (e.g., bit packing) may require explicit handling.

@@ -1,0 +1,114 @@
+### Prompt Structure
+
+**Example 1: Mandelbrot Set Generation (PBM Output)**
+---
+```cpp
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+int main(int argc, char* argv[]) {
+    int N = std::stoi(argv[1]);
+    double max_iterations = 50.0;
+    double escape_threshold = 4.0;
+
+    // Initialize PBM header (P4 format)
+    std::cout << "P4\n" << N << "\n";
+
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+            double c_real = -1.5 + (2.0 / N) * x;
+            double c_imag = -1.0 + (2.0 / N) * y;
+
+            // Mandelbrot iteration logic
+            double z_real = 0.0, z_imag = 0.0;
+            int iter = 0;
+            while (z_real*z_real + z_imag*z_imag < escape_threshold && iter < max_iterations) {
+                double new_z_real = z_real * z_real - z_imag * z_imag + c_real;
+                double new_z_imag = 2.0 * z_real * z_imag + c_imag;
+                z_real = new_z_real;
+                z_imag = new_z_imag;
+                iter++;
+            }
+
+            // Pack bits (MSB first, zero-padded)
+            std::cout << ((iter == max_iterations) ? 1 : 0);
+        }
+        std::cout << "\n"; // Newline after each row
+    }
+}
+```
+
+---
+**Example 2: Simplified Mandelbrot with Bit-Packing**
+---
+```cpp
+#include <iostream>
+#include <cmath>
+
+int main(int argc, char* argv[]) {
+    int N = std::stoi(argv[1]);
+    const double max_iter = 50.0;
+    const double threshold = 4.0;
+
+    // PBM header (P4 format)
+    std::cout << "P4\n" << N << "\n";
+
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+            double c_real = -1.5 + (2.0 / N) * x;
+            double c_imag = -1.0 + (2.0 / N) * y;
+
+            int iter = 0;
+            double z_real = 0.0, z_imag = 0.0;
+            while (z_real*z_real + z_imag*z_imag < threshold && iter < max_iter) {
+                double new_z_real = z_real*z_real - z_imag*z_imag + c_real;
+                double new_z_imag = 2.0 * z_real * z_imag + c_imag;
+                z_real = new_z_real; z_imag = new_z_imag;
+                iter++;
+            }
+            std::cout << ((iter == max_iter) ? 1 : 0);
+        }
+    }
+}
+```
+
+---
+**Target Problem:**
+Generate a C++ program that computes the Mandelbrot set for an N×N grid in PBM P4 format, using exactly:
+- **50 iterations**
+- **Escape threshold = 4.0**
+- **Plot region**: `c_real ∈ [-1.5, 0.5]`, `c_imag ∈ [-1.0, 1.0]`.
+Output must match the reference for N=200 exactly (bit-packed MSB-first, zero-padded rows).
+
+---
+
+### Key Requirements
+- **Input Handling**: Parse `N` from command-line argument (`argv[1]`).
+- **Precision**: Use `double` for all floating-point calculations.
+- **Output Format**:
+  - Write PBM header as `"P4\nN"` (no newline after `N`).
+  - Pack bits MSB-first, zero-padded per row (e.g., `0b0101` → `5` in binary).
+  - No trailing newline after the final pixel.
+- **Mandelbrot Logic**:
+  - Iterate until `z_real² + z_imag² ≥ threshold` or `iter == max_iter`.
+  - Output `1` if point escapes within iterations, else `0`.
+
+---
+
+### Variable Values
+| Parameter          | Value               |
+|--------------------|---------------------|
+| **Max Iterations** | 50                  |
+| **Escape Threshold** | 4.0                |
+| **Plot Region (c_real)** | [-1.5, 0.5]       |
+| **Plot Region (c_imag)** | [-1.0, 1.0]        |
+
+---
+
+### Notes
+- **Bit-Packing**: The examples assume binary output per pixel (e.g., `0` or `1`). For N=200, rows may require padding to 8-bit alignment if not handled explicitly.
+- **Edge Cases**:
+  - Handle invalid `N` (e.g., non-integer input) by exiting gracefully.
+  - Avoid floating-point precision errors in iteration termination.
+- **Validation**: The output must match the reference PBM file for N=200 exactly, including bit-packing rules.

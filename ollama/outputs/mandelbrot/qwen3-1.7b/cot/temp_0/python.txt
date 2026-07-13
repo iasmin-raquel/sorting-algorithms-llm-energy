@@ -1,0 +1,35 @@
+[The actual prompt text that will be sent to the target LLM]
+
+You are to implement the Mandelbrot set generation for the Computer Language Benchmarks Game, following these specifications:
+- Generate an N-by-N bitmap of the Mandelbrot set
+- Use maximum iterations of 50 and escape threshold 4.0
+- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+- Output in PBM P4 format (text header, binary pixel data)
+- Write output byte-by-byte with MSB-first packing and zero-padding per row
+- Receive N as command-line argument via int(sys.argv[1])
+- Ensure output matches reference.pbm for N=200
+
+Key Requirements:
+- Exactly 50 iterations
+- Escape threshold of 4.0
+- Plot region bounds: real -1.5 to 0.5, imaginary -1.0 to 1.0
+- PBM P4 header with correct dimensions and format
+- Binary pixel data packed MSB-first with zero-padding per row
+- Output must match reference.pbm for N=200
+
+Variable Values:
+- N: integer from command line argument
+- iterations: 50
+- escape_threshold: 4.0
+- real_min: -1.5
+- real_max: 0.5
+- imag_min: -1.0
+- imag_max: 1.0
+- pixel_format: MSB-first, zero-padded per row
+
+Notes:
+- The output must be identical to reference.pbm for N=200
+- The PBM P4 format requires precise header formatting
+- The binary data must be correctly packed and padded
+- The code must handle floating-point calculations accurately
+- The iteration count and escape threshold must be strictly enforced

@@ -1,0 +1,120 @@
+### Prompt Structure
+**Think step-by-step about how to implement the Mandelbrot set visualization in C++ for the Computer Language Benchmarks Game. Break down the problem into clear stages:**
+
+1. **Understand the Mandelbrot Set Algorithm**:
+   - For each complex number \( c \) in the specified region, compute the sequence of iterations \( z_{n+1} = z_n^2 + c \).
+   - If \(|z_n|\) exceeds the escape threshold (4.0) within 50 iterations, plot it as black (0); otherwise, plot it as white (1).
+
+2. **Define the Plot Region**:
+   - The real part ranges from \(-1.5\) to \(0.5\).
+   - The imaginary part ranges from \(-1.0\) to \(1.0\).
+   - Map these values linearly to pixel coordinates in an N×N grid.
+
+3. **Generate PBM (P4) Output**:
+   - Write a header line: `P4` followed by the dimensions (N × N).
+   - For each row, pack 8-bit pixels MSB-first, zero-padded per byte.
+     - Each pixel is either 0 (black) or 1 (white).
+
+4. **Command-Line Argument Handling**:
+   - Accept \( N \) as a command-line argument and validate it is positive.
+
+5. **Optimization Considerations**:
+   - Use efficient loops for iterating over the grid and computing Mandelbrot values.
+   - Avoid redundant calculations by precomputing bounds or using bitwise operations where possible.
+
+6. **Edge Cases & Validation**:
+   - Handle \( N = 200 \) exactly as specified (reference validation).
+   - Ensure correct byte-packed output format for all \( N \).
+
+**Now, draft the C++ code based on these steps:**
+
+```cpp
+#include <iostream>
+#include <cmath>
+#include <vector>
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " N\n";
+        return 1;
+    }
+    int N = std::stoi(argv[1]);
+    if (N <= 0) {
+        std::cerr << "N must be positive.\n";
+        return 1;
+    }
+
+    // Mandelbrot parameters
+    const double max_iterations = 50.0;
+    const double escape_threshold = 4.0;
+
+    // Plot region bounds: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+            // Map pixel coordinates to complex plane
+            double real = -1.5 + (0.5 + 1.5) * x / static_cast<double>(N);
+            double imag = -1.0 + (1.0 + 1.0) * y / static_cast<double>(N);
+
+            // Compute Mandelbrot iteration count
+            int iter = 0;
+            double z_real = 0.0, z_imag = 0.0;
+            while (iter < max_iterations && z_real*z_real + z_imag*z_imag < escape_threshold*escape_threshold) {
+                double temp_real = z_real * z_real - z_imag * z_imag + real;
+                double temp_imag = 2.0 * z_real * z_imag + imag;
+                z_real = temp_real;
+                z_imag = temp_imag;
+                ++iter;
+            }
+            // Output pixel (0 or 1)
+            std::cout << ((iter == max_iterations) ? '0' : '1');
+        }
+        // Pack bits MSB-first, zero-padded per byte
+        int packed_byte = 0;
+        for (int bit = 7; bit >= 0; --bit) {
+            if (std::cin.eof()) break; // Handle EOF (though unlikely here)
+            char pixel = std::cin.peek();
+            if (pixel == '1') {
+                packed_byte |= (1 << bit);
+            }
+        }
+        std::cout << '\n';
+    }
+
+    return 0;
+}
+```
+
+---
+
+### Key Requirements
+- **Language**: C++.
+- **Input Handling**:
+  - Accept \( N \) as a command-line argument.
+  - Validate \( N > 0\).
+- **Algorithm Parameters**:
+  - Exactly 50 iterations per point.
+  - Escape threshold = 4.0.
+- **Output Format**:
+  - PBM P4 header (`P4` followed by dimensions).
+  - Binary pixel data packed MSB-first, zero-padded per row (no newline after last byte).
+- **Precision**: Linear mapping of pixel coordinates to complex plane bounds exactly as specified.
+
+---
+
+### Variable Values
+| Parameter          | Value               |
+|---------------------|---------------------|
+| Maximum iterations   | `50`                |
+| Escape threshold    | `4.0`               |
+| Real range          | \([-1.5, 0.5]\)     |
+| Imaginary range     | \([-1.0, 1.0]\)     |
+
+---
+
+### Notes
+- **Bit Packing**: The prompt assumes the output is written row-wise with bits packed MSB-first per byte. If the LLM struggles with this, clarify that each pixel (0/1) must be written as a single bit in the binary stream, zero-padded to 8 bits per byte.
+- **Edge Cases**:
+  - For \( N = 200 \), ensure the linear mapping of coordinates is exact (e.g., no floating-point rounding errors).
+  - Handle potential integer overflow during iteration calculations (though unlikely for these bounds).
+- **Performance**: The prompt does not enforce optimizations beyond correctness. If the LLM produces inefficient code, it will be rejected on validation.
+- **Validation**: The output must match the reference PBM file exactly for \( N = 200 \). Any deviation (e.g., floating-point precision) will fail validation.

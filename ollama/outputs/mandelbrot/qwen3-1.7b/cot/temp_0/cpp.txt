@@ -1,0 +1,35 @@
+[The actual prompt text that will be sent to the target LLM]
+
+You are to implement the Mandelbrot set in C++ according to the following specifications:
+- Generate an N-by-N bitmap of the Mandelbrot set with the specified plot region
+- Use exactly 50 iterations and escape threshold 4.0
+- Output in PBM P4 format (header + binary pixel data)
+- Ensure output matches the reference when validated with cmp output.pbm reference.pbm for N=200
+- The code must:
+  - Accept N as a command-line argument
+  - Use the exact plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
+  - Pack pixels in MSB-first format with zero-padding per row
+  - Write the PBM header correctly
+
+Key Requirements:
+- C++ implementation with command-line argument parsing
+- Exactly 50 iterations with escape threshold 4.0
+- Plot region defined by real [-1.5, 0.5] and imaginary [-1.0, 1.0]
+- PBM P4 format with MSB-first pixel packing and zero-padding
+- Output must match reference.pbm for N=200
+
+Variable Values:
+- N: integer command-line argument
+- max_iterations: 50
+- escape_threshold: 4.0
+- plot_real: -1.5
+- plot_imag: 1.0
+- plot_real2: 0.5
+- plot_imag2: -1.0
+
+Notes:
+- The code must handle the exact plot region boundaries
+- Pixel packing must be MSB-first with zero-padding per row
+- The PBM header must include the correct format specification
+- The code must ensure the output matches the reference for N=200
+- The iteration logic must be precise with the given parameters

@@ -1,0 +1,23 @@
+### Prompt Structure
+Generate a Python script to compute the Mandelbrot set for N=200 pixels, using 50 iterations and escape threshold 4.0. The output must be in PBM P4 format with MSB-first packing and zero-padding per row. The script should read N from command line arguments and produce the correct header and pixel data.
+
+### Key Requirements
+- Use exactly 50 iterations
+- Escape threshold: 4.0
+- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
+- Output PBM P4 format with MSB-first packing
+- Write byte-by-byte to stdout in portable bitmap format
+- N is specified as command-line argument
+
+### Variable Values
+- N = 200
+- max_iter = 50
+- escape_threshold = 4.0
+- plot_real = -1.5
+- plot_imag = 1.0
+
+### Notes
+- The output must match the reference for N=200
+- PBM P4 requires a header with "P4" and the correct dimensions
+- MSB-first packing implies the pixel data is stored in reverse order
+- Zero-padding per row ensures proper alignment in the bitmap format

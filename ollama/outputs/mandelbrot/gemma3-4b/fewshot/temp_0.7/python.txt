@@ -1,0 +1,108 @@
+### Prompt Structure
+```
+You are an expert Python programmer specializing in image generation and algorithmic problem-solving. Your task is to implement the Mandelbrot set using Python based on a provided specification. You will be given examples of similar code structures, and your response should mirror those examples exactly in terms of argument handling, loop structure, and output format. Do not include any explanations or comments beyond what is strictly necessary for the code itself.
+
+Here are two examples demonstrating the expected code structure:
+
+Example 1:
+# The Computer Language Benchmarks Game
+# contributed by Isaac Gouy
+
+from math import sqrt
+import sys
+
+PI = 3.14159265358979323
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+
+class Body:
+  def __init__(self, x, y, z, vx, vy, vz, mass):
+    self.x = x; self.y = y; self.z = z
+    self.vx = vx; self.vy = vy; self.vz = vz
+    self.mass = mass
+
+def offset_momentum(bodies): ...
+def energy(bodies): ...
+def advance(bodies, dt): ...
+
+def nbody(n):
+  bodies = [ Body(...), ... ]
+  offset_momentum(bodies)
+  print("%.9f" % energy(bodies))
+  for i in range(n):
+    advance(bodies, 0.01)
+  print("%.9f" % energy(bodies))
+
+if __name__ == '__main__':
+  main(int(sys.argv[1]))
+
+
+Example 2:
+# This is a dummy example; focus on the structure of arguments and output.
+def solve():
+    n = int(input())
+    print("Hello, world!")
+    print(f"The value of n is: {n}")
+
+if __name__ == "__main__":
+    solve()
+```
+
+Now, implement the Mandelbrot set generation algorithm based on the following specifications.  Your code should receive N as a command-line argument via `int(sys.argv[1])`. Use exactly 50 iterations and an escape threshold of 4.0. Output the result in PBM P4 format to stdout, including the header and pixel data.
+
+```python
+# Mandelbrot Set Implementation
+import math
+import sys
+
+def main(N):
+    # Parameters
+    max_iterations = 50
+    escape_threshold = 4.0
+    real_range = [-1.5, 0.5]
+    imaginary_range = [-1.0, 1.0]
+    
+    # Output PBM P4 header
+    print("P3")  # PBM P4 format
+    print(f"N {N}")
+    print("255") # Max color value
+    
+    for row in range(N):
+        for col in range(N):
+            # Calculate complex number
+            c = complex(-1.5 + (col / N) * (0.5 - (-1.5)), -1.0 + (row / N) * (1.0 - (-1.0)))
+
+            z = 0
+            for i in range(max_iterations):
+                z = z*z + c
+                if abs(z) > escape_threshold:
+                    break
+            
+            # Convert to grayscale value (black background)
+            pixel_value = 0
+            if i == max_iterations:
+                pixel_value = 255 # Set pixel to white if escaped
+            
+            # Output pixel data as byte
+            print(pixel_value.to_bytes(1, 'big'))
+```
+
+### Key Requirements
+*   The code must be written in Python.
+*   The code must receive the size `N` of the bitmap as a command-line argument using `int(sys.argv[1])`.
+*   The code must use exactly 50 iterations for each point.
+*   The escape threshold must be set to 4.0.
+*   The output format must strictly adhere to PBM P4 (P3 header, N-by-N dimensions, max color value of 255, and byte-by-byte pixel data).
+*   The code must generate a black background (pixel values of 0) for the Mandelbrot set.  Escaped points should be rendered as white pixels (pixel value of 255).
+
+### Variable Values
+*   `N`: Command-line argument representing the bitmap size (e.g., 200).
+*   `max_iterations`: 50
+*   `escape_threshold`: 4.0
+*   `real_range`: [-1.5, 0.5]
+*   `imaginary_range`: [-1.0, 1.0]
+
+### Notes
+*   The provided example code snippets are meant to guide the structure of your response only. The content of the generated code is crucial for fulfilling the problem requirements.
+*   Pay close attention to the byte-by-byte output format, including the header and pixel data.  Ensure correct handling of `to_bytes` method.
+*   The core Mandelbrot calculation logic should be implemented accurately based on the specified parameters.

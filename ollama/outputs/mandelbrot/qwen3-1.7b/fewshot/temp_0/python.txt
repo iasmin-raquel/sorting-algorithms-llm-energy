@@ -1,0 +1,26 @@
+### Prompt Structure
+You are to implement the Mandelbrot set in Python according to the Computer Language Benchmarks Game. The code must:
+- Accept N as a command-line argument.
+- Use exactly 50 iterations and escape threshold 4.0.
+- Plot the Mandelbrot set in the region [-1.5, 0.5] × [-1.0, 1.0].
+- Output in PBM P4 format (binary, MSB first, zero-padded per row).
+- Match the reference output for N=200.
+
+### Key Requirements
+- Use N as int(sys.argv[1]).
+- Exactly 50 iterations.
+- Escape threshold 4.0.
+- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0].
+- Output PBM P4 header and binary pixel data to stdout.
+- MSB-first byte ordering, zero-padded per row.
+
+### Variable Values
+- N: integer from command line argument.
+- Max iterations: 50.
+- Escape threshold: 4.0.
+- Plot region: real min=-1.5, real max=0.5, imaginary min=-1.0, imaginary max=1.0.
+
+### Notes
+- The output must match the reference for N=200, requiring precise pixel calculations.
+- The PBM P4 format requires the header "P4" followed by the pixel data.
+- The pixel data is stored as bytes, with each row padded to the next multiple of 4 bytes.

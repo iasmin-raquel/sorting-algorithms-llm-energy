@@ -1,0 +1,28 @@
+### Prompt Structure
+You are to implement the Mandelbrot set in C++ according to the following specifications:
+- Read N from the command line argument.
+- Plot the Mandelbrot set with real range [-1.5, 0.5] and imaginary range [-1.0, 1.0].
+- Use 50 iterations with escape threshold 4.0.
+- Output in PBM P4 format (MSB first, zero-padded per row).
+- Write the header and pixel data to stdout.
+
+### Key Requirements
+- N must be the command-line argument.
+- Exactly 50 iterations.
+- Escape threshold is 4.0.
+- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0].
+- Output must be PBM P4 format with MSB first, zero-padded per row.
+
+### Variable Values
+- N: integer from command line argument.
+- iterations: 50.
+- escape_threshold: 4.0.
+- plot_real_min: -1.5.
+- plot_real_max: 0.5.
+- plot_imag_min: -1.0.
+- plot_imag_max: 1.0.
+
+### Notes
+- The code must handle floating-point calculations for complex numbers.
+- The output must match the reference for N=200, ensuring correct pixel data formatting.
+- The PBM P4 format requires the header "P4" and binary pixel data with MSB first.

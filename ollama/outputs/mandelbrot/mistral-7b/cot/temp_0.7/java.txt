@@ -1,0 +1,21 @@
+### Prompt Structure
+Implement a Java program that generates the Mandelbrot set in PBM P4 format. The program should accept N as a command-line argument and produce output identical to the reference for N=200. The generated bitmap must conform to the PBM P4 format, with bits packed MSB first and zero-padded per row.
+
+### Key Requirements
+1. The solution should be implemented in Java.
+2. Accepts N as a command-line argument via Integer.parseInt(args[0]).
+3. Uses exactly 50 iterations and escape threshold 4.0.
+4. Writes PBM P4 header and binary pixel data to stdout.
+5. The output must be identical to the reference when validated with "cmp output.pbm reference.pbm" for N=200.
+
+### Variable Values
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region (real): [-1.5, 0.5]
+- Plot region (imaginary): [-1.0, 1.0]
+- Output format: PBM P4
+- Bit packing: MSB first
+- Zero-padding per row
+
+### Notes
+Be aware that small differences in floating-point arithmetic may cause variations between different Java implementations and the reference solution. Ensure your code uses double precision floating-point numbers to minimize these differences. Also, consider using libraries like Apache Commons Math for improved numerical stability if needed.

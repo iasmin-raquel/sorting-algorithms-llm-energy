@@ -1,0 +1,47 @@
+### Prompt Structure
+```python
+# The Computer Language Benchmarks Game
+# contributed by [Your Name]
+
+import sys
+from math import sqrt
+
+class MandelbrotPoint:
+  def __init__(self, x, y):
+    self.x = x; self.y = y
+
+def mandelbrot_iteration(point): ...
+def mandelbrot_escape_threshold(): ...
+def mandelbrot_plot_region(): ...
+def mandelbrot_pbm_header(): ...
+def mandelbrot_pbm_binary_data(image): ...
+
+def mandelbrot(N):
+  plot_region = mandelbrot_plot_region()
+  image = [ [0] * N for _ in range(N) ]
+  for y in range(*plot_region[1], *plot_region[3], 1):
+    for x in range(*plot_region[0], *plot_region[2], 1):
+      point = MandelbrotPoint(x, y)
+      image[y][x] = mandelbrot_iteration(point)
+  mandelbrot_pbm_header()
+  sys.stdout.buffer.write(mandelbrot_pbm_binary_data(image))
+
+if __name__ == '__main__':
+  main(int(sys.argv[1]))
+```
+
+### Key Requirements
+- The code must be implemented in Python
+- Receives N as a command-line argument via int(sys.argv[1])
+- Uses exactly 50 iterations and escape threshold 4.0
+- Writes PBM P4 header as text and binary pixel data to stdout
+
+### Variable Values
+- Maximum iterations: 50
+- Escape threshold: 4.0
+- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
+
+### Notes
+- The provided example code is not related to the Mandelbrot set problem and serves only as a demonstration of structure and style.
+- The generated prompt assumes that the model can implement the functions `mandelbrot_iteration`, `mandelbrot_escape_threshold`, `mandelbrot_plot_region`, `mandelbrot_pbm_header`, and `mandelbrot_pbm_binary_data`.
+- The model should understand that it needs to create a 2D array (list of lists) for the image, iterate over the plot region, perform the Mandelbrot set calculations for each point, and write the PBM P4 header followed by the binary pixel data to stdout.

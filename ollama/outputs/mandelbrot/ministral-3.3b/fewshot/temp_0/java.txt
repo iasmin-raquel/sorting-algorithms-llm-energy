@@ -1,0 +1,98 @@
+### Prompt Structure
+
+**Example 1: Mandelbrot Set Generation (PBM Output)**
+```java
+// Problem: Generate Mandelbrot set for a given N and output in PBM format.
+// Input: Command-line argument `N` (size of grid).
+// Constraints:
+//   - Iterations = 50, escape threshold = 4.0
+//   - Plot region: real ∈ [-1.5, 0.5], imag ∈ [-1.0, 1.0]
+//   - Output: PBM P4 (bits packed MSB-first, zero-padded rows).
+
+public class Mandelbrot {
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]);
+        double maxIter = 50;
+        double escapeThreshold = 4.0;
+
+        // Initialize grid and compute pixels
+        for (int y = 0; y < N; ++y) {
+            for (int x = 0; x < N; ++x) {
+                // Map (x,y) to complex plane, compute iterations, write PBM byte.
+            }
+        }
+    }
+}
+```
+
+---
+
+**Example 2: Modified Mandelbrot with Custom Threshold**
+```java
+// Problem: Same as above but with user-provided threshold.
+// Input: `N` and `threshold` (e.g., `args[0] = N`, `args[1] = threshold`).
+public class MandelbrotCustom {
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]);
+        double threshold = Double.parseDouble(args[1]);
+
+        for (int y = 0; y < N; ++y) {
+            for (int x = 0; x < N; ++x) {
+                // Escape logic adjusted to `threshold`.
+            }
+        }
+    }
+}
+```
+
+---
+**Target Problem:**
+```java
+// Generate Mandelbrot set for N=200, output PBM P4 with exact specs:
+//   - Iterations: 50
+//   - Escape threshold: 4.0
+//   - Region: real ∈ [-1.5, 0.5], imag ∈ [-1.0, 1.0]
+//   - Output: PBM P4 header + packed binary pixels (MSB-first, zero-padded rows).
+public class Mandelbrot {
+    public static void main(String[] args) {
+        // Implement the loop and pixel writing as shown in examples.
+    }
+}
+```
+
+---
+
+### Key Requirements
+- **Language**: Pure Java (no external libraries like `java.awt` or `javax.imageio`).
+- **Input Handling**:
+  - Parse `N` from `args[0]` via `Integer.parseInt(args[0])`.
+  - No additional arguments allowed.
+- **Algorithm**:
+  - Use **50 iterations** per pixel, escape threshold **4.0**.
+  - Map `(x,y)` to complex plane: `c = (real + offsetX) + i*(imag + offsetY)`, where:
+    - `offsetX = (-1.5 + 0.5/N)*N` (center real axis).
+    - `offsetY = (-1.0 + 1.0/N)*N` (center imaginary axis).
+- **Output**:
+  - Write PBM header manually (e.g., `"P4\n200 200"`).
+  - Pack bits MSB-first, zero-pad rows to full byte.
+  - No extra whitespace or comments in binary data.
+- **Precision**: Use `double` for complex plane arithmetic; avoid floating-point errors.
+
+---
+
+### Variable Values
+| Parameter          | Value               |
+|---------------------|---------------------|
+| Max Iterations      | 50                  |
+| Escape Threshold    | 4.0                 |
+| Plot Region (real)  | [-1.5, 0.5]         |
+| Plot Region (imag)  | [-1.0, 1.0]         |
+| Output Format       | PBM P4              |
+
+---
+### Notes
+- **Ambiguity Risk**: The prompt avoids specifying exact PBM header text (e.g., `"P4\n200 200"`), trusting the LLM to infer it from the binary output structure. Ensure the generated code writes a valid PBM header *before* pixel data.
+- **Edge Cases**:
+  - Handle `N=1` correctly (single-pixel grid).
+  - Zero-padding per row: For odd bits, pad with zeros to form a full byte.
+- **Performance**: The LLM should optimize loops for minimal overhead (e.g., avoid redundant calculations). Benchmarking is implicit via the problem’s constraints.

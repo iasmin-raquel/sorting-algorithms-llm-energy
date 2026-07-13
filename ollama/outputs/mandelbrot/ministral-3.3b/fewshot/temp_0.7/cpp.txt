@@ -1,0 +1,61 @@
+### Prompt Structure
+**Generate a C++ program that implements the Mandelbrot set calculation for an N×N bitmap in PBM P4 format. Follow these key instructions:**
+
+1. **Input Handling**:
+   - Accept `N` (grid size) as a command-line argument.
+   - Read parameters explicitly: max iterations = 50, threshold = 4.0.
+
+2. **Core Algorithm**:
+   - Iterate over the given plot region (`real ∈ [-1.5, 0.5]`, `imaginary ∈ [-1.0, 1.0]`).
+   - For each complex number `z`, apply Mandelbrot iteration: `(z^2 + c)` iteratively until escaping (magnitude > threshold) or max iterations reached.
+   - Mark points as black (binary ‘0’) if escaped after ≤50 steps; white otherwise.
+
+3. **Output**:
+   - Write a PBM P4 header (`P4` followed by width/height dimensions).
+   - Pack row bits MSB-first, zero-padded to byte alignment.
+   - Output raw binary pixel data per row (e.g., `1` = black, `0` = white).
+
+---
+### Example (Shows Expected Structure)
+```cpp
+// Mandelbrot helper function
+bool escape(complex<double> c, int max_iter) {
+  complex<double> z = {0.0, 0.0};
+  for (int i = 0; i < max_iter && norm(z) <= threshold; ++i)
+    z = z*z + c;
+  return norm(z) > threshold || i == max_iter - 1;
+}
+
+// Main loop
+void render(int N) {
+  printf("P4\n%d %d\n", N, N);
+  for (int y = 0; y < N; ++y)
+    for (int x = 0; x < N; ++x) {
+      double c_real = -1.5 + x*(0.75/N); // Range: [-1.5, 0.5]
+      double c_imag = -1.0 + y*(2.0/N); // Range: [-1.0, 1.0]
+      putchar(escape({c_real, c_imag}, max_iter) ? '0' : '1');
+    }
+}
+```
+
+---
+### Key Requirements
+- **Strict Parameter Enforcement**: No deviation from `max_iter=50` or threshold=`4.0`.
+- **PBM P4 Compliance**: Header + bits-packed output (MSB-first, no extra whitespace).
+- **Grid Bounds**: Map `(x,y)` to complex plane coordinates (`c_real`, `c_imag`) linearly.
+- **Edge Cases**: Zero-pad bytes to 8 bits; handle N=1 correctly.
+
+---
+### Variable Values
+| Parameter          | Value         |
+|--------------------|---------------|
+| Max Iterations     | 50            |
+| Escape Threshold   | 4.0           |
+| Real Range         | [-1.5, 0.5]   |
+| Imaginary Range    | [-1.0, 1.0]   |
+
+---
+### Notes
+- **Ambiguity Avoidance**: Clarify whether the iteration check `norm(z) > threshold` is *or* `i == max_iter - 1` (here, treat escaped if norm exceeds threshold or exactly max iterations).
+- **Bit Order**: Explicitly enforce MSB-first packing by writing bytes’ LSBs first in the loop.
+- **Performance**: Avoid redundant calculations; iterate only over grid points.

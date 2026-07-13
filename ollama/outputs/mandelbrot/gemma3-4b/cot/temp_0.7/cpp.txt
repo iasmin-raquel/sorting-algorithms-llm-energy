@@ -1,0 +1,96 @@
+### Prompt Structure
+You are an expert C++ programmer tasked with implementing the Mandelbrot set visualization problem from the Computer Language Benchmarks Game. Your goal is to generate a complete and correct C++ program that plots the Mandelbrot set within the specified region, writes the output in PBM P4 format to standard output, and adheres strictly to the given constraints.
+
+Let's break this down into manageable steps. First, I need to think through the necessary components of the program.
+
+1.  **Input:** The program needs to accept an integer `N` as a command-line argument, representing the size of the bitmap (N x N).
+2.  **Initialization:** Define constants for the plot region (real: -1.5 to 0.5, imaginary: -1.0 to 1.0), maximum iterations (50), and escape threshold (4.0).
+3.  **Mandelbrot Calculation:** Implement a function to calculate whether a given complex number belongs to the Mandelbrot set. This involves iterating up to 50 times, checking if `z^2 + c` exceeds the escape threshold.
+4.  **Bitmap Generation:** Create an N x N bitmap (represented as a 2D array of integers). Iterate through each pixel in the bitmap and calculate its corresponding complex number. Based on the Mandelbrot calculation, assign either 0 or 1 to the pixel value (representing whether the point belongs to the set or escapes).
+5.  **PBM P4 Output:** Write the PBM P4 header followed by the binary pixel data to standard output. The header should include the image dimensions and color type ("black and white"). Each row of pixel data must be zero-padded, with bytes packed in MSB order.
+
+Now, let's generate the C++ code:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        cerr << "Usage: mandelbrot N" << endl;
+        return 1;
+    }
+
+    int N = atoi(argv[1]);
+
+    // Constants
+    const double real_min = -1.5;
+    const double real_max = 0.5;
+    const double imaginary_min = -1.0;
+    const double imaginary_max = 1.0;
+    const int max_iterations = 50;
+    const double escape_threshold = 4.0;
+
+    // Create bitmap
+    vector<vector<int>> bitmap(N, vector<int>(N));
+
+    // Mandelbrot calculation
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            double x = real_min + (real_max - real_min) * (double)j / (N - 1);
+            double y = imaginary_min + (imaginary_max - imaginary_min) * (double)i / (N - 1);
+
+            int z_re = 0, z_im = 0;
+            int iterations = 0;
+
+            while (iterations < max_iterations && (z_re * z_re + z_im * z_im) <= escape_threshold) {
+                z_re = (int)(z_re * z_re - z_im * z_im + x);
+                z_im = (int)(2 * z_re * z_im + y);
+                iterations++;
+            }
+
+            bitmap[i][j] = iterations;
+        }
+    }
+
+    // PBM P4 output
+    cout << "P4" << endl;
+    cout << N << " " << N << endl;
+    cout << "255" << endl; // Color type (black and white)
+
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            unsigned char pixel_value = (unsigned char)(bitmap[i][j]);
+            for (int k = 7; k >= 0; --k) { // MSB first, zero-padded
+                cout << (pixel_value >> k) & 1;
+            }
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+```
+
+### Key Requirements
+*   The code must be written in C++.
+*   It should accept the bitmap size `N` as a command-line argument.
+*   It must use exactly 50 iterations for the Mandelbrot calculation.
+*   The escape threshold must be set to 4.0.
+*   The output format must be PBM P4, with bytes packed MSB first and zero-padded per row.
+*   The plot region is defined as real values between -1.5 and 0.5, and imaginary values between -1.0 and 1.0.
+
+### Variable Values
+*   `N`: Command-line argument (integer) representing the bitmap size.
+*   `real_min`: -1.5
+*   `real_max`: 0.5
+*   `imaginary_min`: -1.0
+*   `imaginary_max`: 1.0
+*   `max_iterations`: 50
+*   `escape_threshold`: 4.0
+
+### Notes
+This prompt provides a detailed, step-by-step guide to generating the C++ code for the Mandelbrot set visualization. The chain-of-thought approach helps the LLM understand the problem and generate a correct solution that adheres to all given constraints.  Testing with N=200 will be crucial for verifying correctness against the benchmark. Carefully consider memory usage when increasing `N`.
