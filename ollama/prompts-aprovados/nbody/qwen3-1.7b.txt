@@ -1,0 +1,6 @@
+cot/temp_0/cpp
+cot/temp_0/java
+cot/temp_0/python
+cot/temp_0.7/cpp
+cot/temp_0.7/java
+cot/temp_0.7/python
