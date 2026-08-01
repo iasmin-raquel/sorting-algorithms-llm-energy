@@ -1,0 +1,70 @@
+You will generate a prompt for an LLM to implement the Binary Trees 
+problem from the Computer Language Benchmarks Game in C++ code.
+
+Problem description:
+Fully create perfect binary trees, before any tree nodes are 
+deallocated, using at minimum the number of allocations of 
+Jeremy Zerfas's C program. Do not optimize away the work.
+Leaf nodes must be the same as interior nodes, with the same memory 
+allocation. Do not optimize away the work.
+The output must be identical to the reference when validated with:
+diff output.txt reference.txt for N=10.
+
+Each program should:
+- Define a tree node structure with left and right child pointers
+- Allocate a binary tree to stretch memory, check it exists, 
+  and deallocate it
+- Allocate a long-lived binary tree which will live on while 
+  other trees are allocated and deallocated
+- Allocate, walk, and deallocate many bottom-up binary trees:
+  allocate a tree, walk the tree counting the nodes, deallocate the tree
+- Check that the long-lived binary tree still exists
+
+Output format:
+- "stretch tree of depth D\t check: C"
+- For each depth from min_depth to max_depth (step 2):
+  "I\t trees of depth D\t check: C"
+- "long lived tree of depth D\t check: C"
+
+The following parameters must be used exactly as given:
+- min_depth = 4
+- max_depth = max(min_depth + 2, N)
+- stretch_depth = max_depth + 1
+- iterations = 1 << (max_depth - depth + min_depth)
+- N received via command-line argument
+
+You will generate a prompt using the Chain-of-Thought Prompting 
+technique. Definition: chain-of-thought prompts encourage the model 
+to decompose the problem into intermediate reasoning steps before 
+producing the final response. The model is guided to "think out loud", 
+describing its reasoning step by step before generating the code.
+
+The generated prompt must ensure that the C++ code that the target 
+LLM will produce:
+- Is implemented in C++
+- Receives N as a command-line argument 
+- Uses min_depth = 4 and computes max_depth and stretch_depth 
+  as defined above
+- Defines a tree node structure with left and right child pointers
+- Implements the stretch tree, long-lived tree, and bottom-up tree 
+  logic as described above
+- Produces output in the exact format specified above
+
+IMPORTANT: Your output must be only the generated prompt text, ready 
+to be sent to another LLM. Do not generate C++ code. Do not include 
+your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known 
+risks of ambiguity or expected model behavior]
