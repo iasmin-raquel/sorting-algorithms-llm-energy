@@ -1,0 +1,166 @@
+You will generate a prompt for an LLM to implement the fasta problem
+from the Computer Language Benchmarks Game in Java code.
+
+Problem description:
+- Generate DNA sequences by copying from a given sequence (repeat fasta)
+- Generate DNA sequences by weighted random selection from 2 alphabets
+  (random fasta)
+- The output must be identical to the reference when validated with:
+  diff output.txt reference.txt for N=1000.
+
+Algorithm requirements:
+- Convert the expected probability of each nucleotide into cumulative
+  probabilities
+- Match a random number against those cumulative probabilities to select
+  each nucleotide using linear search
+- Use the following naive linear congruential generator (LCG) to calculate
+  a random number each time a nucleotide needs to be selected. Do not cache
+  the random number sequence:
+
+  IM = 139968
+  IA = 3877
+  IC = 29573
+  Seed = 42
+
+  Random(Max):
+    Seed = (Seed * IA + IC) modulo IM
+    return Max * Seed / IM
+
+The following values must be used exactly as given:
+
+ALU sequence (used for repeat fasta):
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+
+IUB alphabet and probabilities:
+a=0.27, c=0.12, g=0.12, t=0.27,
+B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,
+N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+
+Homo sapiens alphabet and probabilities:
+a=0.3029549426680, c=0.1979883004921,
+g=0.1975473066391, t=0.3015094502008
+
+Output format:
+- Line length: 60 characters
+- Three sequences in order:
+  1. ">ONE Homo sapiens alu" followed by repeat fasta of ALU with n*2 characters
+  2. ">TWO IUB ambiguity codes" followed by random fasta of IUB with n*3 characters
+  3. ">THREE Homo sapiens frequency" followed by random fasta of
+     Homo sapiens with n*5 characters
+- N received via command-line argument
+
+Use the following code as a demonstration example in the generated prompt:
+
+Example code (binary-trees Java):
+
+/* The Computer Language Benchmarks Game
+ * contributed by Diogo Lima
+ */
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class binarytrees {
+    private static class TreeNode {
+        private TreeNode left;
+        private TreeNode right;
+
+        private TreeNode(TreeNode i_left, TreeNode i_right) {
+            this.left = i_left;
+            this.right = i_right;
+        }
+
+        public static TreeNode createNode(int i_depth) {
+            TreeNode bottomTree = new TreeNode(null, null);
+            return i_depth == 0 ? bottomTree : createNode(i_depth, bottomTree);
+        }
+
+        private static TreeNode createNode(int i_depth, TreeNode i_accumulator) {
+            TreeNode accumulator = i_accumulator;
+            if (i_depth > 0) {
+                final int depth = i_depth - 1;
+                accumulator.left = createNode(depth);
+                accumulator.right = createNode(depth);
+            }
+            return accumulator;
+        }
+
+        public final int checkNode() {
+            return left == null ? 1 : left.checkNode() + right.checkNode() + 1;
+        }
+    }
+
+    public static void main(String[] args) {
+        int n = args.length > 0 ? Integer.parseInt(args[0]) : 0;
+        int proc = Runtime.getRuntime().availableProcessors() * 2;
+        ExecutorService service = Executors.newFixedThreadPool(proc);
+        service.execute(() -> runBenchmark(n));
+        service.shutdown();
+        try { service.awaitTermination(120L, TimeUnit.SECONDS); }
+        catch (InterruptedException e) {}
+    }
+
+    private static void runBenchmark(int n) {
+        final int minimumDepth = 4;
+        final int maximumDepth = Math.max(minimumDepth + 2, n);
+        final int stretchDepth = maximumDepth + 1;
+
+        TreeNode node = TreeNode.createNode(stretchDepth);
+        System.out.println("stretch tree of depth " + (maximumDepth + 1)
+            + "\t check: " + node.checkNode());
+
+        TreeNode longLivedTree = TreeNode.createNode(maximumDepth);
+        for (int depth = minimumDepth; depth <= maximumDepth; depth += 2) {
+            final int iterations = 1 << (maximumDepth - depth + minimumDepth);
+            int check = 0;
+            for (int i = 1; i <= iterations; i++)
+                check += TreeNode.createNode(depth).checkNode();
+            System.out.println(iterations + "\t trees of depth " + depth
+                + "\t check: " + check);
+        }
+        System.out.println("long lived tree of depth " + maximumDepth
+            + "\t check: " + longLivedTree.checkNode());
+    }
+}
+
+You will generate a prompt using the Few-Shot Prompting technique.
+Definition: few-shot prompts provide the model with one or more examples
+of similar solved problems before presenting the target problem. The
+examples demonstrate the expected style and structure of the response
+without specifying the content of the solution. The generated prompt
+must orient the model to extract from the example only the general
+structure (argument reading, multiple functions, output to stdout).
+
+The generated prompt must ensure that the Java code that the target
+LLM will produce:
+- Is implemented in Java
+- Receives N as a command-line argument
+- Uses the LCG with the exact constants defined above
+- Uses the ALU sequence, IUB and Homo sapiens alphabets with their
+  exact probabilities as defined above
+- Produces output in the exact format specified above
+- Does not cache the random number sequence
+
+IMPORTANT: Your output must be only the generated prompt text, ready
+to be sent to another LLM. Do not generate Java code. Do not include
+your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known
+risks of ambiguity or expected model behavior]

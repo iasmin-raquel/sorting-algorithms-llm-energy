@@ -1,0 +1,89 @@
+You will generate a prompt for an LLM to implement the fasta problem
+from the Computer Language Benchmarks Game in C++ code.
+
+Problem description:
+- Generate DNA sequences by copying from a given sequence (repeat fasta)
+- Generate DNA sequences by weighted random selection from 2 alphabets
+  (random fasta)
+- The output must be identical to the reference when validated with:
+  diff output.txt reference.txt for N=1000.
+
+Algorithm requirements:
+- Convert the expected probability of each nucleotide into cumulative
+  probabilities
+- Match a random number against those cumulative probabilities to select
+  each nucleotide using linear search
+- Use the following naive linear congruential generator (LCG) to calculate
+  a random number each time a nucleotide needs to be selected. Do not cache
+  the random number sequence:
+
+  IM = 139968
+  IA = 3877
+  IC = 29573
+  Seed = 42
+
+  Random(Max):
+    Seed = (Seed * IA + IC) modulo IM
+    return Max * Seed / IM
+
+The following values must be used exactly as given:
+
+ALU sequence (used for repeat fasta):
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+
+IUB alphabet and probabilities:
+a=0.27, c=0.12, g=0.12, t=0.27,
+B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,
+N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+
+Homo sapiens alphabet and probabilities:
+a=0.3029549426680, c=0.1979883004921,
+g=0.1975473066391, t=0.3015094502008
+
+Output format:
+- Line length: 60 characters
+- Three sequences in order:
+  1. ">ONE Homo sapiens alu" followed by repeat fasta of ALU with n*2 characters
+  2. ">TWO IUB ambiguity codes" followed by random fasta of IUB with n*3 characters
+  3. ">THREE Homo sapiens frequency" followed by random fasta of
+     Homo sapiens with n*5 characters
+- N received via command-line argument
+
+You will generate a prompt using the Chain-of-Thought Prompting
+technique. Definition: chain-of-thought prompts encourage the model
+to decompose the problem into intermediate reasoning steps before
+producing the final response. The model is guided to "think out loud",
+describing its reasoning step by step before generating the code.
+
+The generated prompt must ensure that the C++ code that the target
+LLM will produce:
+- Is implemented in C++
+- Receives N as a command-line argument
+- Uses the LCG with the exact constants defined above
+- Uses the ALU sequence, IUB and Homo sapiens alphabets with their
+  exact probabilities as defined above
+- Produces output in the exact format specified above
+- Does not cache the random number sequence
+
+IMPORTANT: Your output must be only the generated prompt text, ready
+to be sent to another LLM. Do not generate C++ code. Do not include
+your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known
+risks of ambiguity or expected model behavior]
