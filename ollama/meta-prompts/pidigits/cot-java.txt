@@ -1,0 +1,75 @@
+You will generate a prompt for an LLM to implement the pidigits problem
+from the Computer Language Benchmarks Game in Java code.
+
+Problem description:
+- Calculate the first N digits of Pi using arbitrary precision arithmetic
+- Print digits 10 per line with the running total of digits calculated
+- The output must be identical to the reference when validated with:
+  diff output.txt reference.txt for N=30.
+
+Algorithm requirements:
+Use the Unbounded Spigot Algorithm (Gibbons) with the following
+step-by-step operations using arbitrary precision arithmetic:
+
+Initial state:
+- q = 1, r = 0, t = 1, k = 0
+
+next_step (advance the algorithm by one term):
+- k = k + 1
+- r = r + 2*q
+- r = r * (2*k + 1)
+- t = t * (2*k + 1)
+- q = q * k
+
+extract(x):
+- return floor((q*x + r) / t)
+
+produce(d):
+- q = q * 10
+- r = (r - t*d) * 10
+
+Digit selection:
+- Call next_step until q > r is false
+- Compute d = extract(3)
+- If d == extract(4), output digit d and call produce(d)
+- Otherwise call next_step again
+
+Output format:
+- 10 digits per line
+- If the last line has fewer than 10 digits, pad with spaces on the right
+- Each line ends with tab, colon, and running total: "\t:N"
+- N received via command-line argument
+
+You will generate a prompt using the Chain-of-Thought Prompting
+technique. Definition: chain-of-thought prompts encourage the model
+to decompose the problem into intermediate reasoning steps before
+producing the final response. The model is guided to "think out loud",
+describing its reasoning step by step before generating the code.
+
+The generated prompt must ensure that the Java code that the target
+LLM will produce:
+- Is implemented in Java using BigInteger for arbitrary precision arithmetic
+- Receives N as a command-line argument
+- Uses the initial state, next_step, extract and produce operations
+  exactly as defined above
+- Performs both extract(3) and extract(4) for digit verification
+- Produces output in the exact format specified above
+
+IMPORTANT: Your output must be only the generated prompt text, ready
+to be sent to another LLM. Do not generate Java code. Do not include
+your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known
+risks of ambiguity or expected model behavior]

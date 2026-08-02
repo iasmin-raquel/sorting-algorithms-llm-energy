@@ -1,0 +1,108 @@
+You will generate a prompt for an LLM to implement the pidigits problem
+from the Computer Language Benchmarks Game in Java code.
+
+Problem description:
+- Calculate the first N digits of Pi using arbitrary precision arithmetic
+- Print digits 10 per line with the running total of digits calculated
+- The output must be identical to the reference when validated with:
+  diff output.txt reference.txt for N=30.
+
+Algorithm requirements:
+Use the Unbounded Spigot Algorithm (Gibbons) with the following
+step-by-step operations using arbitrary precision arithmetic:
+
+Initial state:
+- q = 1, r = 0, t = 1, k = 0
+
+next_step (advance the algorithm by one term):
+- k = k + 1
+- r = r + 2*q
+- r = r * (2*k + 1)
+- t = t * (2*k + 1)
+- q = q * k
+
+extract(x):
+- return floor((q*x + r) / t)
+
+produce(d):
+- q = q * 10
+- r = (r - t*d) * 10
+
+Digit selection:
+- Call next_step until q > r is false
+- Compute d = extract(3)
+- If d == extract(4), output digit d and call produce(d)
+- Otherwise call next_step again
+
+Output format:
+- 10 digits per line
+- If the last line has fewer than 10 digits, pad with spaces on the right
+- Each line ends with tab, colon, and running total: "\t:N"
+- N received via command-line argument
+
+Use the following code as a demonstration example in the generated prompt:
+
+Example code (fasta Java):
+
+/* The Computer Language Benchmarks Game
+   contributed by Isaac Gouy
+*/
+
+import java.io.IOException;
+
+final class fasta {
+static final int IM = 139968, IA = 3877, IC = 29573, SEED = 42;
+static int seed = SEED;
+
+static double fastaRand(double max) {
+   seed = (seed * IA + IC) % IM;
+   return max * seed / IM;
+}
+
+static final String ALU =
+  "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG" +
+  "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA" +
+  "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT" +
+  "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA" +
+  "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG" +
+  "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC" +
+  "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+
+static final String iub = "acgtBDHKMNRSVWY";
+static final double[] iubP = {
+   0.27,0.12,0.12,0.27,
+   0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02
+};
+
+static final String homosapiens = "acgt";
+static final double[] homosapiensP = {
+   0.3029549426680,0.1979883004921,
+   0.1975473066391,0.3015094502008
+};
+
+static final int LINELEN = 60;
+
+public static void main(String[] args) throws IOException {
+   final int n = (args.length > 0) ? Integer.parseInt(args[0]) : 1000;
+   System.out.println(">ONE Homo sapiens alu");
+   repeatFasta(ALU, n*2);
+   System.out.println(">TWO IUB ambiguity codes");
+   randomFasta(iub, iubP, n*3);
+   System.out.println(">THREE Homo sapiens frequency");
+   randomFasta(homosapiens, homosapiensP, n*5);
+}
+}
+
+You will generate a prompt using the Few-Shot Prompting technique.
+Definition: few-shot prompts provide the model with one or more examples
+of similar solved problems before presenting the target problem. The
+examples demonstrate the expected style and structure of the response
+without specifying the content of the solution. The generated prompt
+must orient the model to extract from the example only the general
+structure (argument reading, stateful loop, formatted output to stdout).
+
+The generated prompt must ensure that the Java code that the target
+LLM will produce:
+- Is implemented in Java using BigInteger for arbitrary precision arithmetic
+- Receives N as a command-line argument
+- Uses the

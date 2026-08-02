@@ -1,0 +1,132 @@
+You will generate a prompt for an LLM to implement the pidigits problem
+from the Computer Language Benchmarks Game in C++ code.
+
+Problem description:
+- Calculate the first N digits of Pi using arbitrary precision arithmetic
+- Print digits 10 per line with the running total of digits calculated
+- The output must be identical to the reference when validated with:
+  diff output.txt reference.txt for N=30.
+
+Algorithm requirements:
+Use the Unbounded Spigot Algorithm (Gibbons) with the following
+step-by-step operations using arbitrary precision arithmetic:
+
+Initial state:
+- q = 1, r = 0, t = 1, k = 0
+
+next_step (advance the algorithm by one term):
+- k = k + 1
+- r = r + 2*q
+- r = r * (2*k + 1)
+- t = t * (2*k + 1)
+- q = q * k
+
+extract(x):
+- return floor((q*x + r) / t)
+
+produce(d):
+- q = q * 10
+- r = (r - t*d) * 10
+
+Digit selection:
+- Call next_step until q > r is false
+- Compute d = extract(3)
+- If d == extract(4), output digit d and call produce(d)
+- Otherwise call next_step again
+
+Output format:
+- 10 digits per line
+- If the last line has fewer than 10 digits, pad with spaces on the right
+- Each line ends with tab, colon, and running total: "\t:N"
+- N received via command-line argument
+
+Use the following code as a demonstration example in the generated prompt:
+
+Example code (fasta C++):
+
+/* The Computer Language Benchmarks Game
+   converted to C++ from D by Rafal Rusin
+   modified by Vaclav Haisman
+   modified by The Anh to compile with g++ 4.3.2
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <algorithm>
+#include <vector>
+#include <numeric>
+
+using namespace std;
+
+static int const IM = 139968, IA = 3877, IC = 29573;
+static int last = 42;
+
+static inline double genRandom(double max) {
+   return(max * (last = (last * IA + IC) % IM) / IM);
+}
+
+struct IUB { char c; double p; };
+
+static const char alu[] =
+"GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG"
+"GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA"
+"CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT"
+"ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA"
+"GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG"
+"AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC"
+"AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+
+static const unsigned length = 60, alu_size = sizeof(alu) - 1;
+
+static IUB iub[] = {
+   {'a',0.27},{'c',0.12},{'g',0.12},{'t',0.27},
+   {'B',0.02},{'D',0.02},{'H',0.02},{'K',0.02},{'M',0.02},
+   {'N',0.02},{'R',0.02},{'S',0.02},{'V',0.02},{'W',0.02},{'Y',0.02}
+};
+
+static IUB homosapiens[] = {
+   {'a',0.3029549426680},{'c',0.1979883004921},
+   {'g',0.1975473066391},{'t',0.3015094502008}
+};
+
+int main(int argc, char *argv[]) {
+   unsigned const n = argc > 1 ? atoi(argv[1]) : 1;
+   // makeRepeatFasta and makeRandomFasta calls omitted for brevity
+   return 0;
+}
+
+You will generate a prompt using the Few-Shot Prompting technique.
+Definition: few-shot prompts provide the model with one or more examples
+of similar solved problems before presenting the target problem. The
+examples demonstrate the expected style and structure of the response
+without specifying the content of the solution. The generated prompt
+must orient the model to extract from the example only the general
+structure (argument reading, stateful loop, formatted output to stdout).
+
+The generated prompt must ensure that the C++ code that the target
+LLM will produce:
+- Is implemented in C++ using arbitrary precision arithmetic (GMP library)
+- Receives N as a command-line argument
+- Uses the initial state, next_step, extract and produce operations
+  exactly as defined above
+- Performs both extract(3) and extract(4) for digit verification
+- Produces output in the exact format specified above
+
+IMPORTANT: Your output must be only the generated prompt text, ready
+to be sent to another LLM. Do not generate C++ code. Do not include
+your reasoning or thinking process.
+
+Structure your output using exactly these four sections:
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known
+risks of ambiguity or expected model behavior]
