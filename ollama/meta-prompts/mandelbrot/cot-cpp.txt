@@ -2,16 +2,27 @@ You will generate a prompt for an LLM to implement the Mandelbrot set
 problem from the Computer Language Benchmarks Game in C++ code.
 
 Problem description:
-* Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap.
-* Write output byte-by-byte in portable bitmap format (PBM P4).
-* The output must be identical to the reference when validated with:
+- Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap.
+- Write output byte-by-byte in portable bitmap format (PBM P4).
+- The output must be identical to the reference when validated with:
   cmp output.pbm reference.pbm for N=200.
 
 The following parameters must be used exactly as given:
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-- Output: PBM P4 format, bits packed MSB first, zero-padded per row
+- Escape threshold (squared): lim = 2.0 * 2.0
+- A point belongs to the set if |Z|² <= lim after all iterations
+- Use squared magnitude (zr*zr + zi*zi) to avoid computing square roots
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Coordinate mapping:
+    real(C) = 2.0 * x / N - 1.5
+    imag(C) = 2.0 * y / N - 1.0
+
+Output format (PBM P4):
+- Header: "P4\n" followed by "N N\n"
+- Pixels packed 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+- If N is not divisible by 8, the last byte of each row is padded with zeros
+  on the right
+- Write only the header and binary pixel data to stdout
 
 You will generate a prompt using the Chain-of-Thought Prompting 
 technique. Definition: chain-of-thought prompts encourage the model 
@@ -23,8 +34,9 @@ The generated prompt must ensure that the C++ code that the target
 LLM will produce:
 - Is implemented in C++
 - Receives N as a command-line argument
-- Uses exactly 50 iterations and escape threshold 4.0
+- Uses exactly 50 iterations and escape threshold lim = 2.0 * 2.0
 - Writes PBM P4 header and binary pixel data to stdout
+- Produces output validatable with cmp for N=200
 
 IMPORTANT: Your output must be only the generated prompt text, ready 
 to be sent to another LLM. Do not generate C++ code. Do not include 

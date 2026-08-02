@@ -1,17 +1,28 @@
-You will generate a prompt for an LLM to implement the Mandelbrot set
+You will generate a prompt for an LLM to implement the Mandelbrot set 
 problem from the Computer Language Benchmarks Game in C++ code.
 
 Problem description:
-* Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap.
-* Write output byte-by-byte in portable bitmap format (PBM P4).
-* The output must be identical to the reference when validated with:
+- Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap.
+- Write output byte-by-byte in portable bitmap format (PBM P4).
+- The output must be identical to the reference when validated with:
   cmp output.pbm reference.pbm for N=200.
 
 The following parameters must be used exactly as given:
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-- Output: PBM P4 format, bits packed MSB first, zero-padded per row
+- Escape threshold (squared): lim = 2.0 * 2.0
+- A point belongs to the set if |Z|² <= lim after all iterations
+- Use squared magnitude (zr*zr + zi*zi) to avoid computing square roots
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Coordinate mapping:
+    real(C) = 2.0 * x / N - 1.5
+    imag(C) = 2.0 * y / N - 1.0
+
+Output format (PBM P4):
+- Header: "P4\n" followed by "N N\n"
+- Pixels packed 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+- If N is not divisible by 8, the last byte of each row is padded with zeros
+  on the right
+- Write only the header and binary pixel data to stdout
 
 Use the following code as a demonstration example in the generated prompt:
 
@@ -19,15 +30,62 @@ Example code (n-body C++):
 
 /*
  * The Computer Language Benchmarks Game
+ * https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
+ *
  * contributed by Jeffrey Beu
  * modified by Danny Angelo Carminati Grein
+ *  
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-namespace {
+namespace 
+{
+
+template< typename ...  > struct tuple{};
+
+template<typename H, typename... T>
+struct tuple<H,T...>
+{
+  typedef H head;
+  typedef tuple<T...> tail;
+ 
+  head fst;
+  tail snd;
+ 
+  tuple(const head& a,const tail& b):fst(a),snd(b){}
+  tuple() = delete;
+};
+
+tuple<> construct_tuple()
+{ return tuple<>();  
+}
+
+template<class H, class...T> tuple<H,T...> construct_tuple(H h, T... a)
+{
+  tuple<H,T...> r(h,construct_tuple(a...));
+  return r;
+}
+
+template<class OP> void FOREACH(OP,tuple<>){}
+template<typename OP,class ...T> void FOREACH(OP& op,tuple<T...>& t)
+{
+  op(t.fst);
+  FOREACH(op,t.snd);
+}
+
+template<class OP> void FOR(OP,tuple<>){}
+
+template<typename OP, class ...T> void FOR(OP& op,tuple<T...>& t)
+{
+  op(t);
+  FOR(op,t.snd);
+}
+
+
+
 struct body {
   double x, y, z;
   double vx, vy, vz;
@@ -39,17 +97,191 @@ const double solar_mass = 4 * pi * pi;
 const double days_per_year = 365.24;
 const double dt = 0.01;
 
-[... resto do código C++ do n-body ...]
+const body sun = 
+{
+  0,0,0,
+  0,0,0,
+  solar_mass
+};
+
+const body jupiter =  
+{
+   4.84143144246472090e+00,
+  -1.16032004402742839e+00,
+  -1.03622044471123109e-01,
+   1.66007664274403694e-03 * days_per_year,
+   7.69901118419740425e-03 * days_per_year,
+  -6.90460016972063023e-05 * days_per_year,
+   9.54791938424326609e-04 * solar_mass
+};
+
+const body saturn = 
+{        
+   8.34336671824457987e+00,
+   4.12479856412430479e+00,
+  -4.03523417114321381e-01,
+  -2.76742510726862411e-03 * days_per_year,
+   4.99852801234917238e-03 * days_per_year,
+   2.30417297573763929e-05 * days_per_year,
+   2.85885980666130812e-04 * solar_mass
+};
+
+const body uranus =
+{ 
+   1.28943695621391310e+01,
+  -1.51111514016986312e+01,
+  -2.23307578892655734e-01,
+   2.96460137564761618e-03 * days_per_year,
+   2.37847173959480950e-03 * days_per_year,
+  -2.96589568540237556e-05 * days_per_year,
+   4.36624404335156298e-05 * solar_mass
+};
+
+const body neptune = 
+{  
+   1.53796971148509165e+01,
+  -2.59193146099879641e+01,
+   1.79258772950371181e-01,
+   2.68067772490389322e-03 * days_per_year,
+   1.62824170038242295e-03 * days_per_year,
+  -9.51592254519715870e-05 * days_per_year,
+   5.15138902046611451e-05 * solar_mass
+};
+
+
+struct
+{ struct 
+  { template<class T> struct foreach_block
+    { T &t;
+      template<class T2> void operator()(T2& b2)
+      {
+	auto& b = t.fst;
+        double dx = b.x - b2.x;
+        double dy = b.y - b2.y;
+        double dz = b.z - b2.z;
+        double distanced = dx * dx + dy * dy + dz * dz;
+        double distance = sqrt(distanced);
+        double mag = dt / (distanced * distance);
+        b.vx -= dx * b2.mass * mag;
+        b.vy -= dy * b2.mass * mag;
+        b.vz -= dz * b2.mass * mag;
+        b2.vx += dx * b.mass * mag;
+        b2.vy += dy * b.mass * mag;
+        b2.vz += dz * b.mass * mag; 
+      }     
+    };
+
+    
+    template<class T> void operator()(T& bodies)
+    {
+      foreach_block<decltype(bodies)> run = {bodies};
+      FOREACH(run,bodies.snd);
+    }
+  }for_block;
+
+
+  struct
+  {
+    template<class T> void operator()(T& body) 
+    {
+      body.x += dt * body.vx;
+      body.y += dt * body.vy;
+      body.z += dt * body.vz;
+    }
+  }foreach_block;
+  
+  template<class T> void operator()(T& bodies)
+  {
+    FOR(for_block,bodies);
+    FOREACH(foreach_block,bodies);
+  }
+  
+}advance;
+
+struct
+{
+  struct for_block
+  { double &e;
+    template<class T> struct foreach_block
+    { T &t;
+      double &e;
+      template<class T2> void operator()(T2& b2)
+      {
+	auto& b = t.fst;
+        double dx = b.x - b2.x;
+        double dy = b.y - b2.y;
+        double dz = b.z - b2.z;
+        double distance = sqrt(dx * dx + dy * dy + dz * dz);
+        e -= (b.mass * b2.mass) / distance;
+      }  
+    };
+    
+    template<class T> void operator()(T& bodies)
+    {
+      auto& p = bodies.fst;
+      e += 0.5 * p.mass * (p.vx * p.vx + p.vy * p.vy + p.vz * p.vz);
+      
+      foreach_block<decltype(bodies)> run = {bodies,e};
+      FOREACH(run,bodies.snd);
+    }
+  };
+
+  template<class T> double operator()(T& bodies)
+  {
+    double e = 0.0;
+    for_block run = {e};
+    FOR(run,bodies);
+    return e;
+  }
+  
+}energy;
+
+struct
+{
+  struct foreach_block
+  {
+    double &px, &py, &pz;
+    template<class T> void operator()(T& body) 
+    {
+      px += body.vx * body.mass;
+      py += body.vy * body.mass;
+      pz += body.vz * body.mass;
+    }
+  };
+  
+  template<class T> void operator()(T& bodies)
+  {
+    double px = 0.0, py = 0.0, pz = 0.0;
+    foreach_block run = {px,py,pz};
+    FOREACH(run,bodies);
+    
+    bodies.fst.vx = -px / solar_mass;
+    bodies.fst.vy = -py / solar_mass;
+    bodies.fst.vz = -pz / solar_mass;
+  }
+  
+}offset;
+
 
 }
 
-int main(int,char** argv) {
+int main(int,char** argv)
+{
+ 
   auto solar_system = construct_tuple(sun,jupiter,saturn,uranus,neptune);
   offset(solar_system);
-  printf("%.9f\n", energy(solar_system));
+
+  printf ("%.9f\n", energy(solar_system));
+  
   int n = atoi(argv[1]);
-  for (int i = 1; i <= n; i++) advance(solar_system);
-  printf("%.9f\n", energy(solar_system));
+  
+  for (int i = 1; i <= n; i++)
+  {
+    advance(solar_system);
+  }
+
+  printf ("%.9f\n", energy(solar_system));
+
   return 0;
 }
 
@@ -59,15 +291,15 @@ of similar solved problems before presenting the target problem. The
 examples demonstrate the expected style and structure of the response
 without specifying the content of the solution. The generated prompt
 must orient the model to extract from the example only the general
-structure (argument reading, main loop, output to stdout). Do not
-replicate the template metaprogramming style of the example.
+structure (argument reading, main loop, output to stdout).
 
 The generated prompt must ensure that the C++ code that the target
 LLM will produce:
 - Is implemented in C++
 - Receives N as a command-line argument
-- Uses exactly 50 iterations and escape threshold 4.0
+- Uses exactly 50 iterations and escape threshold lim = 2.0 * 2.0
 - Writes PBM P4 header and binary pixel data to stdout
+- Produces output validatable with cmp for N=200
 
 IMPORTANT: Your output must be only the generated prompt text, ready
 to be sent to another LLM. Do not generate C++ code. Do not include
