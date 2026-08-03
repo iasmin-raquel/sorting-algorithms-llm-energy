@@ -1,0 +1,92 @@
+---
+### **Prompt Structure**
+Below is a structured chain-of-thought prompt designed to guide the LLM in implementing the PIDigits problem using the Unbounded Spigot Algorithm with GMP-based arbitrary precision arithmetic.
+
+---
+
+**To generate the C++ code, follow these steps:**
+
+1. **Understand the algorithm requirements**:
+   - The Unbounded Spigot Algorithm (Gibbons) for computing Pi digits is described precisely below.
+   - Use GMP (`gmpxx.h`, `mpz_class`) to handle arbitrary precision arithmetic for variables `q`, `r`, `t`.
+   - Ensure every step in `next_step()` is executed **exactly as specified**, including increments and multiplications.
+
+2. **Initialize variables**:
+   Start with:
+     ```cpp
+     mpz_class q(1), r(0), t(1);
+     ```
+   Then set `k = 0`.
+
+3. **Implement `next_step()`**:
+   - Increment `k` by `1`.
+   - Compute `r = (2*q + r) * (2*k + 1)`.
+   - Update `t *= (2*k + 1)`.
+   - Compute `q = q * k`.
+
+4. **Implement `extract(x)`**:
+   This must return the floor of `(q*x + r)/t` using GMP arithmetic:
+     ```cpp
+     mpz_class extract(mpz_class x) {
+         return (q * x + r) / t;
+     }
+     ```
+
+5. **Digit selection logic**:
+   - Loop until `q > r` is false.
+   - For each iteration:
+     - Compute `d1 = extract(3)` and `d2 = extract(4)`.
+     - If `d1 == d2`, output the digit, call `produce(d1)`, and update `k`.
+     - Otherwise, recurse into `next_step()`.
+
+6. **Implement `produce(d)`**:
+   Shift decimal place by appending zeros to `r`:
+     ```cpp
+     void produce(mpz_class d) {
+         q *= 10;
+         r = (r - t * d) * 10; // Multiply by 10 and adjust.
+     }
+     ```
+
+7. **Output formatting**:
+   - Print digits in groups of 10, with a trailing `\t:N` where `N` is the total digits computed so far.
+
+8. **Command-line input handling**:
+   Parse `N` from `std::cin` or command line (e.g., `--help` if not provided).
+
+9. **Testing constraints**:
+   The output must match the reference for `N = 30` when run with `diff`.
+   If digit mismatches occur, re-examine `extract(4)` logic or precision handling.
+
+---
+
+### **Key Requirements**
+- **[Arbitrary Precision Arithmetic]**: Use GMP (`mpz_class`) for `q`, `r`, and `t`.
+- **[Algorithm Steps Exactly]:** Follow the raw formulaic steps in the problem description.
+- **[Digit Selection Check]:** Always compare `extract(3)` and `extract(4)`. If equal, output the digit; else loop.
+- **[Output Precision]**: Pad trailing digits with spaces for partial lines (≤10 digits).
+- **[Error Handling]:** Validate integer input for `N` (rejection of non-integer/negative values).
+
+---
+
+### **Variable Values**
+| Variable | Initial Value | Purpose                          |
+|----------|---------------|----------------------------------|
+| `q`      | 1             | Numerator in fraction `(q*3 + r)/t`. |
+| `r`      | 0             | Remainder of the fraction.       |
+| `t`      | 1             | Denominator after expansion.     |
+| `k`      | 0             | Loop counter (iterations).       |
+
+---
+
+### **Notes**
+- **GMP Precision**: The LLM must ensure `mpz_class` operations (e.g., division/modulo) are correct and handle large integers.
+- **Edge Case Handling**:
+  - If `q > r` is never met (i.e., infinite loop), add a safeguard (e.g., break after `N/2` iterations).
+- **Output Format**: The `\t:N` must appear **after** the digits, not at start-of-line. Example:
+  ```
+  3141592653\t:10
+  5897932384\t:20
+  ```
+- **Known Ambiguity**: The comparison `d1 == d2` assumes both `extract()` calls return the same integer type (no floating-point approximations). If uncertain, clarify with the user.
+- **GMP Dependencies**: Ensure GMP (`libgmp`) is installed and accessible during code execution.

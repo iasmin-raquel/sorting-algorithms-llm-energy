@@ -1,0 +1,36 @@
+### Prompt Structure
+You are tasked with implementing the Binary Trees problem from the Computer Language Benchmarks Game in Java. Your solution must:
+- Define a `TreeNode` structure with `left` and `right` child pointers.
+- Allocate a "stretch tree" of depth `D` (where `D = max_depth + 1`), check it exists, and deallocate it.
+- Allocate a "long-lived tree" that persists while other trees are deallocated.
+- Allocate, walk, and deallocate "bottom-up trees" (each of depth `D` for `D` from `min_depth` to `max_depth` in steps of 2).
+- Output in the exact format specified, including `check: C` for each line.
+
+### Key Requirements
+- Use `min_depth = 4` and compute `max_depth = max(6, N)` (for N=10, `max_depth = 10`).
+- `stretch_depth = max_depth + 1 = 11`.
+- `iterations = 1 << (max_depth - depth + min_depth)` for each depth `depth` from `min_depth` to `max_depth` (step 2).
+- Ensure the stretch tree is fully allocated, checked, and deallocated.
+- The long-lived tree must survive all allocations and deallocations.
+- Output must match the reference for `N=10` (e.g., `stretch tree of depth 11 check: C`).
+
+### Variable Values
+- `N = 10`
+- `min_depth = 4`
+- `max_depth = max(6, 10) = 10`
+- `stretch_depth = max_depth + 1 = 11`
+- `iterations = 1 << (max_depth - depth + min_depth)` for each depth `depth` from 4 to 10 (step 2)
+
+### Notes
+- The LLM must **not optimize away the work**, meaning all allocations and deallocations must be explicitly handled.
+- The output must **exactly match the reference** for `N=10`, including the required `check: C` format.
+- The tree structures must be **perfect binary trees** with leaf nodes matching interior nodes in memory allocation.
+- The long-lived tree must **persist** even after other trees are deallocated.
+
+```java
+// Example structure (simplified)
+class TreeNode {
+    TreeNode left, right;
+    public TreeNode() { left = right = null; }
+}
+```

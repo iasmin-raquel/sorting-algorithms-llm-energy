@@ -1,0 +1,72 @@
+### Prompt Structure
+```python
+# The Computer Language Benchmarks Game
+# contributed by [You]
+
+def generate_fasta(n, alphabet, probabilities):
+    # Generate DNA sequences by copying from a given sequence (repeat fasta)
+    # Generate DNA sequences by weighted random selection from 2 alphabets (random fasta)
+
+    def cumulative_probabilities(probs):
+        cumulative = [0] + list(sum([[cum + p for cum, p in zip(cum, probs)]))
+        return cumulative
+
+    def select_nucleotide(cumulative_probs):
+        random_number = RandomMax(IM)
+        for i, cum in enumerate(cumulative_probs):
+            if random_number <= cum:
+                return alphabet[i]
+
+    def RandomMax(Max):
+        Seed = 42
+        while True:
+            Seed = (Seed * IA + IC) % IM
+            if Seed < Max:
+                return Seed
+
+    # Algorithm parameters
+    ALU_sequence = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA\nTCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
+    IUB_alphabet = {"a": 0.27, "c": 0.12, "g": 0.12, "t": 0.27, "B": 0.02, "D": 0.02, "H": 0.02, "K": 0.02, "M": 0.02, "N": 0.02, "R": 0.02, "S": 0.02, "V": 0.02, "W": 0.02, "Y": 0.02}
+    Homo_sapiens_alphabet = {"a": 0.3029549426680, "c": 0.1979883004921, "g": 0.1975473066391, "t": 0.3015094502008}
+    IM = 139968
+    IA = 3877
+    IC = 29573
+
+    # Generate sequences and print output
+    print(">ONE Homo sapiens alu")
+    print(ALU_sequence[:n*2])
+    print("\n>TWO IUB ambiguity codes")
+    sequence = ""
+    cumulative_probs = cumulative_probabilities([v for k, v in IUB_alphabet.items()])
+    for _ in range(n*3):
+        sequence += select_nucleotide(cumulative_probs)
+    print(sequence)
+    print("\n>THREE Homo sapiens frequency")
+    sequence = ""
+    cumulative_probs = cumulative_probabilities([v for k, v in Homo_sapiens_alphabet.items()])
+    for _ in range(n*5):
+        sequence += select_nucleotide(cumulative_probs)
+    print(sequence)
+
+if __name__ == "__main__":
+    import sys
+    N = int(sys.argv[1])
+    generate_fasta(N, ALU_sequence, Homo_sapiens_alphabet)
+```
+
+### Key Requirements
+- The code must be implemented in Python
+- Receives `N` as a command-line argument
+- Uses the LCG with the exact constants defined above
+- Uses the ALU sequence, IUB and Homo sapiens alphabets with their exact probabilities as defined above
+- Produces output in the exact format specified above
+- Does not cache the random number sequence
+
+### Variable Values
+- ALU_sequence: The given ALU sequence
+- IUB_alphabet: The IUB alphabet and probabilities
+- Homo_sapiens_alphabet: The Homo sapiens alphabet and probabilities
+- IM, IA, IC: The LCG constants defined above
+
+### Notes
+- This prompt is designed to generate Python code that follows the structure of the example provided while enforcing the critical constraints. It may require some adjustments based on the target LLM's capabilities and behavior.

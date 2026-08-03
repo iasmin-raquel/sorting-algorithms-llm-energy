@@ -1,0 +1,36 @@
+### Prompt Structure
+Create a C++ program that takes N as a command-line argument and generates DNA sequences based on the given rules. The output should follow the specified format with three sequences.
+
+### Key Requirements
+1. The generated code must be implemented in C++.
+2. The program should receive N as a command-line argument.
+3. Use the provided LCG for generating random numbers.
+4. Include the ALU sequence, IUB and Homo sapiens alphabets with their exact probabilities.
+5. The output must adhere to the specified format.
+6. Do not cache the random number sequence.
+
+### Variable Values
+#### ALU Sequence (used for repeat fasta)
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+
+#### IUB Alphabet and Probabilities
+a=0.27, c=0.12, g=0.12, t=0.27,
+B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,
+N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+
+#### Homo sapiens Alphabet and Probabilities
+a=0.3029549426680, c=0.1979883004921,
+g=0.1975473066391, t=0.3015094502008
+
+#### LCG Constants
+IM = 139968
+IA = 3877
+IC = 29573
+Seed = 42
+
+### Notes
+Ensure that the generated code meets all the key requirements and uses the exact variable values provided. The program should not cache the random number sequence. The output format must be identical to the reference when validated with "diff output.txt reference.txt" for N=1000.

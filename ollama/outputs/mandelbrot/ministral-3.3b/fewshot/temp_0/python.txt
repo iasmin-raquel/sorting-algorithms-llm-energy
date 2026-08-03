@@ -1,115 +1,84 @@
-### Prompt Structure
-**Few-shot Example for Mandelbrot Set Generation in Python (PBM P4 Output):**
+---
+
+### **Prompt Structure**
+**Few-shot example for Mandelbrot set generation in Python (PBM P4 output):**
 
 ---
-**Example 1:**
+#### **Example 1: N=8 (for illustration)**
 ```python
-# Mandelbrot set generator for N=200, 50 iterations, escape threshold 4.0
 import sys
 
 def mandelbrot_pbm(N):
-    # Initialize PBM header
-    print(f"P4\n{N} {N}\n")
+    lim = 2.0 * 2.0
+    max_iter = 50
 
-    for i in range(N):
-        row = []
-        for j in range(N):
-            # Map (i,j) to complex plane coordinates
-            x_real = -1.5 + (2.0 / N) * j
-            y_imag =  1.0 - (2.0 / N) * i
+    # Coordinate mapping for C in [-1.5, 0.5] × [-1.0, 1.0]
+    for y in range(N):
+        for x in range(N):
+            # Map (x,y) → real(C), imag(C)
+            c_real = 2.0 * x / N - 1.5
+            c_imag = 2.0 * y / N - 1.0
 
-            zx, zi = 0.0, 0.0
-            iterations = 0
-            while abs(zx**2 + zi**2) < 4.0 and iterations < 50:
-                zi = 2*zx*zi + y_imag
-                zx = zx**2 - zi**2 + x_real
-                iterations += 1
+            z_real, z_imag = 0.0, 0.0
+            iter_count = 0
+            while (z_real*z_real + z_imag*z_imag <= lim) and (iter_count < max_iter):
+                new_z_real = z_real * z_real - z_imag * z_imag + c_real
+                new_z_imag = 2.0 * z_real * z_imag + c_imag
+                z_real, z_imag = new_z_real, new_z_imag
+                iter_count += 1
 
-            row.append(iterations if iterations == 50 else 0)
-        # Pack bits MSB-first, zero-padded per row
-        packed_row = int(''.join(str(b) for b in row), 2)
-        print(packed_row.to_bytes(1, 'big'))
+            # Pack bits (MSB=in set, LSB=not in set)
+            pixel_byte = (iter_count == max_iter) << 7
+            sys.stdout.buffer.write(pixel_byte.to_bytes(1, byteorder='big'))
 
-if __name__ == "__main__":
-    mandelbrot_pbm(int(sys.argv[1]))
-```
-
----
-**Example 2:**
-```python
-# Simplified version (same logic, different variable names)
-import sys
-
-def generate_mandelbrot(N):
-    print("P4\n", N, N)  # Header
-    for row in range(N):
-        packed_row = 0
-        for col in range(N):
-            x = -1.5 + (2.0 / N) * col
-            y =  1.0 - (2.0 / N) * row
-
-            zx, zi = 0.0, 0.0
-            count = 0
-            while abs(zx**2 + zi**2) < 4.0 and count < 50:
-                zi = 2*zx*zi + y
-                zx = zx**2 - zi**2 + x
-                count += 1
-
-            packed_row |= (count if count == 50 else 0) << (8 * col)
-        print(packed_row.to_bytes(1, 'big'))
-
-if __name__ == "__main__":
-    generate_mandelbrot(int(sys.argv[1]))
-```
+        # Pad last row to 8 bytes if N % 8 != 0
+        padding = (N % 8) * 0xFF
+        sys.stdout.buffer.write(padding.to_bytes((N + 7) // 8, byteorder='big'))
+    print(f"{N} {N}")
 
 ---
+#### **Example 2: N=16 (header + binary data)**
+*(Omitted for brevity; focus on the loop structure and bit-packing.)*
+
+---
+
 **Target Problem:**
-Plot the Mandelbrot set over the region `[-1.5, 0.5]` (real) × `[-1.0, 1.0]` (imaginary) for an N×N grid.
-Write output in **PBM P4 format**, with:
-- Exactly 50 iterations per point
-- Escape threshold = 4.0
-- Zero-padded bits MSB-first per row.
-
-**Constraints:**
-```python
-import sys
-def mandelbrot_pbm(N):
-    # Your implementation here
-    pass
-
-if __name__ == "__main__":
-    mandelbrot_pbm(int(sys.argv[1]))
-```
+Write a Python script that:
+1. Takes `N` as a command-line argument.
+2. Generates the Mandelbrot set in PBM P4 format (header + packed bits).
+3. Uses **exactly**:
+   - `max_iter = 50`
+   - `lim = 2.0 * 2.0`
+   - Coordinate mapping: `real(C) = 2.0*x/N - 1.5`, `imag(C) = 2.0*y/N - 1.0`.
+4. Outputs to stdout **exactly** as specified (header + binary data).
+5. Must validate for `N=200` with `cmp`.
 
 ---
+### **Key Requirements**
+- **Strict adherence to PBM P4 format**:
+  - Header: `"P4\nN N"` (no quotes, newline after header).
+  - Binary pixel data: 8 bits per pixel (MSB = in set), packed MSB-first.
+  - Padding: Last row padded with zeros if `N % 8 != 0`.
+- **No floating-point inaccuracies**: Use exact arithmetic for `lim` and coordinate mapping.
+- **Iteration formula**: `Z = Z*Z + C` (complex multiplication).
+- **Input/Output**:
+  - Read `N` from `sys.argv[1]`.
+  - Write header + binary data to stdout (no file I/O).
+- **Performance**: Optimize for speed (avoid redundant calculations).
 
-### Key Requirements
-- **Input Handling**: Read `N` from `sys.argv[1]` as an integer.
-- **Algorithm**:
-  - Map each pixel `(i,j)` to complex plane coordinates using linear interpolation:
-    `x = -1.5 + (2.0/N)*j`, `y = 1.0 - (2.0/N)*i`.
-  - Compute Mandelbrot iterations for `z₀ = x + iy` until escape or max iterations.
-- **Output Format**:
-  - PBM P4 header: `"P4\nN N"` followed by binary pixel data.
-  - Pixel encoding: Pack bits MSB-first, zero-padded per row (e.g., 200×200 → 16-bit rows).
-  - Write each packed row as a single byte (`to_bytes(1, 'big')`).
+---
+### **Variable Values**
+| Parameter          | Value               |
+|---------------------|---------------------|
+| Maximum iterations   | `50`                |
+| Escape threshold    | `lim = 2.0 * 2.0`   |
+| Coordinate bounds   | Real: [-1.5, 0.5], Imag: [-1.0, 1.0] |
+| Bit-packing         | MSB = in set (≤ lim), LSB = not in set (> lim) |
+
+---
+### **Notes**
+- **Ambiguity Risk**: The prompt avoids specifying exact bit-padding logic for the last row (e.g., "pad with zeros"), trusting the model to infer it from PBM standards. Clarify if the model deviates.
 - **Edge Cases**:
-  - Escape threshold = 4.0; iterations ≤ 50 → output `0`, else `iterations`.
-- **No External Libraries**: Use only Python’s built-ins (e.g., `math.sqrt`, `int.to_bytes`).
-
----
-
-### Variable Values
-| Parameter          | Value       |
-|---------------------|-------------|
-| Maximum Iterations   | 50          |
-| Escape Threshold    | 4.0         |
-| Real Range          | [-1.5, 0.5] |
-| Imaginary Range     | [-1.0, 1.0] |
-
----
-### Notes
-1. **Bit Packing**: The examples use `int.to_bytes(1, 'big')` for simplicity; ensure the output matches PBM’s packed format (MSB-first, zero-padded). For N=200, each row requires 200 bits → 3 bytes (since 200 mod 8 = 4 bits left over).
-2. **Ambiguity Risk**: The prompt avoids specifying exact bit-packing logic by referencing the examples’ `<<` shifts and `to_bytes`, but the LLM must infer that zero-padding is required for rows with non-multiples of 8 bits.
-3. **Performance Note**: For N=200, the loop will generate ~40K bytes of output; ensure the implementation avoids redundant calculations (e.g., precompute `2/N`).
-4. **Header Format**: The PBM header must be printed as plain text before binary data.
+  - `N=1`: Single pixel at `(0,0)` → always in set (iter_count = 50).
+  - `N % 8 != 0`: Explicit padding required; ensure trailing bytes are zero.
+- **Expected Behavior**: The model should prioritize correctness over optimization for N=200. Focus on exact PBM compliance and iteration logic.

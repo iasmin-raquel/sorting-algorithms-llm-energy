@@ -1,0 +1,28 @@
+### Prompt Structure
+Implement a Java program that calculates the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons). The program should perform the following steps:
+
+1. Initialize variables q, r, t, and k according to the given initial state.
+2. Implement the next_step function as described in the algorithm.
+3. Implement extract(x) and produce(d) functions as defined above.
+4. Advance the algorithm using next_step until q > r is false.
+5. Determine the digit d by calling extract(3).
+6. If the digit d matches the result of extract(4), output the digit d, and call produce(d). Otherwise, continue with the next step.
+7. Format the output as specified in the problem description, printing 10 digits per line, with a running total at the end of each line.
+8. Receive N as a command-line argument to determine the number of digits to calculate and print.
+
+### Key Requirements
+- The program must be implemented in Java using BigInteger for arbitrary precision arithmetic.
+- The program should receive N as a command-line argument.
+- The program must use the initial state, next_step, extract, and produce operations exactly as defined above.
+- The program should perform both extract(3) and extract(4) for digit verification.
+- The output format should be identical to the one specified in the problem description.
+
+### Variable Values
+- q: BigInteger initialized with value 1
+- r: BigInteger initialized with value 0
+- t: BigInteger initialized with value 1
+- k: int initialized with value 0
+
+### Notes
+- The program may need to handle potential overflow or underflow issues when performing arithmetic operations with large numbers.
+- It is essential to ensure that the output format matches the one specified in the problem description for correct validation.

@@ -1,0 +1,53 @@
+### Prompt Structure
+
+Act as an expert Python developer tasked with implementing the Unbounded Spigot Algorithm for calculating Pi's first N digits. You must adhere strictly to the following problem description and algorithm requirements.
+
+Decompose your reasoning into clear, intermediate steps before producing the final code:
+
+1. **Initialization**: Define variables `q`, `r`, `t` in their starting values (as per the problem).
+2. **Algorithm Loop**:
+   - Execute `next_step()` operations sequentially until condition `q > r` evaluates to `False`.
+3. **Digit Extraction & Verification**:
+   - For each computed step, determine whether to output a digit using both `extract(3)` and `extract(4)` comparisons.
+   - Call `produce(d)` only if the digits match; otherwise, repeat until they match or exhaust conditions.
+4. **Output Formatting**:
+   - Output every 10 digits per line (padding with spaces if needed).
+   - Include a tab-separated `\t:N` suffix with running total N, where N is provided as a command-line argument.
+
+**Constraints for Implementation**:
+- Use **native Python arbitrary precision integers** (no external libraries like `decimal`).
+- Maintain variables in the exact order specified (`k`, `r`, `t`, `q` → updated via `next_step()`).
+- Ensure `extract(x)` returns floor division: `(q*x + r) // t`.
+- Implement `produce(d)` exactly as described, including scaling by 10 and subtraction logic.
+
+**Input Handling**:
+- Accept N from command-line arguments (e.g., `python script.py 30`).
+- Validate input to ensure it is a positive integer.
+
+**Output Validation**:
+- Output must match the **exact format**: 10 digits per line, padded with spaces, followed by `\t:N`, where N is dynamically updated.
+- If last line has <10 digits, append spaces until column reaches 10 characters *before* `\t:N`.
+
+---
+### Key Requirements
+- **Algorithm Strictness**: Follow every step in `next_step()`, `extract()`, and `produce()` without deviation.
+- **Variable Ordering**: Update variables in the exact sequence (`k→r→t→q`) per problem description.
+- **Digit Verification**: Always compare `d = extract(3)` vs. `d = extract(4)` before emitting output.
+- **Output Precision**: Pad lines to 10 digits; include `\t:N` for each line with cumulative N (1-based indexing).
+- **Error Handling**: Reject non-integer/negative inputs (fail gracefully if invalid).
+
+---
+### Variable Values
+| Variable | Initial Value | Change Sequence                          |
+|----------|---------------|----------------------------------------|
+| q        | 1             | Updated via `next_step()`               |
+| r        | 0             | Updated sequentially after `q`          |
+| t        | 1             | Multiplied by `(2k + 1)` per iteration   |
+| k        | 0             | Incremented first (`k = k + 1`)          |
+
+---
+### Notes
+- **Ambiguity Risks**: Clarify whether the problem expects `next_step()` to be called repeatedly in a loop, or if it should be modeled as a procedural function.
+- **Termination Condition**: `q > r` must trigger a loop exit for digit extraction (avoid infinite loops if misimplemented).
+- **Edge Cases**: Handle N=1 explicitly; ensure digit padding does not affect `\t:N` suffix alignment (e.g., line with "10 digits" → 3 spaces + `\t:10`).
+- **Model Behavior**: Expect the LLM to enforce exact integer arithmetic (no floats) and validate outputs against the reference format.

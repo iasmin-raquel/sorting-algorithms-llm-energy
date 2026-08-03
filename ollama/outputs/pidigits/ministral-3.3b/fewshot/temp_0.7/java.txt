@@ -1,0 +1,109 @@
+**Few-Shot Prompt for Pi Calculation with Unbounded Spigot Algorithm**
+
+---
+### **Prompt Structure:**
+To generate a Java implementation of the **Unbounded Spigot Algorithm (Gibbons)** for calculating *N* digits of π using arbitrary precision arithmetic, provide the following template:
+
+---
+
+#### **Example 1: A Simplified Arithmetic Loop**
+```java
+import java.math.BigInteger;
+
+public class PiSpigotLoop {
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]); // Example: N=30
+
+        BigInteger q = new BigInteger("1");
+        BigInteger r = new BigInteger("0");
+        BigInteger t = new BigInteger("1");
+
+        for (int digitCount = 0; digitCount < N; ) {
+            int k = 0;
+            // Step-by-step updates (pseudo-code placeholder)
+            updateState(q, r, t);
+
+            // Extract a digit (simplified: just `extract(3)` here)
+            BigInteger d = extract(q, r, t, 3);
+            System.out.println(d.intValue());
+
+            // State recovery/advance logic omitted for brevity.
+        }
+    }
+
+    private static void updateState(BigInteger q, BigInteger r, BigInteger t) {
+        k += 1;
+        r = (r + 2 * q).mod(new BigInteger("9e+18")); // Arbitrary precision placeholder
+        t = t.multiply((k * 2L + 1));
+        q = q.multiply(k);
+    }
+
+    private static int extract(BigInteger q, BigInteger r, BigInteger t, long x) {
+        return (q * x + r).divide(t).intValue();
+    }
+}
+```
+---
+#### **Example 2: Key Output Formatting**
+```java
+import java.math.BigInteger;
+
+public class PiSpigotFormatted {
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]);
+        BigInteger q = new BigInteger("1");
+        BigInteger r = new BigInteger("0");
+        BigInteger t = new BigInteger("1");
+
+        for (int lineCount = 0; lineCount < N / 10; ) {
+            printLine(q, r, t, 10); // Extract 10 digits
+            nextStep(q, r, t);
+            lineCount++;
+        }
+    }
+
+    private static void printLine(BigInteger q, BigInteger r, BigInteger t, int digits) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < digits && hasDigits(); ) {
+            long d = extract(q, r, t, 3);
+            sb.append(d);
+            if (d != extract(q, r, t, 4)) { break; } // Digit selection rule.
+            produce(q, r, t, d);
+        }
+        System.out.println(sb + "\t:N"); // Format with \t and running total
+    }
+
+    private static void nextStep(BigInteger q, BigInteger r, BigInteger t) {
+        int k = 0;
+        // Apply Gibbons’ steps (omitted for brevity).
+    }
+}
+```
+---
+### **Target Problem:**
+Now implement the *full* algorithm with:
+1. **Arbitrary precision arithmetic** using `java.math.BigInteger`.
+2. **Digit selection logic**:
+   - Extract `d = extract(3)`; output if `d == extract(4)`, else restart.
+   - Call `produce(d)` when a digit is output (shift state).
+3. **Output format**:
+   - 10 digits per line, padded with spaces.
+   - End each line with `\t:N`, where *N* = command-line argument.
+
+---
+### **Key Requests to the LLM:**
+1. Write a complete Java class (`PiSpigot`) adhering to these rules.
+2. Use only:
+   - `BigInteger` for arbitrary precision.
+   - Command-line args: `new String[] { "30" }`.
+3. Validate output matches reference.txt (e.g., 30 digits) when run.
+
+---
+### **Expected Output Example:**
+For `N=30`, the output should resemble:
+```
+314159265358979323846\t:10
+...
+\t:30
+```
+---

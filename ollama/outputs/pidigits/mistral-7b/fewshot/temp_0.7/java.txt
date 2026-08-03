@@ -1,0 +1,60 @@
+Prompt: Given the example code provided, generate a Java program that solves the Pidigits problem using the Unbounded Spigot Algorithm. The program should use BigInteger for arbitrary precision arithmetic and receive `N` as a command-line argument. The output format should be similar to the example, printing 10 digits per line with spaces padding any shorter lines, ending each line with a tab, colon, and running total: "\t:N". The program should follow the structure of the provided example in terms of argument reading, stateful loop, and formatted output.
+
+Example code (Pidigits):
+
+```java
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Pidigits {
+    static final BigInteger TWO = BigInteger.valueOf(2);
+    static BigInteger q, r, t, k;
+
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int n = Integer.parseInt(args[0]);
+        System.out.printf(">Pi to %d digits\n", n);
+        q = BigInteger.ONE;
+        r = BigInteger.ZERO;
+        t = TWO;
+        k = BigInteger.ZERO;
+        printDigits(n * 10);
+        sc.close();
+    }
+
+    static void next_step() {
+        k = k.add(BigInteger.ONE);
+        r = r.add(q.multiply(TWO));
+        r = r.multiply(r.add(k.multiply(TWO)).shiftLeft(1));
+        t = t.multiply(r.add(k.multiply(TWO)).shiftLeft(1));
+        q = q.multiply(k);
+    }
+
+    static BigInteger extract(int x) {
+        return q.multiply(BigInteger.valueOf(x)).add(r).divide(t);
+    }
+
+    static void produce(int d) {
+        q = q.multiply(BigInteger.TEN);
+        r = r.subtract(t.multiply(BigInteger.valueOf(d))).shiftLeft(1);
+    }
+
+    static void printDigits(int total) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        while (count < total) {
+            next_step();
+            BigInteger d = extract(3);
+            if (d.equals(extract(4))) {
+                sb.append(d);
+                count++;
+                if (count % 10 == 0) {
+                    System.out.printf("%s%d\t: %d%n", sb, d, count);
+                    sb = new StringBuilder();
+                }
+            }
+        }
+        System.out.printf("%s%d\t: %d%n", sb, d, count);
+    }
+}
+```

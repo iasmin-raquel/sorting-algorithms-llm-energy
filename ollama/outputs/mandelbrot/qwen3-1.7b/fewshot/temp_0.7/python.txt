@@ -1,23 +1,29 @@
 ### Prompt Structure
-Generate a Python script to compute the Mandelbrot set for N=200 pixels, using 50 iterations and escape threshold 4.0. The output must be in PBM P4 format with MSB-first packing and zero-padding per row. The script should read N from command line arguments and produce the correct header and pixel data.
+You are to implement the Mandelbrot set in Python according to the following specifications:
+- Accept N as a command-line argument.
+- Use exactly 50 iterations with escape threshold lim = 2.0 * 2.0.
+- Calculate using squared magnitude (zr*zr + zi*zi) to avoid square roots.
+- Map real(C) = 2.0 * x / N - 1.5 and imag(C) = 2.0 * y / N - 1.0.
+- Output PBM P4 header and binary pixel data to stdout.
+- Ensure output is validatable with cmp for N=200.
 
 ### Key Requirements
-- Use exactly 50 iterations
-- Escape threshold: 4.0
-- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
-- Output PBM P4 format with MSB-first packing
-- Write byte-by-byte to stdout in portable bitmap format
-- N is specified as command-line argument
+- N must be provided as a command-line argument.
+- Maximum iterations: 50.
+- Escape threshold: lim = 2.0 * 2.0.
+- Use squared magnitude (zr² + zi²) for calculations.
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0.
+- Output must be in PBM P4 format (header "P4\n" followed by "N N\n").
+- Pixels packed 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set).
+- Pad with zeros if N not divisible by 8.
 
 ### Variable Values
-- N = 200
-- max_iter = 50
-- escape_threshold = 4.0
-- plot_real = -1.5
-- plot_imag = 1.0
+- N: integer command-line argument.
+- Iterations: 50.
+- Lim: 4.0.
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0.
 
 ### Notes
-- The output must match the reference for N=200
-- PBM P4 requires a header with "P4" and the correct dimensions
-- MSB-first packing implies the pixel data is stored in reverse order
-- Zero-padding per row ensures proper alignment in the bitmap format
+- Ensure coordinate mapping correctly maps the Mandelbrot region.
+- Handle padding for odd N by appending zeros to rows.
+- Verify output validity with cmp for N=200.

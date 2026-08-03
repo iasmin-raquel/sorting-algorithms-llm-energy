@@ -1,0 +1,32 @@
+### Prompt Structure
+Here is a prompt that instructs the target LLM to implement the Pidigits problem using the Unbounded Spigot Algorithm (Gibbons). The example code provided demonstrates the expected style and structure, but not the content of the solution. The prompt will guide the model to extract only the general structure while ensuring that the Python code produced meets the specific requirements of this problem.
+
+```python
+# The Computer Language Benchmarks Game
+# contributed by [Your Name]
+
+import sys
+import math
+from mpmath import mp
+
+def main(n):
+    # Your implementation here
+
+if __name__ == '__main__':
+    main(int(sys.argv[1]) if len(sys.argv) > 1 else 30)
+```
+
+### Key Requirements
+- The Python code must be implemented using native arbitrary precision integers (mpmath library).
+- The code should receive N as a command-line argument.
+- Use the initial state, next_step, extract and produce operations exactly as defined above.
+- Perform both extract(3) and extract(4) for digit verification.
+- Output must adhere to the specified format: 10 digits per line, padded with spaces on the right, ending with a tab, colon, and running total ("\t:N").
+
+### Variable Values
+- Initial state: q = 1, r = 0, t = 1, k = 0
+- Algorithm parameters for next_step, extract, and produce are as defined above.
+
+### Notes
+- The prompt may generate code that does not perfectly follow the example provided due to differences in style or approach while still meeting all key requirements.
+- The output produced by this LLM will need to be compiled and run with mpmath installed before testing against the reference solution.

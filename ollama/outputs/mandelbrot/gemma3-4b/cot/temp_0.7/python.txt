@@ -1,33 +1,68 @@
 ### Prompt Structure
-You are an expert Python programmer tasked with implementing the Mandelbrot set problem from the Computer Language Benchmarks Game. Your goal is to generate a complete, executable Python script that plots the Mandelbrot set within the specified region and writes the output in PBM P4 format to standard output. Follow these steps:
+You are an expert Python programmer tasked with implementing the Mandelbrot set benchmark problem from the Computer Language Benchmarks Game. Your goal is to generate a complete and executable Python script that fulfills all requirements precisely. I will provide you with instructions, and you must respond with only the Python code itself.
 
-1.  **Initialization:** Start by importing necessary libraries (e.g., `sys`, `math`). Handle command-line arguments for N.
-2.  **Parameter Definition:** Set the maximum iterations to 50 and the escape threshold to 4.0, as specified in the problem description.
-3.  **Plot Region:** Define the plotting region for the real part ([-1.5, 0.5]) and imaginary part ([-1.0, 1.0]).
-4.  **Mandelbrot Calculation:** Implement the Mandelbrot set calculation using a nested loop structure. For each complex number `c`, iterate up to 50 times, calculating `z` iteratively according to `z = z*z + c`. If `abs(z) > 4.0`, mark the point as an escape.
-5.  **Bitmap Generation:** Create a 2D array (or list of lists) to represent the bitmap. Each element in the array will indicate whether the corresponding pixel belongs to the Mandelbrot set (0) or is an escape (1).
-6.  **PBM P4 Output:** Write the output in PBM P4 format, starting with the header: "P4\n" followed by the width and height of the image, then the binary pixel data where each byte represents a row of pixels (0s and 1s). Ensure MSB packing and zero-padding per row as required. Output should be written to standard output (stdout).
-7.  **Command Line Argument Handling:** Take N as an argument from the command line using `int(sys.argv[1])`.
+First, let's break down the problem into smaller, manageable steps:
 
-Now, write the Python code to fulfill these steps. Ensure that your code is well-commented and adheres strictly to all specified constraints.
+1.  **Input:** The script should accept an integer `N` as a command-line argument. This value determines the size of the bitmap (image) to be generated.
+2.  **Initialization:** Set the maximum number of iterations to 50 and the escape threshold (`lim`) to 2.0 * 2.0. Initialize the complex number `Z` to 0 + 0i.
+3.  **Coordinate Mapping:** Define functions to map the Cartesian coordinates (x, y) to the complex plane based on the given range [-1.5 - i, 0.5 + i] and the bitmap dimensions N. Specifically:
+
+    *   `real(C) = 2.0 * x / N - 1.5`
+    *   `imag(C) = 2.0 * y / N - 1.0`
+
+4.  **Iteration:** Implement the Mandelbrot iteration formula: `Z = Z*Z + C`. Perform this calculation for each point (x, y) in the bitmap up to a maximum of 50 iterations.
+5.  **Escape Condition:** Check if the magnitude squared of `Z` (`zr*zr + zi*zi`) exceeds the escape threshold (`lim`). If it does, set the corresponding pixel to 0 (not in the set). Otherwise, set the pixel to 1 (in the set).
+6.  **Output Formatting:** Generate the PBM P4 bitmap header and binary pixel data. The header should be "P4\n" followed by "N N\n". Each byte contains 8 bits, where the most significant bit (MSB) indicates whether the point is in the Mandelbrot set (1) or not (0). Pad the last byte of each row with zeros if `N` is not divisible by 8. Finally, write the header and the binary pixel data to standard output.
+7.  **Validation:** The generated bitmap must be identical to the reference when validated using the `cmp` command. Ensure that N=200 is used for validation.
+
+Now, please generate the complete Python code according to these steps. Do not include any comments or explanations in the code itself; just provide the functional implementation.
+```python
+import sys
+import math
+
+def mandelbrot(N):
+    """
+    Generates a Mandelbrot set bitmap image.
+    """
+    # Header
+    print("P4\n")
+    print(str(N) + " " + str(N) + "\n")
+
+    lim = 2.0 * 2.0
+    for y in range(N):
+        for x in range(N):
+            # Coordinate mapping
+            real_c = 2.0 * x / N - 1.5
+            imag_c = 2.0 * y / N - 1.0
+            c = complex(real_c, imag_c)
+
+            z = complex(0, 0)
+            for i in range(50):
+                zr = z.real
+                zi = z.imag
+                z = z*z + c
+                if (zr*zr + zi*zi) > lim:
+                    break
+
+            # Output pixel data
+            print(int(bin(i)[2:].zfill(8)), end='')
+```
 
 ### Key Requirements
-*   The script must be written in Python 3.
-*   It must accept an integer argument `N` representing the size of the bitmap (width and height).
-*   The maximum iterations for the Mandelbrot calculation must be set to 50.
-*   The escape threshold must be set to 4.0.
-*   The plotting region must be [-1.5, 0.5] for the real part and [-1.0, 1.0] for the imaginary part.
-*   The output format must be PBM P4 (Portable Bitmap).
-*   The header of the PBM P4 file ("P4\nwidth height") must be written to standard output as text.
-*   The pixel data must be written in binary format, with MSB packing and zero-padding per row.
-*   The width and height are determined by N.
-*   The script should handle the command line argument correctly.
+*   The code must be written in Python.
+*   It must accept an integer `N` as a command-line argument.
+*   It must use exactly 50 iterations for the Mandelbrot calculation.
+*   The escape threshold (`lim`) must be set to 2.0 * 2.0.
+*   The output format must strictly adhere to PBM P4 (header and binary pixel data).
+*   The coordinate mapping should precisely calculate `real(C)` and `imag(C)`.
+*   The output must be validatable using the `cmp` command with N=200 for comparison against a reference image.
 
 ### Variable Values
 *   Maximum iterations: 50
-*   Escape threshold: 4.0
-*   Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-*   Output format: PBM P4 (bits packed MSB first, zero-padded per row)
+*   Escape threshold (squared): lim = 2.0 * 2.0
+*   N: Command-line argument
+*   Real part of C: 2.0 * x / N - 1.5
+*   Imaginary part of C: 2.0 * y / N - 1.0
 
 ### Notes
-This prompt emphasizes chain-of-thought prompting to guide the LLM towards a correct implementation. The detailed breakdown of steps is crucial for ensuring that the model understands the requirements and generates code that adheres to all constraints, particularly the specific output format (PBM P4).  The inclusion of parameter values explicitly reinforces these critical aspects. The prompt avoids giving away the code directly and instead focuses on instructing the LLM through a logical process.
+The prompt emphasizes the importance of precise implementation and validation, particularly regarding the binary pixel representation and the `cmp` command. The provided code is a direct translation of the step-by-step instructions, focusing on functionality rather than explanation. This approach aligns with the Chain-of-Thought prompting technique by guiding the LLM to decompose the problem into distinct phases before generating the final code.

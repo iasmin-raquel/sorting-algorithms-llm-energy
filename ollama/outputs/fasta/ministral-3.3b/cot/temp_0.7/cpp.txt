@@ -1,0 +1,138 @@
+### Prompt Structure
+To generate a C++ program that implements the FASTA problem by:
+1. Producing three DNA sequences using specified probabilistic alphabets (Homo sapiens and IUB ambiguity codes),
+2. Implementing both **repeat fasta** (copying from ALU sequence) and **random fasta** (weighted random selection based on given probabilities), ensuring:
+   - Output adheres to the exact line format (60 characters, three sequences in order):
+     ```
+     >ONE Homo sapiens alu [n*2 chars]
+     >TWO IUB ambiguity codes [n*3 chars]
+     >THREE Homo sapiens frequency [n*5 chars]
+     ```
+   - Correct usage of the given **Linear Congruential Generator (LCG)** with specified constants for randomness.
+   - No caching of random numbers between nucleotide selections.
+
+Use the following Chain-of-Thought reasoning steps:
+1. Define the exact input/output structure and constraints, including line length and sequence generation requirements.
+2. Break down each sequence into its respective components (repeat vs. random fasta) and ensure the specified alphabets/probabilities are applied correctly.
+3. Derive cumulative probabilities for weighted selection in IUB/Homo sapiens alphabets.
+4. Implement LCG to generate random numbers, using them to select nucleotides via linear search against cumulative probabilities.
+5. Validate correctness by comparing output with reference files for N=1000 (use `diff` command) and ensure no caching of RNG state.
+
+---
+**Code Template Structure:**
+```cpp
+#include <iostream>
+#include <string>
+#include <random>
+
+int main(int argc, char* argv[]) {
+    // 1. Parse command-line argument 'N' (exact format: N)
+    int N = [validate input]; // Validate via regex or manual check
+
+    // Define constants and alphabets (as per problem statement).
+    const std::string ALU_SEQ = "GGCCGGGCGCGGTGGCTCACGC..."; // Full ALU sequence
+    // Alphabets and probabilities for each sequence type.
+    // Use cumulative probabilities to select nucleotides.
+
+    // Generate sequences:
+    // 1. Repeat fasta (ALU, length N*2)
+    std::string seq1 = [generate using ALU_SEQ with repeat logic];
+    // 2. Random fasta (IUB, length N*3) via weighted selection.
+    std::string seq2 = [implement cumulative probabilities and LCG];
+    // 3. Random fasta (Homo sapiens, length N*5).
+    std::string seq3 = [same as above but with Homo sapiens probs];
+
+    // Output in exact format:
+    std::cout << ">ONE Homo sapiens alu" << seq1.substr(0, N*2) << "\n";
+    std::cout << ">TWO IUB ambiguity codes" << seq2.substr(0, N*3) << "\n";
+    std::cout << ">THREE Homo sapiens frequency" << seq3.substr(0, N*5) << "\n";
+
+    return 0;
+}
+```
+
+---
+### Key Requirements
+- **Language**: Explicitly enforce C++ (no other languages).
+- **LCG Implementation**:
+  - Use exact constants (`IM=139968`, `IA=3877`, `IC=29573`) with `Seed = 42`.
+  - Generate random numbers per nucleotide selection *without caching*.
+- **Probability Handling**: Convert given probabilities into cumulative values for IUB/Homo sapiens alphabets to enable weighted random selection via linear search.
+- **Input Validation**: Check if command-line argument `N` exists and is an integer (e.g., via regex or manual checks).
+- **Output Format**:
+  - Line length = 60 characters *except* for the truncated subsequences in each header line (no padding/truncation beyond specified lengths).
+  - No extra whitespace, empty lines, or misaligned sequences.
+- **No External Libraries**: Avoid `rand()`, `<cstdlib>`, etc., and rely solely on LCG.
+- **Sequence Lengths**:
+  - For repeat fasta: Output exactly `N*2` characters (truncate if necessary).
+  - For random fasta: Exact `N*3`/`N*5` characters (no rounding).
+
+---
+### Variable Values
+#### **ALU Sequence**
+- Copied verbatim from problem statement:
+  ```cpp
+  const std::string ALU_SEQ =
+      "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA"
+      "TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT"
+      "AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG"
+      "GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG"
+      "CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+  ```
+
+#### **IUB Alphabet and Probabilities**
+- Base probabilities (per nucleotide):
+  ```cpp
+  // Ordered by cumulative probability: a < c < g < t
+  const double IUB_PROBS[] = {0.27, 0.12, 0.12, 0.27};  // a, c, g, t
+  ```
+- Ambiguous codes and their probabilities:
+  ```cpp
+  // Map ambiguous codes to base pairs (IUB IUPAC) for selection.
+  const std::map<char, double> IUB_AMBIG_PROBS = {
+      {'B', 0.02}, {'D', 0.02}, {'H', 0.02}, {'K', 0.02},
+      {'M', 0.02}, {'N', 0.02}, {'R', 0.02}, {'S', 0.02},
+      {'V', 0.02}, {'W', 0.02}, {'Y', 0.02}
+  };
+  ```
+- **Cumulative Probabilities** (derived for IUB selection):
+  ```cpp
+  // Cumulative probabilities for each ambiguous code (e.g., R = 'a' or 'g')
+  const double IUB_CUM[] = {0.02, 0.04, 0.06, ..., 1.0};
+  ```
+
+#### **Homo sapiens Alphabet and Probabilities**
+- Base probabilities:
+  ```cpp
+  const double HOMO_SAPIENS_PROBS[] = {
+      0.3029549426680,  // a
+      0.1979883004921,  // c
+      0.1975473066391,  // g
+      0.3015094502008   // t
+  };
+  ```
+- **Cumulative Probabilities** (derived for selection):
+  ```cpp
+  const double HOMO_SAPIENS_CUM[] = { ... }; // e.g., {0.30, ..., 1.0}
+  ```
+
+#### **LCG Constants**
+```cpp
+const int IM = 139968;
+const int IA = 3877;
+const int IC = 29573;
+int Seed = 42;
+```
+
+---
+### Notes
+1. **Ambiguity Handling**: For IUB sequences, ambiguous codes (e.g., `R` for 'a' or 'g') must be expanded probabilistically. The exact mapping to bases depends on IUPAC rules (e.g., `R` = A/G). Ensure cumulative probabilities account for this.
+2. **Randomness Invariance**: Since LCG is deterministic with fixed seed, the same sequence will be generated *if inputs/outputs are identical*. This is acceptable for validation but could break if the prompt is slightly altered.
+3. **Precision**: Use floating-point arithmetic for cumulative probabilities to avoid rounding errors during selection (e.g., `double` instead of `int`).
+4. **Edge Cases**:
+   - If `N=0`, handle gracefully with empty output.
+   - Truncate sequences if lengths exceed 60 characters *only* at the end (no padding).
+5. **Validation Risk**: The problem explicitly states to validate for `N=1000`. This is a sanity check but does not imply `N` will always be 1000—validate dynamically.
+6. **Output Format**:
+   - Truncate lines beyond 60 chars *only* in the reference format (e.g., `>ONE...[truncated]`), but ensure the *next* line is padded to 60 characters if needed (though problem says "Line length: 60 characters" may imply no padding). Clarify this ambiguity with the user.
+   - The sequences themselves must be printed as-is, without trimming/padding beyond specified lengths.

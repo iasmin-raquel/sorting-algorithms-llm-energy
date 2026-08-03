@@ -1,0 +1,28 @@
+### Prompt Structure
+Generate a C++ program that implements the Binary Trees problem from the Computer Language Benchmarks Game. The program must:
+- Define a tree node structure with left and right child pointers.
+- Allocate a stretch tree of depth D, check it exists, and deallocate it.
+- Allocate a long-lived tree that persists while other trees are deallocated.
+- Allocate, walk, and deallocate many bottom-up trees (depth D), ensuring the long-lived tree remains valid.
+- Output in the specified format with checks for N=10.
+
+### Key Requirements
+- Define a node structure with left and right pointers.
+- Allocate stretch tree of depth D (max_depth + 1), check existence, and deallocate.
+- Allocate long-lived tree that persists across allocations/deallocations.
+- Allocate, walk, and deallocate bottom-up trees (depth D) for each depth from min_depth (4) to max_depth (max(6, N)).
+- Ensure output matches reference for N=10, with checks "check: C" for each depth line.
+- Do not optimize away work, preserve memory allocation patterns.
+
+### Variable Values
+- min_depth = 4
+- max_depth = max(6, N)
+- stretch_depth = max_depth + 1
+- iterations = 1 << (max_depth - depth + min_depth)
+- N received via command-line argument
+
+### Notes
+- Ensure leaf nodes and interior nodes have same memory allocation.
+- Preserve tree structure for bottom-up allocations.
+- Match reference output for N=10, including depth ranges and check: C format.
+- Avoid optimizing away work, preserve allocation patterns for validation.

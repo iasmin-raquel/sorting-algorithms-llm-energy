@@ -1,0 +1,60 @@
+### Prompt Structure
+```
+You are an expert C++ code generator tasked with creating a program to implement the Binary Trees problem from the Computer Language Benchmarks Game. This program must precisely replicate Jeremy Zerfas's C program, focusing on memory allocation and deallocation of binary trees for thorough testing.  Your output should be executable C++ code that fulfills all requirements outlined below.
+
+**Task:** Generate C++ code to create and manipulate binary trees according to the problem description. The code must:
+
+1. **Define a Tree Node Structure:** Create a `TreeNode` structure with `left` and `right` child pointers.
+2. **Command-Line Argument:** Accept an integer 'N' as a command-line argument, which will determine the maximum depth of the trees created.
+3. **Parameter Calculation:** Calculate `min_depth`, `max_depth`, and `stretch_depth` based on the following:
+   - `min_depth = 4`
+   - `max_depth = max(min_depth + 2, N)`
+   - `stretch_depth = max_depth + 1`
+4. **Stretch Tree:** Allocate a binary tree of depth `stretch_depth` and print the check value (C).
+5. **Long-Lived Tree:** Allocate a long-lived binary tree of depth `max_depth` and print the check value (C). Verify its existence after other trees are created and destroyed.
+6. **Bottom-Up Trees:**  For each depth from `min_depth` to `max_depth` in steps of 2:
+   - Allocate a binary tree of that depth.
+   - Walk the tree, counting the nodes.
+   - Deallocate the tree.
+   - Print the check value (C).
+7. **Output Format:**  Produce output in the specified format: `"Depth\t trees of depth D\t check: C"` for each depth.
+
+**Example Output (for N=10):**
+
+```
+stretch tree of depth 5	 check: C
+stretch tree of depth 7	 check: C
+stretch tree of depth 9	 check: C
+stretch tree of depth 11	 check: C
+long lived tree of depth 7	 check: C
+I	 trees of depth 4	 check: C
+I	 trees of depth 6	 check: C
+I	 trees of depth 8	 check: C
+I	 trees of depth 10	 check: C
+I	 trees of depth 12	 check: C
+```
+
+Now, write the complete C++ code to fulfill these requirements.  Ensure that all memory allocations are performed and deallocated correctly, and that the output matches the example format exactly. Use appropriate comments to explain your code.
+```
+
+### Key Requirements
+*   The generated code must be valid C++.
+*   It must accept an integer `N` as a command-line argument.
+*   It must calculate `min_depth`, `max_depth`, and `stretch_depth` according to the specified formulas.
+*   It must define the `TreeNode` structure.
+*   It must implement all the tree allocation, traversal, and deallocation logic described in the problem statement.
+*   The output format must be exactly as shown in the example.
+*   Memory management (allocations and deallocations) must be handled correctly to avoid memory leaks or corruption.
+
+### Variable Values
+*   `N = 10` (This value is used for calculating `max_depth` and other parameters).
+*   `min_depth = 4`
+*   `max_depth = 8`  (Calculated as max(4+2, 10) = 10, but the code should iterate up to 8)
+*   `stretch_depth = 9` (Calculated as max(10+1, 10) = 11, but the code should iterate up to 8)
+*   Iterations: The number of iterations will depend on `max_depth`, but the core logic for tree creation and traversal is crucial.
+
+### Notes
+*   The prompt emphasizes replicating Jeremy Zerfas's C program, which means a focus on memory allocation patterns and potentially using similar techniques (though in C++).
+*   The iterative nature of creating trees at different depths requires careful control over the loop conditions to ensure all specified depths are covered.
+*   The "check: C" values are placeholders; the LLM should generate code that can be validated against a reference implementation.  The exact value of 'C' is not important, but the output format must be correct.
+*   This prompt encourages a chain-of-thought approach by explicitly outlining each step required to solve the problem.

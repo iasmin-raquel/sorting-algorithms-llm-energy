@@ -1,0 +1,61 @@
+### Prompt Structure
+```text
+You are an expert C++ code generator. Your task is to generate a complete C++ program that implements the FastA problem described in the Computer Language Benchmarks Game. The program should take an integer 'N' as a command-line argument and produce three DNA sequences based on the specified algorithms.
+
+Here are three examples demonstrating the expected output format:
+Example 1 (N=1000):
+```
+>ONE Homo sapiens alu
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA... (1000 characters)
+>TWO IUB ambiguity codes
+... (3000 characters)
+>THREE Homo sapiens frequency
+... (5000 characters)
+```
+Example 2 (N=2000):
+```
+>ONE Homo sapiens alu
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA... (2000 characters)
+>TWO IUB ambiguity codes
+... (6000 characters)
+>THREE Homo sapiens frequency
+... (10000 characters)
+```
+Example 3 (N=500):
+```
+>ONE Homo sapiens alu
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA... (500 characters)
+>TWO IUB ambiguity codes
+... (1500 characters)
+>THREE Homo sapiens frequency
+... (2500 characters)
+```
+
+Now, generate the C++ code. The code should:
+
+1.  Read the value of 'N' from the command-line argument.
+2.  Implement the repeat fasta algorithm using the ALU sequence as provided.
+3.  Implement the weighted random selection fasta algorithm using the IUB alphabet and probabilities, generating a sequence of length 3\*N.
+4.  Implement the Homo sapiens frequency fasta algorithm using the Homo sapiens alphabet and probabilities, generating a sequence of length 5\*N.
+5.  Use the following LCG constants: IM = 139968, IA = 3877, IC = 29573, Seed = 42.  Do not cache the random number sequence.
+6.  Output the three sequences in the specified format (line length 60 characters, with the appropriate headers).
+```
+
+### Key Requirements
+*   C++ code must be generated.
+*   The program must accept 'N' as a command-line argument.
+*   Use the LCG constants exactly as defined above.
+*   Utilize the provided ALU, IUB, and Homo sapiens alphabet probabilities.
+*   Output must adhere to the specified format (3 sequences, line length 60).
+*   No random number caching should be employed.
+*   The code must produce identical output when validated with `diff output.txt reference.txt for N=1000`.
+
+### Variable Values
+*   IM = 139968
+*   IA = 3877
+*   IC = 29573
+*   Seed = 42
+*   ALU sequence: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA... (as provided in the problem description)
+*   IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+*   Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+```

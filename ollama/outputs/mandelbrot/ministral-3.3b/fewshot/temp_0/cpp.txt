@@ -1,114 +1,78 @@
-### Prompt Structure
-
-**Example 1: Mandelbrot Set Generation (PBM Output)**
 ---
+
+### **Prompt Structure**
+**Few-shot example for Mandelbrot set generation in C++ (PBM P4 output):**
+
+---
+#### **Example 1: N=8 (for illustration)**
 ```cpp
-#include <iostream>
-#include <cmath>
-#include <iomanip>
-
-int main(int argc, char* argv[]) {
-    int N = std::stoi(argv[1]);
-    double max_iterations = 50.0;
-    double escape_threshold = 4.0;
-
-    // Initialize PBM header (P4 format)
-    std::cout << "P4\n" << N << "\n";
-
-    for (int y = 0; y < N; ++y) {
-        for (int x = 0; x < N; ++x) {
-            double c_real = -1.5 + (2.0 / N) * x;
-            double c_imag = -1.0 + (2.0 / N) * y;
-
-            // Mandelbrot iteration logic
-            double z_real = 0.0, z_imag = 0.0;
-            int iter = 0;
-            while (z_real*z_real + z_imag*z_imag < escape_threshold && iter < max_iterations) {
-                double new_z_real = z_real * z_real - z_imag * z_imag + c_real;
-                double new_z_imag = 2.0 * z_real * z_imag + c_imag;
-                z_real = new_z_real;
-                z_imag = new_z_imag;
-                iter++;
-            }
-
-            // Pack bits (MSB first, zero-padded)
-            std::cout << ((iter == max_iterations) ? 1 : 0);
-        }
-        std::cout << "\n"; // Newline after each row
-    }
-}
-```
-
----
-**Example 2: Simplified Mandelbrot with Bit-Packing**
----
-```cpp
-#include <iostream>
+#include <cstdio>
 #include <cmath>
 
 int main(int argc, char* argv[]) {
-    int N = std::stoi(argv[1]);
-    const double max_iter = 50.0;
-    const double threshold = 4.0;
+    int N = atoi(argv[1]); // Must be passed as command-line arg
 
-    // PBM header (P4 format)
-    std::cout << "P4\n" << N << "\n";
+    // --- Mandelbrot core ---
+    const double lim = 4.0; // Escape threshold squared (2.0 * 2.0)
+    const int max_iter = 50;
 
     for (int y = 0; y < N; ++y) {
         for (int x = 0; x < N; ++x) {
-            double c_real = -1.5 + (2.0 / N) * x;
-            double c_imag = -1.0 + (2.0 / N) * y;
+            double cr = 2.0 * x / N - 1.5;
+            double ci = 2.0 * y / N - 1.0;
 
             int iter = 0;
-            double z_real = 0.0, z_imag = 0.0;
-            while (z_real*z_real + z_imag*z_imag < threshold && iter < max_iter) {
-                double new_z_real = z_real*z_real - z_imag*z_imag + c_real;
-                double new_z_imag = 2.0 * z_real * z_imag + c_imag;
-                z_real = new_z_real; z_imag = new_z_imag;
+            double zr = 0, zi = 0;
+            while (iter < max_iter && zr*zr + zi*zi <= lim) {
+                double new_zr = zr*zr - zi*zi + cr;
+                double new_zi = 2 * zr * zi + ci;
+                zr = new_zr; zi = new_zi;
                 iter++;
             }
-            std::cout << ((iter == max_iter) ? 1 : 0);
+            // Pack bits (MSB=in set, LSB=not in set)
+            printf("%c", (iter == max_iter) ? '1' : '0');
         }
     }
+
+    return 0;
 }
 ```
+---
+#### **Example 2: N=16 (header + packed output)**
+*(Header omitted for brevity; actual code must include it.)*
 
 ---
 **Target Problem:**
-Generate a C++ program that computes the Mandelbrot set for an N×N grid in PBM P4 format, using exactly:
-- **50 iterations**
-- **Escape threshold = 4.0**
-- **Plot region**: `c_real ∈ [-1.5, 0.5]`, `c_imag ∈ [-1.0, 1.0]`.
-Output must match the reference for N=200 exactly (bit-packed MSB-first, zero-padded rows).
+Write a C++ program that:
+1. Takes `N` as a command-line argument.
+2. Generates the Mandelbrot set over `[-1.5, 0.5]` × `[-1.0, 1.0]` in an N×N grid.
+3. Outputs PBM P4 header (`"P4\nN N"` followed by newline) **and** binary pixel data (8 bits/pixel, MSB-first).
+   - Pad last byte of rows with zeros if `N % 8 != 0`.
+4. Use exactly:
+   - `max_iter = 50`
+   - `lim = 2.0 * 2.0` (escape threshold squared)
+   - Coordinate mapping: `cr = 2.0*x/N - 1.5`, `ci = 2.0*y/N - 1.0`.
+5. Validate correctness via `cmp output.pbm reference.pbm` for N=200.
 
 ---
-
-### Key Requirements
-- **Input Handling**: Parse `N` from command-line argument (`argv[1]`).
-- **Precision**: Use `double` for all floating-point calculations.
-- **Output Format**:
-  - Write PBM header as `"P4\nN"` (no newline after `N`).
-  - Pack bits MSB-first, zero-padded per row (e.g., `0b0101` → `5` in binary).
-  - No trailing newline after the final pixel.
-- **Mandelbrot Logic**:
-  - Iterate until `z_real² + z_imag² ≥ threshold` or `iter == max_iter`.
-  - Output `1` if point escapes within iterations, else `0`.
+### **Key Requirements**
+- **Strict adherence to PBM P4 format**: Header must be `"P4\nN N"` (no extra whitespace).
+- **Bit-packing**: Each pixel is 1 bit (MSB = in set, LSB = not). Write bytes MSB-first.
+- **No floating-point inaccuracies**: Use exact arithmetic for `lim` and coordinate mapping.
+- **Command-line input**: Parse `N` from `argv[1]` (e.g., `./mandelbrot 200`).
+- **Output validation**: Binary data must match reference exactly for N=200.
 
 ---
-
-### Variable Values
+### **Variable Values**
 | Parameter          | Value               |
 |--------------------|---------------------|
-| **Max Iterations** | 50                  |
-| **Escape Threshold** | 4.0                |
-| **Plot Region (c_real)** | [-1.5, 0.5]       |
-| **Plot Region (c_imag)** | [-1.0, 1.0]        |
+| Maximum iterations  | `50`                |
+| Escape threshold (squared) | `lim = 4.0`         |
+| Coordinate bounds   | Real: `[-1.5, 0.5]`, Imaginary: `[-1.0, 1.0]` |
+| Pixel mapping       | `cr = 2.0*x/N - 1.5`, `ci = 2.0*y/N - 1.0` |
 
 ---
-
-### Notes
-- **Bit-Packing**: The examples assume binary output per pixel (e.g., `0` or `1`). For N=200, rows may require padding to 8-bit alignment if not handled explicitly.
-- **Edge Cases**:
-  - Handle invalid `N` (e.g., non-integer input) by exiting gracefully.
-  - Avoid floating-point precision errors in iteration termination.
-- **Validation**: The output must match the reference PBM file for N=200 exactly, including bit-packing rules.
+### **Notes**
+- The examples above are simplified for clarity; the actual code must handle **full PBM P4 output** (header + packed bits).
+- Avoid hardcoding `lim` as `4.0`—use `2.0 * 2.0` explicitly.
+- For N=200, ensure bit-padding is correct (e.g., last row’s byte may need trailing zeros).

@@ -1,53 +1,64 @@
 ### Prompt Structure
-Think step-by-step about how to implement the Mandelbrot set visualization in Java for the Computer Language Benchmarks Game. The task involves generating a bitmap representation of the Mandelbrot set over an N×N grid within the specified region, then encoding it in PBM P4 format.
+Think step-by-step about how to implement the Mandelbrot set in Java for a given input size `N`, adhering strictly to the Computer Language Benchmarks Game specifications. The goal is to generate code that produces an exact match with the reference output when validated via `cmp` for `N=200`.
 
 1. **Decompose the problem into logical steps**:
-   - Define the input parameters and their constraints.
-   - Explain how to map each complex number (c) in the plot region to a pixel coordinate (i,j).
-   - Describe the Mandelbrot iteration algorithm, including the escape test.
-   - Outline how to pack bits for PBM P4 output efficiently.
-   - Detail the exact Java implementation requirements, such as command-line argument handling and file/output formatting.
+   - Parse command-line argument `N` and validate it (must be a positive integer).
+   - Define the Mandelbrot iteration logic: For each complex number `C = x + yi` in the specified range, compute its escape time under the iteration formula `Z = Z*Z + C`, starting from `Z = 0`.
+   - Map pixel coordinates `(x,y)` to complex numbers `C` using the given formulas:
+     ```
+     real(C) = 2.0 * x / N - 1.5
+     imag(C) = 2.0 * y / N - 1.0
+     ```
+   - Track iterations until either:
+     - The magnitude squared of `Z` exceeds `lim = 4.0` (since `lim = 2.0^2`), or
+     - 50 iterations are reached.
+   - Assign a pixel value based on whether the point belongs to the set (`|Z|² ≤ lim`) after all iterations.
 
-2. **Chain-of-thought reasoning**:
-   - Start with reading `N` from command line arguments.
-   - Iterate over each pixel (i,j) in an N×N grid, mapping it to a complex number `c = x + y*i`, where:
-     - Real part `x` ranges linearly from `-1.5` to `0.5`.
-     - Imaginary part `y` ranges linearly from `-1.0` to `1.0`.
-   - For each `c`, compute the Mandelbrot iteration sequence up to 50 steps, checking if it escapes (magnitude > 4).
-   - Assign a bit value (0 or 1) based on whether the point is in the set (iterations ≤ 50) or not.
-   - Pack bits into bytes for PBM P4 output, ensuring zero-padding and MSB-first order.
+2. **Generate PBM P4 output**:
+   - Write the header: `"P4\nN N"` (where `N` is the input size).
+   - Pack 8 pixels per byte, with the most significant bit (MSB) representing membership in the set.
+   - Pad the last byte of each row to ensure it aligns correctly for binary output.
 
-3. **Construct Java code adhering to these steps**:
-   - Use `Integer.parseInt(args[0])` to get `N`.
-   - Initialize a 2D array of booleans (or integers) to track iteration counts.
-   - Implement the Mandelbrot function with exact parameters:
-     - Max iterations: 50
-     - Escape threshold: 4.0
-   - Write PBM P4 header (`P4` followed by `N N`) and binary pixel data, packing bits correctly.
+3. **Optimize for correctness and efficiency**:
+   - Use primitive types (`float`/`double`) for precision but avoid unnecessary computations.
+   - Ensure no floating-point rounding errors affect the final output (e.g., use `lim = 4.0` explicitly).
+   - Handle edge cases: e.g., `N=1`, or non-integer inputs.
+
+4. **Implement as a Java program**:
+   - Use `System.out.print()` for binary pixel data to avoid buffering issues.
+   - Write the full code in a single method (e.g., `main`) with no external dependencies.
+
+5. **Validate assumptions**:
+   - Confirm that the escape threshold is correctly interpreted as `|Z|² ≤ 4.0`.
+   - Verify that the coordinate mapping and iteration formula are applied exactly as specified.
+   - Ensure the PBM format adheres to strict bit-packing rules (MSB first, padding zeros).
 
 ### Key Requirements
-- **Language**: Pure Java (no external libraries except standard I/O).
+- **Language**: Pure Java (no libraries like `java.awt` or `javax.imageio`).
 - **Input Handling**:
-  - Command-line argument `N` must be parsed via `Integer.parseInt(args[0])`.
-- **Algorithm Parameters**:
-  - Exactly 50 iterations per point.
-  - Escape threshold = 4.0.
+  - Command-line argument `N` must be parsed as an integer.
+  - Exit with error code if `N` is invalid (e.g., non-positive, non-integer).
+- **Precision**:
+  - Use `double` for complex number arithmetic to avoid precision loss.
+  - Avoid square roots; compute squared magnitude directly (`zr*zr + zi*zi`).
 - **Output Format**:
-  - PBM P4 header: `P4` followed by `N N` (no newline).
-  - Binary pixel data: bits packed MSB-first, zero-padded per row.
-- **Precision**: Linear interpolation for complex number mapping to pixels.
-- **Edge Cases**: Handle invalid `N` (e.g., ≤0) gracefully or exit with error.
+  - Header: `"P4\nN N"` (no newline after header).
+  - Binary pixel data written as bytes, MSB first, with padding zeros for incomplete rows.
+- **Iteration Logic**:
+  - Exactly 50 iterations per point; escape if `|Z|² > lim` at any step.
+  - Points in the set are those where `|Z|² ≤ 4.0` after all iterations.
+- **Performance**: No unnecessary loops or redundant calculations.
 
 ### Variable Values
-- **Maximum iterations**: 50
-- **Escape threshold**: 4.0
-- **Plot region**:
-  - Real axis: [-1.5, 0.5]
-  - Imaginary axis: [-1.0, 1.0]
-- **Output format**: PBM P4 (bits packed MSB-first, zero-padded rows).
+- **Maximum Iterations**: `50`
+- **Escape Threshold (lim)**: `2.0 * 2.0 = 4.0` (squared magnitude limit)
+- **Coordinate Mapping**:
+  - Real part: `real(C) = 2.0 * x / N - 1.5`
+  - Imaginary part: `imag(C) = 2.0 * y / N - 1.0`
+- **Output Format**: PBM P4 (binary, packed 8 pixels/byte, MSB first)
 
 ### Notes
-- The Mandelbrot set is defined as points `c` where the sequence `z_{n+1} = z_n^2 + c` does not escape to infinity within 50 iterations.
-- Bit packing requires careful handling of row boundaries and byte alignment. Ensure trailing zeros are added for each row to maintain MSB-first order.
-- For N=200, validate output against the reference using `cmp` (e.g., `diff` or custom script) to ensure correctness.
-- Avoid floating-point precision errors by using exact arithmetic or rounding during iteration checks.
+- The prompt must enforce strict adherence to the coordinate system bounds (`[-1.5, 0.5]` for real and `[-1.0, 1.0]` for imaginary parts).
+- Ambiguity risk: Ensure the LLM interprets "MSB first" as bit ordering in binary output (e.g., bits 7–0 correspond to pixels 8–1). Clarify that padding zeros are appended to incomplete bytes.
+- Edge cases: Handle `N=8` or `N=9` explicitly to test padding logic. The LLM should generate code that works for all valid `N`.
+- Avoid hardcoding the escape threshold as a literal `2.0`; derive it from `lim = 4.0` (since `|Z|² ≤ lim`).

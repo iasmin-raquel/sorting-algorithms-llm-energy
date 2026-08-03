@@ -1,0 +1,82 @@
+### Prompt Structure
+You are an expert Python programmer tasked with implementing the PIDIGITS problem from the Computer Language Benchmarks Game. This problem calculates the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic. Your task is to generate a complete, executable Python code solution that adheres precisely to the specified requirements.
+
+First, let's break down the problem into logical steps and outline the reasoning process:
+
+1.  **Initialization:** We start with initial values for q, r, t, and k as defined in the problem description (q=1, r=0, t=1, k=0). These variables represent the state of our algorithm at each step.
+2.  **Algorithm Core:** The `next_step` function updates the state based on the Gibbons algorithm. It increments k, calculates new values for r and t using multiplication with (2*k+1), and updates q by multiplying it with k. This step advances the algorithm.
+3.  **Digit Extraction:** The `extract(x)` function computes a single digit of Pi using the current state. It returns the floor of ((q\*x + r) / t). We must use x=3 for extracting the first digit and x=4 for extracting the second digit to confirm correct implementation.
+4.  **Digit Production:** The `produce(d)` function updates the algorithm's state after extracting a digit. It multiplies q by 10, calculates the new value of r by subtracting t\*d from r (scaled by 10), and prepares for the next iteration.
+5.  **Output Formatting:** We need to print digits 10 per line, followed by a tab character, a colon, and the running total number of digits calculated (N). If the last line has fewer than 10 digits, we pad with spaces on the right. The output should exactly match the reference when validated using `diff output.txt reference.txt for N=30`.
+6.  **Command-Line Argument:** The code must accept the value of N (the number of digits to calculate) as a command-line argument.
+
+Now, let's translate this reasoning into Python code:
+
+```python
+import sys
+
+def next_step(q, r, t, k):
+    k += 1
+    r += 2 * q
+    r *= (2 * k + 1)
+    t *= (2 * k + 1)
+    q *= k
+    return q, r, t, k
+
+def extract(x):
+    return int(float((q*x + r) / t))
+
+def produce(d):
+    q *= 10
+    r = (r - t*d) * 10
+
+def pidigits():
+    q, r, t, k = 1, 0, 1, 0
+    n_digits = 0
+    while True:
+        if q > r:
+            break
+        digit = extract(3)
+        if digit == extract(4):
+            print(digit, end='\t:')
+            produce(digit)
+            n_digits += 1
+        else:
+            q, r, t, k = next_step(q, r, t, k)
+
+    print() #newline for final output
+    print(":" + str(n_digits))
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python pidigits.py <N>")
+        sys.exit(1)
+    try:
+        N = int(sys.argv[1])
+        if N <= 0:
+            print("N must be a positive integer.")
+            sys.exit(1)
+        pidigits()
+    except ValueError:
+        print("Invalid input. N must be an integer.")
+        sys.exit(1)
+```
+
+### Key Requirements
+*   The code must use native arbitrary precision integers in Python (no external libraries are allowed).
+*   It must receive the value of N as a command-line argument.
+*   The `next_step`, `extract(3)`, and `extract(4)` functions must be implemented exactly as described in the problem definition.
+*   The output format must precisely match the specification: 10 digits per line, followed by '\t:', and the running total N. Padding with spaces is required for the last line if it has fewer than 10 digits.
+*   The code should handle potential errors (e.g., invalid command-line arguments or non-integer input).
+
+### Variable Values
+*   q = 1
+*   r = 0
+*   t = 1
+*   k = 0
+*   N: Determined by the user as a command line argument
+
+### Notes
+*   The code includes error handling for invalid command-line arguments and non-integer input, ensuring robustness.
+*   The use of `int(float(...))` in the `extract` function is crucial for correct floating-point arithmetic to ensure accurate digit extraction.
+*   The algorithm's core logic closely follows the Gibbons spigot algorithm description provided in the problem statement. The explicit calls to extract(3) and extract(4) are performed as instructed.  A newline character is added at the end of the output for formatting purposes.

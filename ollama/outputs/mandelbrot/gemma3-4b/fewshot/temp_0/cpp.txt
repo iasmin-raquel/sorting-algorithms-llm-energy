@@ -1,59 +1,71 @@
 ### Prompt Structure
 ```
-You are an expert C++ code generator. Your task is to generate C++ code that implements the Mandelbrot set visualization based on the Computer Language Benchmarks Game problem description.  The code should follow the structure demonstrated in the example provided, focusing on argument parsing, iteration logic, and output formatting.
+You are an expert C++ code generator. You will be given a problem description and asked to generate the C++ code to solve it.
 
-Here's an example of the expected structure:
+Here are some examples:
+
+**Example 1:**
+Problem Description: Plot the Mandelbrot set [-0.8, 0.8] x [-0.8, 0.8] on an N-by-N bitmap. Output byte-by-byte in PBM P4 format. Use 50 iterations and lim = 2.0 * 2.0.
 
 ```cpp
-#include <iostream>
-#include <cmath>
-#include <cstdlib> // for atoi
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 int main(int argc, char** argv) {
-  // Argument parsing (e.g., N from command line)
-  int n = atoi(argv[1]); 
-
-  // Mandelbrot set calculation loop (50 iterations max)
-  for (int i = 0; i < 50; ++i) {
-    // ... Mandelbrot iteration logic here ...
-  }
-
-  // Output to stdout in PBM P4 format
-  std::cout << "P4" << std::endl;
-  std::cout << n << " " << n << std::endl;
-  std::cout << "0";
-  for (int y = 0; y < n; ++y) {
-    for (int x = 0; x < n; ++x) {
-      // ... pixel data calculation and output here ...
-    }
-  }
-  std::cout << std::endl;
-
+  int N = atoi(argv[1]);
+  // ... (code to generate Mandelbrot set and output PBM P4 format) ...
   return 0;
 }
 ```
-Now, generate the C++ code to implement the Mandelbrot set visualization according to the problem description.
+
+**Example 2:**
+Problem Description: Plot the Mandelbrot set [-0.5, 0.5] x [-0.5, 0.5] on an N-by-N bitmap. Output byte-by-byte in PBM P4 format. Use 50 iterations and lim = 2.0 * 2.0.
+
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main(int argc, char** argv) {
+  int N = atoi(argv[1]);
+  // ... (code to generate Mandelbrot set and output PBM P4 format) ...
+  return 0;
+}
+```
+
+Now, solve the following problem:
+
+Problem Description: Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap. Output byte-by-byte in PBM P4 format. Use 50 iterations and lim = 2.0 * 2.0.  The input N is a command line argument.
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main(int argc, char** argv) {
+  int N = atoi(argv[1]);
+  // ... (code to generate Mandelbrot set and output PBM P4 format) ...
+  return 0;
+}
+```
 ```
 
 ### Key Requirements
-*   The generated code must be valid C++.
-*   It should receive the value of `N` (the bitmap size) as a command-line argument.
-*   It must use exactly 50 iterations for the Mandelbrot calculation.
-*   The escape threshold must be set to 4.0.
-*   The plotting region is [-1.5, 0.5] for real and [-1.0, 1.0] for imaginary.
-*   The output format must be PBM P4 (header + binary pixel data).
-*   The code should write the header "P4" followed by the dimensions of the bitmap (N x N) and a single '0' to the standard output.
-*   Pixel data should be written byte-by-byte, MSB first, with zero-padding per row.
-*   The code must include necessary headers like `<iostream>`, `<cmath>`, and `<cstdlib>`.
+*   The generated code must be valid C++ code.
+*   The code must receive the value of `N` as a command-line argument (argv[1]).
+*   The code must use exactly 50 iterations.
+*   The escape threshold (`lim`) must be set to 2.0 * 2.0.
+*   The output format must be PBM P4, including the header "P4\n" followed by "N N\n".
+*   The pixel data must be packed 8 bits per byte (MSB first), with bit 1 indicating set and bit 0 indicating not set.
+*   If `N` is not divisible by 8, the last byte of each row must be padded with zeros on the right.
+*   The code must write only the header and binary pixel data to stdout.
+*   The output should be validatable using `cmp output.pbm reference.pbm for N=200`.
 
 ### Variable Values
-*   Maximum iterations: 50
-*   Escape threshold: 4.0
-*   Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-*   Output format: PBM P4 (bits packed MSB first, zero-padded per row)
-*   N: Command-line argument (integer)
+*   `N`: Integer, determined by the command-line argument (argv[1]).
+*   `lim`: 2.0 * 2.0 = 4.0
+*   `max_iterations`: 50
+*   Output format: PBM P4
 
 ### Notes
-*   The model should focus on generating the core logic for the Mandelbrot set calculation and output formatting, mirroring the example provided.  It does not need to implement the full Mandelbrot algorithm itself; it should use a simple iteration loop.
-*   Error handling (e.g., checking if `N` is a valid integer) is not required in this prompt.
-*   The model's output should be primarily focused on the structure and formatting of the C++ code, not on providing detailed explanations or comments within the generated code itself.
+The prompt emphasizes a few-shot approach to guide the LLM towards generating the correct C++ code structure and adhering to the specified constraints. The examples provided illustrate the expected input/output format and the use of command-line arguments, which should help the model understand the task requirements effectively.  The explicit mention of "byte-by-byte" output is crucial for ensuring the correct PBM P4 formatting.

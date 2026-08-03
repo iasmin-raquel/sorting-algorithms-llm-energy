@@ -1,0 +1,28 @@
+### Prompt Structure
+You are to implement the pidigits problem from the Computer Language Benchmarks Game in Java. The task requires calculating the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic. The code must:
+
+1. Use `BigInteger` for arbitrary precision arithmetic.
+2. Receive N as a command-line argument.
+3. Follow the exact algorithm steps: initial state (q=1, r=0, t=1, k=0), next_step, extract(3), produce, and extract(4) for verification.
+4. Output 10 digits per line with the running total, padding with spaces if necessary.
+5. Match the output format exactly: "\t:N" at the end of each line, with the running total N.
+
+### Key Requirements
+- Use `BigInteger` for arbitrary precision arithmetic.
+- Receive N as a command-line argument.
+- Follow the exact algorithm steps: next_step, extract(3), produce, extract(4).
+- Verify output with `diff output.txt reference.txt` for N=30.
+- Output 10 digits per line, with padding and "\t:N" formatting.
+- Ensure the code is correct, handles edge cases (e.g., q > r), and avoids errors in the produce function.
+
+### Variable Values
+- Initial state: q = 1, r = 0, t = 1, k = 0.
+- N is provided as a command-line argument (e.g., `java pidigits 30`).
+- Algorithm steps must be executed exactly as described, including extract(3) and extract(4) for verification.
+- Output must have 10 digits per line, with the running total N displayed as "\t:N".
+
+### Notes
+- The LLM must carefully handle the produce function to ensure correct digit selection and adjustment of q and r.
+- The algorithm requires precise control over k, r, t, and q, especially during the next_step and produce phases.
+- The output formatting is critical: padding with spaces and ensuring the "\t:N" format is maintained.
+- The code must avoid any deviations from the specified algorithm steps, including the exact sequence of extract(3) and extract(4) for verification.

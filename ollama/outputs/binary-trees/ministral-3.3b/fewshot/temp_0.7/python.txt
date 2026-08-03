@@ -1,0 +1,60 @@
+### **Prompt Structure**
+Provide a Python program that solves the Binary Trees problem in the Computer Language Benchmarks Game. The solution must adhere strictly to the specified structure and output format.
+
+**Task:**
+Write a Python script implementing perfect binary trees according to the following logic:
+
+1. Define a `TreeNode` class with:
+   - Left child (`left`)
+   - Right child (`right`)
+   - Internal deallocation mechanism (use Python’s garbage collection)
+
+2. Implement three critical tree operations:
+   - **Stretch Tree:** Allocate, validate, and deallocate a tree of maximum depth (`stretch_depth`), then check its existence.
+   - **Long-Lived Tree:** Allocate a root node that persists while other trees are allocated/deallocated.
+   - **Bottom-Up Trees:** For each specified depth `D` in the range `[min_depth, max_depth]`, allocate multiple trees (according to `iterations`), walk them to count nodes, and deallocate all trees before checking the long-lived tree’s integrity.
+
+3. Output must match this exact format:
+   ```
+   stretch tree of depth D\t check: C
+   I\t trees of depth D\t check: C
+   ...
+   long lived tree of depth D\t check: C
+   ```
+   where `C` is a binary assertion (e.g., `True`, `False`) indicating memory validity after deallocation.
+
+4. **Constraints on Allocations:**
+   - No optimizations for memory alignment or reusing nodes.
+   - Leaf and interior nodes must allocate identical memory structures.
+   - Validate output using `diff <output.txt> reference.txt` for `N=10`.
+
+---
+
+### **Key Requirements**
+- **Command-line argument parsing:** The script must accept exactly one integer argument (`N`) at runtime.
+- **Depth calculation:** Use:
+  - `min_depth = 4`
+  - `max_depth = max(min_depth + 2, N)`
+  - `stretch_depth = max_depth + 1`
+  - `iterations` per depth: `iterations = (1 << (max_depth - D + min_depth))`, where `D` ranges from `min_depth` to `max_depth`.
+- **Structure:** Enforce the following:
+  - Define a `TreeNode` struct as a class with `__del__` for deallocation.
+  - Use recursion or iterative traversal to count nodes in bottom-up trees.
+  - Validate memory integrity post-deallocation via assertions or garbage collection checks (e.g., check if long-lived trees still exist).
+- **Output:** No extra comments, docstrings, or whitespace beyond what’s required. Only print the formatted output above.
+
+---
+### **Variable Values**
+| Parameter       | Value               |
+|------------------|---------------------|
+| `min_depth`      | 4                   |
+| `max_depth`      | `max(min_depth + 2, N)` (computed dynamically) |
+| `stretch_depth`  | `max_depth + 1`     |
+| `N`              | Command-line input (exactly one argument: e.g., `python script.py 8`) |
+
+---
+### **Notes**
+- **Ambiguity Risks:** Ensure the LLM interprets "deallocate" as explicitly freeing memory (no silent garbage collection bypasses). Use Python’s `__del__` to simulate manual deallocation if needed.
+- **Performance Focus:** Avoid dynamic dispatch for tree traversals. Use simple iterative or recursive loops with explicit node counting.
+- **Edge Cases:** Handle `N < min_depth + 2` by setting `max_depth = min_depth`.
+- **Validation:** The LLM’s output must produce identical lines to the reference when run via `diff`. Prioritize correctness over raw speed.

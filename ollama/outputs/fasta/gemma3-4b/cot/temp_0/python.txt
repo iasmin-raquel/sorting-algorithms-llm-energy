@@ -1,0 +1,51 @@
+### Prompt Structure
+Okay, let's generate a Chain-of-Thought prompt to guide an LLM in creating Python code for the Fasta problem from the Computer Language Benchmarks Game. The goal is to produce a robust and accurate solution that adheres strictly to the specified requirements.
+
+**Prompt:**
+
+"You are an expert Python programmer tasked with implementing a solution to the Fasta problem from the Computer Language Benchmarks Game. This problem involves generating DNA sequences using different methods – repeat fasta, random fasta with IUB alphabet probabilities, and random fasta with Homo sapiens frequencies. Your task is to write a complete Python script that fulfills all requirements outlined below.  I want you to think step by step through the process of creating this code.
+
+**Step 1: Understanding the Problem:** The core challenge is generating DNA sequences based on different probability distributions. We need to implement three distinct sequence generation methods, each with its own specific rules and parameters.
+
+**Step 2: Implementing the LCG:**  We must use a Linear Congruential Generator (LCG) to generate random numbers for nucleotide selection. The constants are: IM = 139968, IA = 3877, IC = 29573, and Seed = 42. Importantly, the seed value should *not* be cached across calls to `Random()`.  Each call must recalculate the seed based on the previous result.
+
+**Step 3: Handling Probabilities:** We need to convert the given probabilities into cumulative probabilities for each nucleotide. This will allow us to use a linear search approach to select nucleotides based on their likelihood.
+
+**Step 4: Implementing Repeat Fasta:**  This involves copying the ALU sequence exactly as provided, expanding it by multiplying the length by 'N'.
+
+**Step 5: Implementing IUB Random Fasta:** This requires generating random sequences using the IUB alphabet and its associated probabilities. The length of the generated sequence should be multiplied by 'N' *3.
+
+**Step 6: Implementing Homo Sapiens Random Fasta:**  This involves generating random sequences using the Homo sapiens alphabet and its associated probabilities. The length of the generated sequence should be multiplied by 'N' *5.
+
+**Step 7: Output Formatting:** The output must adhere to a specific format:
+    *   Line Length: 60 characters
+    *   Three Sequences:
+        1.  `>ONE Homo sapiens alu` followed by the expanded ALU sequence (n\*2 characters).
+        2.  `>TWO IUB ambiguity codes` followed by the generated IUB sequence (n\*3 characters).
+        3.  `>THREE Homo sapiens frequency` followed by the generated Homo sapiens sequence (n\*5 characters).
+
+**Step 8: Command-Line Argument:** The script must accept an integer 'N' as a command-line argument, which determines the length of the sequences to be generated.
+
+**Step 9: Code Structure and Clarity:** Write clean, well-documented Python code that is easy to understand and maintain. Use meaningful variable names and include comments where necessary to explain your logic.  Ensure the code is efficient and avoids unnecessary computations.
+
+Now, write the complete Python script following these steps. Remember to focus on accuracy, adherence to the specified constraints, and clear coding practices."
+
+### Key Requirements
+*   The generated code must be in Python.
+*   It must accept an integer 'N' as a command-line argument.
+*   It must implement the LCG with the exact constants: IM = 139968, IA = 3877, IC = 29573, Seed = 42, and avoid caching the seed value.
+*   It must use the ALU sequence, IUB alphabet (with probabilities), and Homo sapiens alphabet (with probabilities) exactly as specified.
+*   The output format must be precisely as described: line length of 60 characters, three sequences in the correct order with the specified labels and lengths.
+*   No caching of random number sequences should occur.
+
+### Variable Values
+*   IM = 139968
+*   IA = 3877
+*   IC = 29573
+*   Seed = 42
+*   ALU sequence: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+*   IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+*   Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+
+### Notes
+This prompt is designed to elicit a detailed and step-by-step response from the LLM, guiding it towards generating accurate and complete Python code for the Fasta problem. The Chain-of-Thought approach should help mitigate potential errors by forcing the model to explicitly reason through each stage of the implementation.  The emphasis on specific constants and probabilities is crucial for ensuring that the generated code meets all requirements precisely.

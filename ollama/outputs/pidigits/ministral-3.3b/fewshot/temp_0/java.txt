@@ -1,0 +1,102 @@
+Here’s a well-structured **few-shot prompting** template for generating the Pi digit calculation code using the Unbounded Spigot Algorithm (Gibbons) in Java. The prompt emphasizes the required structure, stateful operations, and output formatting while abstracting away implementation details:
+
+---
+
+### **Prompt Template**
+*(For an LLM to generate Java code implementing the Pidigits problem)*
+
+---
+**Instructions:**
+Write a Java program that calculates the first `N` digits of π using the **Unbounded Spigot Algorithm (Gibbons)** with arbitrary precision arithmetic. The output must match the reference for `N=30`.
+
+#### **Key Requirements:**
+1. **Input Handling**:
+   - Read `N` from command-line arguments (`args[0]`).
+2. **Arbitrary Precision Arithmetic**:
+   - Use `BigInteger` for all variables (`q`, `r`, `t`, intermediate calculations).
+3. **Algorithm Steps** (repeat until `q > r` is false):
+   ```java
+   k = k + 1;
+   r = r + 2 * q;
+   r = r * (2*k + 1);
+   t = t * (2*k + 1);
+   q = q * k;
+   ```
+4. **Digit Extraction**:
+   - Compute `d = extract(3)` where:
+     ```java
+     extract(x) = floor((q*x + r) / t)
+     ```
+5. **Digit Selection Logic**:
+   - If `d == extract(4)`, output the digit and call `produce(d)`.
+   - Else, repeat `next_step`.
+6. **Output Format**:
+   - Print 10 digits per line (pad with spaces if fewer than 10).
+   - Each line ends with `\t:N` where `N` is the running total of digits printed.
+
+#### **Example Code Structure** *(Focus on structure, not content)*:
+```java
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Pidigits {
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]);
+        BigInteger q = new BigInteger("1");
+        BigInteger r = new BigInteger("0");
+        BigInteger t = new BigInteger("1");
+        int k = 0;
+
+        while (true) { // Loop until termination condition
+            nextStep(q, r, t, k);
+            if (q.compareTo(r) <= 0) break; // Termination
+
+            int d = extract(3); // Extract digit
+            if (d == extract(4)) {
+                produce(d);      // Output and adjust state
+            } else {
+                nextStep(q, r, t, k);
+            }
+        }
+    }
+
+    private static void nextStep(BigInteger q, BigInteger r, BigInteger t, int k) {
+        // Implement the 4 steps above.
+    }
+
+    private static int extract(BigInteger x) {
+        return (int)(q.multiply(x).add(r).divide(t)).intValue();
+    }
+
+    private static void produce(int d) {
+        // Output logic: print digit + \t:N, adjust state.
+    }
+}
+```
+
+#### **Example Output for `N=30`**:
+```
+1.234567890\t:10
+12345678901\t:20
+1234567890123\t:30
+```
+*(Note: Exact digits depend on the algorithm’s state.)*
+
+---
+**Constraints**:
+- Do not hardcode any constants (e.g., `BigInteger` literals).
+- Use only `BigInteger` for all arithmetic.
+- Validate output matches the reference when `N=30`.
+
+---
+### **Why This Works**
+1. **Few-Shot Structure**: The example code shows the loop, state variables (`q`, `r`, `t`), and termination condition.
+2. **Abstraction**: Focuses on *how* to structure the algorithm (e.g., `nextStep`/`extract`) rather than implementation details.
+3. **Output Format**: Explicitly defines the line-by-line output requirements.
+
+---
+**Expected Output**:
+A Java program that:
+- Takes `N` as input.
+- Implements the Gibbons algorithm with `BigInteger`.
+- Produces formatted digits per line.

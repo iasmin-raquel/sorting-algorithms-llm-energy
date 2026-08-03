@@ -1,0 +1,27 @@
+### Prompt Structure
+Implement a C++ program that calculates the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons). The program should follow these steps:
+
+1. Initialize variables q, r, t, and k as specified in the problem description.
+2. Implement a `next_step` function that advances the algorithm by one term according to the given operations.
+3. Implement `extract` and `produce` functions as described in the problem description.
+4. Perform the digit selection process outlined in the problem description until the required number of digits is reached.
+5. Output the digits in groups of 10, with a running total displayed on each line. The output should adhere to the format specified in the problem description.
+6. Receive N as a command-line argument and use it to determine how many digits of Pi to calculate.
+7. Use the GNU Multiple Precision Arithmetic Library (GMP) for arbitrary precision arithmetic.
+
+### Key Requirements
+1. The program must be implemented in C++ using the GMP library.
+2. The program should receive N as a command-line argument.
+3. The `next_step`, `extract`, and `produce` functions should be implemented according to the given operations.
+4. The program should perform both `extract(3)` and `extract(4)` for digit verification.
+5. The output format should adhere to the specified format.
+6. The program should not exceed the specified requirements in terms of output format, function implementation, or use of libraries.
+
+### Variable Values
+- q: 1
+- r: 0
+- t: 1
+- k: 0
+
+### Notes
+- This prompt encourages the model to generate a C++ program that implements the Unbounded Spigot Algorithm for calculating Pi. The program should be written in a way that adheres to the given constraints, including using GMP for arbitrary precision arithmetic and outputting digits in groups of 10 with a running total. The model should also perform digit verification by comparing `extract(3)` and `extract(4)`. The generated code should produce output identical to the reference when validated with `diff`.

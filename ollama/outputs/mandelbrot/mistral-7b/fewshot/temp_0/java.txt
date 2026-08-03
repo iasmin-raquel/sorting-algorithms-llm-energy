@@ -1,19 +1,31 @@
 ### Prompt Structure
-Write a Java program that plots the Mandelbrot set using the given parameters and writes the output in PBM P4 format to stdout. The program should receive N as a command-line argument via `Integer.parseInt(args[0])`.
+Here is a Few-Shot Prompt for implementing the Mandelbrot set problem in Java code:
+
+```java
+public class Mandelbrot {
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]);
+        // Your implementation here
+    }
+}
+```
 
 ### Key Requirements
-- The solution must be implemented in Java.
-- The program should accept an integer N as a command-line argument.
-- The code should use exactly 50 iterations and an escape threshold of 4.0.
-- The output should be written in PBM P4 format, with bits packed MSB first and zero-padded per row.
-- The plot region should be real in [-1.5, 0.5], imaginary in [-1.0, 1.0].
+- The solution must be implemented in Java
+- The program should receive N as a command-line argument
+- Use exactly 50 iterations and escape threshold `lim = 2.0 * 2.0`
+- Write PBM P4 header and binary pixel data to stdout
+- Produce output validatable with `cmp` for N=200
 
 ### Variable Values
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region (real): [-1.5, 0.5]
-- Plot region (imaginary): [-1.0, 1.0]
-- Output format: PBM P4
+- Escape threshold (squared): `lim = 2.0 * 2.0`
+- A point belongs to the set if `|Z|² <= lim` after all iterations
+- Use squared magnitude (`zr*zr + zi*zi`) to avoid computing square roots
+- Iteration formula: `Z = Z*Z + C`, starting from `Z = (0, 0)`
+- Coordinate mapping:
+    - real(C) = `2.0 * x / N - 1.5`
+    - imag(C) = `2.0 * y / N - 1.0`
 
 ### Notes
-The solution should follow the structure and style demonstrated in the example code provided, focusing on the general structure (argument reading, main loop, output to stdout) rather than the specific content of the solution. The generated LLM response will not include any Java code.
+The provided example code is for the n-body problem and should not be used as a reference for implementing the Mandelbrot set. The structure, argument reading, main loop, and output to stdout are the key elements to extract from the example.

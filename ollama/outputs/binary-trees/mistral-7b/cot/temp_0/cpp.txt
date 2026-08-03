@@ -1,0 +1,33 @@
+### Prompt Structure
+Create a C++ program that implements the Binary Trees problem from the Computer Language Benchmarks Game. The program should:
+
+1. Define a tree node structure with left and right child pointers.
+2. Allocate a binary tree to stretch memory, check it exists, and deallocate it.
+3. Allocate a long-lived binary tree which will live on while other trees are allocated and deallocated.
+4. Allocate, walk, and deallocate many bottom-up binary trees: allocate a tree, walk the tree counting the nodes, deallocate the tree.
+5. Check that the long-lived binary tree still exists.
+6. The output must be identical to the reference when validated with `diff output.txt reference.txt` for N=10.
+7. The program should receive N as a command-line argument.
+8. Use min_depth = 4 and compute max_depth and stretch_depth as defined above.
+9. Produce output in the exact format specified above.
+
+### Key Requirements
+- The code must be implemented in C++.
+- The program should receive N as a command-line argument.
+- min_depth = 4, max_depth and stretch_depth should be computed according to the problem description.
+- Define a tree node structure with left and right child pointers.
+- Implement the stretch tree, long-lived tree, and bottom-up tree logic as described above.
+- Produce output in the exact format specified above.
+
+### Variable Values
+- min_depth: 4
+- max_depth: N > 10 ? N : 10 + (N - 4) / 2
+- stretch_depth: max_depth + 1
+- iterations: 1 << (max_depth - depth + min_depth)
+- N: Command-line argument
+
+### Notes
+- The prompt enforces the minimum number of allocations from Jeremy Zerfas's C program and does not optimize away the work.
+- Leaf nodes must be the same as interior nodes, with the same memory allocation.
+- The output format is identical to the reference when validated with `diff output.txt reference.txt` for N=10.
+- The long-lived tree should still exist after other trees are allocated and deallocated.

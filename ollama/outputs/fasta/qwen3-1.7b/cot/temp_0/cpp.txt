@@ -1,0 +1,25 @@
+### Prompt Structure
+You are tasked with implementing the Fasta problem from the Computer Language Benchmarks Game in C++. The code must generate three types of DNA sequences based on specified algorithms and probabilities. The output must match a reference file when validated with `diff output.txt reference.txt` for a given N. The code must use the naive linear congruential generator (LCG) with the exact constants provided, and generate sequences in the exact format specified.
+
+### Key Requirements
+- The code must use the LCG with IM=139968, IA=3877, IC=29573, Seed=42.
+- Generate three sequences:
+  1. "ONE Homo sapiens alu" followed by repeat fasta of ALU with n*2 characters.
+  2. "TWO IUB ambiguity codes" followed by random fasta of IUB with n*3 characters.
+  3. "THREE Homo sapiens frequency" followed by random fasta of Homo sapiens with n*5 characters.
+- Use the exact ALU sequence, IUB probabilities (a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02), and Homo sapiens probabilities (a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008).
+- Output must be exactly 60-character lines, with three sequences in order.
+- Do not cache the random number sequence; generate each number on the fly using the LCG.
+- Receive N as a command-line argument.
+
+### Variable Values
+- ALU sequence: "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAA ATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGC AGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAG CTTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
+- IUB probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02
+- Homo sapiens probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+- LCG constants: IM=139968, IA=3877, IC=29573, Seed=42
+
+### Notes
+- The LCG must be used without caching, ensuring each random number is generated on the fly.
+- The output format requires precise line lengths and sequence structures, including exact N values.
+- The code must handle floating-point probabilities accurately, ensuring cumulative probabilities are correctly calculated and used for selection.
+- The ALU sequence and probabilities must be used exactly as provided, including the specific values for Homo sapiens.

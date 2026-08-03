@@ -1,0 +1,20 @@
+### Prompt Structure
+You are to implement the Computer Language Benchmarks Game Fasta problem in C++. The task involves generating three types of DNA sequences based on given alphabets and probabilities, using a naive linear congruential generator (LCG) with specific constants. The output must match a reference file when validated with `diff output.txt reference.txt` for a given N.
+
+### Key Requirements
+- Generate three sequences: repeat fasta, random fasta with weighted selection, and Homo sapiens fasta.
+- Use the ALU sequence, IUB alphabet, and Homo sapiens alphabet with exact probabilities.
+- Use the LCG with IM=139968, IA=3877, IC=29573, Seed=42.
+- Ensure output matches the specified format (60-character lines, three sequences with exact lengths).
+- Do not cache the random number sequence.
+
+### Variable Values
+- N: Command-line argument (e.g., 1000)
+- ALU sequence: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+- IUB alphabet probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02
+- Homo sapiens alphabet probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+
+### Notes
+- The LCG must be used without caching, so seed updates occur dynamically.
+- The output must strictly adhere to the format, including exact line lengths and sequence order.
+- The reference file validation ensures correctness for N=1000.

@@ -1,0 +1,112 @@
+---
+
+### **Prompt Structure**
+**Few-shot Prompt for Binary Tree Allocation Benchmark in Java**
+
+---
+**Example 1 (n-body simulation):**
+```java
+/* Problem structure:
+   - Command-line argument: `int n`
+   - Core logic loop over iterations
+   - Output format: `%.9f` for energy values
+*/
+
+public final class Body {
+    public double x, y, z, vx, vy, vz, mass;
+    // Constructor omitted for brevity
+}
+
+public static void main(String[] args) {
+    int n = Integer.parseInt(args[0]);
+    var bodies = new Body[]{...};  // Initialization
+
+    // Loop over iterations (n times)
+    for (int i=0; i<n; ++i) {
+        advance(bodies, dt);  // Core operation
+    }
+
+    System.out.printf("%.9f\n", energy(bodies));  // Final output
+}
+```
+
+---
+**Example 2 (Binary Tree Allocation):**
+```java
+/* Problem structure:
+   - Command-line argument: `int N`
+   - Define tree node structure with left/right pointers
+   - Stretch tree, long-lived tree, and bottom-up trees logic
+   - Output format:
+     "stretch tree of depth D\t check: C"
+     "I\t trees of depth D\t check: C"
+     "long lived tree of depth D\t check: C"
+*/
+
+// Define node structure (example)
+class TreeNode {
+    TreeNode left, right;
+    // Allocation logic omitted for brevity
+}
+
+public static void main(String[] args) {
+    int N = Integer.parseInt(args[0]);
+    min_depth = 4;  // Fixed constant
+
+    // Stretch tree allocation/deallocation
+    allocateStretchTree(stretch_depth);
+    System.out.printf("stretch tree of depth %d\t check: %s\n", stretch_depth, "PASS");
+
+    // Bottom-up trees loop
+    for (int D = min_depth; D <= max_depth; D += 2) {
+        int iterations = ...;  // Compute based on formula
+        allocateBottomUpTrees(D, iterations);
+        System.out.printf("I\t trees of depth %d\t check: %s\n", D, "PASS");
+    }
+
+    // Long-lived tree allocation/deallocation
+    allocateLongLivedTree(max_depth);
+    System.out.printf("long lived tree of depth %d\t check: %s\n", max_depth, "PASS");
+}
+```
+
+---
+**Target Problem:**
+Implement a Java program that:
+1. Receives `N` as a command-line argument.
+2. Defines a binary tree node structure with left/right pointers.
+3. Implements three tree allocation strategies (stretch, long-lived, bottom-up) as described in the problem statement.
+4. Outputs results in the exact format specified.
+
+---
+
+### **Key Requirements**
+- **Language**: Pure Java (no external libraries).
+- **Input Handling**:
+  - Parse `N` from `args[0]`.
+  - Use `min_depth = 4`, compute `max_depth` and `stretch_depth` as per formula.
+- **Tree Logic**:
+  - Allocate/deallocate trees in the specified order (stretch → bottom-up → long-lived).
+  - Ensure leaf nodes match interior nodes in memory allocation.
+- **Output Format**:
+  - Exactly match the template for each tree type (e.g., `"I\t trees of depth D\t check: C"`).
+  - Use `\t` as a tab character, not spaces.
+- **No Optimizations**: Do not skip allocations or deallocations.
+- **Validation**: Assume `diff output.txt reference.txt` will validate correctness for `N=10`.
+
+---
+
+### **Variable Values**
+| Parameter          | Value                     |
+|--------------------|---------------------------|
+| `min_depth`        | 4                         |
+| `max_depth`        | `max(min_depth + 2, N)`   |
+| `stretch_depth`    | `max_depth + 1`           |
+| `iterations`       | `(1 << (max_depth - depth + min_depth))` for bottom-up trees |
+
+---
+### **Notes**
+- The prompt avoids hardcoding values to allow the LLM to compute them dynamically.
+- Ambiguity risk: Ensure the LLM interprets "check" as a placeholder for `"PASS"` or similar validation result. Clarify that output must match *exactly* (e.g., no extra whitespace).
+- Expected behavior: The LLM should generate minimal, correct code focusing on structure over optimization. Use `System.out.printf` for tab-separated output.
+- **Tool Note**: If the target LLM lacks Java parsing tools, enforce strict adherence to the example’s indentation and method signatures.

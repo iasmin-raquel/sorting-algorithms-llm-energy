@@ -1,0 +1,28 @@
+### Prompt Structure
+The LLM must generate a C++ program that:
+- Defines a `TreeNode` struct with `left` and `right` pointers
+- Allocates and deallocates a stretch tree of depth `max_depth + 1`
+- Creates a long-lived tree that persists beyond other allocations
+- Implements bottom-up tree allocation, walking, and deallocation for depths from `min_depth` to `max_depth` (step 2)
+- Outputs in the specified format with `check: C` for each line
+
+### Key Requirements
+- Define `TreeNode` with `left` and `right` as pointers
+- Allocate a stretch tree (depth `max_depth + 1`) and verify memory allocation
+- Create a long-lived tree that survives other allocations
+- Allocate, walk, and deallocate bottom-up trees for depths from `min_depth` to `max_depth` (step 2)
+- Ensure output matches reference for N=10 with `check: C` for each line
+- Do not optimize away work (e.g., ensure all allocations and deallocations are performed)
+
+### Variable Values
+- `min_depth = 4`
+- `max_depth = max(4, N)`
+- `stretch_depth = max_depth + 1`
+- `iterations = 1 << (max_depth - depth + min_depth)` (for depth=4)
+- `N` received via command-line argument
+
+### Notes
+- The code must use `min_depth = 4` and compute `max_depth` and `stretch_depth` as specified
+- The output format must include lines like `"stretch tree of depth D\t check: C"` and `"long lived tree of depth D\t check: C"`
+- The long-lived tree must be checked to exist after all allocations
+- The bottom-up trees must be allocated, walked, and deallocated in a bottom-up manner (e.g., depth 4, 6, 8, etc.)

@@ -1,21 +1,26 @@
 ### Prompt Structure
-Implement a Java program that generates the Mandelbrot set in PBM P4 format. The program should accept N as a command-line argument and produce output identical to the reference for N=200. The generated bitmap must conform to the PBM P4 format, with bits packed MSB first and zero-padded per row.
+Write a Java program that takes N as a command-line argument and generates the Mandelbrot set using the given parameters. The output should be in PBM P4 format, with the header and binary pixel data written to stdout.
 
 ### Key Requirements
-1. The solution should be implemented in Java.
-2. Accepts N as a command-line argument via Integer.parseInt(args[0]).
-3. Uses exactly 50 iterations and escape threshold 4.0.
-4. Writes PBM P4 header and binary pixel data to stdout.
-5. The output must be identical to the reference when validated with "cmp output.pbm reference.pbm" for N=200.
+- The program must be implemented in Java.
+- It should receive N as a command-line argument.
+- The program must use exactly 50 iterations and an escape threshold of lim = 2.0 * 2.0.
+- The output format should conform to PBM P4 standards.
+- The output must be identical to the reference when validated with `cmp` for N=200.
 
 ### Variable Values
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region (real): [-1.5, 0.5]
-- Plot region (imaginary): [-1.0, 1.0]
-- Output format: PBM P4
-- Bit packing: MSB first
-- Zero-padding per row
+- Escape threshold (squared): lim = 2.0 * 2.0
+- Point belonging to the set condition: |Z|² <= lim after all iterations
+- Squared magnitude calculation: zr*zr + zi*zi
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Coordinate mapping:
+  - real(C) = 2.0 * x / N - 1.5
+  - imag(C) = 2.0 * y / N - 1.0
+- Output format details:
+  - Header: "P4\n" followed by "N N\n"
+  - Pixels packed 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+  - If N is not divisible by 8, the last byte of each row is padded with zeros on the right
 
 ### Notes
-Be aware that small differences in floating-point arithmetic may cause variations between different Java implementations and the reference solution. Ensure your code uses double precision floating-point numbers to minimize these differences. Also, consider using libraries like Apache Commons Math for improved numerical stability if needed.
+The program should be well-structured and efficient to ensure it adheres to the rules of the Computer Language Benchmarks Game. There might be some room for optimization, such as bit manipulation techniques or parallel processing, but the primary focus should be on meeting the specified requirements.

@@ -1,26 +1,61 @@
 ### Prompt Structure
-Here's a prompt that encourages the target LLM to write a C++ program for plotting the Mandelbrot set in PBM P4 format based on the example provided:
+Here's a few-shot prompt to guide the target LLM in implementing the Mandelbrot set problem in C++. The example code is for a different problem, but it will help the model understand the structure and style of the solution.
 
-```
-Write a C++ program that plots the Mandelbrot set using 50 iterations and an escape threshold of 4.0, as specified by the Computer Language Benchmarks Game. The program should receive N as a command-line argument, where N represents the resolution (number of pixels in each dimension). Write output byte-by-byte in PBM P4 format, with bits packed MSB first and zero-padded per row.
+```cpp
+//
+// The Computer Language Benchmarks Game
+// https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
+//
+// Contributed by [Your Name]
+//
 
-The program must be identical to the reference when validated with:
-  cmp output.pbm reference.pbm for N=200.
+#include <iostream>
+#include <cmath>
+
+namespace {
+    // ... (Include any helper functions needed)
+}
+
+int main(int argc, char* argv[]) {
+    // ... (Read command-line argument N)
+
+    const int N = std::atoi(argv[1]);
+    const unsigned short lim = 2 * 2; // Escape threshold squared
+    const int max_iterations = 50;
+
+    // ... (Initialize variables for the Mandelbrot set calculation)
+
+    // Main loop iterating over each point in the grid
+    for (int y = 0; y < N; ++y) {
+        double yc = ... // Map imaginary coordinate to [-1.5, 0.5] range
+        for (int x = 0; x < N; ++x) {
+            double xc = ... // Map real coordinate to [-1.5, 0.5] range
+            unsigned char pixel_data = ... // Calculate the Mandelbrot set point and pack into PBM format
+
+            // Write the pixel data byte-by-byte to stdout
+            std::cout << (char)pixel_data;
+        }
+    }
+
+    // Write the header for the PBM P4 output
+    std::cout << "P4\nN N\n";
+
+    return 0;
+}
 ```
 
 ### Key Requirements
-- The program should be written in C++
-- It must receive N as a command-line argument
-- The program should use exactly 50 iterations and an escape threshold of 4.0
-- The output should be in PBM P4 format, with bits packed MSB first and zero-padded per row
-- The output should be written byte-by-byte to stdout
+- The solution should be implemented in C++.
+- It must accept a single command-line argument `N`, representing the size of the bitmap.
+- Use exactly 50 iterations and an escape threshold `lim = 2.0 * 2.0`.
+- Write PBM P4 header and binary pixel data to stdout, and produce output validatable with cmp for N=200.
 
 ### Variable Values
-- Iteration limit: 50
-- Escape threshold: 4.0
-- Plot region (real): [-1.5, 0.5]
-- Plot region (imaginary): [-1.0, 1.0]
-- Output format: PBM P4
+```cpp
+const unsigned short lim = 2 * 2; // Escape threshold squared
+const int max_iterations = 50;
+```
 
 ### Notes
-This prompt is designed to encourage the model to extract the general structure from the provided example and apply it to the Mandelbrot set problem. The output should not include any unnecessary details or deviate significantly from the style of the example code. It's important to note that this prompt does not enforce the use of template metaprogramming, as requested.
+- The prompt assumes that the Mandelbrot set calculation and coordinate mapping functions are implemented in helper functions within the `namespace {}`.
+- The solution does not include error handling or validation for invalid inputs.

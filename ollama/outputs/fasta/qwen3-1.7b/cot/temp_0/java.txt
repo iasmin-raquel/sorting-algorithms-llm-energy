@@ -1,0 +1,33 @@
+[The actual prompt text that will be sent to the target LLM]
+
+Prompt:
+Implement a Java program to generate DNA sequences according to the Computer Language Benchmarks Game's Fasta problem. The program must:
+1. Generate a repeat fasta of the ALU sequence (n*2 characters)
+2. Generate a random fasta of the IUB alphabet (n*3 characters)
+3. Generate a random fasta of the Homo sapiens alphabet (n*5 characters)
+4. Use the specified LCG (IM=139968, IA=3877, IC=29573, Seed=42) to generate random numbers
+5. Calculate cumulative probabilities for each nucleotide (a, c, g, t, B, D, H, K, M, N, R, S, V, W, Y)
+6. Match random numbers to nucleotides using linear search
+7. Output sequences in the exact format: 60-character lines, three sequences with specified lengths
+8. Ensure output matches reference.txt when validated with diff output.txt reference.txt for N=1000
+
+Key Requirements:
+- Use exact LCG parameters and seed
+- Calculate cumulative probabilities for all nucleotides
+- Generate sequences with exact lengths (n*2, n*3, n*5)
+- Output in strict format: ">ONE Homo sapiens alu" followed by sequences
+- Do not cache random number sequence
+- Use ALU sequence, IUB probabilities, and Homo sapiens probabilities as specified
+
+Variable Values:
+- ALU sequence: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAA TACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGG AGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGG CGACAGAGCGAGACTCCGTCTCAAAAA
+- IUB probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+- Homo sapiens probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+- LCG parameters: IM=139968, IA=3877, IC=29573, Seed=42
+
+Notes:
+- The LCG must be used exactly as specified, including the seed value
+- The output must match the reference.txt when validated with diff output.txt reference.txt for N=1000
+- The random number sequence must not be cached between calls
+- The cumulative probabilities must be calculated accurately for all nucleotides
+- The output format requires precise line lengths and sequence order

@@ -1,0 +1,171 @@
+### Prompt Structure
+```text
+You are an expert Python code generator specializing in implementing the Gibbon's Spigot Algorithm for calculating Pi to arbitrary precision. You will be given a numerical input `N` representing the desired number of digits. Your task is to generate a complete, runnable Python script that implements this algorithm exactly as specified.
+
+Here are three example prompts and their corresponding outputs:
+
+**Example 1:**
+Prompt: "Generate a Python script to calculate the first 50 digits of Pi using the Gibbon's Spigot Algorithm."
+Output:
+```python
+from sys import argv
+
+IM = 139968
+IA = 3877
+IC = 29573
+SEED = 42
+
+def fastaRand(max):
+    global seed
+    seed = (seed * IA + IC) % IM
+    return max * seed / IM
+
+ALU = (
+  "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG"
+  "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA"
+  "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT"
+  "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA"
+  "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG"
+  "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC"
+  "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA")
+
+IUB = "acgtBDHKMNRSVWY"
+IUB_P = [0.27,0.12,0.12,0.27,
+   0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02]
+
+HomoSapiens = "acgt"
+HomoSapiens_P = [0.3029549426680,0.1979883004921,
+   0.1975473066391,0.3015094502008]
+
+LINELEN = 60
+
+def main(n):
+    print(">ONE Homo sapiens alu")
+    repeatFasta(ALU, n*2)
+    print(">TWO IUB ambiguity codes")
+    randomFasta(IUB, IUB_P, n*3)
+    print(">THREE Homo sapiens frequency")
+    randomFasta(HomoSapiens, HomoSapiens_P, n*5)
+
+if __name__ == '__main__':
+  main(int(argv[1]) if len(argv) > 1 else 1000)
+```
+
+**Example 2:**
+Prompt: "Generate a Python script to calculate the first 10 digits of Pi using the Gibbon's Spigot Algorithm."
+Output:
+```python
+from sys import argv
+
+IM = 139968
+IA = 3877
+IC = 29573
+SEED = 42
+
+def fastaRand(max):
+    global seed
+    seed = (seed * IA + IC) % IM
+    return max * seed / IM
+
+ALU = (
+  "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG"
+  "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA"
+  "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT"
+  "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA"
+  "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG"
+  "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC"
+  "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA")
+
+IUB = "acgtBDHKMNRSVWY"
+IUB_P = [0.27,0.12,0.12,0.27,
+   0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02]
+
+HomoSapiens = "acgt"
+HomoSapiens_P = [0.3029549426680,0.1979883004921,
+   0.1975473066391,0.3015094502008]
+
+LINELEN = 60
+
+def main(n):
+    print(">ONE Homo sapiens alu")
+    repeatFasta(ALU, n*2)
+    print(">TWO IUB ambiguity codes")
+    randomFasta(IUB, IUB_P, n*3)
+    print(">THREE Homo sapiens frequency")
+    randomFasta(HomoSapiens, HomoSapiens_P, n*5)
+
+if __name__ == '__main__':
+  main(int(argv[1]) if len(argv) > 1 else 1000)
+```
+
+**Example 3:**
+Prompt: "Generate a Python script to calculate the first 20 digits of Pi using the Gibbon's Spigot Algorithm."
+Output:
+```python
+from sys import argv
+
+IM = 139968
+IA = 3877
+IC = 29573
+SEED = 42
+
+def fastaRand(max):
+    global seed
+    seed = (seed * IA + IC) % IM
+    return max * seed / IM
+
+ALU = (
+  "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG"
+  "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA"
+  "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT"
+  "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA"
+  "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG"
+  "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC"
+  "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA")
+
+IUB = "acgtBDHKMNRSVWY"
+IUB_P = [0.27,0.12,0.12,0.27,
+   0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02]
+
+HomoSapiens = "acgt"
+HomoSapiens_P = [0.3029549426680,0.1979883004921,
+   0.1975473066391,0.3015094502008]
+
+LINELEN = 60
+
+def main(n):
+    print(">ONE Homo sapiens alu")
+    repeatFasta(ALU, n*2)
+    print(">TWO IUB ambiguity codes")
+    randomFasta(IUB, IUB_P, n*3)
+    print(">THREE Homo sapiens frequency")
+    randomFasta(HomoSapiens, HomoSapiens_P, n*5)
+
+if __name__ == '__main__':
+  main(int(argv[1]) if len(argv) > 1 else 1000)
+```
+
+Now, generate a Python script to calculate the first N digits of Pi using the Gibbon's Spigot Algorithm. The script should receive N as a command-line argument. Output the digits 10 per line with the running total of digits calculated. The output must be identical to the reference when validated with: diff output.txt reference.txt for N=30.
+```
+
+### Key Requirements
+*   The code must implement the Gibbon's Spigot Algorithm precisely as described, including the initial state, `next_step`, `extract` and `produce` operations.
+*   It must use arbitrary precision integers (using Python's built-in integer type) to avoid floating-point inaccuracies.
+*   The code should take the number of digits N as a command-line argument.
+*   The output format must be 10 digits per line, with a tab character (`\t`) separating each digit, followed by a colon and the running total of digits calculated (e.g., "3.141592653:N"). The final line should have fewer than 10 digits, padded with spaces on the right.
+*   The code must perform both `extract(3)` and `extract(4)` for digit verification before outputting a new digit.
+*   Use the provided constants (IM, IA, IC, SEED, ALU, IUB, HomoSapiens, HomoSapiens_P) exactly as defined in the examples.
+
+### Variable Values
+*   `IM = 139968`
+*   `IA = 3877`
+*   `IC = 29573`
+*   `SEED = 42`
+*   `ALU = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG...AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"` (full string as provided)
+*   `IUB = "acgtBDHKMNRSVWY"` (full string as provided)
+*   `HomoSapiens = "acgt"` (full string as provided)
+*   `HomoSapiens_P = [0.3029549426680, 0.1979883004921, 0.1975473066391, 0.3015094502008]` (full list as provided)
+*   `LINELEN = 60`
+
+### Notes
+The example outputs given are for N=30. Ensure the generated code produces exactly those digits and that the output matches the reference when validated with `diff output.txt reference.txt`. The provided `ALU`, `IUB`, `HomoSapiens` and `HomoSapiens_P` data is crucial; do not modify or replace them. Using a debugger to step through the algorithm's execution would be beneficial for verification.

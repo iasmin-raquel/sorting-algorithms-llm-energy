@@ -1,74 +1,68 @@
-### Prompt Structure
+---
 
-You are tasked with implementing a Mandelbrot set generator in Java for the Computer Language Benchmarks Game. Follow these examples to guide your solution structure:
+### **Prompt Structure**
+Generate a Java program that computes and outputs the Mandelbrot set for an input size `N` using the following specifications:
 
-**Example 1 (n-body):**
-```java
-/* The Computer Language Benchmarks Game
-   contributed by Isaac Gouy
-*/
+#### Example Adaptation:
+The provided example (`nbody`) demonstrates the structure of command-line argument handling, output to stdout, and iterative loop formatting. Focus on adopting these conventions without duplicating unrelated logic (e.g., body physics calculations).
 
-final class Body {
-   public double x, y, z, vx, vy, vz, mass;
-   Body(double x, double y, double z,
-         double vx, double vy, dz, double mass) {
-      this.x = x; this.y = y; this.z = z;
-      this.vx = vx; this.vy = vy; this.vz = vz;
-      this.mass = mass;
-   }
-}
-
-public final class nbody {
-    static void main(String[] args) {
-        int n = Integer.parseInt(args[0]);
-        // Initialize bodies here (omitted for brevity)
-        System.out.printf("%.9f\n", someCalculation());
-        // Main loop and output logic omitted
-    }
-}
 ```
-**Key patterns to capture:**
-1. **Input handling**: Use `Integer.parseInt(args[0])` for the command-line argument.
-2. **Core logic structure**:
-   - Initialize Mandelbrot parameters (region, iterations, threshold).
-   - Outer loop: iterate over grid coordinates (N-by-N).
-   - Inner loop: compute escape iteration count for each complex point.
-3. **Output format**: Follow PBM P4 specification exactly—header followed by packed binary pixel data (MSB-first, zero-padded rows).
+Main method: Takes `N` from CLI.
+Output format:
+- P4 header: "P4\nN N" (no quotes).
+- Pixel data: 8 pixels packed per byte (MSB-first bits), padded with zeros for rows not divisible by 8.
+Iteration logic:
+For each complex `C = (real(C), imag(C))` in the grid,
+- Initialize `Z = 0 + 0i`.
+- Repeat 50 times: `Z = Z*Z + C`.
+- If `|Z|² > lim`, exit loop and mark pixel as not in set.
+- Else, mark pixel as in set.
+
+Coordinate mapping:
+real(C) = 2.0 * x / N - 1.5
+imag(C) = 2.0 * y / N - 1.0
+
+Algorithm:
+Loop over all (x,y) pairs in [0,N-1]×[0,N-1]:
+- For each C, compute iterations.
+- Pack bits into bytes (MSB first), appending zeros if needed.
+
+Constraints:
+- Use exactly `lim = 2.0 * 2.0`.
+- No square roots; compare squared magnitude: `zr*zr + zi*zi <= lim`.
+```
 
 ---
-**Your task:**
-Implement a Mandelbrot generator in Java adhering strictly to the following parameters:
-- Command-line input: `N` (size of grid).
-- Output: Binary PBM P4 header + packed pixel bytes via `System.out`.
-- No helper methods; embed all logic directly. Write only the minimal required code snippet to reproduce the exact output when validated with N=200.
+
+### **Key Requirements**
+- **Language**: Pure Java (no external dependencies).
+- **Input Handling**: Command-line argument `N` (e.g., `"java Mandelbrot 200"`).
+- **Iterations**: Fixed at 50 per point.
+- **Precision**: Use `double` for arithmetic, round-trip to integers only for bit packing.
+- **Output**: Raw P4 binary data + header; no newline characters beyond header.
+- **Correctness**:
+  - Validate with `cmp` for N=200.
+  - Strictly follow bit-packing rules (8 pixels/byte, MSB-first).
+- **Code Style**:
+  - Avoid example’s unrelated code (e.g., `Body` class).
+  - Minimal boilerplate; focus on core logic.
 
 ---
-### Key Requirements
-- **Language**: Strictly Java 8+ syntax (no third-party imports; rely on primitive types only).
-- **Precision**: Use `double` for complex arithmetic.
-- **Output format**:
-  - Header: `"P4"` newline followed by N rows (each row’s width is `(N*8/8)` bytes, zero-padded).
-  - Pixel data: Packed bits per row (MSB-first), zero-padded per byte.
-- **Algorithm**:
-  - Grid spans `[-1.5, 0.5]` (real) × `[-1.0, 1.0]` (imaginary).
-  - Escape threshold = 4.0; max iterations = 50.
-  - Set pixel = `0` if iteration count ≤ 50 (in set); else `255`.
-- **No validation libraries**: Assume output matches reference on binary level when run for N=200.
+
+### **Variable Values**
+| Parameter          | Value                     |
+|--------------------|---------------------------|
+| Maximum Iterations  | `50`                      |
+| Escape Threshold    | `lim = 2.0 * 2.0`         |
+| Coordinate Bounds   | Real: [-1.5, 0.5]; Imag: [-1.0, 1.0] |
+| Packing Rate        | 8 pixels/byte (MSB-first) |
 
 ---
-### Variable Values
-| Parameter          | Value       |
-|--------------------|------------|
-| Grid size (`N`)    | Command-line argument (e.g., `"200"`) |
-| Max iterations     | 50         |
-| Escape threshold   | 4.0        |
-| Real range         | [-1.5, 0.5]|
-| Imaginary range    | [-1.0, 1.0]|
 
----
-### Notes
-- **Edge case handling**: Assume `N` is always integer and ≥ 2.
-- **Bit packing**: Each pixel = 8 bits (2 bytes), but write packed rows to stdout as raw bytes (no newline between rows).
-- **Precision**: Floating-point errors are acceptable if the output matches reference for N=200; avoid exact bit-level mismatches unless critical.
-- **Avoid**: Using `MandelbrotSet` classes or external libraries. Implement purely algorithmically.
-- **Output format note**: The PBM header must include no trailing newlines beyond `"P4"` newline. Rows must be zero-padded to byte-length `(N*8/8) = N` bytes per row.
+### **Notes**
+- **Bit Packing**: Use `>>`/`&` to merge bits; clear lower 3 bits for padding.
+- **Edge Cases**:
+  - Handle N not divisible by 8 by appending zeros in the last row’s byte(s).
+  - Ensure all pixels are written (no partial bytes).
+- **Performance**: Optimize loop/unrolling for speed (though correctness is prioritized over raw code size).
+- **Assumptions**: Assume target LLM handles primitive arithmetic and bit manipulation accurately.

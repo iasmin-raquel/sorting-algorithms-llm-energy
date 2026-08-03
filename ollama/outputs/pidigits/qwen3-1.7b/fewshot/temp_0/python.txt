@@ -1,0 +1,33 @@
+### Prompt Structure
+Implement the pidigits problem using the Unbounded Spigot Algorithm (Gibbons) in Python. The code must:
+- Use arbitrary precision integers (Python's built-in integers)
+- Receive N as a command-line argument
+- Follow the stateful loop: next_step, extract(3), produce(d), and repeat
+- Output 10 digits per line with running total
+- Verify output matches reference for N=30
+- Handle digit selection with extract(3) and extract(4) for validation
+
+### Key Requirements
+- Use Python's arbitrary precision integers (no external libraries)
+- Receive N as command-line argument (e.g., `python pidigits.py 30`)
+- Follow the exact algorithm steps: next_step, extract(3), produce(d), and repeat
+- Output 10 digits per line, padding with spaces if needed
+- Ensure the running total is printed as "\t:N" per line
+- Validate output with `diff output.txt reference.txt` for N=30
+
+### Variable Values
+- IM = 139968 (from example)
+- IA = 3877 (from example)
+- IC = 29573 (from example)
+- SEED = 42 (from example)
+- IUB = "acgtBDHKMNRSVWY" (from example)
+- IUB_P = [0.27,0.12,0.12,0.27, ...] (from example)
+- HomoSapiens = "acgt" (from example)
+- HomoSapiens_P = [0.3029549426680, ...] (from example)
+- LINELEN = 60 (from example)
+
+### Notes
+- The algorithm parameters (IM, IA, IC, SEED) are from the example code and must be used
+- The code must handle arbitrary precision arithmetic via Python's integers
+- The output format must match exactly: 10 digits per line, padding with spaces, and "\t:N" running total
+- The LLM must ensure that extract(3) and extract(4) are both called for validation

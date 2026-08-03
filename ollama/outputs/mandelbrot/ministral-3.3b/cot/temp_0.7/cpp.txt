@@ -1,67 +1,91 @@
-### Prompt Structure
-Think step-by-step about how to generate a C++ program that computes the Mandelbrot set within the specified region and outputs it in PBM P4 format. Follow these instructions:
+---
 
-1. **Understand the Mandelbrot Set Calculation**:
-   For each complex number \( c \) in the grid over the range `[-1.5, 0.5]` (real part) and `[-1.0, 1.0]` (imaginary part), compute the sequence:
-   \[
-   z_{n+1} = z_n^2 + c,
-   \]
-   where \( z_0 = 0 \). Count iterations until either:
-   - The magnitude of \( z_n \) exceeds **4.0** (escape threshold), or
-   - The iteration count reaches **50**.
+### **Prompt Structure**
+**Task:** Generate a C++ program to compute the Mandelbrot set for an N×N grid over the complex plane `[-1.5 - i, 0.5 + i]` using exactly the following constraints:
 
-   If the sequence escapes, the point is *not* in the Mandelbrot set; otherwise, it *is*.
+#### **Step-by-Step Reasoning:**
+1. **Input Handling:**
+   - The program should read `N` from the command line (e.g., `./mandelbrot 200`).
+   - Validate that `N` is a positive integer and exits gracefully if invalid.
 
-2. **Grid Mapping**:
-   For a given resolution `N`, map each grid pixel to a corresponding complex number \( c \) by linear interpolation:
-   - Real part: \( x = -1.5 + (0.5 - (-1.5)) \cdot \frac{i}{N} \)
-   - Imaginary part: \( y = -1.0 + (1.0 - (-1.0)) \cdot \frac{j}{N} \).
+2. **Complex Plane Mapping:**
+   - For each pixel `(x, y)` (where `x`, `y ∈ [0, N-1]`), compute the corresponding complex constant `C` using:
+     ```
+     real(C) = 2.0 * x / N - 1.5
+     imag(C) = 2.0 * y / N - 1.0
+     ```
+   - Round to nearest float for precision (e.g., `real(C) = floor(real(C) + 0.5)`).
 
-3. **PBM P4 Format**:
-   The output must follow PBM P4:
-   - Header line: `P4` (case-sensitive).
-   - First line: `N N` (the resolution squared, i.e., \( N^2 \)).
-   - Binary data: A packed bitstream where each pixel’s iteration count is written as 8 bits (zero-padded to an integer value). Bits are packed MSB-first per row.
+3. **Mandelbrot Algorithm:**
+   - Initialize `Z` = `(0.0, 0.0)` for all iterations.
+   - For each iteration `i ∈ [0, 49]`:
+     - Compute `new_Z = Z² + C` using squared magnitude updates (no sqrt):
+       ```
+       zr_new = zr² - zi² + real(C)
+       zi_new = 2 * zr * zi + imag(C)
+       ```
+     - Check if `|Z|² > lim = 4.0` (escape condition). If so, the point is **not** in the set.
+   - After 50 iterations, if `|Z|² ≤ lim`, the point belongs to the set.
 
-4. **C++ Code Requirements**:
-   - Use `std::cout` for output.
-   - Accept `N` as a command-line argument.
-   - Precompute constants like \(-1.5\), \(0.5\), etc., to avoid redundant calculations.
-   - Handle edge cases (e.g., invalid `N`, rounding errors in interpolation).
+4. **Output Format (PBM P4):**
+   - **Header:** Write `P4\nN N` to stdout.
+   - **Pixels:** For each row:
+     a) Pack bits into bytes (MSB = in-set, LSB = not).
+     b) If `N % 8 ≠ 0`, pad the last byte with zeros to align rows to 1-byte boundaries.
+
+5. **Edge Cases:**
+   - Handle floating-point precision carefully (e.g., `real(C)`/`imag(C)` truncation vs. rounding).
+   - Ensure no infinite loops if rounding artifacts cause wrong iteration stops.
 
 ---
-**Chain-of-Thought Steps**:
-- Write the Mandelbrot iteration function.
-- Implement the grid mapping for each pixel \((i,j)\).
-- Construct the binary PBM output by iterating over all pixels and packing their iteration counts.
-- Validate that the code adheres to the exact specification for escape threshold (4.0), max iterations (50), and PBM format.
+**Code Signature:**
+```cpp
+#include <iostream>
+#include <cmath>      // For fmod() and floor()
+using namespace std;
 
-### Key Requirements
-- **Language**: Pure C++17 or later; no external libraries allowed.
-- **Input Handling**:
-  - Command-line argument: `N` (must be an integer ≥ 2).
-  - Validate `N` to avoid invalid ranges (e.g., reject non-integer inputs).
-- **Iteration Logic**:
-  - Use exactly 50 iterations per point.
-  - Escape threshold is the magnitude of \( z_n \) exceeding 4.0 (compute as \(|z_n| > 4.0\)).
-- **Output Format**:
-  - No extra whitespace or lines; strictly PBM P4.
-  - Binary pixels packed MSB-first, zero-padded per row (e.g., for iteration count `k`, bits must represent the *binary* form of \( k \) as an integer).
-  - Example: Iteration counts 3 and 7 (binary `011` and `111`) are written as `[0b011][0b111]` = packed bytes `0x35`.
-- **Edge Cases**:
-  - Handle rounding errors during interpolation gracefully.
-  - Ensure correctness for the boundary points of the plot region (e.g., \( c \) values where \(|z_n|\) just exceeds 4.0 at max iterations).
+int main(int argc, char* argv[]) {
+    if (argc != 2) { ... } // Validate N input.
+    int N = stoi(argv[1]); ...
 
-### Variable Values
-- **Max Iterations**: `50`
-- **Escape Threshold**: `4.0` (explicitly check \(|z_n| > 4.0\))
-- **Plot Region**:
-  - Real axis: \( x \in [-1.5, 0.5] \)
-  - Imaginary axis: \( y \in [-1.0, 1.0] \)
+    // Initialize C, Z, and iterate 50 times per pixel.
+    double real_C, imag_C;
+    for (y = 0; y < N; y++) {
+        imag_C = 2.0 * y / N - 1.0;
+        for (x = 0; x < N; x++) {
+            real_C = 2.0 * x / N - 1.5;
+            ... // Compute bitmask for Z after 50 iterations.
+        }
+    }
 
-### Notes
-- The PBM P4 packing requires the binary values of iteration counts (not their decimal representation). For example:
-  - Iteration count `k = 3` (binary `0b00...011`) is written as two bytes: `0x00`, `0x03`.
-  - The model must ensure correct bit-packing per row, zero-padded to an integer value (e.g., a row with iteration counts `[256, 1]` becomes bytes `0xFF` + `0b00000001` = `0xFF`, `0x01`).
-- Ambiguity risk: Ensure the model distinguishes between "escape" (reaching threshold) and "max iterations hit." Both must render as 50 (black pixel) if interpreted as part of the set.
-- Known pitfall: Floating-point precision in interpolation may affect edge cases near the plot boundaries. The prompt emphasizes rounding to nearest integer for grid mapping.
+    // Write PBM header and packed binary data.
+}
+```
+
+---
+### **Key Requirements**
+- **Language:** Pure C++ (no libraries beyond `<iostream>`, `<cmath>`).
+- **Precision:** Must match reference output *exactly* for N=200 after floating-point rounding.
+- **Portability:** Works on any system with standard C++11 or later.
+- **Output Validation:**
+  - The binary pixel data must pass `cmp output.pbm reference.pbm` without discrepancies.
+  - Header format is strict: `"P4\nN N"` (no extra whitespace/newlines).
+
+---
+### **Variable Values**
+| Parameter               | Value         | Notes                                  |
+|-------------------------|---------------|----------------------------------------|
+| Maximum iterations       | `50`          | Must iterate exactly 50 times per point. |
+| Escape threshold (`lim`) | `4.0` (2²)    | Point escapes if `|Z|² > lim`.            |
+| Real(C) range           | `[-1.5, 0.5]` | Mapped to `[x/N * 2 - 1.5]`.           |
+| Imag(C) range           | `[-1.0, 1.0]` | Mapped to `[y/N * 2 - 1.0]`.            |
+
+---
+### **Notes**
+- **Rounding Ambiguity:** The prompt assumes `real_C`/`imag_C` should be **rounded** (e.g., `-1.5 + 0.6 = -0.9`), but must match the reference exactly. Test with N=200 to validate.
+- **Bit Packing:**
+  - For N=8, each row outputs `N/8` bytes. For odd rows, pad with zeros (e.g., N=11 → 1 byte + 3 zero bits).
+- **Floating-Point Safety:** Avoid `-0.0` vs. `+0.0` comparisons; use `fabs(zr) > lim` to detect escape conditions.
+- **Expected Behavior:**
+  - The LLM should output a deterministic binary pixel stream with no assumptions about external tools (e.g., no `system("cmp")`).
+  - For N=200, the output must match the reference *byte-for-byte* when padded correctly.

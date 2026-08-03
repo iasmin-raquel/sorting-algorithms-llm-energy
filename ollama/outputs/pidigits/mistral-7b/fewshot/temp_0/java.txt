@@ -1,0 +1,38 @@
+Prompt:
+
+Given the following example code that generates random DNA sequences, modify it to implement the Pidigits problem from the Computer Language Benchmarks Game. The new program should calculate the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) and print the calculated digits in groups of 10 with a running total.
+
+The output format should be identical to the reference when validated with `diff output.txt reference.txt` for N=30. The program must use BigInteger for arbitrary precision arithmetic, receive N as a command-line argument, and follow the structure of the example code.
+
+Example code:
+
+```java
+import java.math.BigInteger;
+import java.io.IOException;
+
+public class Pidigits {
+    // ... (existing code)
+
+    static BigInteger q = BigInteger.ONE, r = BigInteger.ZERO, t = BigInteger.ONE, k = BigInteger.ZERO;
+
+    static void next_step() {
+        // ... (implement the next_step function using BigIntegers)
+    }
+
+    static int extract(BigInteger x) {
+        // ... (implement the extract function)
+    }
+
+    static void produce(int d) {
+        // ... (implement the produce function)
+    }
+
+    public static void main(String[] args) throws IOException {
+        final int n = (args.length > 0) ? Integer.parseInt(args[0]) : 1000;
+        System.out.println(">PI Digits");
+        repeatPidigits(n);
+    }
+}
+```
+
+In the modified code, you should implement the `next_step`, `extract`, and `produce` functions using BigInteger for arbitrary precision arithmetic according to the algorithm requirements. The `repeatPidigits` function should call these functions in a stateful loop until the required number of digits is calculated and print them in groups of 10 with a running total.

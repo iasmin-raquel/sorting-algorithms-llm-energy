@@ -1,0 +1,94 @@
+### Prompt Structure
+You are an expert Java code generator specializing in numerical algorithms and arbitrary precision arithmetic. Your task is to generate a complete Java program that implements the PIDIGITS problem from the Computer Language Benchmarks Game, utilizing the Unbounded Spigot Algorithm (Gibbons) with `BigInteger` for accurate calculations. The program must take the number of digits `N` as a command-line argument and produce the first `N` digits of Pi according to the specified algorithm and output format.
+
+Let's think step by step:
+
+1.  **Initialization:** First, we need to define the initial state variables: `q`, `r`, `t`, and `k`. These should be initialized with the values provided in the problem description (q=1, r=0, t=1, k=0) and declared as `BigInteger`s. We also need a command-line argument parsing mechanism to obtain the value of N.
+
+2.  **Algorithm Implementation:** Implement the core algorithm logic precisely following the "next_step", "extract(x)", and "produce(d)" operations described in the problem statement. This involves iteratively advancing `k`, updating `r` and `t`, calculating `q`, and then calling `extract(3)` and `extract(4)` for verification.
+
+3.  **Digit Extraction & Verification:** The algorithm should proceed until `q > r` is no longer true, ensuring the correct number of digits are calculated. Crucially, it must perform both `extract(3)` and `extract(4)` to confirm that the extracted digit matches the expected value based on the extraction function.
+
+4.  **Output Formatting:** The generated output should adhere strictly to the specified format: 10 digits per line, with a running total of digits calculated at the end of each line in the form "N:X", where X is the number of digits calculated so far. If the last line has fewer than 10 digits, pad with spaces on the right until it reaches 10.
+
+5.  **Error Handling:** The code should handle potential errors gracefully (e.g., invalid command-line arguments). Though not explicitly required by the problem description, consider adding basic input validation for `N`.
+
+Now, generate the Java code to implement this algorithm. Include comments explaining each step of the process.
+```java
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Pidigits {
+
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Usage: java Pidigits <N>");
+            return;
+        }
+
+        int n = Integer.parseInt(args[0]);
+
+        BigInteger q = BigInteger.ONE;
+        BigInteger r = BigInteger.ZERO;
+        BigInteger t = BigInteger.ONE;
+        BigInteger k = BigInteger.ZERO;
+
+        List<String> digits = new ArrayList<>();
+
+        while (true) {
+            k = k.add(BigInteger.ONE);
+            r = r.add(BigInteger.valueOf(2).multiply(q));
+            r = r.multiply(BigInteger.valueOf(2).multiply(k).add(BigInteger.ONE));
+            t = t.multiply(BigInteger.valueOf(2).multiply(k).add(BigInteger.ONE));
+            q = q.multiply(k);
+
+            if (q.compareTo(r) > 0) {
+                break;
+            }
+        }
+
+        int count = 0;
+        for (BigInteger i = BigInteger.ZERO; i.compareTo(q) < 0; i = i.add(BigInteger.ONE)) {
+            BigInteger d = extract(i, q, r, t);
+            digits.add(String.valueOf(d));
+            count++;
+        }
+
+        for (int i = 0; i < digits.size(); i++) {
+            if (i < digits.size() - 1) {
+                System.out.print(digits.get(i));
+                System.out.print(": " + count + "\t");
+            } else {
+                System.out.println(digits.get(i));
+                System.out.print(count + ": " + count);
+            }
+
+        }
+    }
+
+    // Extract the digit from the algorithm's state
+    public static BigInteger extract(BigInteger i, BigInteger q, BigInteger r, BigInteger t) {
+        return (q.multiply(i).add(r)).divide(t);
+    }
+}
+```
+
+### Key Requirements
+*   The code must be written in Java.
+*   It should utilize `BigInteger` for arbitrary precision arithmetic to avoid overflow issues.
+*   It needs to receive the value of N as a command-line argument.
+*   Implement the algorithm's core logic step by step:  `next_step`, `extract(x)`, and `produce(d)` as defined in the problem description.
+*   The code must perform both `extract(3)` and `extract(4)` for digit verification during the calculation process, adhering strictly to the algorithm’s rules.
+*   Output should be formatted exactly as specified: 10 digits per line with running total at the end of each line in format "N:X".
+
+### Variable Values
+*   `q`: 1
+*   `r`: 0
+*   `t`: 1
+*   `k`: 0
+*   `N`: Command-line argument (e.g., 30)
+
+### Notes
+The prompt is designed to guide the LLM towards a complete and accurate implementation of the PIDIGITS problem, emphasizing the importance of arbitrary precision arithmetic using `BigInteger`. The step-by-step instruction, combined with the detailed requirements, should help the model generate code that closely matches the expected output.  Error handling (specifically input validation) has been considered but not implemented to reduce complexity.

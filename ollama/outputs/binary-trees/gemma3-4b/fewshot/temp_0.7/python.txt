@@ -1,0 +1,61 @@
+```text
+### Prompt Structure
+You are an expert Python code generator specializing in solving problems from the Computer Language Benchmarks Game. Your task is to generate a complete Python program that implements the Binary Trees problem exactly as described in the game documentation. The output of your generated code must match the reference output when validated using `diff output.txt reference.txt` for N=10, ensuring identical tree allocations and deallocations.
+
+Here's an example of the expected input/output format:
+
+```
+stretch tree of depth 4	 check: C
+trees of depth 4	 check: C
+long lived tree of depth 4	 check: C
+stretch tree of depth 5	 check: C
+trees of depth 5	 check: C
+long lived tree of depth 5	 check: C
+stretch tree of depth 6	 check: C
+trees of depth 6	 check: C
+long lived tree of depth 6	 check: C
+stretch tree of depth 7	 check: C
+trees of depth 7	 check: C
+long lived tree of depth 7	 check: C
+stretch tree of depth 8	 check: C
+trees of depth 8	 check: C
+long lived tree of depth 8	 check: C
+```
+
+The program should receive the value of `N` as a command-line argument. The following parameters must be used exactly as given:
+
+*   `min_depth = 4`
+*   `max_depth = max(min_depth + 2, N)`
+*   `stretch_depth = max_depth + 1`
+*   `iterations = 1 << (max_depth - depth + min_depth)`  (where 'depth' is the current depth being processed)
+*   `N` received via command-line argument
+
+The program must:
+
+1.  Define a `Tree` node structure with `left` and `right` child pointers.
+2.  Allocate a binary tree to stretch memory, check its existence, and deallocate it.
+3.  Allocate a long-lived binary tree which will live on while other trees are allocated and deallocated.
+4.  Implement the logic to allocate, walk, and deallocate many bottom-up binary trees. For each depth from `min_depth` to `max_depth` (step 2), create a tree with that depth, count its nodes, deallocate it, and ensure the long-lived tree remains active.
+5.  Verify that the long-lived binary tree exists after all allocations and deallocations.
+
+The output should be precisely as shown in the example above, including the header lines and the tree depths. Each tree node allocation and deallocation step must be meticulously implemented to match the requirements of the problem. Use a clear and readable coding style with comments explaining each step.  Do not optimize for performance; focus on producing correct code that adheres exactly to the specification.
+
+Now, generate the Python code to solve this problem based on the above description.
+```
+
+### Key Requirements
+*   The generated Python code must implement the Binary Trees problem from the Computer Language Benchmarks Game.
+*   It must receive `N` as a command-line argument.
+*   The algorithm parameters (`min_depth`, `max_depth`, `stretch_depth`, `iterations`) should be calculated according to the specified rules.
+*   A `Tree` node structure with `left` and `right` child pointers must be defined.
+*   The code must allocate and deallocate binary trees correctly, following the bottom-up approach.
+*   The output format must precisely match the example provided in the prompt.
+*   No optimizations should be applied to improve performance; the focus is on correctness and adherence to the problem's constraints.
+
+### Variable Values
+*   `N = 10` (This value will be passed as a command-line argument)
+*   `min_depth = 4`
+*   `max_depth = 7`
+*   `stretch_depth = 8`
+*   `iterations = 1 << (7 - 4 + 4) = 16`
+```

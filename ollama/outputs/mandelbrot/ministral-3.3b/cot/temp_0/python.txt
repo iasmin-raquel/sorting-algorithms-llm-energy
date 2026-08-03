@@ -1,65 +1,55 @@
 ### Prompt Structure
-**Think step-by-step about how to generate a Python script that computes the Mandelbrot set for an N×N grid within the specified region and outputs it in PBM P4 format. Break down the problem into these key phases:**
+Think step-by-step about how to generate a Python script that computes the Mandelbrot set within the specified constraints. The script must:
 
-1. **Input Handling:**
-   - Parse `sys.argv` to extract `N`, ensuring it is validated as an integer.
-   - Define constants: `MAX_ITERATIONS = 50`, `ESCAPE_THRESHOLD = 4.0`.
-   - Validate that the input region matches exactly:
-     - Real axis: `[-1.5, 0.5]` (inclusive bounds).
-     - Imaginary axis: `[-1.0, 1.0]`.
+1. Take an integer `N` (the size of the bitmap) as a command-line argument.
+2. Define the coordinate mapping for the complex plane, converting pixel coordinates `(x,y)` into complex numbers `C = real(C) + imag(C)*i`.
+3. Implement the Mandelbrot iteration algorithm to determine if each point belongs to the set by checking whether `|Z|²` exceeds the escape threshold after 50 iterations.
+4. Pack binary pixel data (1 bit per pixel, MSB first) into bytes for PBM P4 output format, ensuring proper padding with zeros if `N % 8 != 0`.
+5. Write the header `"P4\nN N"` followed by packed binary pixel data to stdout.
 
-2. **Grid Initialization:**
-   - Create an N×N grid of complex numbers (`c`) covering the specified region.
-   - For each pixel `(i,j)`, compute the corresponding real and imaginary coordinates:
-     ```
-     real = -1.5 + (0.5 + 1.5) * i / (N - 1)
-     imag = -1.0 + (1.0 + 1.0) * j / (N - 1)
-     ```
+**Chain-of-thought reasoning:**
+- First, derive the exact mapping between pixel coordinates and complex plane values using the given formulas.
+- Next, outline how to iterate over each pixel `(x,y)`, compute `C`, initialize `Z = 0 + 0i`, and apply the iteration formula `Z = Z² + C` for 50 steps.
+- For each iteration, check if `|Z|² > lim`. If so, mark the point as *not* in the set; otherwise, it is part of the set.
+- Pack bits into bytes: For each row, iterate over pixels, write a bit (1=set, 0=not) to an output buffer. After every 8 pixels, emit a byte with MSB first. Pad the last byte if necessary.
+- Handle edge cases like `N % 8 != 0` by appending zeros to the last row’s bytes.
 
-3. **Mandelbrot Iteration Logic:**
-   - For each `c`, iterate over `z = 0` and compute:
-     ```
-     z_new = z² + c
-     ```
-   - Stop iterating if `|z| > ESCAPE_THRESHOLD` or reach `MAX_ITERATIONS`.
-   - Track the iteration count for each pixel.
-
-4. **PBM P4 Output:**
-   - Write a header line: `"P4"` (no whitespace).
-   - Follow with two integers: `N` (width) and `1` (grayscale, bits per pixel).
-   - For each row:
-     - Pack 8 pixels into a byte (MSB-first), zero-padded if necessary.
-     - Use the iteration count as grayscale value (0–50 → 0–255 scaling).
-
-**Constraints:**
-- Do not hardcode any values except those explicitly required by the problem.
-- Ensure binary pixel data is written in raw bytes, with no extra whitespace or metadata.
+**Output format:**
+- Header: `"P4\nN N"` (no newline after header).
+- Binary pixel data: Packed bits as described, written in binary mode (e.g., `sys.stdout.buffer.write()`).
 
 ---
 
 ### Key Requirements
-- **Language:** Pure Python 3.x (no external libraries).
-- **Command-line Argument:** `N` must be passed as an integer via `sys.argv[1]`.
-- **Precision:** Use floating-point arithmetic for complex number calculations.
-- **Output Format:**
-  - Header: Exactly `"P4"` followed by newline.
-  - Pixel data: Binary bytes, packed MSB-first (e.g., `0xAA` = 6 bits of pixel 1 + 2 bits of pixel 2).
-- **Edge Cases:** Handle invalid `N` (e.g., non-integer or ≤ 0) gracefully by exiting with an error message.
+- **Language**: Pure Python 3.x.
+- **Input**: Command-line argument `N` (must be parsed and validated to be a positive integer).
+- **Algorithm**:
+  - Exactly 50 iterations per point.
+  - Escape threshold: `lim = 2.0 * 2.0`.
+  - Use squared magnitude (`zr² + zi²`) for comparison; no square roots.
+  - Iteration formula: `Z = Z*Z + C` (complex multiplication).
+- **Output**:
+  - Header: `"P4\nN N"` (exactly, no extra whitespace or newlines).
+  - Pixel data:
+    - 1 bit per pixel (MSB first), packed into bytes.
+    - Last byte of each row padded with zeros if `N % 8 != 0`.
+- **Validation**: Output must match the reference for `N=200` when compared via `cmp`.
 
 ---
 
 ### Variable Values
 | Parameter          | Value               |
 |--------------------|---------------------|
-| Maximum Iterations  | `50`                |
-| Escape Threshold   | `4.0`               |
-| Real Axis Range    | `[-1.5, 0.5]`       |
-| Imaginary Axis Range| `[-1.0, 1.0]`       |
+| Maximum iterations  | 50                  |
+| Escape threshold   | `lim = 4.0` (since `2.0 * 2.0`) |
+| Coordinate mapping: real(C) = `2.0 * x / N - 1.5` |
+| Coordinate mapping: imag(C) = `2.0 * y / N - 1.0` |
 
 ---
 
 ### Notes
-- **Ambiguity Risk:** The PBM P4 header specification is minimal; ensure the LLM strictly adheres to `"P4"` (no extra characters).
-- **Performance Note:** For N=200, this requires ~40k iterations total. Optimize by avoiding redundant calculations (e.g., precompute grid spacing).
-- **Binary Output:** The pixel data must be written as raw bytes; avoid converting to strings or other formats.
-- **Validation:** The output must match the reference exactly for N=200, including bit-packing and scaling.
+- **Edge cases**: Handle invalid `N` (e.g., non-integer or negative) by raising a clear error.
+- **Bit packing**: Ensure bit order is MSB-first when writing bytes. For example, if the first pixel in a row is in the set, the output byte should have bit 7 set (binary `100...0`).
+- **Performance**: The script must run efficiently for `N=200` (or larger) without unnecessary overhead.
+- **Output format**: No trailing newline after header or binary data. Use `sys.stdout.buffer.write()` for binary output to avoid encoding issues.
+- **Complex math**: Implement complex number arithmetic manually if the LLM does not have built-in support (e.g., using tuples `(zr, zi)`).

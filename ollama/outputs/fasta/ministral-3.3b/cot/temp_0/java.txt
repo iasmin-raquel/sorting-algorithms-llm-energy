@@ -1,0 +1,91 @@
+### Prompt Structure
+
+**Chain-of-Thought Reasoning for Fasta Sequence Generation in Java:**
+
+1. **Problem Decomposition:**
+   - The task is divided into three main parts: generating a repeated fasta sequence from an ALU template, and two random fasta sequences based on weighted probabilities for IUB ambiguity codes and Homo sapiens nucleotides.
+   - For each part, the following steps must be followed:
+     - Parse command-line argument `N` to determine output length.
+     - Define cumulative probability distributions for each alphabet (IUB and Homo sapiens).
+     - Use a Linear Congruential Generator (LCG) with given constants (`IM`, `IA`, `IC`, Seed=42) to generate random numbers.
+     - For each nucleotide, select it by comparing the generated random number against its cumulative probability range.
+
+2. **Implementation Steps:**
+   - **Repeat Fasta:** Copy the ALU sequence in chunks of 2 characters (to match `n*2` output length), ensuring no padding or truncation.
+   - **Random Fasta for IUB Alphabet:**
+     - Convert given probabilities to cumulative probabilities.
+     - Use LCG to generate random numbers, then select nucleotides based on these ranges.
+   - **Random Fasta for Homo sapiens Alphabet:**
+     - Repeat the same process with adjusted probabilities (a=0.3029549..., etc.).
+   - **Output Formatting:** Ensure each sequence is exactly 60 characters long per line and formatted as specified (`>ONE`, `>TWO`, `>THREE`).
+
+3. **LCG Implementation:**
+   - The LCG must be applied sequentially for each nucleotide selection, without caching results.
+   - Seed initialization must start at 42, and the formula `(Seed * IA + IC) % IM` must be used to update the seed.
+
+4. **Edge Cases & Validation:**
+   - Handle cases where `N` is not divisible by 2 (for repeat fasta), but ensure output length matches `n*2`, `n*3`, or `n*5` for each sequence.
+   - Validate output against reference files using `diff` to confirm correctness.
+
+---
+
+### Key Requirements
+- **Language:** Java only; no other languages allowed.
+- **Command-line Argument:** Must accept `N` as input (e.g., `java Program N`).
+- **LCG Constraints:**
+  - Use exact constants: `IM=139968`, `IA=3877`, `IC=29573`, Seed=42.
+  - Do not cache random numbers; generate them on-demand for each nucleotide.
+- **Alphabet Probabilities:** Must use the provided exact values (e.g., IUB: `a=0.27, c=0.12,...`).
+- **Output Format:**
+  - Exactly three sequences per run, with line lengths of 60 characters.
+  - Prefixes must match exactly (`>ONE`, `>TWO`, `>THREE`).
+  - Lengths must be `n*2`, `n*3`, and `n*5` for the respective sequences.
+- **No Padding/Truncation:** Output must be exact; no extra characters or missing nucleotides.
+
+---
+
+### Variable Values
+#### ALU Sequence (Repeat Fasta):
+```
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+```
+
+#### IUB Alphabet Probabilities (Weighted Random Fasta):
+| Nucleotide | Probability |
+|------------|-------------|
+| a          | 0.27        |
+| c          | 0.12        |
+| g          | 0.12        |
+| t          | 0.27        |
+| B/D/H/K/M/N/R/S/V/W/Y | 0.02 each |
+
+#### Homo sapiens Alphabet Probabilities (Weighted Random Fasta):
+| Nucleotide | Probability                     |
+|------------|---------------------------------|
+| a          | 0.3029549426680                 |
+| c          | 0.1979883004921                |
+| g          | 0.1975473066391                |
+| t          | 0.3015094502008                |
+
+#### LCG Constants:
+- `IM = 139968`
+- `IA = 3877`
+- `IC = 29573`
+- Seed = 42
+
+---
+
+### Notes
+- **Ambiguity Handling:** For IUB sequences, ensure all ambiguity codes are generated with equal probability (0.02 each) and correctly mapped to their base counterparts.
+- **Output Lengths:**
+  - Repeat fasta: `n*2` characters (ALU sequence repeated).
+  - IUB random fasta: `n*3` characters (each nucleotide selected independently).
+  - Homo sapiens random fasta: `n*5` characters (same logic, but with adjusted probabilities).
+- **LCG Behavior:** The model must generate a new random number for each nucleotide selection without storing intermediate results.
+- **Edge Cases:**
+  - If `N=0`, output should be empty (no sequences). Validate this case explicitly.
+  - Ensure no floating-point precision errors affect cumulative probability comparisons.

@@ -1,0 +1,31 @@
+### Prompt Structure
+You are an expert Python code generator specializing in implementing numerical algorithms. Your task is to generate a complete Python program that calculates the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic, adhering strictly to the problem description and output format.
+
+First, let's break down the process step-by-step to ensure we cover all requirements:
+
+1.  **Initialization:** The algorithm starts with `q = 1`, `r = 0`, `t = 1`, and `k = 0`. These variables represent the state of the spigot.
+2.  **`next_step()` Function:** This function increments `k`, updates `r` based on `q`, updates `t` based on `k`, and updates `q` based on `k`. It's the core step in generating the digits.
+3.  **`extract(x)` Function:** This function calculates a single digit using the formula: `floor((q*x + r) / t)`. The input `x` is typically 3 or 4 for verification.
+4.  **`produce(d)` Function:** This function updates the state of the spigot after extracting a digit. It multiplies `q` by 10, and adjusts `r` based on the extracted digit `d`.
+5.  **Digit Selection Logic:** The algorithm repeatedly calls `next_step()` until `q > r` is false. Then, it calculates `d = extract(3)` and `d = extract(4)`. It compares these two values. If they are equal, it prints the digit `d` and calls `produce(d)`. Otherwise, it calls `next_step()` again to continue generating digits.
+6.  **Output Formatting:** The program must print digits 10 per line with a running total of digits calculated at the end of each line in the format "digit1 digit2 ... digit10 : N", where N is the total number of digits generated so far. If the last line has fewer than 10 digits, pad it with spaces on the right.
+7.  **Command-Line Argument:** The program should receive the value of `N` (the desired number of digits) as a command-line argument.
+
+Now, please generate the complete Python code for this algorithm. Ensure that you use native arbitrary precision integers in Python to handle potentially large numbers accurately. Include comments explaining each step and function.  The output must be identical to the reference when validated with: `diff output.txt reference.txt for N=30`.
+
+### Key Requirements
+*   Python code implementation using native arbitrary precision integers.
+*   Command-line argument parsing for `N` (number of digits).
+*   Exact implementation of `next_step()`, `extract(x)`, and `produce(d)` functions as defined in the problem description.
+*   Explicit verification of digits by calling `extract(3)` and `extract(4)`.
+*   Precise output formatting: 10 digits per line, running total at the end, padding with spaces if necessary, and tab/colon/N format.
+*   The code must be runnable without modification.
+
+### Variable Values
+`q = 1`, `r = 0`, `t = 1`, `k = 0` (Initial state)
+`x = 3` or `4` (Input for extract function)
+`d = ...` (Digit extracted from the algorithm)
+`N = command-line argument` (Number of digits to calculate)
+
+### Notes
+This prompt emphasizes a chain-of-thought approach, guiding the LLM through each step of the algorithm. The detailed instructions and specific requirements are crucial for ensuring that the generated code accurately implements the Gibbons spigot algorithm with arbitrary precision arithmetic and produces the correct output format.  The inclusion of the `diff` command validation requirement is key to verifying correctness.

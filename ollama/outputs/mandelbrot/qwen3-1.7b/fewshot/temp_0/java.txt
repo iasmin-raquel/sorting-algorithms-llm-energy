@@ -1,28 +1,27 @@
 ### Prompt Structure
-You are to implement the Mandelbrot set in Java according to the following specifications:  
-- Accept N as a command-line argument via `Integer.parseInt(args[0])`  
-- Use exactly 50 iterations with an escape threshold of 4.0  
-- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]  
-- Output PBM P4 format (header "P4", 4-bit per pixel, MSB first, zero-padded per row)  
-- Generate byte-by-byte PBM P4 output to stdout  
+You are to implement the Mandelbrot set in Java, following the specified parameters and output format. The code must:
+- Take N as a command-line argument
+- Use exactly 50 iterations with escape threshold lim = 2.0 * 2.0
+- Compute squared magnitude (zr*zr + zi*zi) to avoid square roots
+- Map coordinates using real(C) = 2.0 * x / N - 1.5 and imag(C) = 2.0 * y / N - 1.0
+- Output PBM P4 format with 8 pixels per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+- Validate against reference.pbm for N=200
 
-### Key Requirements  
-- Use the specified plot region bounds  
-- Ensure 50 iterations with escape threshold 4.0  
-- Output PBM P4 header and binary pixel data  
-- Write to stdout in the required format  
-- Use the provided example structure as a template  
+### Key Requirements
+- Use exactly 50 iterations
+- Escape threshold lim = 2.0 * 2.0
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- Output PBM P4 header and binary pixel data
+- Pad with zeros if N not divisible by 8
+- Write only header and pixel data to stdout
 
-### Variable Values  
-- N: integer from command-line argument  
-- max_iterations: 50  
-- escape_threshold: 4.0  
-- plot_real: -1.5  
-- plot_imag: 1.0  
-- pixel_format: "P4" (MSB first, zero-padded per row)  
+### Variable Values
+- N: integer command-line argument
+- iterations: 50
+- lim: 2.0 * 2.0
+- coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
 
-### Notes  
-- The model must focus on the structure (main loop, pixel calculation, header generation)  
-- Ensure correct handling of the plot region and iteration limits  
-- Verify that the PBM format matches the reference for N=200  
-- Avoid adding extra code or parameters outside the specified constraints
+### Notes
+- Ensure the code uses squared magnitude (zr*zr + zi*zi) for accuracy
+- Handle N not divisible by 8 by padding with zeros
+- Validate output with cmp output.pbm reference.pbm for N=200

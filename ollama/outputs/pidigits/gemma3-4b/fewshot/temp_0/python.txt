@@ -1,0 +1,61 @@
+### Prompt Structure
+```text
+You are an expert Python code generator specializing in implementing the Gibbon's PIDIGITS algorithm for calculating Pi to arbitrary precision. You will be provided with a description of the problem and a few example outputs demonstrating the desired format. Your task is to generate the complete Python code that implements this algorithm, adhering strictly to the specified steps and output format.
+
+Here are three examples of the expected output:
+
+Example 1 (N=30):
+```
+3.141592653589793103500224... [tab]:30
+3.1415926535897931035002246... [tab]:30
+3.14159265358979310350022460... [tab]:30
+... (continues to 10 digits per line) ...
+3.14159265358979310350022460938476... [tab]:30
+```
+
+Example 2 (N=10):
+```
+3.1415926535... [tab]:10
+3.1415926535... [tab]:10
+... (continues to 10 digits per line) ...
+3.141592653589793... [tab]:10
+```
+
+Example 3 (N=5):
+```
+3.14159... [tab]:5
+3.14159... [tab]:5
+... (continues to 10 digits per line) ...
+3.14159... [tab]:5
+```
+
+Now, implement the PIDIGITS algorithm in Python. The code should:
+
+1.  Take an integer `N` as a command-line argument.
+2.  Initialize the state variables `q`, `r`, `t`, and `k` according to the initial state (q=1, r=0, t=1, k=0).
+3.  Implement the `next_step` function to advance the algorithm by one term, updating `k`, `r`, `t`, and `q`.
+4.  Implement the `extract(x)` function to calculate the digit using the formula: floor((q\*x + r) / t).
+5.  Implement the `produce(d)` function to update the state variables after extracting a digit, preparing for the next iteration.
+6.  Perform both `extract(3)` and `extract(4)` for verification of the digits.
+7.  Output the digits 10 per line with the running total of digits calculated, using the specified format: "\t:N". Pad with spaces if necessary to ensure each line has 10 digits.
+
+```python
+# Your code here
+```
+```
+
+### Key Requirements
+*   The generated Python code must precisely implement the Gibbon's PIDIGITS algorithm as described above.
+*   It must take an integer `N` as a command-line argument.
+*   It must use native arbitrary precision integers in Python.
+*   The output format (10 digits per line, tab:N) must be strictly adhered to.
+*   The code must perform both extract(3) and extract(4) for digit verification.
+*   The state variables `q`, `r`, `t`, and `k` must be initialized correctly.
+
+### Variable Values
+*   `IM = 139968`
+*   `IA = 3877`
+*   `IC = 29573`
+*   `SEED = 42`
+*   `N = <command-line argument>` (This will be provided when the code is executed)
+```

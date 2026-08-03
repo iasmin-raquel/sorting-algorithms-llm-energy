@@ -1,0 +1,138 @@
+Okay, here's a detailed prompt designed to guide an LLM towards generating the PIDIGITS solution in Java, incorporating few-shot prompting and emphasizing structural extraction from examples:
+
+**Prompt:**
+
+```text
+You are an expert software developer tasked with implementing the PIDIGITS problem, which calculates the first N digits of Pi using the Gibbons Unbounded Spigot Algorithm with arbitrary precision.  Your goal is to generate a complete, runnable Java program that meets the specified requirements.
+
+Here are some examples illustrating the desired structure and output format. *Do not include any solution content within these examples; focus solely on replicating the demonstrated structure.*
+
+**Example 1:**
+
+```java
+/* The Computer Language Benchmarks Game
+   contributed by Isaac Gouy
+*/
+
+import java.io.IOException;
+
+final class pidigits {
+    static final int IM = 139968, IA = 3877, IC = 29573, SEED = 42;
+    static int seed = SEED;
+
+    static double fastaRand(double max) {
+        seed = (seed * IA + IC) % IM;
+        return max * seed / IM;
+    }
+
+    static final String ALU =
+      "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG" +
+      "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA" +
+      "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT" +
+      "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA" +
+      "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG" +
+      "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC" +
+      "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+
+    static final String iub = "acgtBDHKMNRSVWY";
+    static final double[] iubP = {
+       0.27,0.12,0.12,0.27,
+       0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02
+    };
+
+    static final String homosapiens = "acgt";
+    static final double[] homosapiensP = {
+       0.3029549426680,0.1979883004921,
+       0.1975473066391,0.3015094502008
+    };
+
+    static final int LINELEN = 60;
+
+public static void main(String[] args) throws IOException {
+   final int n = (args.length > 0) ? Integer.parseInt(args[0]) : 1000;
+   System.out.println(">ONE Homo sapiens alu");
+   repeatFasta(ALU, n*2);
+   System.out.println(">TWO IUB ambiguity codes");
+   randomFasta(iub, iubP, n*3);
+   System.out.println(">THREE Homo sapiens frequency");
+   randomFasta(homosapiens, homosapiensP, n*5);
+}
+}
+
+```
+
+**Example 2:**
+
+```java
+/* The Computer Language Benchmarks Game
+   contributed by Isaac Gouy
+*/
+
+import java.io.IOException;
+
+final class pidigits {
+    static final int IM = 139968, IA = 3877, IC = 29573, SEED = 42;
+    static int seed = SEED;
+
+    static double fastaRand(double max) {
+        seed = (seed * IA + IC) % IM;
+        return max * seed / IM;
+    }
+
+    static final String ALU =
+      "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG" +
+      "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA" +
+      "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT" +
+      "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA" +
+      "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG" +
+      "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC" +
+      "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+
+    static final String iub = "acgtBDHKMNRSVWY";
+    static final double[] iubP = {
+       0.27,0.12,0.12,0.27,
+       0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02
+    };
+
+    static final String homosapiens = "acgt";
+    static final double[] homosapiensP = {
+       0.3029549426680,0.1979883004921,
+       0.1975473066391,0.3015094502008
+    };
+
+    static final int LINELEN = 60;
+
+public static void main(String[] args) throws IOException {
+   final int n = (args.length > 0) ? Integer.parseInt(args[0]) : 1000;
+   System.out.println(">ONE Homo sapiens alu");
+   repeatFasta(ALU, n*2);
+   System.out.println(">TWO IUB ambiguity codes");
+   randomFasta(iub, iubP, n*3);
+   System.out.println(">THREE Homo sapiens frequency");
+   randomFasta(homosapiens, homosapiensP, n*5);
+}
+}
+```
+
+
+Now, implement the PIDIGITS problem in Java as described:
+
+1.  **Input:** The program should accept an integer `N` from the command line argument(s).
+2.  **Algorithm:** Implement the Gibbons Unbounded Spigot Algorithm to calculate Pi's digits. Use `BigInteger` for arbitrary precision arithmetic.
+3.  **Output:** Print the first `N` digits of Pi to standard output, with each digit on a new line and 10 digits per line. Include a tab character (`\t`) at the end of each line, followed by a colon (:) and the running total 'N'. If the last line has fewer than 10 digits, pad with spaces on the right to ensure each line contains exactly 10 digits.
+
+**Constraints:**
+*   Use `BigInteger` for calculations.
+*   The code should be runnable as a standard Java program.
+*  Ensure that all output is identical to the reference when validated using "diff output.txt reference.txt for N=30".
+```
+
+**Key Improvements and Reasoning:**
+
+*   **Few-Shot Prompting:** Provides two examples demonstrating the structure - the import statements, class declaration, main method, command line argument handling (important), and the core loop logic with the specified output format. The emphasis is on *replicating the structure*, not on providing the algorithm's code.
+*   **Clear Instructions:** Explicitly states the input, algorithm requirements, and desired output format.
+*   **Constraints:**  Highlights the critical constraints (BigInteger usage) and validation method.
+*   **Focus on Structure Extraction:** The prompt explicitly instructs the LLM to *only* focus on extracting the structural elements from the examples. This is key to guiding it toward generating a well-structured, runnable program without getting bogged down in implementing the algorithm itself.
+*   **Reproducible Output Emphasis**:  The final instruction regarding validation using "diff output.txt reference.txt for N=30" reinforces the expected outcome and helps with debugging.
+
+This prompt is designed to be highly effective at guiding an LLM towards generating a complete, correct, and well-structured PIDIGITS solution in Java. Remember to adjust the examples if necessary depending on the specific capabilities of the LLM you are using.  You may need to experiment with the number of examples provided for optimal results.

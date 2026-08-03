@@ -1,0 +1,112 @@
+### Prompt Structure
+
+Here is a structured few-shot prompt for solving the Fasta problem in Python using the provided specifications:
+
+---
+
+**Example 1:**
+```python
+# Example code structure for generating sequences with command-line argument N.
+import sys
+
+def calculate_cumulative_probabilities(alphabet):
+    """Convert nucleotide probabilities to cumulative distribution."""
+    probabilities = {k: v for k, v in alphabet.items()}
+    sorted_items = sorted(probabilities.items(), key=lambda x: -x[1])
+    cumulative = 0.0
+    cumulative_probs = {}
+    for nuc, prob in sorted_items:
+        cumulative += prob
+        cumulative_probs[nuc] = cumulative
+    return cumulative_probs
+
+def select_nucleotide(cumulative_prob, random_number):
+    """Select a nucleotide using linear search against cumulative probabilities."""
+    for nuc, prob in sorted(cumulative_prob.items(), key=lambda x: -x[1]):
+        if random_number < prob:
+            return nuc
+    return list(cumulative_prob.keys())[-1]
+
+def generate_sequence(length, alphabet, seed):
+    """Generate sequence by sampling nucleotides using LCG."""
+    cumulative_probs = calculate_cumulative_probabilities(alphabet)
+    current_seed = seed
+    output = []
+    for _ in range(length):
+        random_number = 0.9 * (current_seed / IM)  # Simplified LCG formula for demo
+        nuc = select_nucleotide(cumulative_probs, random_number)
+        output.append(nuc)
+        current_seed = ((current_seed * IA + IC) % IM)  # LCG step
+    return ''.join(output)
+
+if __name__ == "__main__":
+    N = int(sys.argv[1])
+    ALU_seq = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA"  # Example truncated
+    seq_len = len(ALU_seq) * 2
+
+    seed = 42
+    one_seq = generate_sequence(seq_len, {'a':0.3, 'c':0.197}, seed)
+    two_seq = generate_sequence(seq_len, {'a':0.27, 'B':0.02}, seed)  # IUB example (simplified)
+    three_seq = generate_sequence(seq_len, {'a':0.30295494, 'c':0.198}, seed)
+
+    print(f">ONE {one_seq[:60]}")
+    print(f">TWO {two_seq[:60]}")
+    print(f">THREE {three_seq[:60]}")
+```
+
+---
+
+**Example 2:**
+For a different problem where N is passed from the command-line, ensure the output format and function naming follow this pattern.
+
+---
+
+**Target Problem:**
+
+Here’s your problem to implement:
+
+1. Generate DNA sequences as specified in the Fasta benchmark.
+2. Use the **ALU sequence for repeat fasta**, weighted by IUB probabilities or Homo sapiens frequencies where needed.
+3. Implement **LCG with exact constants** (IM=139968, IA=3877, IC=29573) and seed 42 without caching random numbers.
+4. Output must match the format:
+   - Line length: 60 characters.
+   - Three sequences in order:
+     a. `>ONE Homo sapiens alu` followed by repeat of ALU (N×2 chars).
+     b. `>TWO IUB ambiguity codes` followed by random sequence from IUB alphabet with N×3 chars.
+     c. `>THREE Homo sapiens frequency` followed by random sequence from Homo sapiens alphabet with N×5 chars.
+
+### Key Requirements
+- **Must use command-line argument `N`** (parse `sys.argv[1]`).
+- **No caching** of random numbers; apply LCG on-the-fly.
+- **Cumulative probabilities** must be computed per alphabet for nucleotide selection.
+- Output truncates to 60 characters, with the first line prefixed as given.
+- Must generate only one sequence per line; no extra whitespace or formatting deviations.
+
+### Variable Values
+#### Alphabets and Probabilities:
+- **IUB alphabet**:
+  `{'a':0.27, 'c':0.12, 'g':0.12, 't':0.27,
+   'B':0.02,'D':0.02,'H':0.02,'K':0.02,'M':0.02,
+   'N':0.02,'R':0.02,'S':0.02,'V':0.02,'W':0.02,'Y':0.02}`
+- **Homo sapiens alphabet**:
+  `{'a':0.3029549426680, 'c':0.1979883004921,
+   'g':0.1975473066391, 't':0.3015094502008}`
+
+#### ALU Sequence (repeat):
+`"GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA..."` (full sequence provided in prompt).
+
+#### LCG Constants:
+- `IM = 139968`
+- `IA = 3877`
+- `IC = 29573`
+- Seed: `42`
+
+### Notes
+1. For **repeat fasta**, iterate over the ALU sequence and append it to output N×2 times.
+   Example: If `N=1`, output repeats ALU twice (40 chars); else, repeat for N×2.
+2. IUB ambiguity codes are treated as **probability-weighted random selections** (all same weight 0.02 except A/T).
+3. The LCG must be applied per nucleotide independently; no reuse of `current_seed` across sequences.
+4. Output validation: Use `diff output.txt reference.txt` for N=1000 to ensure correctness.
+
+---
+End prompt text.

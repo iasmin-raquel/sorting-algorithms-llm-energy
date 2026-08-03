@@ -1,0 +1,18 @@
+### Prompt Structure
+Calculate and print the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons). Use native arbitrary precision arithmetic in Python, receive N as a command-line argument, follow specific operations for next_step, extract, and produce, perform digit verification, and output in the specified format.
+
+### Key Requirements
+1. Implementation in Python using native arbitrary precision integers
+2. Receives N as a command-line argument
+3. Uses the initial state, next_step, extract, and produce operations exactly as defined above
+4. Performs both extract(3) and extract(4) for digit verification
+5. Produces output in the exact format specified above
+
+### Variable Values
+- q: 1 (initial value of q)
+- r: 0 (initial value of r)
+- t: 1 (initial value of t)
+- k: 0 (initial value of k)
+
+### Notes
+The model is expected to generate Python code that follows the given algorithm and produces output in the specified format. To ensure the correctness of the generated code, validate it against the reference solution for N=30 using the command: `diff output.txt reference.txt`. This prompt structure encourages the model to think out loud about how it would implement the problem step by step before generating the code.

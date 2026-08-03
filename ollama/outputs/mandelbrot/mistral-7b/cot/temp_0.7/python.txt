@@ -1,18 +1,20 @@
 ### Prompt Structure
-Write a Python script that generates the Mandelbrot set in PBM P4 format given an N-by-N bitmap size. The script should receive N as a command-line argument and adhere to the specified parameters.
+Generate a Python script that takes N as a command-line argument and plots the Mandelbrot set using the given parameters. The output should be in PBM P4 format, with the header and binary pixel data written to stdout.
 
 ### Key Requirements
-- Write the output in PBM P4 format with bits packed MSB first, zero-padded per row
-- Use exactly 50 iterations and an escape threshold of 4.0
-- The plot region should be real values from [-1.5, 0.5] and imaginary values from [-1.0, 1.0]
-- Write the PBM P4 header as text followed by binary pixel data to stdout
+- The script must be implemented in Python
+- The script should receive N as a command-line argument
+- Use exactly 50 iterations and escape threshold lim = 2.0 * 2.0
+- Write PBM P4 header and binary pixel data to stdout
+- The output should be identical to the reference when validated with `cmp output.pbm reference.pbm` for N=200
 
 ### Variable Values
-- N: int(sys.argv[1])
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region real: [-1.5, 0.5]
-- Plot region imaginary: [-1.0, 1.0]
+- Escape threshold (squared): lim = 2.0 * 2.0
+- A point belongs to the set if |Z|² <= lim after all iterations
+- Use squared magnitude (zr*zr + zi*zi) to avoid computing square roots
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
 
 ### Notes
-The output should be identical to the reference when validated with `cmp output.pbm reference.pbm` for N=200. Ensure that the output format conforms to the PBM P4 specification and that there are no deviations from the provided parameters.
+Ensure that the last byte of each row is padded with zeros on the right if N is not divisible by 8. The target LLM's output should conform to the given structure and parameters for correct validation against the reference.

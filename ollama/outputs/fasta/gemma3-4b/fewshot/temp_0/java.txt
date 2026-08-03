@@ -1,0 +1,67 @@
+### Prompt Structure
+Here are three examples demonstrating how to generate DNA sequences using different methods. Your task is to implement a Java program that generates these sequences based on the specifications provided.
+
+**Example 1:** Repeat Fasta with ALU sequence
+
+```
+>ONE Homo sapiens alu
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+```
+
+**Example 2:** Random Fasta with IUB alphabet
+
+```
+>TWO IUB ambiguity codes
+a=0.27, c=0.12, g=0.12, t=0.27,
+B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,
+N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+```
+
+**Example 3:** Random Homo sapiens frequency
+
+```
+>THREE Homo sapiens frequency
+a=0.3029549426680, c=0.1979883004921,
+g=0.1975473066391, t=0.3015094502008
+```
+
+Now, implement a Java program that generates the following three sequences based on the provided specifications and N (command-line argument):
+
+1.  Repeat Fasta of the ALU sequence with N characters.
+2.  Random Fasta using the IUB alphabet with N characters.
+3.  Random Homo sapiens frequency with N characters.
+
+The output should be formatted as follows:
+
+```
+>SEQUENCE_TYPE
+[Sequence Data]
+```
+
+Where `SEQUENCE_TYPE` is one of ">ONE Homo sapiens alu", ">TWO IUB ambiguity codes", or ">THREE Homo sapiens frequency". The `[Sequence Data]` part contains the generated DNA sequence.  Ensure that the output matches exactly what's expected when validated with `diff output.txt reference.txt for N=1000`.
+
+### Key Requirements
+*   The code must be written in Java.
+*   It must accept an integer 'N' as a command-line argument.
+*   Implement a Linear Congruential Generator (LCG) using the following constants: `IM = 139968`, `IA = 3877`, `IC = 29573`, and `Seed = 42`.  Do not cache the random number sequence.
+*   Use the provided ALU, IUB, and Homo sapiens alphabets with their exact probabilities.
+*   The output must be formatted exactly as specified above (sequence type followed by the DNA sequence).
+*   The generated sequences should match the reference when validated using `diff`.
+*   Do not use any external libraries beyond standard Java libraries.
+
+### Variable Values
+*   `IM = 139968`
+*   `IA = 3877`
+*   `IC = 29573`
+*   `Seed = 42`
+*   `ALU`: `GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA`
+*   `IUB`: `a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02`
+*   `Homo sapiens`: `a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008`
+*   `N`: Command-line argument (integer)
+
+### Notes
+The LCG is a simple pseudo-random number generator and may not produce high-quality random numbers for all applications.  Focus on correctly implementing the algorithm as specified, rather than optimizing for randomness. The `diff` command will be used to verify that the generated output matches the expected output exactly. Ensure your code handles potential errors gracefully (e.g., invalid command-line arguments).

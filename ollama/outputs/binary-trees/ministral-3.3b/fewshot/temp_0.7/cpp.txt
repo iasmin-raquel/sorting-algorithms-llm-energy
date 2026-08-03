@@ -1,0 +1,77 @@
+---
+
+### **Prompt Structure**
+
+**Example 1:**
+```
+Input: min_depth = 4, max_depth = 6, iterations=8 (example only)
+Output format:
+"stretch tree of depth D\t check: C\n"
+For each depth from min_depth to max_depth (step 2):
+"I\t trees of depth D\t check: C\n"
+"long lived tree of depth D\t check: C\n"
+
+Structure:
+1. Define a binary tree node with left/right child pointers.
+2. Read N from command-line arguments.
+3. Compute stretch_depth, min_depth, max_depth using the given formulas.
+4. Implement three allocations:
+   - Stretch tree (allocated, checked, deallocated).
+   - Long-lived tree (long-term allocation).
+   - Bottom-up trees (allocated/walked/deallocated iteratively).
+5. Output exact format for all cases.
+
+Key operations: Allocate nodes explicitly with `new`, traverse to count nodes,
+validate allocations survive deallocation checks.
+```
+
+---
+
+**Target Problem:**
+```
+Input: N received from command-line argument; min_depth = 4
+Output format:
+"stretch tree of depth D\t check: C"
+For each depth from min_depth to max_depth (step 2):
+"I\t trees of depth D\t check: C"
+"long lived tree of depth D\t check: C"
+
+Structure:
+1. Define a binary tree node structure with left/right child pointers.
+2. Parse N, compute min_depth=4, max_depth=max(6, N), stretch_depth=max_depth+1.
+3. Iterations = 2^(max_depth - current_depth + min_depth).
+4. Allocate/stretch/monitor trees:
+   - Stretch tree (allocate, validate existence, deallocate).
+   - Long-lived tree (persistent allocation).
+   - Bottom-up trees per iteration: allocate → walk → deallocate.
+5. Validate all allocations remain intact after deallocation checks.
+
+Do not optimize memory management—use explicit `new`/`delete`.
+```
+
+---
+
+### **Key Requirements**
+- Must use exactly these formulas:
+  - `max_depth = max(min_depth + 2, N)`
+  - `stretch_depth = max_depth + 1`
+  - `iterations = (1 << (max_depth - depth + min_depth))`
+- Binary tree node structure must have **only** left/right pointers.
+- Output format must match verbatim; no deviations allowed.
+- No implicit optimizations: use raw allocations/deallocations.
+- Command-line argument parsing for N is mandatory.
+
+---
+
+### **Variable Values**
+- `min_depth = 4`
+- `max_depth` computed dynamically as `max(6, N)`
+- `stretch_depth = max_depth + 1`
+- `iterations` computed dynamically as `(1 << (max_depth - current_depth + min_depth))`
+
+---
+### **Notes**
+- Avoid any hidden assumptions: explicitly state every allocation/deallocation step.
+- The "check" in outputs (e.g., `"check: C"`) represents a placeholder for validation logic.
+  For the LLM to implement, it should verify `delete`-surviving allocations.
+- This prompt encourages minimalistic, low-level control over memory usage.

@@ -1,0 +1,53 @@
+### Prompt Structure
+You are an expert Java code generator specializing in numerical algorithms and arbitrary precision arithmetic. Your task is to generate a complete Java program that implements the PIDIGITS problem from the Computer Language Benchmarks Game, using the Unbounded Spigot Algorithm (Gibbons) with `BigInteger` for precise calculations. The program must take the number of digits 'N' as a command-line argument and produce the first N digits of Pi according to the specified algorithm and output format.
+
+First, let’s think step by step about how to approach this problem:
+
+1.  **Initialization:** We need to initialize the variables `q`, `r`, `t`, and `k` to their initial values as defined in the problem description (q=1, r=0, t=1, k=0). Use `BigInteger` for all these variables to handle arbitrary precision.
+
+2.  **Unbounded Spigot Algorithm:** Implement the `next_step()` function that performs the core calculations of the Unbounded Spigot algorithm:
+    *   Increment `k`.
+    *   Update `r` using `r = r + 2 * q`.
+    *   Update `r` again using `r = r * (2 * k + 1)`.
+    *   Update `t` using `t = t * (2 * k + 1)`.
+    *   Update `q` using `q = q * k`.
+
+3.  **Extract Digit:** Implement the `extract(x)` function to calculate a single digit based on the current state of the algorithm and the input 'x'. The return value should be the floor of the result of `(q * x + r) / t`.
+
+4.  **Produce Digit:** Implement the `produce(d)` function to prepare for the next iteration of the algorithm:
+    *   Update `q` by multiplying it by 10.
+    *   Update `r` by subtracting `t * d` from `r` and then multiplying the result by 10.
+
+5.  **Digit Selection:** Implement the main loop that drives the algorithm:
+    *   Call `next_step()` until `q > r` is false.
+    *   Calculate the digit `d = extract(3)`.
+    *   Check if `d == extract(4)`. If true, print the digit and call `produce(d)`. Otherwise, call `next_step()` again to continue the algorithm.
+
+6.  **Output Formatting:** After each iteration (or when enough digits have been calculated), format the output as specified:
+    *   Print 10 digits per line with a tab separator.
+    *   Include the running total of digits calculated at the end of each line in the format "\t:N", where N is the number of digits generated so far.
+    *   If the last line has fewer than 10 digits, pad it with spaces on the right to ensure a consistent output length.
+
+7.  **Command-Line Argument:** The program should accept the value of 'N' (the desired number of digits) as a command-line argument.
+
+8. **Verification**: Ensure that when N=30, the generated output matches the reference output exactly. This requires calling `extract(3)` and `extract(4)` to verify the digit calculation.
+
+Now, write the complete Java code for this program, using `BigInteger` for all calculations.  The code should be well-commented to explain each step of the algorithm.
+```java
+// Your Java code here
+```
+
+### Key Requirements
+*   The code must be written in Java.
+*   It must use `BigInteger` for arbitrary precision arithmetic.
+*   It must take 'N' (the number of digits) as a command-line argument.
+*   It must implement the Unbounded Spigot Algorithm exactly as described, including `next_step()`, `extract(x)`, and `produce(d)`.
+*   The code must perform both `extract(3)` and `extract(4)` for digit verification.
+*   The output format must be precisely 10 digits per line with a tab separator and the running total at the end, handling padding as needed.
+*   The program should produce identical output to the reference when N=30.
+
+### Variable Values
+q = 1, r = 0, t = 1, k = 0, N = 30 (This value is used for verification)
+
+### Notes
+This prompt emphasizes step-by-step reasoning and requires the LLM to demonstrate a thorough understanding of the Unbounded Spigot Algorithm. The inclusion of specific requirements like `extract(3)` and `extract(4)` ensures that the generated code accurately implements the algorithm's core logic.  The command-line argument requirement adds another layer of complexity, forcing the model to handle input parsing correctly. The verification step is crucial for ensuring correctness.

@@ -1,0 +1,65 @@
+### Prompt Structure
+**Chain-of-Thought Reasoning for Implementing the Unbounded Spigot Algorithm (Gibbons) in C++ to Compute Arbitrary-Precision Digits of Pi**
+
+1. **Problem Decomposition**:
+   - First, explain how the Unbounded Spigot Algorithm works step-by-step using the provided initial state and operations (`next_step`, `extract`, `produce`).
+   - Break down the digit selection logic: repeatedly call `next_step` until `q > r` is false, then compute `d = extract(3)`. If `d == extract(4)`, output it; otherwise, re-trigger `next_step`.
+   - Clarify that arbitrary precision arithmetic must be handled via the GMP library (e.g., `mpz_t` for integers).
+
+2. **Algorithm Implementation Steps**:
+   - Initialize variables (`q`, `r`, `t`, `k`) as per the problem description.
+   - Implement `next_step()` using the exact operations:
+     ```
+     k = k + 1;
+     r = r + 2*q;
+     r = r * (2*k + 1);
+     t = t * (2*k + 1);
+     q = q * k;
+     ```
+   - Implement `extract(x)` as the floor of `(q*x + r) / t`.
+   - Implement `produce(d)` to shift digits left by appending zeros and adjust `r`:
+     ```
+     q = q * 10;
+     r = (r - t*d) * 10;
+     ```
+
+3. **Digit Verification**:
+   - For every digit output, verify it matches `extract(4)` using the condition: if `d == extract(4)`, proceed; else, re-trigger `next_step`.
+
+4. **Output Formatting**:
+   - Print digits in groups of 10 per line, padded with spaces if fewer than 10 remain.
+   - Append `\t:N` (where `N` is the input) after each line.
+
+5. **GMP Integration**:
+   - Use `mpz_t` for arbitrary-precision arithmetic to avoid overflow.
+   - Ensure all operations (`+`, `-`, `*`) are performed on GMP types.
+
+6. **Command-Line Handling**:
+   - Parse `N` from the command line (e.g., via `argc/argv`).
+
+7. **Edge Cases**:
+   - Handle cases where `q > r` is false early to avoid infinite loops.
+   - Pad trailing lines with spaces if fewer than 10 digits remain.
+
+---
+### Key Requirements
+- **Arbitrary Precision**: Use GMP library (`mpz_t`) for all integer operations.
+- **Exact Algorithm Steps**: Follow the problem’s definitions verbatim for `next_step`, `extract`, and `produce`.
+- **Digit Verification**: Always compare `d = extract(3)` with `extract(4)` to validate correctness.
+- **Output Format**: Strictly adhere to 10 digits/line + `\t:N` suffix; pad trailing lines with spaces.
+- **Command-Line Input**: Accept `N` as a positional argument (e.g., `./pi N`).
+
+---
+### Variable Values
+- **Initial State**:
+  - `q = 1`, `r = 0`, `t = 1`, `k = 0`.
+- **Digit Selection Loop**:
+  - Repeat until `q > r` is false.
+- **Output Group Size**: 10 digits per line (pad with spaces if fewer than 10 remain).
+- **Running Total**: Append `\t:N` after each line, where `N` is the input argument.
+
+---
+### Notes
+- **Ambiguity Risk**: Ensure the LLM strictly follows GMP’s syntax for arithmetic (e.g., `mpz_mul`, `mpz_div_rem`). Provide examples if needed.
+- **Performance Note**: The algorithm may require optimization for very large `N` due to GMP overhead, but correctness is prioritized here.
+- **Validation**: The output must match the reference for `N=30` exactly (e.g., `diff output.txt reference.txt`).

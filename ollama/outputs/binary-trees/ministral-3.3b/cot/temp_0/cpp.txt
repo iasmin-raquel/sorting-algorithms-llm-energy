@@ -1,0 +1,76 @@
+### Prompt Structure
+Think step-by-step about how to implement a C++ program that constructs and validates perfect binary trees according to the Computer Language Benchmarks Game (CLBG) Binary Trees problem. The goal is to replicate Jeremy Zerfas's allocation strategy while ensuring identical memory allocations for leaf and interior nodes, without optimization.
+
+**Chain-of-Thought Reasoning:**
+
+1. **Define Tree Structure:**
+   - Create a `TreeNode` struct with fields: `int data`, `TreeNode* left`, `TreeNode* right`.
+   - Ensure both leaf and internal nodes allocate the same memory (no optimization).
+
+2. **Command-Line Argument Handling:**
+   - Parse `N` from command-line arguments to determine tree depth limits.
+   - Compute `max_depth = max(min_depth + 2, N)` where `min_depth = 4`.
+   - Define `stretch_depth = max_depth + 1`.
+
+3. **Stretch Tree Allocation:**
+   - Allocate a tree of depth `stretch_depth` to "stretch" memory.
+   - Verify existence and deallocate it after allocation.
+
+4. **Long-Lived Tree:**
+   - Create a long-lived tree (e.g., global or static) of depth `max_depth`.
+   - Ensure it persists through allocations/deallocations of other trees.
+
+5. **Bottom-Up Trees:**
+   - For each depth from `min_depth` to `max_depth` in steps of 2:
+     - Allocate, traverse, and deallocate a tree of that depth.
+     - Use `iterations = 1 << (max_depth - depth + min_depth)` to control allocation frequency.
+
+6. **Output Format:**
+   - Print results in the exact format specified:
+     ```
+     stretch tree of depth D\t check: C
+     I\t trees of depth D\t check: C
+     long lived tree of depth D\t check: C
+     ```
+   - Validate each tree’s memory allocation matches expectations.
+
+7. **Validation:**
+   - Use `diff` to compare output with reference for `N=10`.
+   - Ensure no optimizations (e.g., compiler inlining) alter allocations.
+
+8. **Code Structure:**
+   - Include helper functions for tree construction, traversal, and deallocation.
+   - Use explicit memory management (no automatic cleanup).
+
+---
+
+### Key Requirements
+- **Language:** Pure C++ (no macros, templates, or non-standard features).
+- **Memory Allocations:** Explicitly track allocations/deallocations; no hidden optimizations.
+- **Tree Depths:**
+  - `min_depth = 4` (fixed).
+  - `max_depth = max(min_depth + 2, N)` where `N` is command-line input.
+  - `stretch_depth = max_depth + 1`.
+- **Output:** Exact format with `\t` separators and "check:" labels.
+- **Validation:** Match reference output for `N=10` via `diff`.
+- **No Optimizations:** Compile with `-O0` or disable optimizations if possible.
+
+---
+
+### Variable Values
+| Parameter          | Value                     |
+|---------------------|---------------------------|
+| `min_depth`         | 4                         |
+| `max_depth`         | `max(min_depth + 2, N)`   |
+| `stretch_depth`     | `max_depth + 1`           |
+| `iterations`        | `1 << (max_depth - depth + min_depth)` for each depth. |
+
+---
+
+### Notes
+- **Ambiguity Risk:** Ensure the LLM strictly adheres to "no optimizations" by avoiding compiler flags or runtime checks that might alter allocations.
+- **Edge Cases:** Handle `N < 6` (e.g., `max_depth = N`) and ensure all trees are fully constructed/deconstructed.
+- **Expected Behavior:**
+  - The LLM should generate a program that allocates trees in a bottom-up manner, tracking memory allocations explicitly.
+  - Output must match the CLBG reference exactly for `N=10` (e.g., verify leaf/internal node counts).
+- **Tool Constraints:** If the LLM lacks C++ tooling, provide minimal scaffolding (e.g., `#include <cstdio>`, `#define N` as a macro).

@@ -1,0 +1,89 @@
+---
+
+### **Prompt Structure**
+**Think aloud while designing the Python code for the CLBG Binary Trees problem. Break it into clear steps to ensure correctness and adherence to constraints.**
+
+1. **Define the tree node structure**:
+   - Create a `TreeNode` class with `left` and `right` child pointers.
+   - Ensure both leaf and interior nodes allocate memory identically (no optimization away).
+
+2. **Command-line argument handling**:
+   - Parse `N` from `sys.argv`. Validate it is ≥ 4 (minimum depth requirement).
+   - Compute:
+     - `max_depth = max(4, N)`
+     - `stretch_depth = max_depth + 1`
+     - Iterations for bottom-up trees: `iterations = 2^(max_depth - current_depth + min_depth)`
+
+3. **Stretch tree**:
+   - Allocate a tree of depth `stretch_depth` (deepest allowed).
+   - Verify memory allocation and deallocation via `gc.collect()` checks.
+   - Output: `"stretch tree of depth D\tcheck: C"` where `C` is a boolean flag confirming existence.
+
+4. **Long-lived tree**:
+   - Allocate a persistent tree (e.g., global or static) with a specified depth.
+   - Deallocate other trees but ensure this one survives checks.
+   - Output: `"long lived tree of depth D\tcheck: C"`.
+
+5. **Bottom-up trees (iterations)**:
+   - For each depth `D` from `min_depth` (4) to `max_depth`, step 2:
+     - Allocate, walk/count nodes (e.g., using `TreeNode.count()`), deallocate.
+     - Output: `"I\t trees of depth D\tcheck: C"` for every iteration.
+
+6. **Output format compliance**:
+   - Use tabs (`\t`) and exact spacing. Validate with:
+     - `diff output.txt reference.txt` for `N=10`.
+   - Print results in sequence: stretch → bottom-up (depths) → long-lived.
+
+7. **Memory validation helper** (if needed):
+   - If `gc` module is unavailable, approximate checks via pointer comparisons.
+   - Ensure no premature garbage collection during allocations/deallocations.
+
+8. **Code structure**:
+   - Use a main function with `sys.exit()` to signal success/failure post-validation.
+   - Explicitly test edge cases (e.g., `N=4`, `N=10`).
+
+---
+**Provide the final Python code in this format:**
+```python
+import sys, gc
+
+# [Define TreeNode class]
+# [Parse N and compute depths]
+# [Stretch tree logic]
+# [Long-lived tree logic]
+# [Bottom-up trees loop]
+# [Output generation]
+
+if __name__ == "__main__":
+    # Validate and run
+```
+
+---
+
+### **Key Requirements**
+- Python 3.x compatibility.
+- No dynamic typing for node pointers (e.g., `TreeNode` vs. `int`).
+- Use exact variable names per problem statement (`min_depth`, `max_depth`, etc.).
+- Avoid shortcuts like "magic numbers" in depth calculations.
+- Output format must match **exactly** the specified template.
+
+### **Variable Values**
+| Variable          | Value                     |
+|-------------------|---------------------------|
+| `min_depth`       | 4                         |
+| `max_depth`       | `max(4, N)`               |
+| `stretch_depth`   | `max_depth + 1`           |
+| `iterations`      | `2^(max_depth - D + min_depth)` (per depth) |
+
+---
+
+### **Notes**
+- **Ambiguity risk**: Clarify if iterative tree walking requires a helper method (e.g., `TreeNode.count()`). Propose implementation as a class attribute.
+- **GC dependency**: If Python lacks `gc` checks, suggest manual pointer comparison for existence validation. Example:
+  ```python
+  def is_alive(node):
+      return node and all(not isinstance(x, TreeNode) or x.parent != node for x in gc.get_referents(node))
+  ```
+- **Output format**: Hardcode the verbatim template to avoid typos (e.g., `"I"` vs. `"i"`).
+- **Error handling**: Assume `N` is always valid per problem constraints.
+- **Tool use**: If the LLM has access to tools, hint that `sys.argv[1]` must return an integer ≥ 4; otherwise, enforce parsing via `int(sys.argv[1])`.

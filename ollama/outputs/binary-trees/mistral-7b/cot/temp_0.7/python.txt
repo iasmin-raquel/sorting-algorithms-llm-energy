@@ -1,0 +1,20 @@
+### Prompt Structure
+Implement a Python program that creates perfect binary trees as per the Computer Language Benchmarks Game requirements. The program should define a tree node structure with left and right child pointers, allocate and deallocate various binary trees, and produce output in the specified format.
+
+### Key Requirements
+- The implementation must be done in Python.
+- The program should receive N as a command-line argument.
+- Minimum depth (`min_depth`) should be set to 4, and `max_depth` and `stretch_depth` should be computed according to the specified rules.
+- The tree node structure should include left and right child pointers.
+- The program should implement stretch trees, long-lived trees, and bottom-up trees as described in the problem statement.
+- The output format should match exactly that specified in the problem description.
+
+### Variable Values
+- `N`: Command-line argument received by the program
+- `min_depth`: 4
+- `max_depth`: Computed as `max(min_depth + 2, N)`
+- `stretch_depth`: Computed as `max_depth + 1`
+- `iterations`: Computed as `1 << (max_depth - depth + min_depth)` for each depth from `min_depth` to `max_depth`
+
+### Notes
+Ensure the program does not optimize away any work, and the output is identical to the reference when validated with the provided command. The model may need multiple iterations to produce a prompt that enforces all key requirements while maintaining readability for human consumption.

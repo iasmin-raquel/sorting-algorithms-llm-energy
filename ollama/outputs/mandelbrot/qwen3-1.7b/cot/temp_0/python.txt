@@ -1,35 +1,27 @@
-[The actual prompt text that will be sent to the target LLM]
-
-You are to implement the Mandelbrot set generation for the Computer Language Benchmarks Game, following these specifications:
-- Generate an N-by-N bitmap of the Mandelbrot set
-- Use maximum iterations of 50 and escape threshold 4.0
-- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-- Output in PBM P4 format (text header, binary pixel data)
-- Write output byte-by-byte with MSB-first packing and zero-padding per row
-- Receive N as command-line argument via int(sys.argv[1])
-- Ensure output matches reference.pbm for N=200
+[Prompt text that will be sent to the target LLM]
+Generate a Python script to compute the Mandelbrot set for an N-by-N bitmap, with the following specifications:
+- Use exactly 50 iterations and escape threshold lim = 2.0 * 2.0
+- Apply coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- Output in PBM P4 format with header "P4\nN N\n" and 8 pixels per byte (MSB first)
+- Ensure pixel data is padded with zeros for rows not divisible by 8
+- Validate output with cmp for N=200
 
 Key Requirements:
-- Exactly 50 iterations
-- Escape threshold of 4.0
-- Plot region bounds: real -1.5 to 0.5, imaginary -1.0 to 1.0
-- PBM P4 header with correct dimensions and format
-- Binary pixel data packed MSB-first with zero-padding per row
-- Output must match reference.pbm for N=200
+- Maximum iterations: 50
+- Escape threshold: 2.0 * 2.0
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- Squared magnitude calculation
+- PBM P4 header and binary pixel data
+- Padding with zeros for non-divisible rows by 8
+- Command-line argument N
 
 Variable Values:
-- N: integer from command line argument
-- iterations: 50
-- escape_threshold: 4.0
-- real_min: -1.5
-- real_max: 0.5
-- imag_min: -1.0
-- imag_max: 1.0
-- pixel_format: MSB-first, zero-padded per row
+- N: 200
+- Iterations: 50
+- lim: 2.0 * 2.0
+- Coordinate mapping: real(C) = 2.0 * x / 200 - 1.5, imag(C) = 2.0 * y / 200 - 1.0
 
 Notes:
-- The output must be identical to reference.pbm for N=200
-- The PBM P4 format requires precise header formatting
-- The binary data must be correctly packed and padded
-- The code must handle floating-point calculations accurately
-- The iteration count and escape threshold must be strictly enforced
+- The code must handle padding correctly for rows not divisible by 8
+- The coordinate mapping must be precise with exact fractions
+- The output must match the reference for N=200 to ensure validation

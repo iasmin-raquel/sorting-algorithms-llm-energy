@@ -1,0 +1,65 @@
+### Prompt Structure
+```cpp
+#include <iostream>
+#include <vector>
+
+struct Node {
+  // Implement the tree node structure with left and right child pointers here
+};
+
+void stretchTree(int depth) {
+  // Implement the logic for stretching a binary tree of given depth here
+}
+
+Node* createLongLivedTree() {
+  // Implement the logic for creating a long-lived binary tree here
+}
+
+void walkAndCountNodes(Node* root, int& count) {
+  // Implement the logic for walking and counting nodes in a binary tree here
+}
+
+void deleteTree(Node* root) {
+  // Implement the logic for deallocating a binary tree here
+}
+
+void bottomUpTrees(int depth) {
+  // Implement the logic for allocating, walking, and deallocating many bottom-up trees here
+}
+
+int main(int argc, char* argv[]) {
+  if (argc != 2) {
+    std::cerr << "Usage: <program_name> <N>" << std::endl;
+    return 1;
+  }
+
+  int N = atoi(argv[1]);
+  int min_depth = 4;
+  int max_depth = std::max(min_depth + 2, N);
+  int stretch_depth = max_depth + 1;
+
+  // Output the stretch tree, long-lived tree, and bottom-up trees here
+
+  return 0;
+}
+```
+
+### Key Requirements
+- The generated C++ code must be written in a clear and concise manner.
+- The code should use standard libraries where appropriate.
+- The solution should follow the structure provided in the example code,
+  using similar naming conventions and structures for tree-related functions.
+- The `main` function should check if the correct number of command-line arguments is provided.
+- All trees must have the same memory allocation for leaf nodes as interior nodes.
+- The output format must be identical to the reference when validated with `diff`.
+
+### Variable Values
+- min_depth: 4
+- N: received via command-line argument
+- max_depth: computed as `std::max(min_depth + 2, N)`
+- stretch_depth: computed as `max_depth + 1`
+
+### Notes
+- The prompt does not enforce any specific implementation details or optimizations.
+- The provided example code is for illustrative purposes only and should not be used as a template for the solution.
+- It is assumed that the target LLM will understand the given structure and produce appropriate C++ code following these guidelines.

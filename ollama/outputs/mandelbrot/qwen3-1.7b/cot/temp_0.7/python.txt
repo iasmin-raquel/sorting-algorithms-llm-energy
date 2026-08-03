@@ -1,32 +1,28 @@
-[The actual prompt text that will be sent to the target LLM]
+### Prompt Structure
+You are to implement the Mandelbrot set using Python, following the Computer Language Benchmarks Game's specifications. Your code must:
+- Accept N as a command-line argument.
+- Generate an N-by-N bitmap of the Mandelbrot set with 50 iterations.
+- Use squared magnitude (zr*zr + zi*zi) to avoid square roots.
+- Map coordinates via real(C) = 2.0 * x / N - 1.5 and imag(C) = 2.0 * y / N - 1.0.
+- Output in PBM P4 format (header + binary pixel data, 8 pixels per byte, MSB first).
+- Validate against the reference.pbm for N=200 using `cmp output.pbm reference.pbm`.
 
-You are to implement the Mandelbrot set generation for the Computer Language Benchmarks Game. The task requires:
-- Plotting the Mandelbrot set within the region [-1.5, 0.5] real and [-1.0, 1.0] imaginary
-- Using exactly 50 iterations and escape threshold 4.0
-- Outputting PBM P4 format (text header, binary pixel data)
-- Ensuring output matches the reference for N=200
-- Writing byte-by-byte to stdout in portable bitmap format
+### Key Requirements
+- Use exactly 50 iterations.
+- Escape threshold lim = 2.0 * 2.0 (4.0).
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0.
+- Output PBM P4 header (P4\n N N) with 8 pixels per byte, MSB first.
+- Pad with zeros if N not divisible by 8.
+- Write only header and binary data to stdout.
 
-Key Requirements:
-- Use N as command-line argument (int(sys.argv[1]))
-- Implement Mandelbrot algorithm with exact parameters
-- Generate PBM P4 header (with bits packed MSB first, zero-padded per row)
-- Ensure pixel data matches reference.pbm for N=200
-- Handle escape threshold correctly (4.0)
-- Maintain 200x200 bitmap size for validation
+### Variable Values
+- N: Command-line argument (e.g., 200).
+- Max iterations: 50.
+- Escape threshold: 4.0 (lim = 2.0 * 2.0).
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0.
 
-Variable Values:
-- N: integer from command line argument
-- max_iterations: 50
-- escape_threshold: 4.0
-- real_min: -1.5
-- real_max: 0.5
-- imag_min: -1.0
-- imag_max: 1.0
-
-Notes:
-- The output must be identical to reference.pbm for N=200
-- PBM P4 format requires specific header and data format
-- Bits must be packed MSB first with zero-padding per row
-- The algorithm must correctly handle escape condition (|z| > 4.0)
-- The code must process the plot region accurately with the given bounds
+### Notes
+- Ensure N=200 for validation; code must handle padding for non-divisible N.
+- Use squared magnitude to avoid sqrt computations.
+- Correctly implement the iteration formula Z = Z² + C.
+- Validate output with `cmp output.pbm reference.pbm` for N=200.

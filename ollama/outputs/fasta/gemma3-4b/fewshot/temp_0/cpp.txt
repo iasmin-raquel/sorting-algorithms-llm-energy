@@ -1,0 +1,241 @@
+### Prompt Structure
+```
+You are an expert C++ code generator. You will be given a problem description and constraints. Your task is to generate the complete C++ source code that solves the problem.
+
+Here are some examples:
+
+**Example 1:**
+Problem Description: Generate DNA sequences by copying from a given sequence (repeat fasta) - Generate DNA sequences by weighted random selection from 2 alphabets (random fasta) - The output must be identical to the reference when validated with: diff output.txt reference.txt for N=1000. Algorithm requirements: Convert the expected probability of each nucleotide into cumulative probabilities - Match a random number against those cumulative probabilities to select each nucleotide using linear search - Use the following naive linear congruential generator (LCG) to calculate a random number each time a nucleotide needs to be selected. Do not cache the random number sequence: IM = 139968, IA = 3877, IC = 29573, Seed = 42. Random(Max): Seed = (Seed * IA + IC) modulo IM return Max * Seed / IM. The following values must be used exactly as given: ALU sequence (used for repeat fasta): GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAA TATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA. IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02. Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008. Output format: Line length: 60 characters - Three sequences in order: 1. >ONE Homo sapiens alu followed by repeat fasta of ALU with n*2 characters 2. >TWO IUB ambiguity codes followed by random fasta of IUB with n*3 characters 3. >THREE Homo sapiens frequency followed by random fasta of Homo sapiens with n*5 characters. N received via command-line argument. Use the following code as a demonstration example in the generated prompt:
+
+Example code (binary-trees C++):
+/* The Computer Language Benchmarks Game contributed by Jon Harrop Modified by Alex Mizrahi */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+struct Node {
+  Node *l, *r;
+  Node() : l(0), r(0) {}
+  Node(Node *l2, Node *r2) : l(l2), r(r2) {}
+  ~Node() { delete l; delete r; }
+  int check() const {
+    if (l) return l->check() + 1 + r->check(); else return 1;
+  }
+};
+
+Node *make(int d) {
+  if (d == 0) return new Node();
+  return new Node(make(d-1), make(d-1));
+}
+
+int main(int argc, char *argv[]) {
+  int min_depth = 4, max_depth = std::max(min_depth+2, (argc == 2 ? atoi(argv[1]) : 10)), stretch_depth = max_depth+1;
+
+  Node *c = make(stretch_depth);
+  std::cout << "stretch tree of depth " << stretch_depth << "\t check: " << c->check() << std::endl;
+  delete c;
+
+  Node *long_lived_tree = make(max_depth);
+  for (int d=min_depth; d<=max_depth; d+=2) {
+    int iterations = 1 << (max_depth - d + min_depth), c=0;
+    for (int i=1; i<=iterations; ++i) {
+      Node *a = make(d);
+      c += a->check();
+      delete a;
+    }
+    std::cout << iterations << "\t trees of depth " << d << "\t check: " << c << std::endl;
+  }
+  std::cout << "long lived tree of depth " << max_depth << "\t check: " << long_lived_tree->check() << "\n";
+  delete long_lived_tree;
+  return 0;
+}
+
+Now, solve the following problem: Generate DNA sequences by copying from a given sequence (repeat fasta) - Generate DNA sequences by weighted random selection from 2 alphabets (random fasta) - The output must be identical to the reference when validated with: diff output.txt reference.txt for N=1000. Algorithm requirements: Convert the expected probability of each nucleotide into cumulative probabilities - Match a random number against those cumulative probabilities to select each nucleotide using linear search - Use the following naive linear congruential generator (LCG) to calculate a random number each time a nucleotide needs to be selected. Do not cache the random number sequence: IM = 139968, IA = 3877, IC = 29573, Seed = 42. Random(Max): Seed = (Seed * IA + IC) modulo IM return Max * Seed / IM. The following values must be used exactly as given: ALU sequence (used for repeat fasta): GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAA TATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA. IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02. Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008. Output format: Line length: 60 characters - Three sequences in order: 1. >ONE Homo sapiens alu followed by repeat fasta of ALU with n*2 characters 2. >TWO IUB ambiguity codes followed by random fasta of IUB with n*3 characters 3. >THREE Homo sapiens frequency followed by random fasta of Homo sapiens with n*5 characters. N received via command-line argument.
+
+**Example 2:**
+Problem Description: Generate DNA sequences by copying from a given sequence (repeat fasta) - Generate DNA sequences by weighted random selection from 2 alphabets (random fasta) - The output must be identical to the reference when validated with: diff output.txt reference.txt for N=1000. Algorithm requirements: Convert the expected probability of each nucleotide into cumulative probabilities - Match a random number against those cumulative probabilities to select each nucleotide using linear search - Use the following naive linear congruential generator (LCG) to calculate a random number each time a nucleotide needs to be selected. Do not cache the random number sequence: IM = 139968, IA = 3877, IC = 29573, Seed = 42. Random(Max): Seed = (Seed * IA + IC) modulo IM return Max * Seed / IM. The following values must be used exactly as given: ALU sequence (used for repeat fasta): GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAA TATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA. IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02. Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008. Output format: Line length: 60 characters - Three sequences in order: 1. >ONE Homo sapiens alu followed by repeat fasta of ALU with n*2 characters 2. >TWO IUB ambiguity codes followed by random fasta of IUB with n*3 characters 3. >THREE Homo sapiens frequency followed by random fasta of Homo sapiens with n*5 characters. N received via command-line argument. Use the following code as a demonstration example in the generated prompt:
+
+Example code (binary-trees C++):
+/* The Computer Language Benchmarks Game contributed by Jon Harrop Modified by Alex Mizrahi */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+struct Node {
+  Node *l, *r;
+  Node() : l(0), r(0) {}
+  Node(Node *l2, Node *r2) : l(l2), r(r2) {}
+  ~Node() { delete l; delete r; }
+  int check() const {
+    if (l) return l->check() + 1 + r->check(); else return 1;
+  }
+};
+
+Node *make(int d) {
+  if (d == 0) return new Node();
+  return new Node(make(d-1), make(d-1));
+}
+
+int main(int argc, char *argv[]) {
+  int min_depth = 4, max_depth = std::max(min_depth+2, (argc == 2 ? atoi(argv[1]) : 10)), stretch_depth = max_depth+1;
+
+  Node *c = make(stretch_depth);
+  std::cout << "stretch tree of depth " << stretch_depth << "\t check: " << c->check() << std::endl;
+  delete c;
+
+  Node *long_lived_tree = make(max_depth);
+  for (int d=min_depth; d<=max_depth; d+=2) {
+    int iterations = 1 << (max_depth - d + min_depth), c=0;
+    for (int i=1; i<=iterations; ++i) {
+      Node *a = make(d);
+      c += a->check();
+      delete a;
+    }
+    std::cout << iterations << "\t trees of depth " << d << "\t check: " << c << std::endl;
+  }
+  std::cout << "long lived tree of depth " << max_depth << "\t check: " << long_lived_tree->check() << "\n";
+  delete long_lived_tree;
+  return 0;
+}
+
+Now, solve the following problem: Generate DNA sequences by copying from a given sequence (repeat fasta) - Generate DNA sequences by weighted random selection from 2 alphabets (random fasta) - The output must be identical to the reference when validated with: diff output.txt reference.txt for N=1000. Algorithm requirements: Convert the expected probability of each nucleotide into cumulative probabilities - Match a random number against those cumulative probabilities to select each nucleotide using linear search - Use the following naive linear congruential generator (LCG) to calculate a random number each time a nucleotide needs to be selected. Do not cache the random number sequence: IM = 139968, IA = 3877, IC = 29573, Seed = 42. Random(Max): Seed = (Seed * IA + IC) modulo IM return Max * Seed / IM. The following values must be used exactly as given: ALU sequence (used for repeat fasta): GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAA TATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA. IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02. Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008. Output format: Line length: 60 characters - Three sequences in order: 1. >ONE Homo sapiens alu followed by repeat fasta of ALU with n*2 characters 2. >TWO IUB ambiguity codes followed by random fasta of IUB with n*3 characters 3. >THREE Homo sapiens frequency followed by random fasta of Homo sapiens with n*5 characters. N received via command-line argument. Use the following code as a demonstration example in the generated prompt:
+
+Example code (binary-trees C++):
+/* The Computer Language Benchmarks Game contributed by Jon Harrop Modified by Alex Mizrahi */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+struct Node {
+  Node *l, *r;
+  Node() : l(0), r(0) {}
+  Node(Node *l2, Node *r2) : l(l2), r(r2) {}
+  ~Node() { delete l; delete r; }
+  int check() const {
+    if (l) return l->check() + 1 + r->check(); else return 1;
+  }
+};
+
+Node *make(int d) {
+  if (d == 0) return new Node();
+  return new Node(make(d-1), make(d-1));
+}
+
+int main(int argc, char *argv[]) {
+  int min_depth = 4, max_depth = std::max(min_depth+2, (argc == 2 ? atoi(argv[1]) : 10)), stretch_depth = max_depth+1;
+
+  Node *c = make(stretch_depth);
+  std::cout << "stretch tree of depth " << stretch_depth << "\t check: " << c->check() << std::endl;
+  delete c;
+
+  Node *long_lived_tree = make(max_depth);
+  for (int d=min_depth; d<=max_depth; d+=2) {
+    int iterations = 1 << (max_depth - d + min_depth), c=0;
+    for (int i=1; i<=iterations; ++i) {
+      Node *a = make(d);
+      c += a->check();
+      delete a;
+    }
+    std::cout << iterations << "\t trees of depth " << d << "\t check: " << c << std::endl;
+  }
+  std::cout << "long lived tree of depth " << max_depth << "\t check: " << long_lived_tree->check() << "\n";
+  delete long_lived_tree;
+  return 0;
+}
+
+Now, solve the following problem: Generate DNA sequences by copying from a given sequence (repeat fasta) - Generate DNA sequences by weighted random selection from 2 alphabets (random fasta) - The output must be identical to the reference when validated with: diff output.txt reference.txt for N=1000. Algorithm requirements: Convert the expected probability of each nucleotide into cumulative probabilities - Match a random number against those cumulative probabilities to select each nucleotide using linear search - Use the following naive linear congruential generator (LCG) to calculate a random number each time a nucleotide needs to be selected. Do not cache the random number sequence: IM = 139968, IA = 3877, IC = 29573, Seed = 42. Random(Max): Seed = (Seed * IA + IC) modulo IM return Max * Seed / IM. The following values must be used exactly as given: ALU sequence (used for repeat fasta): GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAA TATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA. IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02. Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008. Output format: Line length: 60 characters - Three sequences in order: 1. >ONE Homo sapiens alu followed by repeat fasta of ALU with n*2 characters 2. >TWO IUB ambiguity codes followed by random fasta of IUB with n*3 characters 3. >THREE Homo sapiens frequency followed by random fasta of Homo sapiens with n*5 characters. N received via command-line argument. Use the following code as a demonstration example in the generated prompt:
+
+Example code (binary-trees C++):
+/* The Computer Language Benchmarks Game contributed by Jon Harrop Modified by Alex Mizrahi */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+struct Node {
+  Node *l, *r;
+  Node() : l(0), r(0) {}
+  Node(Node *l2, Node *r2) : l(l2), r(r2) {}
+  ~Node() { delete l; delete r; }
+  int check() const {
+    if (l) return l->check() + 1 + r->check(); else return 1;
+  }
+};
+
+Node *make(int d) {
+  if (d == 0) return new Node();
+  return new Node(make(d-1), make(d-1));
+}
+
+int main(int argc, char *argv[]) {
+  int min_depth = 4, max_depth = std::max(min_depth+2, (argc == 2 ? atoi(argv[1]) : 10)), stretch_depth = max_depth+1;
+
+  Node *c = make(stretch_depth);
+  std::cout << "stretch tree of depth " << stretch_depth << "\t check: " << c->check() << std::endl;
+  delete c;
+
+  Node *long_lived_tree = make(max_depth);
+  for (int d=min_depth; d<=max_depth; d+=2) {
+    int iterations = 1 << (max_depth - d + min_depth), c=0;
+    for (int i=1; i<=iterations; ++i) {
+      Node *a = make(d);
+      c += a->check();
+      delete a;
+    }
+    std::cout << iterations << "\t trees of depth " << d << "\t check: " << c << std::endl;
+  }
+  std::cout << "long lived tree of depth " << max_depth << "\t check: " << long_lived_tree->check() << "\n";
+  delete long_lived_tree;
+  return 0;
+}
+
+Now, solve the following problem: Generate DNA sequences by copying from a given sequence (repeat fasta) - Generate DNA sequences by weighted random selection from 2 alphabets (random fasta) - The output must be identical to the reference when validated with: diff output.txt reference.txt for N=1000. Algorithm requirements: Convert the expected probability of each nucleotide into cumulative probabilities - Match a random number against those cumulative probabilities to select each nucleotide using linear search - Use the following naive linear congruential generator (LCG) to calculate a random number each time a nucleotide needs to be selected. Do not cache the random number sequence: IM = 139968, IA = 3877, IC = 29573, Seed = 42. Random(Max): Seed = (Seed * IA + IC) modulo IM return Max * Seed / IM. The following values must be used exactly as given: ALU sequence (used for repeat fasta): GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAA TATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA. IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02. Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008. Output format: Line length: 60 characters - Three sequences in order: 1. >ONE Homo sapiens alu followed by repeat fasta of ALU with n*2 characters 2. >TWO IUB ambiguity codes followed by random fasta of IUB with n*3 characters 3. >THREE Homo sapiens frequency followed by random fasta of Homo sapiens with n*5 characters. N received via command-line argument. Use the following code as a demonstration example in the generated prompt:
+
+Example code (binary-trees C++):
+/* The Computer Language Benchmarks Game contributed by Jon Harrop Modified by Alex Mizrahi */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+struct Node {
+  Node *l, *r;
+  Node() : l(0), r(0) {}
+  Node(Node *l2, Node *r2) : l(l2), r(r2) {}
+  ~Node() { delete l; delete r; }
+  int check() const {
+    if (l) return l->check() + 1 + r->check(); else return 1;
+  }
+};
+
+Node *make(int d) {
+  if (d == 0) return new Node();
+  return new Node(make(d-1), make(d-1));
+}
+
+int main(int argc, char *argv[]) {
+  int min_depth = 4, max_depth = std::max(min_depth+2, (argc == 2 ? atoi(argv[1]) : 10)), stretch_depth = max_depth+1;
+
+  Node *c = make(stretch_depth);
+  std::cout << "stretch tree of depth " << stretch_depth << "\t check: " << c->check() << std::endl;
+  delete c;
+
+  Node *long_lived_tree = make(max_depth);
+  for (int d=min_depth; d<=max_depth; d+=2) {
+    int iterations = 1 << (max_depth - d + min_depth), c=0;
+    for (int i=1; i<=iterations; ++i) {
+      Node *a = make(d);
+      c += a->check();
+      delete a;
+    }
+    std::cout << iterations << "\t trees of depth " << d << "\t check: " << c << std::endl;
+  }
+  std::cout << "long lived tree of depth " << max_depth << "\t check: " << long_lived_tree->check() << "\n";
+  delete long_lived_tree;
+  return 0;
+}
+
+Now, solve the following problem: Generate DNA sequences by copying from a given sequence (repeat fasta) - Generate DNA sequences by weighted random selection from 2 alphabets (random fasta) - The output must be identical to the reference when validated with: diff output.txt reference.txt for N=1000. Algorithm requirements: Convert the expected probability of each nucleotide into cumulative probabilities - Match a random number against those cumulative probabilities to select each nucleotide using linear search - Use the following naive linear congruential generator (LCG) to calculate a random number each time a nucleotide needs to be selected. Do not cache the random number sequence: IM = 139968, IA = 3877, IC = 29573, Seed = 42. Random(Max): Seed = (Seed * IA + IC) modulo IM return Max * Seed / IM. The following values must be used exactly as given: ALU sequence (used for repeat fasta): GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAA TATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA. IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,

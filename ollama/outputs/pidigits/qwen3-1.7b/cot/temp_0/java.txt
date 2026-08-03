@@ -1,0 +1,32 @@
+[The actual prompt text that will be sent to the target LLM]
+
+Key Requirements
+- Use BigInteger for arbitrary precision arithmetic
+- Receive N as command-line argument
+- Implement next_step, extract, produce operations exactly as defined
+- Perform extract(3) and extract(4) for verification
+- Output 10 digits per line with running total
+- Pad with spaces if line has fewer than 10 digits
+- Use "\t:N" format for each line
+- Ensure output matches reference.txt for N=30
+
+Variable Values
+- N: integer command-line argument
+- q: BigInteger initialized to 1
+- r: BigInteger initialized to 0
+- t: BigInteger initialized to 1
+- k: integer initialized to 0
+
+Notes
+- Must ensure the algorithm steps are correctly ordered and executed
+- Need to handle the digit selection process accurately
+- The output formatting requires precise string formatting
+- The verification step requires both extract(3) and extract(4) to be called
+- The LLM must implement the algorithm with exact step-by-step operations
+
+The generated prompt must enforce:
+- The use of BigInteger for all arithmetic operations
+- The correct sequence of next_step, extract, and produce operations
+- The exact output formatting with running totals
+- The requirement to validate the output with the reference file
+- The proper handling of the digit selection process and verification steps

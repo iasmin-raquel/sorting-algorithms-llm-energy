@@ -1,0 +1,22 @@
+### Prompt Structure
+You are to implement the Fasta problem from the Computer Language Benchmarks Game in Python. The task involves generating three types of DNA sequences based on specific rules and probabilities. The code must use a naive linear congruential generator (LCG) with the exact constants provided, and produce output in the specified format. The code must handle the ALU sequence, IUB alphabet, and Homo sapiens alphabet with their exact probabilities, and ensure the output matches the reference when validated.
+
+### Key Requirements
+- Generate three sequences: repeat fasta, random fasta (IUB), and random fasta (Homo sapiens).
+- Use the LCG with IM=139968, IA=3877, IC=29573, Seed=42.
+- Use the ALU sequence, IUB alphabet, and Homo sapiens alphabet with their exact probabilities.
+- Output must be 60 characters per line, with specific headers and lengths.
+- Do not cache the random number sequence.
+- Validate output with `diff output.txt reference.txt` for N=1000.
+
+### Variable Values
+- ALU sequence: `GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA`
+- IUB alphabet probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02
+- Homo sapiens alphabet probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+- LCG parameters: IM=139968, IA=3877, IC=29573, Seed=42
+- N is received as a command-line argument
+
+### Notes
+- The LCG must be used to generate random numbers without caching, ensuring each call to `Random(Max)` produces a unique value.
+- The output must strictly adhere to the 60-character line length and the specified headers for each sequence.
+- The code must handle the exact probabilities for each alphabet and ensure the correct number of sequences (n*2, n*3, n*5) are generated.

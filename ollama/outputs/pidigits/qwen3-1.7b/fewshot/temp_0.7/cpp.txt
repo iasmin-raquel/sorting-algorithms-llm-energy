@@ -1,0 +1,27 @@
+### Prompt Structure
+You are to implement the Unbounded Spigot Algorithm (Gibbons) in C++ using the GMP library to compute the first N digits of π. The algorithm must follow these steps:  
+- Initialize q=1, r=0, t=1, k=0.  
+- Use the `next_step` function to advance the algorithm.  
+- Use `extract(3)` and `extract(4)` for digit verification.  
+- Output 10 digits per line, with the running total printed as "\t:N" and padded with spaces if necessary.  
+- The code must receive N as a command-line argument and produce output identical to the reference for N=30.  
+
+### Key Requirements  
+- Use GMP for arbitrary precision arithmetic.  
+- Implement `next_step`, `extract`, and `produce` as specified.  
+- Ensure the state is tracked (q, r, t, k) and updated correctly.  
+- Output 10 digits per line, with padding and the "\t:N" format.  
+- Validate output with `diff output.txt reference.txt` for N=30.  
+- Handle the algorithm's stateful loop and digit extraction properly.  
+
+### Variable Values  
+- `N`: Command-line argument (e.g., `30`).  
+- `q`, `r`, `t`, `k`: Initial state (q=1, r=0, t=1, k=0).  
+- `extract(3)` and `extract(4)`: Used for digit validation.  
+- Output format: 10 digits per line, padded with spaces, "\t:N" prefix.  
+
+### Notes  
+- The algorithm must strictly follow the steps: `next_step`, `extract(3)`, `produce`, and `extract(4)`.  
+- The GMP library must be included for arbitrary precision operations.  
+- The output must match the reference file exactly for N=30.  
+- Ambiguity in the algorithm's state transitions may require careful handling.

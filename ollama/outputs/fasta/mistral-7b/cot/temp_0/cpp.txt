@@ -1,0 +1,32 @@
+### Prompt Structure
+Write a C++ program that takes the number of sequences to generate (N) as a command-line argument. The program should generate three DNA sequences in order:
+
+1. A repeat fasta sequence of the provided ALU sequence with n*2 characters. The sequence should be prefixed with ">ONE Homo sapiens alu".
+2. A random fasta sequence using the IUB ambiguity codes with n*3 characters. The sequence should be prefixed with ">TWO IUB ambiguity codes".
+3. A random fasta sequence using the Homo sapiens frequency with n*5 characters. The sequence should be prefixed with ">THREE Homo sapiens frequency".
+
+The output should adhere to the specified format, and the program should use the provided LCG for generating random numbers.
+
+### Key Requirements
+- Implemented in C++
+- Receives N as a command-line argument
+- Uses the LCG with the exact constants defined above (IM = 139968, IA = 3877, IC = 29573, Seed = 42)
+- Utilizes the ALU sequence, IUB and Homo sapiens alphabets with their exact probabilities as defined above
+- Produces output in the exact format specified above
+- Does not cache the random number sequence
+
+### Variable Values
+ALU Sequence: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+
+IUB Alphabet and Probabilities:
+a=0.27, c=0.12, g=0.12, t=0.27,
+B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,
+N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+
+Homo sapiens Alphabet and Probabilities:
+a=0.3029549426680, c=0.1979883004921,
+g=0.1975473066391, t=0.3015094502008
+
+### Notes
+The program should convert the expected probability of each nucleotide into cumulative probabilities and match a random number against those cumulative probabilities to select each nucleotide using linear search. The output line length should be 60 characters, and the program should not cache the random number sequence.

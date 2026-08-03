@@ -1,0 +1,20 @@
+### Prompt Structure
+Create a Java program that solves the Binary Trees problem from the Computer Language Benchmarks Game. The program should follow the specified output format and receive N as a command-line argument.
+
+### Key Requirements
+1. Implemented in Java
+2. Receives N as a command-line argument
+3. Min_depth is set to 4, and max_depth and stretch_depth are computed based on the received value of N
+4. Defines a tree node structure with left and right child pointers
+5. Implements the stretch tree, long-lived tree, and bottom-up tree logic as described in the problem statement
+6. Produces output in the exact format specified in the problem description
+
+### Variable Values
+- min_depth: 4
+- max_depth: Computed based on N (max(min_depth + 2, N))
+- stretch_depth: Computed as max_depth + 1
+- iterations: Computed as (1 << (max_depth - depth + min_depth)) for each depth from min_depth to max_depth
+- N received via command-line argument
+
+### Notes
+Ensure the generated Java code follows the structure and style similar to the provided example, without optimizing away the work. The model should focus on extracting the general structure and output format from the example.

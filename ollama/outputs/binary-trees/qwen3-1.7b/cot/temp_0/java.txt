@@ -1,0 +1,28 @@
+### Prompt Structure
+The LLM must generate Java code that implements the Binary Trees problem from the Computer Language Benchmarks Game. The code must:
+- Define a `TreeNode` structure with `left` and `right` pointers.
+- Allocate and deallocate a stretch tree of depth `max_depth + 1` (stretch_depth), ensuring it exists and is deallocated.
+- Create a long-lived tree that persists while other trees are allocated and deallocated.
+- Allocate, walk, and deallocate multiple bottom-up trees (depth from min_depth to max_depth, step 2), counting nodes and verifying correctness.
+- Output in the exact format: "stretch tree of depth D\t check: C" for each depth, "long lived tree of depth D\t check: C", and ensure the long-lived tree is valid.
+
+### Key Requirements
+- Use `min_depth = 4`, `max_depth = max(6, N)`, `stretch_depth = max_depth + 1`.
+- Define `TreeNode` with `left` and `right` as `TreeNode` references.
+- Allocate stretch tree, check existence, and deallocate it.
+- Allocate long-lived tree, ensure it persists.
+- Allocate, walk, and deallocate bottom-up trees (depth from 4 to max_depth, step 2), counting nodes.
+- Output in the specified format, matching the reference for N=10.
+
+### Variable Values
+- `min_depth = 4`
+- `max_depth = max(6, N)` (for N=10, `max_depth = 6`)
+- `stretch_depth = max_depth + 1 = 7`
+- `iterations = 1 << (max_depth - depth + min_depth)` (for N=10, `iterations = 1 << (6 - 4 + 4) = 64`)
+- `N = 10` (command-line argument)
+
+### Notes
+- The code must ensure the long-lived tree is valid and persists despite other allocations/deallocations.
+- The stretch tree must be allocated, checked to exist, and deallocated.
+- The bottom-up trees must be allocated, walked, and counted, with the output matching the reference for N=10.
+- The LLM must avoid optimizations that would remove work required to meet the problem's constraints.

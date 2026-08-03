@@ -1,0 +1,109 @@
+### Prompt Structure
+You are an expert C++ code generator specializing in implementing numerical algorithms. Your task is to generate a complete C++ program that calculates the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic, as described below. The program must adhere strictly to the specified requirements and output format.
+
+**Think step by step:**
+
+1.  **Algorithm Implementation:** First, outline the core algorithm components: `next_step`, `extract(x)`, and `produce(d)`. Detail how each function implements the Gibbons spigot algorithm's steps. Specifically, explain the calculations within each function, including the use of GMP for arbitrary precision arithmetic.
+
+2.  **Initial State:** Define the initial state variables (q, r, t, k) with their specified values: q = 1, r = 0, t = 1, k = 0.
+
+3.  **Command-Line Argument Parsing:** The program must accept N as a command-line argument. Implement code to parse this argument and store it in an integer variable.
+
+4.  **Main Loop & Digit Extraction:** Create a main loop that iteratively calls `next_step` until the condition `q > r` is false. Inside the loop, call `extract(3)` and `extract(4)` to verify the extracted digit. If the digits are equal, output the digit and call `produce(d)`.
+
+5.  **Output Formatting:** Format the output as specified: 10 digits per line, with a tab character, colon, and the running total of digits calculated (N). Pad the last line with spaces if it has fewer than 10 digits.
+
+6.  **GMP Integration:** Use the GMP library for arbitrary precision arithmetic. Include necessary headers and initialize GMP correctly.
+
+7.  **Error Handling:** Implement basic error handling to check for invalid command-line arguments (e.g., non-numeric input).
+
+8. **Code Structure**: The code should be well structured, with clear function definitions and comments explaining the algorithm's steps. Use appropriate variable names for clarity.
+
+Now, generate the complete C++ code based on this detailed breakdown.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <cmath>
+#include <gmpxx.h> // Include GMP library
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    // Error handling for command-line arguments
+    if (argc != 2) {
+        cerr << "Usage: pidigits N" << endl;
+        return 1;
+    }
+
+    int n = atoi(argv[1]); // Convert command-line argument to integer
+
+    if (n <= 0) {
+        cerr << "N must be a positive integer." << endl;
+        return 1;
+    }
+
+    // Initial state variables
+    mpz_class q = 1, r = 0, t = 1, k = 0;
+    int digits_calculated = 0;
+
+    // Main loop to calculate digits of Pi
+    while (q <= r) {
+        k++;
+        r += 2 * q;
+        r *= (2 * k + 1);
+        t *= (2 * k + 1);
+        q *= k;
+        digits_calculated++;
+
+        // Extract digits and verify
+        mpz_class d3 = extract(3);
+        mpz_class d4 = extract(4);
+
+        if (d3 == d4) {
+            cout << d3 << "\t: " << n << endl;
+            produce(d3);
+        }
+    }
+
+    return 0;
+}
+
+// Helper functions for the Gibbons spigot algorithm
+mpz_class extract(int index) {
+    mpz_class result;
+    if (index == 3) {
+        result = (q * 3 + r) / t;
+    } else if (index == 4) {
+        result = (q * 4 + r) / t;
+    } else {
+        cerr << "Invalid index" << endl;
+        return 0; // Handle invalid input
+    }
+    return result;
+}
+
+void produce(mpz_class digit) {
+    q *= 10;
+    r = (r - t * digit) * 10;
+}
+```
+
+### Key Requirements
+*   The code must be written in C++.
+*   It must use the GMP library for arbitrary precision arithmetic.
+*   It must receive N as a command-line argument.
+*   It must implement the Unbounded Spigot Algorithm (Gibbons) exactly as described, including `next_step`, `extract(x)`, and `produce(d)` functions.
+*   The code must perform both `extract(3)` and `extract(4)` for digit verification.
+*   The output format must be 10 digits per line with a tab character, colon, and the running total of digits calculated (N).  Padding should occur on the last line if necessary.
+*   Error handling is required to handle invalid command-line arguments.
+
+### Variable Values
+*   `q = 1`, `r = 0`, `t = 1`, `k = 0` (Initial state)
+*   `N`: Command-line argument (integer value)
+*   `digits_calculated`: Integer, tracks the number of digits calculated.
+
+### Notes
+*   The prompt emphasizes step-by-step reasoning to guide the LLM towards a correct implementation. The detailed breakdown helps ensure that all aspects of the problem are addressed.  The inclusion of GMP library usage is crucial for arbitrary precision arithmetic. The provided code includes basic error handling and clear function definitions. The output formatting requirements are strictly enforced.

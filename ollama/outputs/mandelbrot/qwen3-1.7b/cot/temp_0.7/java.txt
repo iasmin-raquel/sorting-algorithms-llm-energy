@@ -1,29 +1,29 @@
-### Prompt Structure
-You are tasked with implementing the Mandelbrot set in Java as per the Computer Language Benchmarks Game. Your code must:
-- Accept N as a command-line argument (via `Integer.parseInt(args[0])`)
-- Plot the Mandelbrot set within the region [-1.5, 0.5] (real) × [-1.0, 1.0] (imaginary)
-- Use exactly 50 iterations and escape threshold 4.0
-- Output in PBM P4 format (header + binary pixel data)
-- Ensure output matches the reference when validated with `cmp output.pbm reference.pbm` for N=200
-- Pack bits MSB first, zero-pad rows, and write to stdout
+[Prompt text that will be sent to the target LLM]
+Generate Java code to compute the Mandelbrot set according to the Computer Language Benchmarks Game specifications. The code must:
+- Accept N as a command-line argument
+- Use exactly 50 iterations with lim = 2.0 * 2.0
+- Compute squared magnitude (zr*zr + zi*zi) for escape check
+- Map real(C) = 2.0 * x / N - 1.5 and imag(C) = 2.0 * y / N - 1.0
+- Output PBM P4 header with N N
+- Pack pixels 8 per byte in MSB order, padding with zeros if needed
+- Validate against cmp output.pbm reference.pbm for N=200
 
-### Key Requirements
-- Java code must use exactly 50 iterations and escape threshold 4.0
-- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
-- Output must be PBM P4 format (header + binary data)
-- Bits packed MSB first, zero-padded per row
-- Code must receive N as command-line argument
-- Output must match reference for N=200
+[Key Requirements]
+- N must be divisible by 8 for proper padding
+- Pixel data must be byte-per-byte with MSB first ordering
+- Iteration formula Z = Z*Z + C must be used
+- Escape threshold must be exactly 2.0*2.0
+- Coordinate mapping must be precise
+- Output must match reference.pbm for N=200
 
-### Variable Values
-- Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region: real min=-1.5, real max=0.5, imaginary min=-1.0, imaginary max=1.0
-- Output format: PBM P4 (header + binary data)
-- Bit packing: MSB first, zero-padded rows
+[Variable Values]
+N: 200
+Iterations: 50
+Lim: 2.0 * 2.0
+Real(C) formula: 2.0 * x / N - 1.5
+Imag(C) formula: 2.0 * y / N - 1.0
 
-### Notes
-- Precision is critical: exact parameter values must be used
-- PBM P4 format requires exact header and data structure
-- Zero-padding ensures consistent row lengths
-- The code must match the reference for N=200 to avoid validation failures
+[Notes]
+- Padding must be added if N is not divisible by 8
+- MSB first ordering requires byte 1 to be set bit (in set) and byte 0 to be unset bit (not in set)
+- Validation with cmp requires exact byte matching for all pixels

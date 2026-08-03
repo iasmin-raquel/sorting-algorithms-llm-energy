@@ -1,0 +1,28 @@
+### Prompt Structure
+The LLM must generate a C++ implementation that:
+1. Reads N from command line.
+2. Implements the Fasta problem with three types of sequences (repeat, random, and another random).
+3. Uses the LCG with exact parameters (IM=139968, IA=3877, IC=29573, Seed=42).
+4. Applies cumulative probabilities for ALU, IUB, and Homo sapiens alphabets.
+5. Produces output in the exact format: 60-character lines, three sequences with specified headers and lengths.
+6. Ensures output matches reference.txt when validated with `diff output.txt reference.txt`.
+
+### Key Requirements
+- Use the ALU sequence as given (exact string).
+- Use IUB and Homo sapiens alphabets with their exact probabilities (a, c, g, t, B, D, H, K, M, N, R, S, V, W, etc.).
+- Generate sequences of length 2*N, 3*N, and 5*N respectively.
+- Avoid caching the LCG sequence.
+- Match output format precisely: headers, line lengths, and sequence counts.
+- Handle N as a command-line argument.
+
+### Variable Values
+- ALU sequence: `GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA` (exact).
+- IUB probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02.
+- Homo sapiens probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008.
+- LCG parameters: IM=139968, IA=3877, IC=29573, Seed=42.
+
+### Notes
+- The LCG must be used naively (no caching) to generate random numbers.
+- The output must be identical to the reference when validated with `diff output.txt reference.txt`.
+- Ensure that the cumulative probabilities are calculated correctly for each nucleotide.
+- The code must handle the exact sequence lengths (2*N, 3*N, 5*N) and format the output precisely.

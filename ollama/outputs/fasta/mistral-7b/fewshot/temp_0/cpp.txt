@@ -1,0 +1,53 @@
+### Prompt Structure
+```cpp
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <string>
+#include <vector>
+
+int main(int argc, char *argv[]) {
+    // Your implementation here
+}
+```
+
+### Key Requirements
+- The code should be written in C++.
+- The program should accept N as a command-line argument.
+- Use the provided LCG to generate random numbers.
+- Implement the ALU sequence, IUB and Homo sapiens alphabets with their exact probabilities.
+- Generate output in the specified format.
+- Do not cache the random number sequence.
+
+### Variable Values
+```cpp
+// LCG constants
+const int IM = 139968;
+const int IA = 3877;
+const int IC = 29573;
+const int Seed = 42;
+
+// ALU sequence
+std::string alu_sequence = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA"
+                             "TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT"
+                             "AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG"
+                             "GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG"
+                             "CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+
+// IUB alphabet and probabilities
+const std::map<char, double> iub_alphabet = {
+    {'a', 0.27}, {'c', 0.12}, {'g', 0.12}, {'t', 0.27},
+    {'B', 0.02}, {'D', 0.02}, {'H', 0.02}, {'K', 0.02}, {'M', 0.02},
+    {'N', 0.02}, {'R', 0.02}, {'S', 0.02}, {'V', 0.02}, {'W', 0.02}, {'Y', 0.02}
+};
+
+// Homo sapiens alphabet and probabilities
+const std::map<char, double> homo_sapiens_alphabet = {
+    {'a', 0.3029549426680}, {'c', 0.1979883004921},
+    {'g', 0.1975473066391}, {'t', 0.3015094502008}
+};
+```
+
+### Notes
+- The output format requires line length of 60 characters and three sequences in order.
+- The model should generate code that follows the structure and style demonstrated by the example code provided.

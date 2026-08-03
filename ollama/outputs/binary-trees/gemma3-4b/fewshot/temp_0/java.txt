@@ -1,0 +1,51 @@
+```text
+### Prompt Structure
+You are an expert Java code generator. Your task is to generate a complete Java program that implements the Binary Trees problem from the Computer Language Benchmarks Game, following the exact specifications provided in the problem description. You will receive the value of `N` as a command-line argument.
+
+Here's an example of the expected output format:
+
+```
+stretch tree of depth 4	 check: C
+trees of depth 4	 check: C
+long lived tree of depth 4	 check: C
+stretch tree of depth 5	 check: C
+trees of depth 5	 check: C
+long lived tree of depth 5	 check: C
+...
+```
+
+The program should:
+
+1.  Define a `TreeNode` class with `left` and `right` child pointers.
+2.  Allocate a binary tree to stretch memory, verify its existence, and deallocate it.
+3.  Allocate a long-lived binary tree that persists throughout the execution.
+4.  Implement the logic for creating multiple bottom-up binary trees: allocate a tree, count nodes, deallocate the tree.
+5.  Verify the existence of the long-lived binary tree after all allocations and deallocations.
+
+The following parameters must be used exactly as given:
+
+*   `min_depth = 4`
+*   `max_depth = max(min_depth + 2, N)`
+*   `stretch_depth = max_depth + 1`
+*   `iterations = 1 << (max_depth - depth + min_depth)`
+*   `N` received via command-line argument.
+
+Use the provided `nbody` example code as a template for your solution, focusing on the structure and logic rather than the specific details of the n-body simulation.  The output should be identical to the reference when validated with: `diff output.txt reference.txt for N=10`. Do not optimize away the work.
+
+### Key Requirements
+*   The generated code must be valid Java code, runnable without modification.
+*   The code must accept an integer `N` as a command-line argument.
+*   The code must correctly implement all aspects of the problem description, including tree allocation, node counting, and deallocation.
+*   The output format must precisely match the specified example.
+*   The code should be well-structured and easy to understand.
+
+### Variable Values
+*   `min_depth = 4`
+*   `max_depth = 10` (Assuming N=10)
+*   `stretch_depth = 11`
+*   `N = 10`
+*   `iterations`:  Calculated based on `max_depth` and `min_depth`.
+
+### Notes
+This prompt relies heavily on the LLM's ability to understand and replicate code structures. The example provided is crucial for guiding the model towards the desired output format. Ensure that the generated code includes all necessary imports and adheres to standard Java coding conventions.  The focus should be on generating a functional program, not on providing an optimized solution.
+```

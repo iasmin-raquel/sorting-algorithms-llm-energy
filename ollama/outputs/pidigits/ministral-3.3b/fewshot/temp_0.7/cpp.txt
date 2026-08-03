@@ -1,0 +1,76 @@
+### Prompt Structure
+Here is a few-shot prompting structure for implementing the **Unbounded Spigot Algorithm (Gibbons)** to compute arbitrary-precision digits of π:
+
+---
+
+**Example 1: Basic State Management & Single Digit Output**
+```cpp
+// Assume q, r, t are initialized as integers.
+// Example: Compute digit d for N=5.
+while (true) {
+    if (!q_gt_r()) { break; } // Termination condition
+    d = extract(3);           // Extract a single digit using formula
+    cout << d;
+    if ((d == extract(4)) && valid_condition_for_produce(d)) {
+        produce(d);           // Adjust q, r, t for next digit
+    }
+}
+```
+
+---
+**Example 2: Full Output Format with Command-Line Argument Handling**
+```cpp
+int main(int argc, char *argv[]) {
+    int N = argc > 1 ? atoi(argv[1]) : 30; // Read N from command line.
+    vector<int> digits;
+    int d;
+    while (digits.size() < N) { // Loop until N digits are computed.
+        if (!q_gt_r()) break;   // Skip if algorithm terminates early.
+        d = extract(3);        // Compute digit via floor formula.
+        digits.push_back(d);
+        cout << setw(10) << d;
+        // Output formatting: Pad to 10 chars + line ending and N counter.
+        if (digits.size() % 10 == 0 || digits.size() == N)
+            cout << "\t:" << digits.size() << endl;
+    }
+}
+```
+---
+
+**Target Implementation Instructions**:
+Write a C++ program that:
+1. Implements arbitrary-precision arithmetic using the **GMP library**.
+2. Initializes state: `q = 1`, `r = 0`, `t = 1`, `k = 0`.
+3. Follows the exact steps for `next_step()` (increment k, update r/t/q).
+4. Uses `extract(3)` and compares with `extract(4)` to enforce digit selection logic.
+5. Outputs digits in groups of **10 per line**, padded with spaces if fewer remain.
+6. Prints `\t:N` after each group/line end.
+
+---
+### Key Requirements
+- **Arbitrary Precision**: Use GMP (`mpz_t`) for `q`, `r`, and `t`.
+- **Command-Line Input**: Parse `N` via `main(int argc, char *argv[])`.
+- **Precision Handling**: Avoid floating-point errors; rely on exact integer arithmetic.
+- **Digit Selection**:
+  - Call `next_step()` until `q > r` is false (loop condition).
+  - Compute `d = extract(3)`; verify `d == extract(4)` before producing output.
+- **Output Format**:
+  - Print digits left-padded to 10 characters per line.
+  - Append `\t:10` after every full line, and adjust for partial lines.
+
+---
+### Variable Values
+| Parameter   | Value                  |
+|-------------|------------------------|
+| `q`         | Initialized to `1` (integer/MPZ). |
+| `r`         | Initialized to `0`.    |
+| `t`         | Initialized to `1`.    |
+| `k`         | Starts at `0`, increments via `next_step()`. |
+
+---
+### Notes
+- **Risk of Ambiguity**: Stress the exactness of `extract()` and termination conditions.
+- **Tool Dependencies**: Assume GMP is available (`#include <gmpxx.h>` or `#include <gmpXX.h>`).
+- **Edge Cases**: Handle line breaks for last partial group (e.g., "12345   \t:6").
+- **Verification**: Compare output with `diff` between your implementation and precomputed reference.txt.
+- **Optimization**: Avoid redundant loops; iterate only until `digits.size() == N`.

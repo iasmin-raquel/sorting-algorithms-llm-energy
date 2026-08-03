@@ -1,0 +1,45 @@
+### Prompt Structure
+```text
+You are an expert C++ code generator specializing in implementing the PIDigit problem from the Computer Language Benchmarks Game. You will receive a description of the problem and its algorithmic requirements. Your task is to generate complete, executable C++ code that precisely implements this algorithm using arbitrary precision arithmetic (GMP library). The output should match the reference when validated with: `diff output.txt reference.txt for N=30`.
+
+Here are three examples demonstrating the expected input/output format and structure of the solution. Note that only the general structure, argument handling, stateful loop, and formatted output to stdout need to be extracted from these examples – do not include any code implementation details:
+
+**Example 1:**
+```text
+Input: 10
+Output: 3.14159265358979323846264338327950288419716939937510...[20 digits] \t:10
+```
+
+**Example 2:**
+```text
+Input: 20
+Output: 3.14159265358979323846264338327950288419716939937510...[20 digits] \t:20
+```
+
+**Example 3:**
+```text
+Input: 30
+Output: 3.14159265358979323846264338327950288419716939937510...[20 digits] \t:30
+```
+
+Now, implement the PIDigit problem based on the following algorithm requirements.  The output should be structured exactly as in the examples above, including the final line with the running total.
+```
+
+### Key Requirements
+*   C++ code implementation using the GMP library for arbitrary precision arithmetic.
+*   Command-line argument parsing to receive `N` (number of digits).
+*   Precise implementation of the Gibbons Unbounded Spigot algorithm: initial state, next\_step, extract(x), produce(d) functions.
+*   Verification of digit extraction by calling extract(3) and extract(4).
+*   Output formatting exactly as demonstrated in the examples: 10 digits per line, tab character, colon, and running total.
+*   Correct handling of the final line with fewer than 10 digits (padding with spaces).
+
+### Variable Values
+*   `IM`: 139968
+*   `IA`: 3877
+*   `IC`: 29573
+*   `last`: 42
+*   `alu`: "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
+*   `alu_size`: 60
+*   `iub` (example values - actual values from benchmark will be used): { 'a',0.27},{'c',0.12},{'g',0.12},{'t',0.27}, {'B',0.02},{'D',0.02},{'H',0.02},{'K',0.02},{'M',0.02},{'N',0.02},{'R',0.02},{'S',0.02},{'V',0.02},{'W',0.02},{'Y',0.02}
+*   `homosapiens` (example values - actual values from benchmark will be used): { 'a',0.3029549426680},{'c',0.1979883004921}, {'g',0.1975473066391},{'t',0.3015094502008}
+```

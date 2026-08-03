@@ -1,0 +1,30 @@
+### Prompt Structure
+You are tasked with implementing the Binary Trees problem from the Computer Language Benchmarks Game in Python. The goal is to create perfect binary trees with specific memory allocations and ensure the output matches the reference for N=10. Your solution must:
+- Define a tree node structure with left and right child pointers.
+- Allocate and deallocate a stretch tree of depth D.
+- Allocate a long-lived tree that persists after other trees are deallocated.
+- Create and deallocate multiple bottom-up trees (depth from min_depth to max_depth, step 2).
+- Ensure the output format matches the reference, including checks for each depth.
+
+### Key Requirements
+- Use min_depth = 4 and compute max_depth = max(6, N) (N is provided via command-line).
+- Stretch_depth = max_depth + 1.
+- Iterations = 1 << (max_depth - depth + min_depth) for each depth (depth is from min_depth to max_depth, step 2).
+- Define a node structure with left and right pointers.
+- Allocate a stretch tree, check it exists, and deallocate it.
+- Allocate a long-lived tree and ensure it persists.
+- Allocate, walk, and deallocate bottom-up trees (depth from min_depth to max_depth, step 2).
+- Output in the exact format: "stretch tree of depth D\t check: C" for each depth, and "long lived tree of depth D\t check: C".
+
+### Variable Values
+- N: Provided via command-line argument (e.g., 10).
+- min_depth: 4.
+- max_depth: max(6, N).
+- stretch_depth: max_depth + 1.
+- iterations: 1 << (max_depth - depth + min_depth) for each depth (depth is from min_depth to max_depth, step 2).
+
+### Notes
+- The code must use min_depth = 4 and compute max_depth and stretch_depth as defined.
+- The long-lived tree must be allocated and not deallocated until after other trees are deallocated.
+- The output must match the reference for N=10, including checks for each depth.
+- The LLM must generate the Python code without including the reasoning process, just the prompt.

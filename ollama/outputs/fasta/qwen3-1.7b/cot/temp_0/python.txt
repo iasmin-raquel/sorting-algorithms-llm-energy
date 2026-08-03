@@ -1,0 +1,26 @@
+### Prompt Structure
+You are to implement the Fasta problem from the Computer Language Benchmarks Game in Python. The task involves generating three DNA sequences based on specific rules and probabilities. The code must use a naive linear congruential generator (LCG) with exact parameters and produce output in a strict format. The code must handle the following:
+
+1. Generate a repeat fasta of the ALU sequence (given) with n*2 characters.
+2. Generate a random fasta of the IUB alphabet (given) with n*3 characters.
+3. Generate a random fasta of the Homo sapiens alphabet (given) with n*5 characters.
+4. Use the LCG with IM=139968, IA=3877, IC=29573, Seed=42 to generate random numbers.
+5. Ensure the output matches the reference when validated with `diff output.txt reference.txt` for N=1000.
+
+### Key Requirements
+- Use the exact ALU sequence, IUB probabilities, and Homo sapiens probabilities as defined.
+- Generate sequences with line length 60 characters.
+- Ensure the LCG is used without caching the random number sequence.
+- Output three sequences in order: "ONE Homo sapiens alu", "TWO IUB ambiguity codes", "THREE Homo sapiens frequency".
+- Validate output with `diff output.txt reference.txt` for N=1000.
+
+### Variable Values
+- ALU sequence: `GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA`
+- IUB probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02
+- Homo sapiens probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+- LCG parameters: IM=139968, IA=3877, IC=29573, Seed=42
+
+### Notes
+- The LCG must be used exactly as defined, with no caching of the random number sequence.
+- The output must match the reference when validated with `diff output.txt reference.txt` for N=1000.
+- The code must handle the three sequences with precise lengths (n*2, n*3, n*5) and ensure the correct order of output.

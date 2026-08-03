@@ -1,0 +1,68 @@
+### Prompt Structure
+Okay, let's generate a Chain-of-Thought prompt for an LLM to implement the Fasta problem from the Computer Language Benchmarks Game. The goal is to produce C++ code that replicates the specified functionality with exact constraints.
+
+**Prompt:**
+
+"You are tasked with generating C++ code to solve the Fasta problem as defined in the Computer Language Benchmark Game. This involves three distinct sequence generation methods: repeat fasta, weighted random selection using IUB alphabet probabilities, and weighted random selection using Homo sapiens frequencies. The generated output must precisely match a reference file (output.txt) when validated with 'diff output.txt reference.txt for N=1000'.  Your response should be C++ code that meticulously adheres to the following requirements:
+
+**Step 1: Understanding and Decomposition:**
+First, let's break down the problem into manageable steps. We need to generate three different sequences based on provided parameters. This requires handling probability distributions, random number generation, sequence repetition, and output formatting.  We’ll focus on creating a modular structure for clarity and maintainability.
+
+**Step 2: Random Number Generation (LCG):**
+Implement the Linear Congruential Generator (LCG) with these constants: IM = 139968, IA = 3877, IC = 29573, Seed = 42.  Crucially, *do not cache* the random number sequence. Each call to `Random()` must generate a new value based on the previous one.
+
+**Step 3: Probability Handling:**
+Create cumulative probability tables for both the IUB alphabet and the Homo sapiens alphabet. This will be used in conjunction with the LCG to select nucleotides. Store these probabilities accurately.
+
+**Step 4: Sequence Generation – Repeat Fasta:**
+Implement the repeat fasta functionality using the ALU sequence. The length of the generated sequences should be n*2, where 'n' is a command-line argument.
+
+**Step 5: Sequence Generation – IUB Weighted Random:**
+Implement the weighted random selection from the IUB alphabet (probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02).  The length of the generated sequence should be n*3.
+
+**Step 6: Sequence Generation – Homo sapiens Frequency Weighted Random:**
+Implement the weighted random selection from the Homo sapiens alphabet (probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008). The length of the generated sequence should be n*5.
+
+**Step 7: Output Formatting:**
+Format the output as follows:
+- Line length: 60 characters
+- Three sequences in order:
+    1. ">ONE Homo sapiens alu" followed by repeat fasta of ALU with n*2 characters
+    2. ">TWO IUB ambiguity codes" followed by random fasta of IUB with n*3 characters
+    3. ">THREE Homo sapiens frequency" followed by random fasta of Homo sapiens with n*5 characters
+
+**Step 8: Command-Line Argument:**
+The C++ code must accept the value of 'n' as a command-line argument.
+
+**Detailed Instructions:**
+
+1.  Include necessary headers (e.g., `<iostream>`, `<string>`, `<random>`).
+2.  Implement the LCG function `Random()`.
+3.  Create functions for generating sequences based on each method.
+4.  Handle probability calculations and random number generation correctly.
+5.  Ensure accurate output formatting as specified above.
+6.  Validate the generated output against the reference file using 'diff' command to guarantee correctness (N=1000).
+
+Now, write the C++ code to fulfill these requirements."
+
+### Key Requirements
+*   C++ Code Generation: The LLM must produce valid and executable C++ code.
+*   Command-Line Argument Handling: The code must accept 'n' as a command-line argument.
+*   LCG Implementation: The LCG must be implemented correctly with the specified constants and without caching.
+*   Probability Tables: Accurate cumulative probability tables for IUB and Homo sapiens alphabets are required.
+*   Sequence Generation Logic: Correct implementation of repeat fasta, weighted random selection using IUB, and weighted random selection using Homo sapiens frequencies.
+*   Output Formatting: Strict adherence to the 60-character line length and three sequence format.
+*   Validation: The code should generate an output that matches `reference.txt` when validated with 'diff'.
+
+### Variable Values
+*   IM = 139968
+*   IA = 3877
+*   IC = 29573
+*   Seed = 42
+*   ALU sequence: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+*   IUB alphabet probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+*   Homo sapiens alphabet probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+
+### Notes
+*   This prompt is designed to elicit a complete and correct implementation of the Fasta problem by guiding the LLM through a step-by-step reasoning process.  The explicit instructions help reduce ambiguity and improve the likelihood of the generated code meeting all the specified requirements. The emphasis on not caching the random number sequence is critical for reproducibility.
+*   The prompt’s detailed decomposition will greatly aid the LLM in constructing a more robust and correct solution.

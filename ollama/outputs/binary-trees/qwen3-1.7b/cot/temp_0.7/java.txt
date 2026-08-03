@@ -1,0 +1,29 @@
+### Prompt Structure
+You are to implement the Binary Trees problem from the Computer Language Benchmarks Game in Java. Your task is to:
+1. Define a tree node structure with left and right child pointers.
+2. Allocate a stretch tree of depth D, check it exists, and deallocate it.
+3. Allocate a long-lived tree that persists while other trees are allocated and deallocated.
+4. Allocate, walk, and deallocate many bottom-up binary trees (depth step 2 from min_depth to max_depth).
+5. Ensure the long-lived tree remains valid and the output matches the reference for N=10.
+
+### Key Requirements
+- The code must use min_depth = 4 and compute max_depth = max(4+2, N).
+- The stretch_depth is set to max_depth + 1.
+- The iterations are 1 << (max_depth - depth + min_depth) for each depth from min_depth to max_depth (step 2).
+- The node structure must have left and right child pointers.
+- The stretch tree must be allocated, checked to exist, and deallocated.
+- The long-lived tree must persist despite other allocations/deallocations.
+- The output must match the reference for N=10, with exact formatting for each depth.
+
+### Variable Values
+- min_depth = 4
+- max_depth = max(6, N)
+- stretch_depth = max_depth + 1
+- iterations = 1 << (max_depth - depth + min_depth) for each depth from min_depth to max_depth (step 2)
+- N = received via command-line argument
+
+### Notes
+- The code must not optimize away the work, ensuring the required number of allocations matches Jeremy Zerfas's C program.
+- The output must exactly match the reference for N=10, including the format for stretch trees, long-lived trees, and bottom-up trees.
+- The long-lived tree must be checked to exist after all allocations.
+- The node structure must be defined with left and right child pointers, and the code must handle the required allocations/deallocations for all trees.

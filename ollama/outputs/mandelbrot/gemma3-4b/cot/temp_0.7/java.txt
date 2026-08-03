@@ -1,43 +1,44 @@
 ### Prompt Structure
-Okay, let's generate a Chain-of-Thought prompt for an LLM to implement the Mandelbrot set in Java, targeting the Computer Language Benchmarks Game problem.
+You are an expert Java code generator specializing in computer graphics and algorithmic problems. Your task is to generate a complete Java program that implements the Mandelbrot set visualization based on the Computer Language Benchmarks Game problem description. Follow these steps:
 
-"You are an expert Java programmer tasked with creating a program that generates a bitmap image of the Mandelbrot set. Your response must be complete, executable Java code. First, let's break this down into steps:
+1.  **Understand the Problem:** The goal is to create a Java program that generates a bitmap image of the Mandelbrot set within the region [-1.5-i, 0.5+i] in the complex plane. The output must be in PBM P4 format, suitable for validation with the `cmp` command.
 
-1.  **Understand the Problem:** The goal is to plot the Mandelbrot set within the specified region [-1.5-i, 0.5+i] and [-1.0, 1.0] for real and imaginary parts respectively. We will use a maximum of 50 iterations and an escape threshold of 4.0. The output should be in PBM P4 format, written byte-by-byte to standard output (stdout).  This means the program needs to create a header string identifying the image as PBM P4 and then follow this with the binary pixel data, packed MSB first, zero-padded per row.
+2.  **Input Handling:** The program should take an integer 'N' as a command-line argument, which determines the size of the bitmap (N x N pixels).
 
-2.  **Input Handling:** The program must accept an integer `N` representing the size of the bitmap (N x N) as a command-line argument. Use `Integer.parseInt(args[0])` to parse this argument.
+3.  **Mandelbrot Calculation:** Implement the Mandelbrot set calculation logic.
+    *   Use 50 iterations for each point.
+    *   The escape threshold is lim = 2.0 * 2.0.
+    *   Calculate the magnitude squared (zr\*zr + zi\*zi) to avoid square roots, which improves performance.
+    *   Apply the iteration formula: Z = Z\*Z + C, starting with Z = (0, 0).
+    *   Map the complex coordinates (x, y) to the complex number 'C' using the given coordinate mapping:
+        *   real(C) = 2.0 * x / N - 1.5
+        *   imag(C) = 2.0 * y / N - 1.0
 
-3.  **Mandelbrot Calculation:** Implement the Mandelbrot set calculation algorithm:
-    *   For each point (x, y) in the plot region:
-        *   Initialize z = 0 + 0i (complex number).
-        *   Iterate up to 50 times:
-            *   z = z * z + c  (where c is the complex number representing the current point).
-            *   If |z| > 4.0, then escape.
+4.  **Bitmap Generation:** Generate the bitmap image in PBM P4 format.
+    *   The header should be "P4\n" followed by "N N\n".
+    *   Each pixel is represented by a single byte, where the most significant bit (MSB) indicates whether the point belongs to the Mandelbrot set (1) or not (0).  The least significant bit (LSB) is unused.
+    *   If 'N' is not divisible by 8, pad the last byte of each row with zeros.
+    *   Write the header and binary pixel data to standard output.
 
-4.  **Bitmap Generation:** Based on whether a point escaped or not after 50 iterations, assign a pixel value (0 or 1) to the corresponding location in the bitmap. A pixel escapes if its magnitude exceeds 4.0.
+5.  **Code Style:** Write clean, well-commented Java code. Use appropriate variable names for clarity.
 
-5.  **PBM P4 Output:** Construct the PBM P4 header string and then write the binary data to stdout:
-    *   Header: "P4\nN M" (where N is the image size, and M is the image size).
-    *   Pixel Data: Write each pixel as a single byte (0 or 1) to stdout, padded with zeros on the left for each row.
+Now, generate the complete Java program code. Do not include any introductory or explanatory text before the code itself. Start with `public class Mandelbrot {`
 
-6.  **Error Handling:** Implement basic error handling, such as checking if the command-line argument is a valid integer and preventing potential array out-of-bounds errors.
-
-Now, write the complete Java code, ensuring it adheres to all specified parameters and output format."
 ### Key Requirements
-*   The generated code must be in Java.
-*   It must accept an integer `N` as a command-line argument.
-*   It must use 50 iterations for the Mandelbrot calculation.
-*   It must utilize an escape threshold of 4.0.
-*   The output format must be PBM P4 (header + binary pixel data).
-*   Pixel data must be packed MSB first, zero-padded per row.
-*   The program should write the output byte-by-byte to stdout.
-*   The plot region must be [-1.5, 0.5] for real and [-1.0, 1.0] for imaginary parts.
+*   The generated code must be entirely in Java.
+*   The program must accept the bitmap size 'N' as a command-line argument.
+*   The maximum number of iterations for the Mandelbrot calculation is exactly 50.
+*   The escape threshold (lim) is fixed at 2.0 * 2.0.
+*   The output must be in PBM P4 format, including the header and binary pixel data.
+*   The program should pad the last byte of each row with zeros if 'N' is not divisible by 8.
+*   The generated code must produce a result that is validatable against the reference image using the `cmp` command for N=200.
+*   The code must use squared magnitude (zr\*zr + zi\*zi) to avoid square root calculations.
 
 ### Variable Values
 *   Maximum iterations: 50
-*   Escape threshold: 4.0
-*   Plot region: Real in [-1.5, 0.5], Imaginary in [-1.0, 1.0]
-*   Output format: PBM P4 (bits packed MSB first, zero-padded per row)
+*   Escape threshold (squared): lim = 2.0 * 2.0
+*   Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+*   Output format: PBM P4
 
 ### Notes
-This prompt emphasizes a Chain-of-Thought approach to guide the LLM through the problem-solving process and ensure it generates code that meets all requirements of the Computer Language Benchmarks Game's Mandelbrot set problem.  The detailed step-by-step instructions should mitigate ambiguity and encourage the model to produce accurate and complete Java code. The inclusion of specific error handling considerations is also intended to improve robustness.
+This prompt is specifically designed to elicit a precise implementation of the Mandelbrot set problem as defined in the Computer Language Benchmarks Game. The emphasis on chain-of-thought reasoning and detailed instructions should guide the LLM towards generating code that adheres strictly to the specified parameters and output format, ensuring compatibility with validation testing.  The instruction to generate *only* the Java code minimizes potential ambiguity and focuses the model's generation process.

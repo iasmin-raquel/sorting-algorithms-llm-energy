@@ -1,0 +1,27 @@
+### Prompt Structure
+You are to implement the pidigits problem using the Unbounded Spigot Algorithm (Gibbons) in Python. The algorithm must:
+- Use arbitrary precision integers (via Python's built-in arbitrary precision)
+- Maintain stateful variables q, r, t, k
+- Execute next_step, extract(3), and extract(4) for verification
+- Output 10 digits per line with running total "\t:N"
+- Match the reference output for N=30
+
+### Key Requirements
+- Use the initial state q=1, r=0, t=1, k=0
+- Implement next_step: increment k, update r and t, then q
+- Implement extract(x): floor((q*x + r)/t)
+- Implement produce(d): q = q*10, r = (r - t*d) * 10
+- Output 10 digits per line with padding
+- Verify extract(3) == extract(4) for N=30
+- Use Python's arbitrary precision integers
+
+### Variable Values
+IM = 139968; IA = 3877; IC = 29573; SEED = 42
+IUB_P = [0.27,0.12,0.12,0.27,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02]
+HomoSapiens_P = [0.3029549426680,0.1979883004921,0.1975473066391,0.3015094502008]
+
+### Notes
+- The algorithm must strictly follow the next_step, extract, and produce steps
+- Output formatting requires precise tab placement and line padding
+- Verification requires both extract(3) and extract(4) for N=30
+- The example code uses a different algorithm, but the target implementation must match the specified steps

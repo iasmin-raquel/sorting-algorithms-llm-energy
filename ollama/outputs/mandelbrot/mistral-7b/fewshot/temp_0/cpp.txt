@@ -1,9 +1,11 @@
 ### Prompt Structure
-Here is a prompt that demonstrates the structure for implementing the Mandelbrot set problem in C++. The example provided does not relate to the Mandelbrot set but serves as a guide for the expected style and structure of the response.
+Here is a Few-Shot Prompt for implementing the Mandelbrot set problem in C++ code:
 
 ```cpp
 /*
  * The Computer Language Benchmarks Game
+ * https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
+ *
  * contributed by [Your Name]
  */
 
@@ -12,33 +14,36 @@ Here is a prompt that demonstrates the structure for implementing the Mandelbrot
 #include <math.h>
 
 namespace {
-    // Define necessary structures and constants
+  // ... (Include any necessary helper functions from the example code)
 }
 
 int main(int argc, char** argv) {
-    int N = atoi(argv[1]);
-    // Initialize variables and data structures
+  int N = atoi(argv[1]);
 
-    for (int i = 0; i < N; ++i) {
-        // Implement the Mandelbrot set calculation here
-    }
+  // ... (Implement the Mandelbrot set algorithm with the given constraints)
 
-    // Write PBM P4 header and binary pixel data to stdout
+  // Write PBM P4 header and binary pixel data to stdout
+
+  return 0;
 }
 ```
 
 ### Key Requirements
-- The solution must be implemented in C++.
-- The code should receive N as a command-line argument.
-- It must use exactly 50 iterations and an escape threshold of 4.0.
-- Write PBM P4 header and binary pixel data to stdout.
+- The code must be implemented in C++
+- Receives N as a command-line argument
+- Uses exactly 50 iterations and escape threshold lim = 2.0 * 2.0
+- Writes PBM P4 header and binary pixel data to stdout
+- Produces output validatable with cmp for N=200
 
 ### Variable Values
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region (real): [-1.5, 0.5]
-- Plot region (imaginary): [-1.0, 1.0]
-- Output format: PBM P4
+- Escape threshold (squared): lim = 2.0 * 2.0
+- A point belongs to the set if |Z|² <= lim after all iterations
+- Use squared magnitude (zr*zr + zi*zi) to avoid computing square roots
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Coordinate mapping:
+    real(C) = 2.0 * x / N - 1.5
+    imag(C) = 2.0 * y / N - 1.0
 
 ### Notes
-The provided example code is not related to the Mandelbrot set problem. The generated prompt should focus on extracting the general structure from the example, without replicating its template metaprogramming style. The output must be only the generated prompt text, ready to be sent to another LLM.
+- The example code provided is for a different problem, but it demonstrates the expected structure and style of the solution. You should adapt the helper functions from the example to implement the Mandelbrot set algorithm with the given constraints.

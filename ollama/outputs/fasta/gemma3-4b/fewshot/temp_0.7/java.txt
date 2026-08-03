@@ -1,0 +1,46 @@
+### Prompt Structure
+Here are three examples demonstrating how to generate DNA sequences using different methods. Your task is to write a Java program that implements these functionalities based on the provided specifications and examples.
+
+**Example 1:** Repeat Fasta with ALU sequence
+```
+>ONE Homo sapiens alu
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+```
+
+**Example 2:** Random Fasta with IUB alphabet
+```
+>TWO IUB ambiguity codes
+a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+```
+
+**Example 3:** Random Fasta with Homo sapiens frequency
+```
+>THREE Homo sapiens frequency
+a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+```
+
+Now, write a Java program that takes an integer 'N' as a command-line argument and generates three DNA sequences based on the above methods: repeat fasta with the ALU sequence, random fasta with the IUB alphabet and random fasta with Homo sapiens frequency. The output must be formatted exactly as shown in the examples above, including the header lines and the corresponding DNA sequences. Use the LCG with the following constants to generate random numbers: IM = 139968, IA = 3877, IC = 29573, Seed = 42. Do not cache the random number sequence.
+
+### Key Requirements
+*   The code must be written in Java.
+*   It should accept an integer `N` as a command-line argument.
+*   It must implement the repeat fasta and random fasta algorithms using the specified alphabets and probabilities.
+*   The LCG must be used correctly to generate random numbers without caching.
+*   The output must strictly adhere to the specified formatting requirements (line length, header lines, sequence lengths).
+*   No external libraries should be used beyond standard Java library classes.
+
+### Variable Values
+*   `ALU`: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+*   `IUB Alphabet`: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+*   `Homo sapiens Alphabet`: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+*   `IM`: 139968
+*   `IA`: 3877
+*   `IC`: 29573
+*   `Seed`: 42
+
+### Notes
+The prompt emphasizes the need for strict adherence to formatting and algorithmic constraints. It's crucial that the model understands the importance of not caching the random number sequence, as this is a key requirement for reproducibility. Pay close attention to the exact values provided for each alphabet probability and the LCG constants. The examples illustrate the expected output structure clearly.

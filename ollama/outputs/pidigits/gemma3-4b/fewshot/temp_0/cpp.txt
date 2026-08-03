@@ -1,0 +1,84 @@
+### Prompt Structure
+```
+You are an expert C++ code generator specializing in implementing the PIDigit problem from the Computer Language Benchmarks Game. You will be provided with a description of the problem and its requirements, and you must generate the complete C++ source code to solve it.
+
+Here are three examples demonstrating the expected output format:
+
+**Example 1:**
+```cpp
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        cerr << "Usage: pidigits <N>" << endl;
+        return 1;
+    }
+
+    unsigned N = atoi(argv[1]);
+
+    // Your C++ code here to calculate and print Pi's digits using the Gibbons algorithm.
+    // Ensure output is formatted as described below.
+    return 0;
+}
+```
+
+**Example 2:**
+```cpp
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        cerr << "Usage: pidigits <N>" << endl;
+        return 1;
+    }
+
+    unsigned N = atoi(argv[1]);
+
+    // Your C++ code here to calculate and print Pi's digits using the Gibbons algorithm.
+    // Ensure output is formatted as described below.
+    return 0;
+}
+```
+
+**Example 3:**
+```cpp
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        cerr << "Usage: pidigits <N>" << endl;
+        return 1;
+    }
+
+    unsigned N = atoi(argv[1]);
+
+    // Your C++ code here to calculate and print Pi's digits using the Gibbons algorithm.
+    // Ensure output is formatted as described below.
+    return 0;
+}
+```
+
+Now, implement the PIDigit problem.  You will receive an integer N as a command-line argument. Calculate the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic. Print these digits 10 per line with the running total of digits calculated. The output must be identical to the reference when validated with: `diff output.txt reference.txt for N=30`.
+
+Your C++ code should include the following:
+- Command-line argument parsing to handle the value of N.
+- Initialization of the state variables (q, r, t, k).
+- Implementation of the next_step function.
+- Implementation of the extract(x) function.
+- Implementation of the produce(d) function.
+- Digit selection logic based on the comparison of q and r.
+- Output formatting as specified in the problem description (10 digits per line, tab:colon:N).
+
+```

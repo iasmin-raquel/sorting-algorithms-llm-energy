@@ -1,0 +1,96 @@
+### Prompt Structure
+
+Act as a C++ programmer tasked with implementing the FASTA sequence generation problem from the Computer Language Benchmarks Game. You must decompose your solution into clear, step-by-step reasoning before writing the code.
+
+#### Step 1: Understand Input and Output Requirements
+- The program should take an integer `N` as a command-line argument.
+- Generate three sequences of length `n*2`, `n*3`, and `n*5` respectively (where `n = N`), formatted exactly as specified:
+  ```
+  >ONE Homo sapiens alu [sequence]
+  >TWO IUB ambiguity codes [sequence]
+  >THREE Homo sapiens frequency [sequence]
+  ```
+
+#### Step 2: Break Down the Problem into Subtasks
+1. **Repeat FASTA (ALU sequence)**:
+   - Copy the given ALU sequence in a loop, appending it to generate `n*2` characters.
+   - Use the provided LCG (`IM=139968`, `IA=3877`, `IC=29573`, Seed=42) to ensure reproducibility without caching.
+
+2. **Random FASTA (IUB alphabet)**:
+   - Convert IUB probabilities into cumulative probabilities.
+   - Use the LCG to generate random numbers and match them against these cumulative values to select nucleotides.
+   - Repeat until reaching `n*3` characters, ensuring no cached randomness.
+
+3. **Random FASTA (Homo sapiens alphabet)**:
+   - Similarly, convert Homo sapiens probabilities into cumulative probabilities.
+   - Apply the same selection logic with LCG-generated numbers.
+   - Generate exactly `n*5` characters.
+
+#### Step 3: Implement the LCG Correctly
+- The LCG must be applied **per nucleotide selection** (no caching).
+- Seed starts at 42, and each call updates it using:
+  ```
+  Seed = (Seed * IA + IC) % IM;
+  random_value = Max * Seed / IM; // Use Max=1.0 for floating-point
+  ```
+
+#### Step 4: Validate Output
+- The output must match the reference when compared with `diff` for `N=1000`.
+- Ensure no hardcoded values or assumptions (e.g., fixed seed behavior).
+
+#### Step 5: Write C++ Code
+- Use `#include <iostream>` and `#include <string>`.
+- Output sequences line by line, respecting the 60-character limit per line.
+- Handle edge cases (e.g., `N=0` or invalid input gracefully).
+
+---
+
+### Key Requirements
+- **Exact Alphabets/Probabilities**: Use IUB and Homo sapiens alphabets *exactly* as provided. Do not modify probabilities.
+- **No Caching**: Random numbers must be generated fresh for each nucleotide selection.
+- **LCG Parameters**: Must use `IM=139968`, `IA=3877`, `IC=29573`, and Seed=42 *exactly*.
+- **Output Format**: Strict adherence to line length (60 chars) and sequence order.
+- **No External Dependencies**: Only standard C++ libraries allowed.
+
+---
+
+### Variable Values
+#### ALU Sequence:
+```
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+```
+
+#### IUB Alphabet Probabilities:
+| Nucleotide | Probability |
+|------------|-------------|
+| a          | 0.27        |
+| c          | 0.12        |
+| g          | 0.12        |
+| t          | 0.27        |
+| B/D/H/K/M/N/R/S/V/W/Y | 0.02 each |
+
+#### Homo sapiens Alphabet Probabilities:
+| Nucleotide | Probability                     |
+|------------|---------------------------------|
+| a          | 0.3029549426680                 |
+| c          | 0.1979883004921                |
+| g          | 0.1975473066391                |
+| t          | 0.3015094502008                |
+
+#### LCG Parameters:
+- `IM = 139968`
+- `IA = 3877`
+- `IC = 29573`
+- Seed = 42
+
+---
+
+### Notes
+- **Ambiguity Handling**: For IUB codes, ensure cumulative probabilities sum to 1.0 (e.g., `a=0.27`, `c=0.12` → cumulative up to `t` is `0.69`).
+- **Edge Cases**: If `N=0`, output an empty file. For `N>1`, truncate lines to 60 chars (e.g., `"..."` for overflow).
+- **Reproducibility**: The LCG must produce deterministic outputs for the same seed/state.
+- **Cumulative Probabilities**: Use floating-point arithmetic (e.g., `double`) for precision.

@@ -1,0 +1,31 @@
+### Prompt Structure
+Implement a Java program that generates three DNA sequences of specified lengths following the FASTA format. The program should receive N as a command-line argument and use the provided LCG to generate random numbers. The output should be in the format described for the CLBG problem.
+
+### Key Requirements
+1. The solution must be implemented in Java.
+2. The program should accept an integer N via command-line arguments.
+3. Use the given LCG constants for generating random numbers.
+4. Implement functions to generate DNA sequences using copying from a given sequence (repeat fasta) and weighted random selection from two alphabets (random fasta).
+5. The program should use the provided ALU sequence, IUB and Homo sapiens alphabets with their exact probabilities.
+6. The output must be identical to the reference when validated using 'diff' for N=1000.
+7. Do not cache the random number sequence.
+
+### Variable Values
+#### ALU Sequence
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+
+#### IUB Alphabet and Probabilities
+a=0.27, c=0.12, g=0.12, t=0.27,
+B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,
+N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+
+#### Homo sapiens Alphabet and Probabilities
+a=0.3029549426680, c=0.1979883004921,
+g=0.1975473066391, t=0.3015094502008
+
+### Notes
+The generated solution should be structured to follow the example code provided in the prompt, with multiple functions for generating DNA sequences and handling command-line arguments. Ensure the program follows the output format specified in the problem description. The model may need additional guidance on parsing command-line arguments, generating random numbers according to the given alphabets' probabilities, and formatting the output correctly.

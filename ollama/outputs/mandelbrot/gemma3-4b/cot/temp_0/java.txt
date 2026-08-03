@@ -1,38 +1,37 @@
 ### Prompt Structure
-Okay, let's generate a Chain-of-Thought prompt for an LLM to implement the Mandelbrot set in Java according to the Computer Language Benchmarks Game problem.
+You are an expert Java code generator specializing in computer graphics and algorithmic problems. Your task is to generate a complete Java program that implements the Mandelbrot set visualization according to the Computer Language Benchmarks Game problem description. I will provide you with instructions, and you should respond with only the Java code itself.
 
-"You are an expert Java programmer tasked with implementing the Mandelbrot set visualization as specified by the benchmark. Your response should be a complete Java program that fulfills all requirements. First, let's break down the task into logical steps:
+First, let's break down the requirements step-by-step:
 
-1.  **Understand the Problem:** The goal is to generate a bitmap image of the Mandelbrot set within the region [-1.5-i, 0.5+i] for the real and imaginary parts, using a maximum of 50 iterations and an escape threshold of 4.0. The output must be in PBM P4 format (Portable Bitmap - Pixel 4), meaning byte-by-byte binary data with MSB packing and zero padding per row.
+1.  **Input:** The program must accept an integer `N` as a command-line argument, representing the size of the bitmap (N x N).
+2.  **Mandelbrot Calculation:** Implement the Mandelbrot set calculation using the following parameters:
+    *   Maximum iterations: 50
+    *   Escape threshold (squared): lim = 2.0 * 2.0
+    *   Iteration formula: Z = Z\*Z + C, starting from Z = (0, 0)
+    *   Coordinate mapping: real(C) = 2.0 \* x / N - 1.5; imag(C) = 2.0 \* y / N - 1.0
+    *   Use squared magnitude (zr\*zr + zi\*zi) to avoid computing square roots.
+3.  **Bitmap Generation:** Generate a bitmap of size N x N, where each pixel represents whether the corresponding point in the complex plane belongs to the Mandelbrot set or not. A point belongs to the set if |Z|² <= lim after all iterations.
+4.  **Output Format (PBM P4):** The output must be in the Portable Bitmap (PBM) format with a pixel depth of 4 (P4). This means:
+    *   Header: "P4\n" followed by "N N\n"
+    *   Pixels packed 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+    *   If N is not divisible by 8, the last byte of each row must be padded with zeros on the right.
+    *   Write only the header and binary pixel data to standard output (stdout).
+5.  **Validation:** The generated bitmap should be identical to a reference bitmap when validated using `cmp output.pbm reference.pbm for N=200`.
 
-2.  **Input Handling:** The program needs to accept the size of the bitmap (N) as a command-line argument. Parse this argument using `Integer.parseInt(args[0])` to determine the dimensions of the output image.
-
-3.  **Mandelbrot Calculation:** Implement the Mandelbrot iteration formula: z_{n+1} = z_n^2 + c, where z and c are complex numbers. The initial value of z should be 0.
-
-4.  **Iteration Loop:** Iterate up to a maximum of 50 times for each pixel. If the magnitude of z exceeds the escape threshold (4.0), mark the point as "escaped" (e.g., set the pixel color to black). Otherwise, continue iterating.
-
-5.  **Bitmap Output:** After all iterations, write the bitmap data to standard output in PBM P4 format. This involves:
-    *   Writing the header line: `P4\nNnn\n` (where N is the size of the image and nn is the number of pixels per row).
-    *   Writing each pixel's color value (0 or 255) as a single byte, packed MSB first, with zero padding.
-
-6.  **Testing:** The generated code should be tested against the reference output provided in `reference.pbm` for N=200 to ensure correctness.
-
-Now, write the complete Java program following these steps. Include comments to explain your code and make it easy to understand."
+Now, write the complete Java code that implements this functionality. Ensure your code is well-structured and efficient.
 
 ### Key Requirements
-*   The solution must be implemented in Java.
-*   The program must accept the bitmap size (N) as a command-line argument.
+*   The code must be written in Java.
+*   It must accept an integer `N` as a command-line argument.
 *   It must use exactly 50 iterations for the Mandelbrot calculation.
-*   The escape threshold must be set to 4.0.
-*   The output format must be PBM P4 (Portable Bitmap - Pixel 4), with MSB packing and zero padding per row.
-*   The output should be written byte-by-byte to standard output.
-*   The program must produce identical output to the reference image when validated for N=200.
+*   It must use the escape threshold lim = 2.0 * 2.0.
+*   The output format must strictly adhere to PBM P4 specifications, including header and binary pixel data.
+*   The code should produce a bitmap that is validatable against a reference bitmap using `cmp`.
 
 ### Variable Values
 *   Maximum iterations: 50
-*   Escape threshold: 4.0
-*   Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-*   Output format: PBM P4 (bits packed MSB first, zero-padded per row)
+*   Escape threshold (squared): lim = 2.0 * 2.0
+*   Coordinate mapping: real(C) = 2.0 * x / N - 1.5; imag(C) = 2.0 * y / N - 1.0
 
 ### Notes
-This prompt utilizes Chain-of-Thought prompting to guide the LLM through the problem-solving process. The detailed breakdown into steps helps ensure that the generated code addresses all aspects of the benchmark's requirements.  The emphasis on testing against a reference image is crucial for verifying correctness. It’s important to note that complex numerical calculations and bitmap manipulation can be computationally intensive, so efficiency might be a consideration in the LLM's implementation (though not explicitly stated as a primary constraint).
+This prompt emphasizes a step-by-step approach to guide the LLM towards generating correct and complete code. The inclusion of specific parameter values and output format details minimizes ambiguity and increases the likelihood of producing the desired result.  The instruction to "think out loud" is implicitly embedded in the detailed breakdown provided within the prompt itself, encouraging the model to consider each aspect of the problem before generating the code.

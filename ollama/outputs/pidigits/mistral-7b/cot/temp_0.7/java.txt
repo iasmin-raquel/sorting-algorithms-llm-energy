@@ -1,0 +1,21 @@
+### Prompt Structure
+Write a Java program that uses BigInteger for arbitrary precision arithmetic to solve the Pidigits problem. The program should receive N as a command-line argument and calculate the first N digits of Pi, printing 10 digits per line with the running total of digits calculated. The output must be identical to the reference when validated using 'diff output.txt reference.txt' for N=30.
+
+### Key Requirements
+- Implement the Unbounded Spigot Algorithm (Gibbons)
+- Use BigInteger for arbitrary precision arithmetic
+- Receive N as a command-line argument
+- Utilize the initial state, next_step, extract, and produce operations as defined above
+- Perform both extract(3) and extract(4) for digit verification
+- Produce output in the exact format specified above
+
+### Variable Values
+- q: BigInteger representing the value of q after each operation
+- r: BigInteger representing the value of r after each operation
+- t: BigInteger representing the value of t after each operation
+- k: int representing the iteration counter
+- d: int representing the extracted digit for verification
+- N: int received via command-line argument, representing the number of digits to calculate and output
+
+### Notes
+The target LLM should generate Java code that strictly adheres to the given requirements, ensuring clarity, maintainability, and adherence to Java standards. The output format is crucial for the 'diff' validation process.

@@ -1,96 +1,33 @@
 ### Prompt Structure
-You are to implement the Mandelbrot set in Java, following the Computer Language Benchmarks Game's structure. The code must:
-- Plot the Mandelbrot set with real range [-1.5, 0.5] and imaginary range [-1.0, 1.0] on an N-by-N bitmap.
-- Use exactly 50 iterations and escape threshold 4.0.
-- Output PBM P4 format with MSB-first packing and zero-padding per row.
-- Match the reference output for N=200.
+You are to generate Java code that implements the Mandelbrot set using the Computer Language Benchmarks Game's specifications. The code must:
+
+- Accept N as a command-line argument
+- Use exactly 50 iterations with escape threshold lim = 4.0
+- Map coordinates using real(C) = 2.0 * x / N - 1.5 and imag(C) = 2.0 * y / N - 1.0
+- Compute Z = Z² + C with Z starting at (0, 0)
+- Output PBM P4 header and binary pixel data (8 per byte, MSB first)
+- Validate output with cmp against reference.pbm for N=200
 
 ### Key Requirements
-- Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
-- Output: PBM P4 format (header + binary pixel data)
-- MSB-first packing, zero-padded per row
-- Match reference for N=200
+- Use exactly 50 iterations
+- Escape threshold lim = 2.0 * 2.0 = 4.0
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- Use squared magnitude (zr*zr + zi*zi) to avoid square roots
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Output PBM P4 header and binary pixel data (8 per byte, MSB first)
+- Pad with zeros if N not divisible by 8
+- Validate output with cmp for N=200
 
 ### Variable Values
-- N: 200
-- Iterations: 50
-- Escape threshold: 4.0
-- Plot region: real min=-1.5, real max=0.5, imag min=-1.0, imag max=1.0
-- Output format: PBM P4 (header + 8-bit binary data)
-
-### Notes
-- Coordinate system must be handled correctly (real x-axis from -1.5 to 0.5, imaginary y-axis from -1.0 to 1.0)
-- PBM P4 requires proper header (PBM P4) and correct bit packing (MSB first, zero-padded rows)
-- Ensure output matches reference for N=200, including pixel count and format
-
-```java
-/* The Computer Language Benchmarks Game
-   contributed by [Your Name]
-*/
-
-class Mandelbrot {
-    static final int N = 200;
-    static final int ITERATIONS = 50;
-    static final double ESCAPE_THRESHOLD = 4.0;
-
-    static void main(String[] args) {
-        int n = Integer.parseInt(args[0]);
-        plotMandelbrot(n);
-    }
-
-    static void plotMandelbrot(int n) {
-        // Initialize bitmap
-        byte[][] bitmap = new byte[n][n];
-        for (int y = 0; y < n; y++) {
-            for (int x = 0; x < n; x++) {
-                // Convert coordinates to pixel index
-                int idx = x + y * n;
-                // Compute Mandelbrot value
-                int iterations = 0;
-                double cx = (-1.5 + (double)x / n) * 2.0; // real axis
-                double cy = (1.0 - (double)y / n) * 2.0; // imaginary axis
-                while (iterations < ITERATIONS && (cx * cx + cy * cy) < ESCAPE_THRESHOLD) {
-                    double nx = cx * cx - cy * cy + (-1.5 + (double)x / n) * 2.0;
-                    double ny = 2.0 * cx * cy;
-                    cx = nx;
-                    cy = ny;
-                    iterations++;
-                }
-                // Pack MSB first, zero-padded per row
-                bitmap[y][x] = (byte) (iterations > ITERATIONS ? 255 : (iterations % 8) << 24);
-            }
-        }
-
-        // Output PBM P4 header
-        System.out.println("PBM P4");
-        for (int y = 0; y < n; y++) {
-            for (int x = 0; x < n; x++) {
-                System.out.print(bitmap[y][x]);
-            }
-            System.out.println();
-        }
-    }
-}
-```
-
-### Key Requirements
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
-- Output: PBM P4 format (header + binary data)
-- MSB-first packing, zero-padded rows
-- Match reference for N=200
-
-### Variable Values
-- N: 200
-- Iterations: 50
-- Escape threshold: 4.0
-- Plot region: real min=-1.5, real max=0.5, imag min=-1.0, imag max=1.0
-- Output format: PBM P4 (header + 8-bit binary data)
+- Escape threshold (squared): 4.0
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- Use squared magnitude (zr*zr + zi*zi)
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Output format: P4 header, 8 per byte, MSB first
 
 ### Notes
-- Coordinate system must be handled correctly (real x-axis from -1.5 to 0.5, imaginary y-axis from -1.0 to 1.0)
-- PBM P4 requires proper header (PBM P4) and correct bit packing (MSB first, zero-padded rows)
-- Ensure output matches reference for N=200, including pixel count and format
+- The code must handle N=200 exactly, ensuring the output matches the reference.pbm
+- The iteration check must use squared magnitude to avoid square roots
+- The coordinate mapping must be applied correctly for all pixels
+- The output must be written in portable bitmap format with proper padding

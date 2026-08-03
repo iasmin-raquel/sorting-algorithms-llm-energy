@@ -1,0 +1,28 @@
+### Prompt Structure
+You are to implement the Binary Trees problem from the Computer Language Benchmarks Game in Python. Your solution must:
+- Define a tree node structure with left and right child pointers
+- Allocate a stretch tree of depth D (stretch_depth), check it exists, and deallocate it
+- Allocate a long-lived tree that persists while other trees are allocated and deallocated
+- Allocate, walk, and deallocate many bottom-up binary trees (depth from min_depth to max_depth, step 2)
+- Ensure the long-lived tree remains valid and the output matches the reference for N=10
+
+### Key Requirements
+- Use min_depth = 4 and max_depth = max(min_depth + 2, N)
+- stretch_depth = max_depth + 1
+- iterations = 1 << (max_depth - depth + min_depth) for each depth
+- Define a node structure with left and right pointers
+- Allocate and deallocate the stretch tree, long-lived tree, and bottom-up trees
+- Check the long-lived tree's validity
+- Output in the exact format: "stretch tree of depth D\t check: C" for each depth
+
+### Variable Values
+- min_depth = 4
+- max_depth = max(6, N)
+- stretch_depth = max_depth + 1
+- iterations = 1 << (max_depth - depth + min_depth) for each depth
+- N received via command-line argument
+
+### Notes
+- The code must match Jeremy Zerfas's C program's allocation count (at least 10 allocations for N=10)
+- The long-lived tree must survive all allocations and deallocations
+- The output must match the reference for N=10, including the exact check: C format

@@ -1,120 +1,79 @@
 ### Prompt Structure
-**Think step-by-step about how to implement the Mandelbrot set visualization in C++ for the Computer Language Benchmarks Game. Break down the problem into clear stages:**
+**Think step-by-step about how to implement the Mandelbrot set in C++ for a given N (command-line argument), adhering strictly to the CLBG rules. Break down the problem into logical phases:**
 
-1. **Understand the Mandelbrot Set Algorithm**:
-   - For each complex number \( c \) in the specified region, compute the sequence of iterations \( z_{n+1} = z_n^2 + c \).
-   - If \(|z_n|\) exceeds the escape threshold (4.0) within 50 iterations, plot it as black (0); otherwise, plot it as white (1).
+1. **Input Handling:**
+   - Parse command-line argument `N` and validate it is an integer ≥ 200.
+   - If invalid, exit with error code 1.
 
-2. **Define the Plot Region**:
-   - The real part ranges from \(-1.5\) to \(0.5\).
-   - The imaginary part ranges from \(-1.0\) to \(1.0\).
-   - Map these values linearly to pixel coordinates in an N×N grid.
+2. **Coordinate Mapping:**
+   - Define a function that maps pixel coordinates `(x, y)` (0-based) to complex plane values `C = C_real + i*C_imag`.
+     Use the exact formulas:
+     ```
+     real(C) = 2.0 * x / N - 1.5
+     imag(C) = 2.0 * y / N - 1.0
+     ```
 
-3. **Generate PBM (P4) Output**:
-   - Write a header line: `P4` followed by the dimensions (N × N).
-   - For each row, pack 8-bit pixels MSB-first, zero-padded per byte.
-     - Each pixel is either 0 (black) or 1 (white).
+3. **Mandelbrot Iteration Logic:**
+   - For each pixel `(x, y)`, initialize `Z = (0 + 0i)`.
+   - Apply the iteration formula `Z = Z*Z + C` for exactly 50 steps.
+   - Track squared magnitude `|Z|² = zr*zr + zi*zi`.
+   - If `|Z|² > lim = 4.0` after any step, escape and mark pixel as *not in set*.
+   - Otherwise, after all iterations, check if `|Z|² ≤ 4.0`. If true, the point is in the set.
 
-4. **Command-Line Argument Handling**:
-   - Accept \( N \) as a command-line argument and validate it is positive.
+4. **Output Generation:**
+   - Write PBM P4 header: `"P4\nN N"` (no newline after `N`).
+   - Pack pixels row-wise into bytes with MSB-first encoding:
+     - Each pixel contributes a bit (1=in set, 0=not in set).
+     - Group 8 bits per byte; pad the last byte of each row to 8 bits.
+   - Output raw binary data directly to stdout.
 
-5. **Optimization Considerations**:
-   - Use efficient loops for iterating over the grid and computing Mandelbrot values.
-   - Avoid redundant calculations by precomputing bounds or using bitwise operations where possible.
+5. **Edge Cases:**
+   - Handle `N % 8 != 0` by padding bytes with zeros on the right.
+   - Ensure no trailing whitespace or extra newlines in output.
 
-6. **Edge Cases & Validation**:
-   - Handle \( N = 200 \) exactly as specified (reference validation).
-   - Ensure correct byte-packed output format for all \( N \).
+6. **Code Structure:**
+   - Use a loop over rows (`y`) and columns (`x`), computing each pixel’s membership independently.
+   - Avoid global variables; declare all necessary types (e.g., `complex<double>`).
+   - Optimize iteration loops for clarity but correctness first.
 
-**Now, draft the C++ code based on these steps:**
-
+**Example pseudocode skeleton to guide the LLM:**
 ```cpp
-#include <iostream>
-#include <cmath>
-#include <vector>
-
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " N\n";
-        return 1;
-    }
-    int N = std::stoi(argv[1]);
-    if (N <= 0) {
-        std::cerr << "N must be positive.\n";
-        return 1;
-    }
+    int N = ...; // Parse from argv[1]
+    if (N < 200) { /* error */ }
 
-    // Mandelbrot parameters
-    const double max_iterations = 50.0;
-    const double escape_threshold = 4.0;
-
-    // Plot region bounds: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-    for (int y = 0; y < N; ++y) {
-        for (int x = 0; x < N; ++x) {
-            // Map pixel coordinates to complex plane
-            double real = -1.5 + (0.5 + 1.5) * x / static_cast<double>(N);
-            double imag = -1.0 + (1.0 + 1.0) * y / static_cast<double>(N);
-
-            // Compute Mandelbrot iteration count
-            int iter = 0;
-            double z_real = 0.0, z_imag = 0.0;
-            while (iter < max_iterations && z_real*z_real + z_imag*z_imag < escape_threshold*escape_threshold) {
-                double temp_real = z_real * z_real - z_imag * z_imag + real;
-                double temp_imag = 2.0 * z_real * z_imag + imag;
-                z_real = temp_real;
-                z_imag = temp_imag;
-                ++iter;
-            }
-            // Output pixel (0 or 1)
-            std::cout << ((iter == max_iterations) ? '0' : '1');
+    for (y = 0; y < N; ++y) {
+        for (x = 0; x < N; ++x) {
+            bool in_set = mandelbrot_iteration(x, y, N);
+            // Pack bits into bytes and write to stdout
         }
-        // Pack bits MSB-first, zero-padded per byte
-        int packed_byte = 0;
-        for (int bit = 7; bit >= 0; --bit) {
-            if (std::cin.eof()) break; // Handle EOF (though unlikely here)
-            char pixel = std::cin.peek();
-            if (pixel == '1') {
-                packed_byte |= (1 << bit);
-            }
-        }
-        std::cout << '\n';
     }
-
-    return 0;
 }
 ```
 
 ---
 
 ### Key Requirements
-- **Language**: C++.
-- **Input Handling**:
-  - Accept \( N \) as a command-line argument.
-  - Validate \( N > 0\).
-- **Algorithm Parameters**:
-  - Exactly 50 iterations per point.
-  - Escape threshold = 4.0.
-- **Output Format**:
-  - PBM P4 header (`P4` followed by dimensions).
-  - Binary pixel data packed MSB-first, zero-padded per row (no newline after last byte).
-- **Precision**: Linear mapping of pixel coordinates to complex plane bounds exactly as specified.
+- **Strict adherence to CLBG rules**: No deviations from iteration count (50), threshold (`lim=4.0`), or coordinate mapping.
+- **Output format**: Exactly PBM P4 header + binary data; no extra metadata.
+- **Bit packing**: MSB-first, 8 bits per byte, padded rows if `N % 8 != 0`.
+- **No floating-point inaccuracies**: Use exact arithmetic (e.g., avoid rounding).
+- **Command-line interface**: Only accept `N` as input; exit gracefully on invalid input.
 
 ---
 
 ### Variable Values
 | Parameter          | Value               |
-|---------------------|---------------------|
-| Maximum iterations   | `50`                |
-| Escape threshold    | `4.0`               |
-| Real range          | \([-1.5, 0.5]\)     |
-| Imaginary range     | \([-1.0, 1.0]\)     |
+|--------------------|---------------------|
+| Maximum iterations  | 50                  |
+| Escape threshold   | `lim = 2.0 * 2.0` (i.e., `4.0`) |
+| Coordinate bounds  | Real: [-1.5, 0.5]; Imaginary: [-1.0, 1.0] |
+| Pixel-to-complex   | `(x,y) → C = (2x/N - 1.5) + i(2y/N - 1.0)` |
 
 ---
 
 ### Notes
-- **Bit Packing**: The prompt assumes the output is written row-wise with bits packed MSB-first per byte. If the LLM struggles with this, clarify that each pixel (0/1) must be written as a single bit in the binary stream, zero-padded to 8 bits per byte.
-- **Edge Cases**:
-  - For \( N = 200 \), ensure the linear mapping of coordinates is exact (e.g., no floating-point rounding errors).
-  - Handle potential integer overflow during iteration calculations (though unlikely for these bounds).
-- **Performance**: The prompt does not enforce optimizations beyond correctness. If the LLM produces inefficient code, it will be rejected on validation.
-- **Validation**: The output must match the reference PBM file exactly for \( N = 200 \). Any deviation (e.g., floating-point precision) will fail validation.
+- **Ambiguity risk**: The LLM may confuse "MSB first" with byte order; clarify that bit 7 is the MSB for each pixel.
+- **Performance trade-off**: The prompt prioritizes correctness over speed, but the LLM should optimize loops (e.g., precompute `1.0/N`).
+- **Edge case handling**: Ensure `N=200` produces identical output to reference; test with `cmp` validation.
+- **Avoid hardcoding**: All values must derive from the prompt’s variables (e.g., `lim = 4.0`, not `2.0`).

@@ -1,27 +1,52 @@
+[Prompt text that will be sent to the target LLM]
+
+### Key Requirements
+- Generate Java code that implements the Mandelbrot set for N=200
+- Use exactly 50 iterations and escape threshold lim = 2.0 * 2.0
+- Map coordinates with real(C) = 2.0 * x / N - 1.5 and imag(C) = 2.0 * y / N - 1.0
+- Output PBM P4 header with "P4\n" followed by "N N\n"
+- Pack pixels 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+- Pad with zeros if N not divisible by 8
+- Write only header and binary pixel data to stdout
+- Validate output with cmp output.pbm reference.pbm for N=200
+
+### Variable Values
+- N = 200
+- max_iterations = 50
+- lim = 2.0 * 2.0
+- coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- PBM format: header "P4\nN N\n", pixels packed 8 per byte, MSB first
+
+### Notes
+- Must ensure coordinate mapping is accurate for all x and y in [0, N)
+- Must handle byte padding correctly for N not divisible by 8
+- Must avoid square roots by using squared magnitude (zr*zr + zi*zi)
+- Must generate code that receives N as command-line argument
+- Must validate output with cmp for N=200
+
 ### Prompt Structure
-You are to implement the Mandelbrot set in Java according to the following specifications:  
-- Read integer N from command-line arguments.  
-- Plot the Mandelbrot set within the region [-1.5, 0.5] × [-1.0, 1.0].  
-- Use 50 iterations and escape threshold 4.0.  
-- Output in PBM P4 format (header + binary pixel data).  
-- Ensure output matches the reference file when compared with `cmp output.pbm reference.pbm` for N=200.  
+[The actual prompt text that will be sent to the target LLM]
 
-### Key Requirements  
-- Java code must take N as a command-line argument.  
-- Maximum iterations: 50.  
-- Escape threshold: 4.0.  
-- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0].  
-- PBM P4 format: header with dimensions N×N, bits packed MSB-first, zero-padded per row.  
-- Output must exactly match the reference file for N=200.  
+### Key Requirements
+- Generate Java code that implements the Mandelbrot set for N=200
+- Use exactly 50 iterations and escape threshold lim = 2.0 * 2.0
+- Map coordinates with real(C) = 2.0 * x / N - 1.5 and imag(C) = 2.0 * y / N - 1.0
+- Output PBM P4 header with "P4\n" followed by "N N\n"
+- Pack pixels 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+- Pad with zeros if N not divisible by 8
+- Write only header and binary pixel data to stdout
+- Validate output with cmp output.pbm reference.pbm for N=200
 
-### Variable Values  
-- N: integer parsed from command-line argument.  
-- Iterations: 50.  
-- Escape threshold: 4.0.  
-- Plot region: real min=-1.5, real max=0.5; imaginary min=-1.0, imaginary max=1.0.  
+### Variable Values
+- N = 200
+- max_iterations = 50
+- lim = 2.0 * 2.0
+- coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- PBM format: header "P4\nN N\n", pixels packed 8 per byte, MSB first
 
-### Notes  
-- The model must ensure correct handling of PBM P4 format, including proper header and pixel data formatting.  
-- Precision is critical: exact iteration count and threshold must be enforced.  
-- Zero-padding per row ensures compatibility with the reference file.  
-- Ambiguity in PBM format requirements (e.g., bit packing) may require explicit handling.
+### Notes
+- Must ensure coordinate mapping is accurate for all x and y in [0, N)
+- Must handle byte padding correctly for N not divisible by 8
+- Must avoid square roots by using squared magnitude (zr*zr + zi*zi)
+- Must generate code that receives N as command-line argument
+- Must validate output with cmp for N=200

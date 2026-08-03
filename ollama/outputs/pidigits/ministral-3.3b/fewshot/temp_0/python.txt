@@ -1,0 +1,93 @@
+---
+
+### **Prompt Structure**
+Below is a few-shot prompt designed to guide an LLM toward generating correct Python code for the PIDigits problem using the Unbounded Spigot Algorithm. The structure follows the example provided in `fastaRand` while enforcing the exact requirements of the PIDigits task.
+
+---
+**Example 1 (Fasta-like pseudocode):**
+```python
+# Pseudocode for a similar stateful loop with arbitrary precision arithmetic.
+def fasta_loop(n):
+    q = 139968; r = 0; t = 1; k = 0  # Initial state (example)
+    while True:
+        k += 1
+        r = r + 2 * q
+        r *= (2*k + 1)
+        t *= (2*k + 1)
+        q *= k
+
+        d = extract(3)  # Pseudocode for floor((q*3 + r)/t)
+
+        if d == extract(4):  # Pseudocode for verification
+            print(d, end="")  # Output digit
+            produce(d)       # Pseudocode for scaling (e.g., q *= 10)
+        else:
+            continue
+
+    # Format output as "d\t:N" per line (pseudo-format).
+```
+
+---
+**Example 2 (PIDigits adaptation):**
+```python
+def pidigits_loop(N):
+    q = 1; r = 0; t = 1; k = 0  # Initial state (exact problem)
+    digits_output = []
+
+    while True:
+        k += 1
+        r = r + 2 * q
+        r *= (2*k + 1)
+        t *= (2*k + 1)
+        q *= k
+
+        d = extract(3)  # floor((q*3 + r)/t)
+
+        if d == extract(4):  # Verification step
+            digits_output.append(str(d))
+            produce(d)       # Scale for next digit
+        else:
+            continue
+
+    # Format output: 10 digits per line, padded with spaces.
+    formatted = []
+    for i in range(N):
+        chunk = digits_output[i*10:(i+1)*10]
+        line = "".join(chunk).ljust(10) + "\t:N"
+        formatted.append(line)
+
+    return "\n".join(formatted)
+```
+
+---
+**Target Problem (Your Task):**
+Write a Python script that:
+1. Takes `N` as a command-line argument.
+2. Implements the Unbounded Spigot Algorithm for arbitrary precision Pi digits.
+3. Uses exact state transitions (`next_step`) and digit extraction logic.
+4. Outputs 10 digits per line, padded with spaces if needed, followed by `\t:N`.
+
+---
+### **Key Requirements**
+- **Arbitrary Precision**: Use Python’s native integers (no `decimal` module).
+- **Stateful Loop**: Follow the exact sequence of operations in `next_step`.
+- **Digit Verification**: Always compare `extract(3)` and `extract(4)`.
+- **Output Format**:
+  - Exactly 10 digits per line, padded with spaces if fewer than 10 remain.
+  - Each line ends with `\t:N` (e.g., `\t:25` for the 25th digit).
+- **Command-line Argument**: Parse `N` from `sys.argv[1]` (default to `30` if missing).
+
+---
+### **Variable Values**
+| Variable | Value       |
+|----------|-------------|
+| Initial State (`q`, `r`, `t`) | `(1, 0, 1)` |
+| Extract Function: `extract(x)` | `floor((q*x + r) / t)` |
+| Produce Function: `produce(d)` | `q *= 10; r = (r - t*d)*10` |
+| Digit Selection Logic | Call `next_step` until `q > r` is false. |
+
+---
+### **Notes**
+- **Ambiguity Risk**: The prompt avoids hardcoding values (e.g., `k`, `t`) to enforce dynamic state updates.
+- **Output Validation**: The format must match the reference exactly, including trailing spaces and `\t:N`.
+- **Edge Cases**: Handle cases where `N` is not a multiple of 10 by padding with spaces.

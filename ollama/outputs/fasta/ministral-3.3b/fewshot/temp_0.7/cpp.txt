@@ -1,0 +1,152 @@
+### Prompt Structure
+
+You are given a task to implement sequences in C++ for the **FASTA problem** from the Computer Language Benchmarks Game. Below is an example of how previous solutions were structured based on the provided `binary-trees` benchmark code:
+
+Example structure:
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <string>
+
+// Define seed constants and LCG parameters for random number generation.
+#define IM 139968
+#define IA 3877
+#define IC 29573
+
+/* Alphabet and probabilities for each type of sequence */
+struct SequenceData {
+    const char* alphabet;
+    double* probabilities;
+    size_t length;
+};
+
+// Function to generate cumulative probability distribution.
+double[] computeCumulativeProbs(double* probs);
+
+// Helper function (LCG example usage):
+unsigned int random(unsigned int seed, unsigned int max) {
+    seed = (seed * IA + IC) % IM; // LCG formula
+    return (max * seed) / IM;
+}
+
+// Main functions to produce sequences:
+void generateRepeatFasta(char*& output, const char* pattern, int count);
+void generateRandomFasta(char*& output, const SequenceData& data, int length);
+
+// Function to validate and write sequences to stdout with correct format.
+
+int main(int argc, char** argv) {
+    // Parse N from command line
+    int N = (argc > 1 ? atoi(argv[1]) : 0);
+
+    if (N <= 0) {
+        std::cerr << "Usage: ./program <length> (e.g., 5)\n";
+        return EXIT_FAILURE;
+    }
+
+    // Define sequences and their properties
+    const char* aluPattern =
+        "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA"
+        "TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT"
+        "AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG"
+        "GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG"
+        "CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+
+    SequenceData iubData = {"abcdefghijklmnopqrstuvwxyzBDHKMNRSVWY", ... /* probs */};
+    SequenceData hsData = {... /* Homo sapiens alphabet and probs */};
+
+    // Generate sequences with correct length.
+    char outputOne[60 * (2*N)];
+    generateRepeatFasta(outputOne, aluPattern, 2*N);
+
+    char outputTwo[60 * (3*N)];
+    generateRandomFasta(outputTwo, iubData, 3*N);
+
+    char outputThree[60 * (5*N)];
+    generateRandomFasta(outputThree, hsData, 5*N);
+
+    // Write formatted output:
+    printf(">ONE Homo sapiens alu\n");
+    for (int i = 0; i < 2*N; ++i) {
+        int linePos = (i % 60);
+        if (linePos == 0) {
+            putchar('\n');
+        } else {
+            putchar(outputOne[i]);
+        }
+    }
+
+    printf("\n>TWO IUB ambiguity codes\n");
+    for (int i = 0; i < 3*N; ++i) {
+        int linePos = (i % 60);
+        if (linePos == 0) { putchar('\n'); }
+        else { putchar(outputTwo[i]); }
+    }
+
+    printf("\n>THREE Homo sapiens frequency\n");
+    for (int i = 0; i < 5*N; ++i) {
+        int linePos = (i % 60);
+        if (linePos == 0) { putchar('\n'); }
+        else { putchar(outputThree[i]); }
+    }
+
+    return EXIT_SUCCESS;
+}
+```
+
+---
+
+### Key Requirements
+- **C++ Implementation**: Must be written in C++, adhering to the exact constraints.
+- **Command-line Argument Handling**: Read `N` (sequence length multiplier) from `argv[1]`; default behavior is invalid if `N ≤ 0`.
+- **LCG Usage**: Use the given constants (`IM`, `IA`, `IC`) for random number generation. **Do not cache** results between calls.
+- **ALU Sequence**: Must use the exact `aluPattern` string (no modifications).
+- **Alphabet Proportions**:
+  - IUB (with `B=D=H=K=M=N=R=S=V=W=Y = 0.02`)
+  - Homo sapiens (`a=0.3029549426680`, `c=0.1979883004921`, etc.).
+- **Cumulative Probability Mapping**: Must generate cumulative probabilities for weighted selection.
+- **Output Format**:
+  - Each sequence in its own block (`>ONE...`, `>TWO...`, `>THREE...`).
+  - Line length: Exactly 60 characters; wrap at line boundaries.
+  - Output lengths:
+    - Repeat FASTA: `2*N` total chars (e.g., `N=1000 → 2000 chars`).
+    - Random IUB FASTA: `3*N` chars.
+    - Random Homo sapiens FASTA: `5*N` chars.
+- **No Caching**: Random numbers must be generated fresh for each character.
+
+---
+
+### Variable Values
+#### LCG Constants:
+```
+IM = 139968, IA = 3877, IC = 29573
+Seed Start = 42 (implicitly used in LCG)
+```
+
+#### ALU Sequence Pattern:
+Full string must match exactly:
+`GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA`
+`TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT`
+[...]
+`CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA`
+
+#### IUB Alphabet and Probabilities:
+```
+Alphabet: a c g t B D H K M N R S V W Y (exact characters)
+Probs:    [0.27, 0.12, 0.12, 0.27, 0.02, ..., 0.02]
+```
+
+#### Homo sapiens Alphabet and Probabilities:
+```
+Alphabet: a c g t
+Probs:     [0.3029549426680, 0.1979883004921, 0.1975473066391, 0.3015094502008]
+```
+
+---
+
+### Notes
+- The prompt emphasizes **exact reproduction of output format** (e.g., newline positioning for line wrapping).
+- The target LLM must produce code that directly maps random numbers to nucleotides via linear search on cumulative probabilities.
+- Risk of ambiguity exists if the model assumes default alphabet strings are ordered differently than in the problem statement. Ensure exact character ordering is preserved during C++ implementation.
+- Validation will use `diff` with `reference.txt`, so correctness is critical for output spacing and nucleotide selection.

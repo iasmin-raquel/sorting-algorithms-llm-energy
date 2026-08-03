@@ -1,61 +1,115 @@
 ### Prompt Structure
-**Generate a C++ program that implements the Mandelbrot set calculation for an N×N bitmap in PBM P4 format. Follow these key instructions:**
-
-1. **Input Handling**:
-   - Accept `N` (grid size) as a command-line argument.
-   - Read parameters explicitly: max iterations = 50, threshold = 4.0.
-
-2. **Core Algorithm**:
-   - Iterate over the given plot region (`real ∈ [-1.5, 0.5]`, `imaginary ∈ [-1.0, 1.0]`).
-   - For each complex number `z`, apply Mandelbrot iteration: `(z^2 + c)` iteratively until escaping (magnitude > threshold) or max iterations reached.
-   - Mark points as black (binary ‘0’) if escaped after ≤50 steps; white otherwise.
-
-3. **Output**:
-   - Write a PBM P4 header (`P4` followed by width/height dimensions).
-   - Pack row bits MSB-first, zero-padded to byte alignment.
-   - Output raw binary pixel data per row (e.g., `1` = black, `0` = white).
+Below is a few-shot prompting structure to generate Mandelbrot set code in C++ adhering to the problem requirements. The examples illustrate the correct structure and style:
 
 ---
-### Example (Shows Expected Structure)
-```cpp
-// Mandelbrot helper function
-bool escape(complex<double> c, int max_iter) {
-  complex<double> z = {0.0, 0.0};
-  for (int i = 0; i < max_iter && norm(z) <= threshold; ++i)
-    z = z*z + c;
-  return norm(z) > threshold || i == max_iter - 1;
-}
 
-// Main loop
-void render(int N) {
-  printf("P4\n%d %d\n", N, N);
-  for (int y = 0; y < N; ++y)
-    for (int x = 0; x < N; ++x) {
-      double c_real = -1.5 + x*(0.75/N); // Range: [-1.5, 0.5]
-      double c_imag = -1.0 + y*(2.0/N); // Range: [-1.0, 1.0]
-      putchar(escape({c_real, c_imag}, max_iter) ? '0' : '1');
+**Example 1 (N=8):**
+```cpp
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+    int N = atoi(argv[1]); // Reads command-line argument
+    const double lim = 2.0 * 2.0;
+    const int max_iter = 50;
+
+    printf("P4\n%d %d\n", N, N); // Header: PBM P4 format
+
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < N; ++x) {
+            double cr = 2.0 * x / N - 1.5;
+            double ci = 2.0 * y / N - 1.0;
+
+            int pixel_byte = 0;
+            bool escape = false;
+
+            for (int iter = 0; iter < max_iter; ++iter) {
+                double zr = cr, zi = ci;
+                for (int k = 0; k < iter; ++k) {
+                    double new_r = zr * zr - zi * zi + cr;
+                    double new_i = 2.0 * zr * zi + ci;
+
+                    if ((new_r * new_r + new_i * new_i) > lim)
+                        escape = true;
+                    zr = new_r; zi = new_i;
+                }
+
+                if (!escape && (zr * zr + zi * zi <= lim))
+                    pixel_byte |= (1 << 0); // Bitwise set for in-set
+            }
+
+            printf("%c", (pixel_byte >> (7 - ((y % 8) & 7))) & 1 ? '1' : '0');
+        }
     }
 }
 ```
 
 ---
+
+**Example 2 (N=16):**
+```cpp
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+    int N = atoi(argv[1]);
+    const double lim = 4.0; // Lim squared (lim = 2*2)
+    const int max_iter = 5;
+
+    printf("P4\n%d %d\n", N, N);
+
+    for (int y = 0; y < N; ++y) {
+        unsigned char packed_byte = 0;
+        for (int x = 0; x < N; ++x) {
+            double cr = 2.0 * x / N - 1.5;
+            double ci = 2.0 * y / N - 1.0;
+
+            int pixel_byte = 0;
+            bool escape = false;
+            for (int iter = 0; iter < max_iter; ++iter) {
+                double zr = cr, zi = ci;
+                for (int k = 0; k < iter; ++k) { // Early escape check
+                    double new_r = zr * zr - zi * zi + cr;
+                    double new_i = 2.0 * zr * zi + ci;
+
+                    if ((new_r * new_r + new_i * new_i) > lim)
+                        escape = true;
+                    zr = new_r; zi = new_i;
+                }
+            }
+
+            pixel_byte |= (escape ? 0 : 1); // Set bit if point is in set
+        }
+
+        printf("%c", (pixel_byte >> ((y % 8) & 7)) & 1 ? '1' : '0'); // Bitwise packing
+    }
+}
+```
+---
+
+**Your Mandelbrot Code (N=200):**
+Implement a C++ solution that reads `N` from the command line, computes the Mandelbrot set using exactly:
+- **50 iterations**, escape threshold squared = 4.0 (`lim`), and bitwise packing into PBM P4 format.
+---
+---
+
 ### Key Requirements
-- **Strict Parameter Enforcement**: No deviation from `max_iter=50` or threshold=`4.0`.
-- **PBM P4 Compliance**: Header + bits-packed output (MSB-first, no extra whitespace).
-- **Grid Bounds**: Map `(x,y)` to complex plane coordinates (`c_real`, `c_imag`) linearly.
-- **Edge Cases**: Zero-pad bytes to 8 bits; handle N=1 correctly.
+- Must be in **exactly C++98 style** (no headers like `<complex>`, only math.h basics).
+- Bitwise output packing: MSB first, padded to `8 per byte`; use `(y % 8)` as bit index.
+- Command-line argument `N` parsed with `atoi()` (no input validation beyond this).
+- **PBM P4 header**: `"P4\n%d %d\n"` where `%d` is `N × N`.
+- Binary pixel data written **byte-by-byte** without newline separators between rows.
 
 ---
+
 ### Variable Values
-| Parameter          | Value         |
-|--------------------|---------------|
-| Max Iterations     | 50            |
-| Escape Threshold   | 4.0           |
-| Real Range         | [-1.5, 0.5]   |
-| Imaginary Range    | [-1.0, 1.0]   |
+| Parameter       | Value                     |
+|------------------|---------------------------|
+| Max Iterations   | `50`                      |
+| Escape Threshold (squared) | `lim = 2.0 * 2.0 = 4.0`    |
+| Mapping Coordinates: Real → `-1.5 + 2x/N`, Imaginary → `-1.0 + 2y/N`.
 
 ---
 ### Notes
-- **Ambiguity Avoidance**: Clarify whether the iteration check `norm(z) > threshold` is *or* `i == max_iter - 1` (here, treat escaped if norm exceeds threshold or exactly max iterations).
-- **Bit Order**: Explicitly enforce MSB-first packing by writing bytes’ LSBs first in the loop.
-- **Performance**: Avoid redundant calculations; iterate only over grid points.
+- **Avoid floating-point inaccuracies** by using `double` for precision but ensure squaring checks directly (`zr² + zi² ≤ lim`).
+- For N=200, the loop unrolling could be optimized with bitwise tricks (e.g., `for(int k = 0; k < iter; k *= 2)`, but avoid non-standard C++ extensions like SIMD or templating.
+- The reference validations expect **strict output** (no extra whitespace). Bit manipulation must respect the PBM packing rules (pad with zeros if `<8` bits per row).
+- Focus on the core: *Iteration, coordinate mapping, bitwise pixel packing*.

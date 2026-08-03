@@ -1,0 +1,27 @@
+### Prompt Structure
+Implement the pidigits problem in C++ using the Gibbons Unbounded Spigot Algorithm with arbitrary precision arithmetic. The code must:
+- Use the GMP library for arbitrary precision.
+- Receive N as a command-line argument.
+- Follow the algorithm steps: next_step, extract, produce.
+- Output 10 digits per line with the running total.
+- Verify output against reference for N=30.
+- Use the initial state q=1, r=0, t=1, k=0.
+
+### Key Requirements
+- Use GMP library for arbitrary precision arithmetic.
+- Receive N as command-line argument.
+- Implement next_step, extract, and produce as per algorithm.
+- Output 10 digits per line with running total.
+- Verify extract(3) and extract(4) for digit accuracy.
+- Format output with tabs and running total "\t:N".
+
+### Variable Values
+- q = 1, r = 0, t = 1, k = 0
+- N = argc > 1 ? atoi(argv[1]) : 1
+- Output format: 10 digits per line, padded with spaces, "\t:N" at end.
+
+### Notes
+- The code must use GMP for arbitrary precision.
+- The algorithm steps must be exactly as described.
+- Output formatting must match the reference for N=30.
+- The model must handle stateful loop and digit verification.

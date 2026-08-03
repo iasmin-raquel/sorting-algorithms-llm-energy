@@ -1,0 +1,71 @@
+### Prompt Structure
+**Chain-of-Thought Reasoning for Binary Tree Allocation Benchmark in Python:**
+
+1. **Understand the Problem Requirements:**
+   The task is to implement a Python program that constructs and deallocates binary trees with specific constraints:
+   - Must match Jeremy Zerfas’s C program’s memory allocation behavior.
+   - Trees must be perfect (fully filled) and leaf nodes must behave identically to interior nodes in terms of allocations.
+   - Output format must exactly mirror the given template for `N=10` validation.
+
+2. **Decompose into Steps:**
+   a. **Define Tree Structure:** Create a node structure with left/right child pointers, ensuring no optimizations are applied (e.g., manual memory management).
+   b. **Stretch Tree:** Allocate a tree of depth `stretch_depth`, verify its existence, and deallocate it.
+   c. **Long-Lived Tree:** Construct a long-lived tree that persists through allocations/deallocations of other trees.
+   d. **Bottom-Up Trees:** For each depth from `min_depth` to `max_depth` (step 2), allocate, traverse, and deallocate `iterations`-many trees of that depth. Validate the long-lived tree’s persistence.
+   e. **Output Format:**
+      - Print `"stretch tree of depth D\t check: C"` for the stretch tree.
+      - For each depth `D` in `[min_depth, max_depth]` (step 2), print:
+        `"I\t trees of depth D\t check: C"` (where `C` is a counter or validation flag).
+      - Print `"long lived tree of depth D\t check: C"`.
+
+3. **Parameter Calculation:**
+   - `min_depth = 4`.
+   - `max_depth = max(min_depth + 2, N)`.
+   - `stretch_depth = max_depth + 1`.
+   - `iterations = 2^(max_depth - depth + min_depth)`.
+
+4. **Implementation Constraints:**
+   - Use command-line argument `N` to determine tree depths.
+   - Avoid Python optimizations (e.g., `__slots__`, garbage collection tweaks).
+   - Validate memory allocations via explicit checks (e.g., `assert` or side effects).
+
+5. **Edge Cases & Validation:**
+   - Handle cases where `max_depth = min_depth + 2` (if `N < min_depth + 2`).
+   - Ensure the long-lived tree’s existence is verified after each batch of bottom-up trees.
+
+---
+
+### Key Requirements
+- **Language:** Pure Python (no C extensions or optimizations).
+- **Input Handling:** Parse command-line argument `N` as an integer.
+- **Tree Structure:**
+  ```python
+  class TreeNode:
+      def __init__(self, left=None, right=None):
+          self.left = left
+          self.right = right
+  ```
+- **Memory Management:**
+  - Explicitly allocate/deallocate trees (no garbage collection reliance).
+  - Use `del` or manual cleanup for bottom-up trees.
+- **Output Format:** Exact string matching as specified; no extra whitespace/newlines.
+- **Validation Flags (`C`):** Assume a placeholder logic (e.g., counters, side effects) to track checks. Example: `"check: 1"` if the tree exists after deallocation.
+
+---
+
+### Variable Values
+| Parameter          | Value                     | Calculation                                                                 |
+|--------------------|---------------------------|-----------------------------------------------------------------------------|
+| `min_depth`        | 4                         | Hardcoded constant.                                                        |
+| `max_depth`        | `max(min_depth + 2, N)`   | Clamped to `N` if `N < min_depth + 2`.                                      |
+| `stretch_depth`    | `max_depth + 1`           | Always one deeper than `max_depth`.                                         |
+| `iterations`       | `2^(max_depth - depth + min_depth)` | Dynamic per-depth; e.g., for `depth=4`, `iterations = 2^(0) = 1`. |
+
+---
+
+### Notes
+- **Ambiguity Risk:** The "check" flag (`C`) is unspecified. Clarify whether it should be a counter (e.g., number of valid trees) or a boolean validation pass/fail.
+- **Performance Focus:** Avoid Python’s garbage collector; enforce manual memory management for accuracy.
+- **Validation Tool:** Assume `diff` output.txt reference.txt is run post-execution to verify correctness. No need to implement this logic in the code.
+- **Edge Case Handling:** If `N < min_depth`, set `max_depth = min_depth + 2`. Example: For `N=3`, `max_depth = 6`.
+- **Output Precision:** Ensure no trailing whitespace or hidden characters (e.g., `\n` mismatches). Use `print()` with exact formatting.

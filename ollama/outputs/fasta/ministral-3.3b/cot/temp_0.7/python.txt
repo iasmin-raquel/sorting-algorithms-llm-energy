@@ -1,0 +1,119 @@
+### Prompt Structure
+
+Think step-by-step to generate a Python script that solves the Fasta Problem for the Computer Language Benchmarks Game. Follow these instructions carefully:
+
+1. **Decompose the problem** into logical steps:
+   - Parse command-line argument `N` and calculate required sequence lengths.
+   - Define probability distributions (both exact and cumulative) for each alphabet (ALU repeat, IUB ambiguity codes, Homo sapiens).
+   - Implement a custom Linear Congruential Generator (LCG) with specified constants to produce unbiased random numbers.
+   - For **repeat fasta**, construct sequences by iterating over the ALU sequence, appending it `N` times while adhering to line length of 60.
+   - For **random fasta**:
+     a. Select nucleotides using cumulative probability matching (linear search).
+     b. Handle ambiguous IUB codes by expanding them into their constituent nucleotides using predefined rules.
+     c. Repeat for `n*3` characters for IUB and `n*5` for Homo sapiens sequences.
+   - Output formatted strings with the exact header patterns:
+      ">ONE Homo sapiens alu", ">TWO IUB ambiguity codes", ">THREE Homo sapiens frequency".
+   - Ensure no random number sequence is cached (generate fresh values per nucleotide).
+
+2. **Implement edge cases**:
+   - Truncate long sequences to fit line length of 60.
+   - Validate cumulative probabilities sum to ~1.0 (allow ±0.0005 due to floating-point precision).
+   - Use precise LCG logic and avoid any precomputed values.
+
+3. **Validate correctness**:
+   - Compare outputs with reference files `output.txt` and `reference.txt` for N=1000 using `diff`, enforcing exact character-by-character accuracy.
+   - For IUB, the generated sequence must match expected deambiguified nucleotides exactly.
+
+4. **Constraints on code style**:
+   - Use only standard Python libraries (no external imports).
+   - Minimize auxiliary variables; directly compute probabilities as needed during nucleotide selection.
+
+5. **Debugging prompts**:
+   If any step fails, describe intermediate artifacts (e.g., printed cumulative probabilities or LCG steps) to isolate issues.
+
+---
+### Key Requirements
+- **Language**: Pure Python 3.x with no external libraries.
+- **LCG Usage**: Generate random numbers fresh for each nucleotide selection; do not memoize sequences.
+- **Output Format**:
+  - Exactly one newline-separated sequence per header, ending with a newline.
+  - Line lengths must be exactly 60 characters (truncate if needed).
+  - Ambiguous IUB codes (e.g., `B`, `D`) must resolve to valid nucleotide probabilities *only* from their constituent letters (`a`, `c`, `g`, `t`).
+- **Precision**: Use floating-point arithmetic with tolerance checks (±0.005) for cumulative probabilities.
+- **No Caching**: LCG seed state persists between calls; avoid global variables unless explicitly required by LCG.
+- **Hardcoded Data**:
+  - ALU repeat sequence (exact string, no substrings).
+  - IUB/Homo sapiens probability tables (exact values).
+
+---
+### Variable Values
+**Command-line argument:**
+- `N` = Number of repetitions (integer input; default: 10 if not provided).
+
+**LCG Parameters:**
+- Seed = 42
+- IM = 139968
+- IA = 3877
+- IC = 29573
+- Max = 1.0 (return a floating-point value in [0, 1)).
+
+**Alphabets and Probabilities:**
+1. **Homo sapiens nucleotides**:
+   - `a` = 0.3029549426680
+   - `c` = 0.1979883004921
+   - `g` = 0.1975473066391
+   - `t` = 0.3015094502008
+
+2. **IUB ambiguity codes** (expand to constituent nucleotides):
+   | Ambiguity Code | Constituents       |
+   |-----------------|--------------------|
+   | B               | a, c, g            |
+   | D               | a, g, t            |
+   | H               | a, c, t            |
+   | K               | g, t               |
+   - Probabilities:
+     `a=0.27`, `c=0.12`, `g=0.12`, `t=0.27`
+     Remaining 5 codes (`B, D, H, K, M/N/R/S/V/W/Y`) each have 0.02 probability.
+
+**ALU Sequence**:
+```
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+```
+
+---
+### Notes
+1. **IUB Ambiguity Handling**:
+   - The IUB code must be expanded *only* into `a`, `c`, or `g`/`t` based on its constituents, e.g., `K=0.5*(g+0.75*t)` (average weights).
+   - If a code has 0 probability in the base case (e.g., `M`), ensure it does not contribute to cumulative probabilities.
+
+2. **LCG Validity**:
+   - The LCG must produce uniform random numbers between [0, 1). Use modulo arithmetic to reset `Seed` after each call.
+   - Avoid integer overflow by casting `Seed * IA + IC` to a sufficiently large integer before taking `% IM`.
+
+3. **Output Line Lengths**:
+   - Sequences must end with exactly 60 characters (pad newline if needed) or truncate at the start of the next line.
+
+4. **Cumulative Probability Matching**:
+   - For nucleotide selection, use a linear search on cumulative probabilities up to `random()`.
+   - Use conditional checks to resolve ties between equal probability bins (e.g., if random() == 0.75, choose `g`/`t` based on their order in the alphabet).
+
+5. **Ambiguity Resolution Ambiguities**:
+   - For codes like `B`, precompute weighted probabilities for `(a + c + g)` before summing to cumulative values.
+   - Example: If `B` has a 0.27 probability, but only `a`, `c`, `g` are allowed, the weighted contribution is `0.27*(1/3)` per constituent nucleotide (sum to 0.09 for each).
+
+6. **Edge Cases in Probability Sums**:
+   - Due to floating-point imprecision, cumulative sums may exceed 1.0 by ~5% after rounding. Normalize by dividing all probabilities by the sum of weights.
+
+7. **Performance Note**:
+   - The linear search on cumulative probabilities is acceptable here but may be slow for very large sequences. Optimize only if `N` exceeds experimental thresholds (not required per problem statement).
+
+8. **Expected Model Behavior**:
+   - If the model struggles with floating-point precision, explicitly round intermediate values to 6 decimal places before comparison.
+   - For IUB codes, enforce exact probability weights (e.g., `B=0.27*(a+c+g)`), not uniform distribution across constituents.
+
+9. **ALU Repetition**:
+   - If the ALU sequence is shorter than line length, ensure it wraps correctly (no partial lines). Ensure no duplicate sequences or incorrect overlaps.

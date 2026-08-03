@@ -1,64 +1,99 @@
 ### Prompt Structure
+Act as a Python programmer tasked with implementing the Mandelbrot set plot in PBM (P4) format for a given grid size `N`. You must follow strict specifications to ensure correctness and compatibility with the reference validation test (cmp output.pbm reference.pbm). Below is your task broken into clear reasoning steps:
 
-You are tasked with generating a Python program to compute and output the Mandelbrot set for an N×N grid within the specified region using the **PBM P4** format. Below is the step-by-step reasoning and implementation plan:
+#### **Problem Decomposition**
+1. **Input Handling**:
+   - Take `N` as a command-line argument, where `N` determines the grid size (e.g., 200 for validation).
+   - Validate that `N` is an integer and divisible by 8 (since PBM requires 8-bit packing per row).
 
-#### Step 1: Define Inputs & Constants
-- The program must take `N` as a command-line argument (integer).
-- Fixed parameters must be enforced:
-  - Maximum iterations = **50**.
-  - Escape threshold = **4.0**.
-  - Complex plane region: real ∈ [-1.5, 0.5], imaginary ∈ [-1.0, 1.0].
+2. **Coordinate Mapping**:
+   - For each pixel at `(x, y)` in the grid:
+     - Map real part of `C` (complex number) to:
+       `real(C) = 2.0 * x / N - 1.5`
+     - Map imaginary part of `C` to:
+       `imag(C) = 2.0 * y / N - 1.0`.
+   - Ensure floating-point precision and avoid integer truncation.
 
-#### Step 2: Mapping to Pixel Coordinates
-- For each pixel `(i,j)` in the grid (0-indexed), compute its corresponding point `c = (real_part, imag_part)`:
-  ```
-  real_part = -1.5 + (0.5 - (-1.5)) * i / (N - 1)
-  imag_part = -1.0 + (1.0 - (-1.0)) * j / (N - 1)
-  ```
+3. **Mandelbrot Set Iteration**:
+   - Initialize `Z = (0, 0)` for each pixel.
+   - For `C = real(C) + imag(C)*i`, compute iterations of:
+     `Z = Z * Z + C` (using squared magnitude for escape detection).
+   - Stop if `|Z|² > lim` (where `lim = 2.0 * 2.0`), otherwise after **50 iterations**.
 
-#### Step 3: Mandelbrot Iteration Logic
-- For each `c`, iterate `z = c + z²` for up to **50** times.
-- If `|z| > 4.0` at any step, the point is **not** in the set; otherwise, it is.
+4. **Output Formatting**:
+   - **Header**: Write `"P4\nN N"` to stdout (e.g., `P4\n200 200` for `N=200`).
+   - **Pixel Packing**:
+     For each row, pack 8 pixels into a single byte, with the **most significant bit (MSB)** representing membership in the set (`1` = set, `0` = not).
+     Pad the last byte of incomplete rows with zeros if `N % 8 != 0`.
 
-#### Step 4: PBM P4 Format Output
-1. Write header:
-   ```
-   P4\nN\n\n
-   ```
-2. Pack each pixel as a single bit (MSB first) and zero-pad rows to byte boundaries.
-3. Output binary data directly to `stdout` for validation against a reference.
+5. **Edge Cases**:
+   - Handle invalid `N` (e.g., non-integer, negative) gracefully.
+   - Ensure no floating-point artifacts affect bitwise packing.
 
-#### Step 5: Code Implementation Notes
-- Use `sys.argv[1]` to fetch `N`.
-- Avoid floating-point precision errors by rounding intermediate steps to **7 decimal places**.
-- Ensure zero-padding in the packed byte stream (e.g., `0b0100` for black, `0b1000` for white).
+6. **Validation**:
+   - Your output must match the reference exactly for `N=200`, including byte-by-byte precision.
 
----
-### Key Requirements
-- **Input Handling**:
-  - Parse `N` from `sys.argv[1]`.
-  - Exit if `N` is invalid (<2).
-- **Precision Control**:
-  - Enforce **7 decimal places** in complex arithmetic to avoid rounding errors.
-- **Output Formatting**:
-  - Strictly follow PBM P4 binary format (no text, only raw bits).
-  - Bytes must be packed MSB-first; zero-padding is mandatory.
-- **Mandelbrot Logic**:
-  - Use **exact escape threshold** (4.0) and **fixed iterations** (50).
+#### **Algorithm Pseudocode**
+```python
+def mandelbrot_maps(x, y):
+    real = 2 * x / N - 1.5
+    imag = 2 * y / N - 1.0
+    return complex(real, imag)
 
----
-### Variable Values
-| Parameter       | Value         |
-|-----------------|---------------|
-| Maximum Iterations | `50`          |
-| Escape Threshold   | `4.0`         |
-| Real Range         | [-1.5, 0.5]   |
-| Imaginary Range    | [-1.0, 1.0]   |
+def mandelbrot_iterate(C, max_iters=50):
+    Z = complex(0, 0)
+    lim = 4.0  # since lim = 2^2
+    for _ in range(max_iters):
+        if (Z.real**2 + Z.imag**2) > lim:
+            return False  # Escaped; point is not in set
+        Z = Z * Z + C
+    return True  # Did not escape; point is in set
 
----
-### Notes
-- **Precision Ambiguity**: Round intermediate results to 7 decimal places to align with reference outputs. Ambiguous results may differ if not rounded.
-- **Edge Cases**:
-  - `N=2` or `N=3` will produce trivial outputs (no meaningful Mandelbrot). Validate correctness for `N ≥ 200`.
-- **Performance**: For large `N`, optimize packed bit operations to avoid memory bottlenecks.
-- **Validation**: The output must match the reference byte-for-byte when compared with a hardcoded reference PBM (e.g., `cmp output.pbm <reference.pbm` for `N=200`).
+def pack_row(pixels, N):
+    packed_byte = 0
+    for i in range(N // 8):
+        byte = pixels[i*8 : (i+1)*8]
+        for j, bit in enumerate(byte):
+            if bit:  # Set pixel (MSB)
+                packed_byte |= (1 << (7 - j))  # MSB first
+    # Pad remaining bits with zeros (if N % 8 != 0)
+    return packed_byte.to_bytes(1, 'big')
+
+# Full implementation below:
+def generate_pbm(N):
+    header = f"P4\n{N} {N}\n"
+    print(header.encode())
+
+    for y in range(N):  # Rows
+        row_bits = []
+        for x in range(N):  # Columns
+            C = mandelbrot_maps(x, y)
+            if mandelbrot_iterate(C):
+                row_bits.append(1)  # MSB = set
+            else:
+                row_bits.append(0)
+        packed_row = pack_row(row_bits, N)
+        print(packed_row)
+```
+
+#### **Critical Constraints**
+- Use **exactly** `50 iterations` for every point.
+- Threshold `lim` must be computed as `4.0` (since lim = 2²).
+- Output **exactly** 8 bits per pixel, bitwise packed and MSB-first (bit 1 = set, bit 0 = not).
+- Handle the last row correctly if `N % 8 != 0` by padding with zeros.
+- Avoid floating-point inaccuracies that could corrupt bitwise packing.
+
+#### **Variable Values**
+| Parameter               | Value                     |
+|--------------------------|---------------------------|
+| Command-line argument     | `N` (must be integer ≥1)   |
+| Max iterations           | `50`                      |
+| Escape threshold         | `lim = 2.0 * 2.0 → lim=4.0`|
+| Real(C) formula          | `2.0 * x / N - 1.5`       |
+| Imag(C) formula          | `2.0 * y / N - 1.0`       |
+
+#### **Notes**
+- The bitwise packing assumes an integer array of bits (0s and 1s). Ensure no floating-point residues corrupt the bit values.
+- For `N=200`, validate that the output matches a precomputed reference exactly (e.g., via manual verification or prior testing).
+- Edge cases: If `N` is not divisible by 8, pad the last byte of each row with zeros (e.g., for `N=193`, the last row’s last 5 bits are set to zero in the packed byte).
+- Avoid using Python’s built-in `complex` operations for packing; manually compute real/imag parts and bitwise logic.

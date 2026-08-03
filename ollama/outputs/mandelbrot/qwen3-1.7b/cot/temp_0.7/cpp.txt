@@ -1,26 +1,27 @@
 [The actual prompt text that will be sent to the target LLM]
 
 ### Key Requirements
-- The C++ code must use exactly 50 iterations and escape threshold 4.0
-- The plot region must be real in [-1.5, 0.5] and imaginary in [-1.0, 1.0]
-- Output must be PBM P4 format with MSB-first bit packing and zero-padding per row
-- The code must write the PBM header and binary pixel data to stdout
-- The code must receive N as a command-line argument
-- The output must match the reference.pbm file when compared with cmp output.pbm reference.pbm for N=200
+- The C++ code must take N as a command-line argument
+- The code must use exactly 50 iterations and lim = 2.0 * 2.0
+- The output must be in PBM P4 format with header "P4\n" and "N N\n"
+- Pixels must be packed 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+- The output must be validatable with `cmp output.pbm reference.pbm` for N=200
+- The code must handle coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- The code must pad rows with zeros if N is not divisible by 8
 
 ### Variable Values
-- Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region: real min=-1.5, real max=0.5, imaginary min=-1.0, imaginary max=1.0
-- Output format: PBM P4, bits packed MSB first, zero-padded per row
-- Command-line argument: N (integer > 0)
+- N = 200
+- Max iterations = 50
+- Escape threshold lim = 2.0 * 2.0
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- Pixel data packed 8 per byte, MSB first
 
 ### Notes
-- The code must correctly handle the plot region boundaries and iteration limits
-- The MSB-first packing requires careful handling of byte ordering
-- Zero-padding per row ensures consistent output dimensions
-- The code must generate the exact PBM header with proper color depth specification
-- The model must ensure the output matches the reference file when validated with cmp
+- The code must validate against `cmp output.pbm reference.pbm` for N=200
+- The output must include the PBM P4 header and binary pixel data
+- The last byte of each row must be padded with zeros if N is not divisible by 8
+- The iteration formula Z = Z*Z + C must use squared magnitude (zr*zr + zi*zi) to avoid square roots
+- The code must handle the coordinate mapping correctly for real(C) and imag(C)
 
 ### Prompt Structure
 [The actual prompt text that will be sent to the target LLM]

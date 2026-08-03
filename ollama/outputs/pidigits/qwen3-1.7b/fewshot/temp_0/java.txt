@@ -1,0 +1,72 @@
+**Prompt for Implementing the pidigits Problem in Java**
+
+Implement the **pidigits** problem from the Computer Language Benchmarks Game using the **Unbounded Spigot Algorithm (Gibbons)**. The goal is to calculate the first N digits of π with arbitrary precision arithmetic, outputting 10 digits per line and the running total. The output must match the reference file `output.txt` when validated against `reference.txt` for N=30.
+
+---
+
+### Key Requirements:
+1. **Algorithm Implementation**:
+   - Use **BigInteger** for arbitrary precision arithmetic.
+   - Follow the steps:
+     - `next_step`: Increment `k`, update `r`, `t`, and `q`.
+     - `extract(x)`: Compute `floor((q*x + r)/t)`.
+     - `produce(d)`: Compute digits by checking `d = extract(3)` and `d = extract(4)`.
+     - Loop until `q > r` is false.
+   - Stateful variables: `q`, `r`, `t`, `k`.
+
+2. **Output Format**:
+   - 10 digits per line.
+   - Each line ends with `\t:N` (e.g., `\t:30` for N=30).
+   - Pad with spaces if the line has fewer than 10 digits.
+
+3. **Command-Line Argument**:
+   - Accept N as a command-line argument (e.g., `java pidigits 30`).
+
+4. **Code Structure**:
+   - Use `BigInteger` for all arithmetic operations.
+   - Implement the algorithm in a stateful loop.
+   - Ensure the output matches the reference file.
+
+---
+
+### Example Code (Skeleton):
+```java
+public class pidigits {
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println("Usage: java pidigits <N>");
+            return;
+        }
+        int N = Integer.parseInt(args[0]);
+        // Algorithm implementation here
+    }
+}
+```
+
+---
+
+### Algorithm Steps in Code:
+1. **Initialization**:
+   - `q = new BigInteger("1")`, `r = new BigInteger("0")`, `t = new BigInteger("1")`, `k = 0`.
+
+2. **Loop**:
+   - While `q.compareTo(r) > 0`:
+     - Call `next_step()` to update `q`, `r`, `t`, and `k`.
+     - Compute `d = extract(3)`.
+     - If `d == extract(4)`, output the digit and update the running total.
+     - Else, continue the loop.
+
+3. **Output**:
+   - Print 10 digits per line.
+   - Format each line as: `digit1 digit2 ... digit10\t:N` (e.g., `3 1 4 1 5 9 2 6 5 4\t:30`).
+
+---
+
+### Notes:
+- The algorithm must handle large numbers (N=30 requires high precision).
+- Ensure `BigInteger` operations are correctly implemented (e.g., `r = r.add(2 * q)`).
+- The output must match the reference file exactly for N=30.
+
+---
+
+This prompt guides the LLM to implement the algorithm, focus on the stateful loop, and produce the required output format. The example code demonstrates the structure, and the LLM must extract the general pattern (argument reading, stateful loop, formatted output) from the example.

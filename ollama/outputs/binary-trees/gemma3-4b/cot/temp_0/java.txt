@@ -1,0 +1,44 @@
+### Prompt Structure
+You are an expert Java code generator tasked with creating a program to implement the Binary Trees problem from the Computer Language Benchmarks Game. Your goal is to generate Java code that precisely replicates the specified functionality and output format, adhering strictly to the given constraints.
+
+First, let's break down the task into logical steps:
+
+1.  **Node Definition:** Define a `TreeNode` class with `left` and `right` child pointers. This will be the fundamental building block of our binary trees.
+
+2.  **Stretch Tree Generation:** Implement a function to create a perfect binary tree of a given depth (`depth`). Allocate memory for each node in this tree, ensuring that the tree stretches as far as possible within the allocated memory. The `depth` should iterate from `min_depth = 4` up to `max_depth`.
+
+3.  **Long-Lived Tree:** Create a long-lived binary tree of depth `D`, which will persist throughout the program's execution, even while other trees are being created and destroyed. This is crucial for verifying the memory allocation strategy.
+
+4.  **Bottom-Up Tree Generation:** Implement a loop to generate multiple bottom-up binary trees. For each depth `D` within the range from `min_depth` to `max_depth`, allocate a tree of that depth, walk the tree (counting nodes), and then deallocate it. The number of iterations for each depth should be calculated as `iterations = 1 << (max_depth - depth + min_depth)`.
+
+5.  **Output Formatting:** Generate output in the specified format: `"stretch tree of depth D\t check: C"` for each depth, followed by "long lived tree of depth D\t check: C". The `C` represents a check to confirm the existence of the allocated memory blocks.
+
+6.  **Command-Line Argument:** The program should accept an integer `N` as a command-line argument. This value will be used to determine the maximum depth of the trees.
+
+7.  **Parameter Calculation:** Calculate `max_depth` and `stretch_depth` based on `min_depth`, `max_depth`, and `N`.
+
+Now, generate the complete Java code incorporating these steps. Ensure that the code is well-structured, readable, and efficient. The output should be identical to the reference when validated with: `diff output.txt reference.txt for N=10`.
+
+```java
+// Your generated Java code will go here
+```
+
+### Key Requirements
+*   The code must be written in Java.
+*   It must accept an integer `N` as a command-line argument.
+*   It must define the `TreeNode` class with `left` and `right` child pointers.
+*   It must implement the stretch tree generation logic, including memory allocation and deallocation.
+*   It must create and manage a long-lived binary tree.
+*   It must generate multiple bottom-up binary trees using the specified iteration count for each depth.
+*   The output format must be exactly as described in the problem statement.
+*   The code should accurately replicate the behavior of the reference implementation, ensuring that all memory allocations and deallocations are handled correctly.
+
+### Variable Values
+*   `min_depth = 4`
+*   `max_depth = max(min_depth + 2, N)`
+*   `stretch_depth = max_depth + 1`
+*   `iterations = 1 << (max_depth - depth + min_depth)`
+*   `N` (command-line argument)
+
+### Notes
+This prompt emphasizes the need for precise replication of the reference implementation. The model should pay close attention to memory allocation and deallocation, as this is a critical aspect of the problem.  The output formatting requirements are strict; any deviation will result in an incorrect solution. The use of bit shifting (`1 <<`) for calculating iterations is important to ensure accuracy.

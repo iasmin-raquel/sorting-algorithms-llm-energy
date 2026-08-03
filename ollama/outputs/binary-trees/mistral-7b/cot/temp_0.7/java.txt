@@ -1,0 +1,24 @@
+### Prompt Structure
+Create a Java program that:
+1. Defines a binary tree node structure with left and right child pointers.
+2. Implements the logic for allocating and deallocating binary trees.
+3. Allocates, walks, and deallocates many bottom-up binary trees.
+4. Produces output in the specified format.
+
+### Key Requirements
+- The program should be implemented in Java.
+- It should receive N as a command-line argument.
+- Minimum depth (min_depth) is 4 and max_depth, stretch_depth are computed according to the provided definitions.
+- The binary tree node structure must have left and right child pointers.
+- The program should implement the stretch tree, long-lived tree, and bottom-up tree logic as described.
+- Output format must be identical to the reference when validated with "diff output.txt reference.txt" for N=10.
+
+### Variable Values
+- min_depth: 4
+- max_depth: N > 4 ? N + 2 : N
+- stretch_depth: max_depth + 1
+- iterations: 2^(max_depth - depth + min_depth) for each tree depth from min_depth to max_depth (step 2)
+- N: command-line argument
+
+### Notes
+Ensure the output format is strictly adhered to, and all required steps are implemented. The program should not optimize away work as per the problem description in the Computer Language Benchmarks Game.

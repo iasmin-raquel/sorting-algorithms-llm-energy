@@ -1,0 +1,38 @@
+[The actual prompt text that will be sent to the target LLM]
+
+I need to generate a C++ implementation of the pidigits problem using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic. The code must:
+- Use the GMP library for arbitrary precision arithmetic
+- Accept N as a command-line argument
+- Implement the algorithm steps: next_step, extract, produce
+- Verify extract(3) and extract(4) for digit accuracy
+- Output in the exact format with 10 digits per line, padding, and running total
+
+Key Requirements:
+- Use GMP for arbitrary precision (gmp::mpz_class)
+- Initialize q=1, r=0, t=1, k=0
+- Implement next_step with k++ and r*t operations
+- Implement extract(3) and extract(4) for digit verification
+- Output format: 10 digits per line, padding with spaces, "\t:N" footer
+- Handle edge cases for q > r and proper digit selection
+
+Variable Values:
+q = gmp::mpz_class(1)
+r = gmp::mpz_class(0)
+t = gmp::mpz_class(1)
+k = gmp::mpz_class(0)
+N = gmp::mpz_class(30) (command-line argument)
+output_buffer = gmp::mpz_class(0)
+running_total = gmp::mpz_class(0)
+
+Notes:
+- The algorithm must correctly handle the step sequence and digit selection
+- The output must match the reference file exactly, including the padding and footer
+- The code must handle the GMP library's arithmetic operations properly
+- The algorithm's steps must be implemented precisely as described
+
+The prompt must ensure that the LLM:
+- Implements the algorithm steps exactly
+- Handles the output formatting correctly
+- Uses GMP for arbitrary precision arithmetic
+- Receives N as a command-line argument
+- Verifies the digits with both extract(3) and extract(4)

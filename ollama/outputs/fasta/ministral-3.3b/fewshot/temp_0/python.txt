@@ -1,0 +1,134 @@
+### Prompt Structure
+
+Below is a few-shot prompt designed to guide an LLM toward generating the correct Python code for solving the FASTA problem according to your specifications. The examples demonstrate the structure and logic required:
+
+---
+
+**Example 1 (Binary Trees):**
+```python
+# Binary tree generation example (for context)
+import sys
+
+def generate_random_sequence(length, probabilities):
+    # Placeholder function demonstrating random selection via cumulative probabilities
+    pass
+
+def main():
+    N = int(sys.argv[1])
+    sequence_lengths = [N * 2, N * 3, N * 5]  # Example lengths (not used here)
+    alu_sequence = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA..."
+    iub_alphabet = {"a":0.27, "c":0.12, ...}  # Example alphabet (not used here)
+    homo_sapiens_alphabet = {"a":0.302954..., ...}  # Example alphabet (not used here)
+
+    # Generate sequences
+    repeat_fasta = alu_sequence * N  # Simplified for illustration
+    random_iub = generate_random_sequence(N*3, iub_alphabet)
+    random_homo = generate_random_sequence(N*5, homo_sapiens_alphabet)
+
+    # Output format (example structure)
+    print(f">ONE Homo sapiens alu\n{repeat_fasta[:60]}\n")
+    print(f">TWO IUB ambiguity codes\n{random_iub[:60]}\n")
+    print(f">THREE Homo sapiens frequency\n{random_homo[:60]}")
+
+if __name__ == "__main__":
+    main()
+```
+
+---
+
+**Example 2 (Your Problem):**
+```python
+# Your problem example (structure only)
+import sys
+
+def lcg(max_val):
+    IM, IA, IC = 139968, 3877, 29573
+    seed = 42
+    while True:
+        seed = (seed * IA + IC) % IM
+        yield max_val * seed / IM
+
+def generate_sequence(length, alphabet):
+    random_gen = lcg(1.0)
+    sequence = []
+    for _ in range(length):
+        # Cumulative probabilities logic here
+        pass
+    return ''.join(sequence)
+
+def main():
+    N = int(sys.argv[1])
+    alu_seq = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA..."
+    iub_probs = {"a":0.27, ...}  # Exact values below
+    homo_probs = {"a":0.302954..., ...}  # Exact values below
+
+    # Generate sequences with exact constraints
+    repeat_fasta = alu_seq * N
+    random_iub = generate_sequence(N*3, iub_probs)
+    random_homo = generate_sequence(N*5, homo_probs)
+
+    # Output format (exact as specified)
+    print(f">ONE Homo sapiens alu\n{repeat_fasta[:60]}\n")
+    print(f">TWO IUB ambiguity codes\n{random_iub[:60]}\n")
+    print(f">THREE Homo sapiens frequency\n{random_homo[:60]}")
+
+if __name__ == "__main__":
+    main()
+```
+
+---
+
+### Key Requirements
+- **Command-line argument handling**: Must read `N` from `sys.argv[1]`.
+- **LCG implementation**: Use the exact constants (`IM=139968`, `IA=3877`, `IC=29573`) and seed (`42`). Do not cache random numbers; generate them on-demand.
+- **Cumulative probabilities**: For each nucleotide, compute cumulative probabilities from the given alphabets (e.g., for IUB: `[0.27, 0.40, 0.52, ...]`).
+- **Linear search selection**: Use a random number to select a nucleotide via binary search on the cumulative probabilities.
+- **Output format**: Exactly match the specified line length (`60`) and sequence order (repeat fasta → IUB → Homo sapiens).
+- **No caching**: Random numbers must be generated fresh for each nucleotide.
+
+---
+
+### Variable Values
+#### Alphabets and Probabilities:
+1. **ALU Sequence** (for repeat fasta):
+   ```
+   GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+   TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+   AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+   GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+   CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+   ```
+2. **IUB Alphabet** (probabilities):
+   ```python
+   {
+       "a": 0.27, "c": 0.12, "g": 0.12, "t": 0.27,
+       "B": 0.02, "D": 0.02, "H": 0.02, "K": 0.02,
+       "M": 0.02, "N": 0.02, "R": 0.02, "S": 0.02,
+       "V": 0.02, "W": 0.02, "Y": 0.02
+   }
+   ```
+3. **Homo sapiens Alphabet** (probabilities):
+   ```python
+   {
+       "a": 0.3029549426680,
+       "c": 0.1979883004921,
+       "g": 0.1975473066391,
+       "t": 0.3015094502008
+   }
+   ```
+
+#### Output Lengths:
+- Repeat fasta: `N * 2` characters.
+- IUB random: `N * 3` characters.
+- Homo sapiens random: `N * 5` characters.
+
+---
+
+### Notes
+1. **LCG Behavior**: The LCG must produce a strictly increasing sequence of random numbers (no repeats) for deterministic output validation. Ensure the seed (`42`) and constants are used exactly as given.
+2. **Cumulative Probabilities**: For IUB, the cumulative probabilities should be ordered by alphabetical priority (e.g., `a < c < g < t` first; then ambiguous codes in order of their probability).
+3. **Edge Cases**:
+   - If `N=0`, output an empty file.
+   - Truncate sequences to 60 characters per line, but ensure the full sequence is generated before truncation (e.g., for `N=1`, output the first 60 chars of the sequence).
+4. **Validation**: The output must pass `diff` validation against reference files when `N=1000`. This implies deterministic behavior for reproducibility.
+5. **Ambiguity Handling**: For IUB codes (e.g., `B`), treat them as single characters with their assigned probability. Use the cumulative probabilities to select among all possible nucleotides/ambiguous codes.

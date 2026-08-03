@@ -1,0 +1,46 @@
+### Prompt Structure
+You are an expert C++ code generator specializing in implementing algorithms from the Computer Language Benchmarks Game. Your task is to generate a complete C++ program that implements the Binary Trees problem described below. Follow the chain-of-thought prompting technique to guide your reasoning and ensure the generated code meets all specified requirements precisely.
+
+**Step 1: Understanding the Problem**
+The goal is to create a robust C++ implementation of the Binary Trees problem, mirroring the logic in Jeremy Zerfas's C program as closely as possible. This involves creating perfect binary trees, allocating and deallocating them strategically, and verifying their existence throughout the process. The output should match the reference when validated using `diff output.txt reference.txt`.
+
+**Step 2: Chain of Thought - Reasoning Process**
+1.  **Node Structure:** First, define a `TreeNode` structure with `left` and `right` child pointers. This is fundamental for representing the binary tree.
+2.  **Parameter Calculation:** The program receives `N` as a command-line argument. Calculate `min_depth`, `max_depth`, `stretch_depth`, and `iterations` based on the given parameters: `min_depth = 4`, `max_depth = max(min_depth + 2, N)`, `stretch_depth = max_depth + 1`, and `iterations = 1 << (max_depth - depth + min_depth)`.
+3.  **Stretch Tree:** Implement the logic to allocate a binary tree of a specific depth (`stretch_depth`). This will stretch memory and demonstrate allocation behavior.
+4.  **Long-Lived Tree:** Create a long-lived binary tree that persists throughout the program's execution. This is critical for testing persistence after allocations and deallocations.
+5.  **Bottom-Up Trees:** Implement the generation of multiple bottom-up binary trees, allocating each one, counting nodes within it, and then deallocating it. Repeat this process many times to thoroughly test memory management.
+6.  **Output Formatting:** Format the output according to the specified format: "stretch tree of depth D\t check: C" followed by details for other trees and the long-lived tree, and finally a concluding check.
+
+**Step 3: Code Generation**
+Now, generate the complete C++ code based on this chain of thought. The code should:
+
+*   Use C++.
+*   Take `N` as a command-line argument.
+*   Calculate `min_depth`, `max_depth`, `stretch_depth`, and `iterations`.
+*   Define the `TreeNode` structure.
+*   Implement all necessary allocation and deallocation routines for binary trees.
+*   Generate the specified number of bottom-up trees.
+*   Produce output in the exact format as described above, including the "check: C" assertions.
+
+**Step 4: Verification**
+The generated code should produce identical output to the reference when executed with `N=10`. The 'check: C' values are crucial for verifying the correct operation of the tree allocation and deallocation mechanisms. Pay close attention to memory management and ensure that trees are properly created, traversed, and destroyed.
+
+### Key Requirements
+*   The code must be written in C++.
+*   It must take the `N` value as a command-line argument.
+*   Calculate `min_depth`, `max_depth`, `stretch_depth`, and `iterations` according to the specified formulas.
+*   A `TreeNode` structure with `left` and `right` child pointers must be defined.
+*   Implement allocation and deallocation of binary trees, including stretch tree, long-lived tree, and multiple bottom-up trees.
+*   Output must adhere precisely to the format: "stretch tree of depth D\t check: C" followed by other tree details and final checks.
+*   The output should be identical to the reference when validated with `diff output.txt reference.txt` for N=10.
+
+### Variable Values
+*   `min_depth = 4`
+*   `max_depth = max(min_depth + 2, N)` (Calculated dynamically)
+*   `stretch_depth = max_depth + 1` (Calculated dynamically)
+*   `iterations = 1 << (max_depth - depth + min_depth)` (Calculated dynamically per tree generation)
+*   `N` = Command-line argument
+
+### Notes
+This prompt emphasizes the importance of precise implementation and output matching. The chain-of-thought approach is designed to guide the LLM toward a thorough understanding of the problem's requirements, particularly concerning memory management and the specific formatting of the output.  The dynamic calculation of `max_depth` and `stretch_depth` based on `N` adds complexity that requires careful attention during code generation. The "check: C" assertions are critical for validating the correctness of the allocation/deallocation process – any errors in these values will cause the generated program to fail validation.

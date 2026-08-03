@@ -1,98 +1,113 @@
-### Prompt Structure
+---
 
-**Example 1: Mandelbrot Set Generation (PBM Output)**
+### **Prompt Structure**
+**Few-shot Example for Mandelbrot Set Generation in Java (PBM P4 Output):**
+
+---
+#### **Example 1: Naive Iteration (N=8)**
 ```java
-// Problem: Generate Mandelbrot set for a given N and output in PBM format.
-// Input: Command-line argument `N` (size of grid).
-// Constraints:
-//   - Iterations = 50, escape threshold = 4.0
-//   - Plot region: real ∈ [-1.5, 0.5], imag ∈ [-1.0, 1.0]
-//   - Output: PBM P4 (bits packed MSB-first, zero-padded rows).
-
 public class Mandelbrot {
     public static void main(String[] args) {
         int N = Integer.parseInt(args[0]);
-        double maxIter = 50;
-        double escapeThreshold = 4.0;
+        double lim = 2.0 * 2.0;
+        System.out.println("P4\n" + N + " " + N); // Header
 
-        // Initialize grid and compute pixels
         for (int y = 0; y < N; ++y) {
             for (int x = 0; x < N; ++x) {
-                // Map (x,y) to complex plane, compute iterations, write PBM byte.
+                double cReal = 2.0 * x / N - 1.5;
+                double cImag = 2.0 * y / N - 1.0;
+                int pixelBits = iterate(cReal, cImag, lim);
+                System.out.write((pixelBits << 4) & 0xFF); // Packed bits
             }
         }
+    }
+
+    private static int iterate(double cr, double ci, double lim) {
+        double zr = 0.0, zi = 0.0;
+        for (int i = 0; i < 50; ++i) {
+            double nr2 = zr * zr + zi * zi;
+            if (nr2 > lim) return 0; // Not in set
+            double nzr = zr * zr - zi * zi + cr;
+            double nzi = 2.0 * zr * zi + ci;
+            zr = nzr; zi = nzi;
+        }
+        return 1; // In set (|Z|² ≤ lim)
     }
 }
 ```
 
 ---
-
-**Example 2: Modified Mandelbrot with Custom Threshold**
+#### **Example 2: Optimized Bit-Packing (N=16)**
 ```java
-// Problem: Same as above but with user-provided threshold.
-// Input: `N` and `threshold` (e.g., `args[0] = N`, `args[1] = threshold`).
-public class MandelbrotCustom {
+public class Mandelbrot {
     public static void main(String[] args) {
         int N = Integer.parseInt(args[0]);
-        double threshold = Double.parseDouble(args[1]);
+        double lim = 4.0; // lim² = 16
+        System.out.println("P4\n" + N + " " + N); // Header
 
         for (int y = 0; y < N; ++y) {
+            int packedBits = 0;
             for (int x = 0; x < N; ++x) {
-                // Escape logic adjusted to `threshold`.
+                double cReal = 2.0 * x / N - 1.5;
+                double cImag = 2.0 * y / N - 1.0;
+                int pixelBits = iterate(cReal, cImag, lim);
+                packedBits = (packedBits << 1) | (pixelBits & 1); // Rotate + append
             }
+            System.out.write(packedBits); // Write packed byte
         }
+    }
+
+    private static int iterate(double cr, double ci, double lim) {
+        double zr = 0.0, zi = 0.0;
+        for (int i = 0; i < 50; ++i) {
+            double nr2 = zr * zr + zi * zi;
+            if (nr2 > lim) return 0;
+            double nzr = zr * zr - zi * zi + cr;
+            double nzi = 2.0 * zr * zi + ci;
+            zr = nzr; zi = nzi;
+        }
+        return 1;
     }
 }
 ```
 
 ---
 **Target Problem:**
-```java
-// Generate Mandelbrot set for N=200, output PBM P4 with exact specs:
-//   - Iterations: 50
-//   - Escape threshold: 4.0
-//   - Region: real ∈ [-1.5, 0.5], imag ∈ [-1.0, 1.0]
-//   - Output: PBM P4 header + packed binary pixels (MSB-first, zero-padded rows).
-public class Mandelbrot {
-    public static void main(String[] args) {
-        // Implement the loop and pixel writing as shown in examples.
-    }
-}
-```
+Generate a Java program that:
+1. Takes `N` (e.g., 200) as a command-line argument.
+2. Computes the Mandelbrot set over the range `[-1.5, 0.5]` × `[-1.0, 1.0]` using **exactly 50 iterations** and escape threshold `lim = 4.0` (since `lim = 2.0 * 2.0`).
+3. Outputs a PBM P4 bitmap with:
+   - Header: `"P4\nN N"`.
+   - Pixel data packed as **8 bits per byte, MSB-first** (bit 1 = in set, bit 0 = not in set).
+   - Padding zeros for incomplete bytes if `N % 8 != 0`.
+4. Validate correctness with `cmp` against a reference for `N=200`.
 
 ---
-
-### Key Requirements
-- **Language**: Pure Java (no external libraries like `java.awt` or `javax.imageio`).
-- **Input Handling**:
-  - Parse `N` from `args[0]` via `Integer.parseInt(args[0])`.
-  - No additional arguments allowed.
-- **Algorithm**:
-  - Use **50 iterations** per pixel, escape threshold **4.0**.
-  - Map `(x,y)` to complex plane: `c = (real + offsetX) + i*(imag + offsetY)`, where:
-    - `offsetX = (-1.5 + 0.5/N)*N` (center real axis).
-    - `offsetY = (-1.0 + 1.0/N)*N` (center imaginary axis).
-- **Output**:
-  - Write PBM header manually (e.g., `"P4\n200 200"`).
-  - Pack bits MSB-first, zero-pad rows to full byte.
-  - No extra whitespace or comments in binary data.
-- **Precision**: Use `double` for complex plane arithmetic; avoid floating-point errors.
+### **Key Requirements**
+- **Language**: Pure Java (no external libraries).
+- **Input Handling**: Parse `N` from `args[0]`.
+- **Precision**: Use `double` arithmetic; avoid floating-point inaccuracies in iteration logic.
+- **Output Format**:
+  - Strictly follow PBM P4 rules (header + binary data).
+  - Pack pixels row-wise, left-to-right, top-to-bottom.
+- **Performance**: Optimize for speed (e.g., bit-packing, loop unrolling).
+- **Correctness**: Must match reference output for `N=200` after validation.
 
 ---
-
-### Variable Values
+### **Variable Values**
 | Parameter          | Value               |
-|---------------------|---------------------|
-| Max Iterations      | 50                  |
-| Escape Threshold    | 4.0                 |
-| Plot Region (real)  | [-1.5, 0.5]         |
-| Plot Region (imag)  | [-1.0, 1.0]         |
-| Output Format       | PBM P4              |
+|--------------------|---------------------|
+| Maximum iterations  | `50`                |
+| Escape threshold (lim) | `4.0` (since `lim = 2.0 * 2.0`) |
+| Coordinate mapping:
+  - Real(C) = `2.0 * x / N - 1.5`
+  - Imag(C) = `2.0 * y / N - 1.0` |
 
 ---
-### Notes
-- **Ambiguity Risk**: The prompt avoids specifying exact PBM header text (e.g., `"P4\n200 200"`), trusting the LLM to infer it from the binary output structure. Ensure the generated code writes a valid PBM header *before* pixel data.
+### **Notes**
+- **Bit-Packing**: The examples show two approaches (per-pixel vs. row-wise packing). Prioritize the latter for efficiency.
 - **Edge Cases**:
-  - Handle `N=1` correctly (single-pixel grid).
-  - Zero-padding per row: For odd bits, pad with zeros to form a full byte.
-- **Performance**: The LLM should optimize loops for minimal overhead (e.g., avoid redundant calculations). Benchmarking is implicit via the problem’s constraints.
+  - Handle `N % 8 != 0` by padding bytes with zeros.
+  - Ensure no floating-point overflow in iteration (e.g., clamp `zr/zi` to avoid extreme values).
+- **Validation**: The output must pass `cmp` for `N=200`. Avoid hardcoding pixel values—compute dynamically.
+- **Ambiguity Risk**: Clarify whether the LLM should generate a single loop (row-wise) or nested loops. Prefer row-wise packing for speed.

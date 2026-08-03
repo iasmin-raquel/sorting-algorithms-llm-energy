@@ -1,0 +1,70 @@
+### Prompt Structure
+**Chain-of-Thought Reasoning for Implementing the Unbounded Spigot Algorithm in Java to Compute N Digits of Pi:**
+
+1. **Understand the Problem Requirements:**
+   - The task is to implement a Java program using arbitrary precision arithmetic (via `BigInteger`) that computes the first *N* digits of π.
+   - The output must strictly adhere to the specified format: 10 digits per line, padded with spaces if fewer than 10 remain, followed by `\t:N` where *N* is the total digits calculated.
+
+2. **Decompose the Algorithm:**
+   - Start with the initial state: `q = 1`, `r = 0`, `t = 1`, and `k = 0`.
+   - Implement the `next_step()` function to advance the algorithm by one term, updating `k`, `r`, `t`, and `q` as per the given rules.
+   - Define `extract(x)` to compute the floor of `(q*x + r) / t` using arbitrary precision arithmetic.
+   - Implement `produce(d)` to update `q` and `r` for digit extraction, ensuring correctness by verifying against `extract(4)` (as a safeguard).
+
+3. **Digit Selection Logic:**
+   - Loop until `q > r` is false:
+     - Compute `d = extract(3)`.
+     - If `d == extract(4)`, output the digit and call `produce(d)` to shift digits right by one place.
+     - Otherwise, call `next_step()` again.
+
+4. **Output Formatting:**
+   - Collect 10 digits at a time, pad with spaces if necessary, and append `\t:N` where *N* is the cumulative count of digits.
+   - Ensure the output matches the reference for *N = 30* exactly (e.g., `diff output.txt reference.txt`).
+
+5. **Java-Specific Constraints:**
+   - Use `BigInteger` for all arithmetic operations to handle arbitrary precision.
+   - Parse command-line argument *N* and validate it is a positive integer.
+
+6. **Edge Cases & Validation:**
+   - Handle cases where *N* is 0 or invalid (e.g., negative).
+   - Ensure the algorithm terminates correctly when `q > r` becomes false, without infinite loops.
+
+7. **Code Structure:**
+   - Write a main method that:
+     - Takes *N* as input.
+     - Initializes variables to initial state.
+     - Calls the digit selection loop.
+     - Prints results in the exact format (10 digits per line + `\t:N`).
+
+---
+
+### Key Requirements
+- **Arbitrary Precision:** Use `BigInteger` for all arithmetic operations (`q`, `r`, `t`) to avoid overflow.
+- **Exact Algorithm Steps:** Follow the Unbounded Spigot algorithm *exactly* as described, including `next_step()`, `extract(x)`, and `produce(d)`.
+- **Digit Verification:** Always compare `d = extract(3)` with `extract(4)` to ensure correctness (this is a safeguard against implementation errors).
+- **Output Format:** Strictly adhere to 10 digits per line, padded spaces, and `\t:N` suffix. No extra whitespace or formatting deviations.
+- **Command-Line Argument:** Parse *N* from the command line as an integer; validate it is positive.
+- **Termination Condition:** Loop until `q > r` is false (no premature exit).
+- **No Hardcoding:** Do not hardcode digits of π; compute them dynamically.
+
+---
+
+### Variable Values
+| Variable | Initial Value | Description                                                                 |
+|----------|---------------|-----------------------------------------------------------------------------|
+| *N*      | Command-line argument (e.g., `java PiCalculator 30`) | Total digits to compute. Must be a positive integer.                     |
+| q        | `1`           | Part of the algorithm state for digit extraction.                           |
+| r        | `0`           | Another part of the algorithm state.                                       |
+| t        | `1`           | Denominator in the `extract(x)` formula.                                    |
+| k        | `0`           | Counter incremented by 1 in each `next_step()`.                            |
+
+---
+
+### Notes
+- **Ambiguity Risk:** The prompt explicitly enforces that *both* `extract(3)` and `extract(4)` must be computed for verification, which may slightly alter the standard Spigot algorithm (though this is a safeguard). Clarify with the LLM if they expect this or if it should be omitted.
+- **Performance:** The Unbounded Spigot Algorithm is efficient but requires careful handling of `BigInteger` operations to avoid unnecessary computations. Optimize for correctness over raw speed.
+- **Edge Cases:**
+  - If *N* = 0, output nothing (or handle gracefully).
+  - If *N* is very large (e.g., >10^6), ensure the program terminates without infinite loops (though the algorithm guarantees termination for finite *N*).
+- **Testing:** The LLM should validate its output against a reference file for *N = 30* using `diff` to ensure exact match. Provide this as a post-validation step.
+- **Output Formatting:** Ensure trailing spaces are preserved exactly (e.g., "123456789\t:10" vs. "123456789 \t:10"). The prompt emphasizes padding with spaces, not tabs or other characters.

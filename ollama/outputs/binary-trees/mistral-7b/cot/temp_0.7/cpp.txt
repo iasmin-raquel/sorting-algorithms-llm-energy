@@ -1,0 +1,25 @@
+### Prompt Structure
+Create a C++ program that implements perfect binary trees as described in the Computer Language Benchmarks Game. The program should:
+1. Define a tree node structure with left and right child pointers.
+2. Implement a function to allocate, walk, and deallocate many bottom-up binary trees.
+3. Allocate a long-lived binary tree which will live on while other trees are allocated and deallocated.
+4. Implement a stretch tree function that allocates a binary tree to stretch memory.
+5. Generate output in the specified format, using the provided parameters.
+
+### Key Requirements
+1. The program should be implemented in C++.
+2. The program should receive N as a command-line argument.
+3. Min_depth should be 4 and max_depth should be calculated based on the value of N.
+4. The tree node structure should include left and right child pointers.
+5. The program should implement stretch tree, long-lived tree, and bottom-up tree logic as described.
+6. The output format should be identical to the reference when validated with "diff output.txt reference.txt" for N=10.
+
+### Variable Values
+- Min_depth: 4
+- Max_depth: max(min_depth + 2, N)
+- Stretch_depth: max_depth + 1
+- Iterations: 1 << (max_depth - depth + min_depth)
+- N: The value received via command-line argument
+
+### Notes
+Ensure the generated code does not optimize away the work as specified, and the output matches the provided format exactly. Potential ambiguities might arise from interpretation of specific function names or data structures, so it's important to choose clear and descriptive variable names. The model is expected to produce well-structured C++ code that follows common coding practices and adheres to the specified requirements.

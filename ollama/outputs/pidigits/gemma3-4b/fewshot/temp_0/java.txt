@@ -1,0 +1,87 @@
+Okay, here's a prompt designed to guide an LLM towards generating Java code implementing the PIDIGITS problem, incorporating few-shot prompting and emphasizing structural extraction from examples:
+
+```text
+You are an expert software engineer tasked with creating a robust and efficient implementation of the PIDIGITS problem. This problem involves calculating digits of Pi using arbitrary precision arithmetic and outputting them in a specific format.  Your goal is to generate Java code that precisely matches the requirements outlined below, focusing on structural elements rather than detailed algorithmic content.
+
+**Problem Description:**
+
+Calculate the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons). Print these digits 10 per line with the running total of digits calculated. The output must be identical to the reference when validated with: `diff output.txt reference.txt for N=30`.
+
+**Algorithm Requirements:**
+
+*   Implement the Unbounded Spigot Algorithm (Gibbons) step-by-step, as described in the problem definition.
+*   Use `BigInteger` for arbitrary precision arithmetic to avoid overflow issues.
+*   Maintain state variables: `q`, `r`, `t`, and `k`. Initialize them appropriately.
+
+**Output Format:**
+
+*   10 digits per line.
+*   If the last line has fewer than 10 digits, pad with spaces on the right.
+*   Each line ends with a tab (`\t`), colon (`:`), and the running total of digits calculated (N).  For example: `3.1415926535\t:30`
+
+**Example Structure (Few-Shot Prompting):**
+
+Here are some examples demonstrating the desired code structure, focusing on argument parsing, state management, and output formatting. *Do not include any specific algorithm implementation details in your response.*  Focus solely on replicating this structural pattern.
+
+```java
+// Example 1:
+/*
+import java.util.Arrays;
+
+public class Example {
+    public static void main(String[] args) {
+        int n = (args.length > 0) ? Integer.parseInt(args[0]) : 1000;
+        System.out.println("Calculating Pi to " + n + " digits...");
+        // ... Your code here ...
+    }
+}
+*/
+
+// Example 2:
+/*
+import java.io.*;
+
+public class AnotherExample {
+    public static void main(String[] args) throws IOException {
+        int numDigits = Integer.parseInt(args[0]);
+        System.out.printf("%0" + numDigits + "f\t: %d\n", 0.0, numDigits);
+    }
+}
+*/
+
+// Example 3: (Illustrative - focus on structure)
+/*
+public class YetAnotherExample {
+    public static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        System.out.println("Pi digits:");
+        for (int i = 0; i < n; i++) {
+            // ... Your code here to calculate and print a digit ...
+        }
+    }
+}
+*/
+
+```
+
+**Your Task:**
+
+Generate the complete Java code for the PIDIGITS problem, adhering strictly to the output format and structural guidelines demonstrated in the examples above.  The code should:
+
+1.  Accept an integer `N` as a command-line argument.
+2.  Initialize the necessary state variables (`q`, `r`, `t`, `k`).
+3.  Implement the Unbounded Spigot Algorithm (Gibbons) using `BigInteger`.
+4.  Print the digits of Pi 10 per line, with the running total (N) at the end of each line.
+
+**Important:** Do not include any comments or explanations in your code. Only generate the Java code itself. Focus on replicating the provided examples' structure and argument handling.
+```
+
+**Explanation and Rationale for this Prompt:**
+
+*   **Few-Shot Prompting:** The inclusion of three example code snippets (even if incomplete) is crucial.  The LLM will learn to recognize the expected input/output format, how arguments are parsed, and the general structure of a loop or iterative process.
+*   **Emphasis on Structure:** The prompt repeatedly instructs the model *not* to include algorithm details. This forces it to focus on replicating the overall code layout rather than attempting to implement the Spigot Algorithm itself.  This is key for achieving the desired output.
+*   **Clear Instructions:** The problem description and requirements are clearly stated, reinforcing the task's objectives.
+*   **Specific Output Format:** The expected output format (10 digits per line, tab/colon/N) is explicitly defined to ensure consistency.
+*   **BigInteger Requirement:**  The prompt mandates the use of `BigInteger` for arbitrary precision arithmetic, addressing a critical aspect of the problem.
+
+This prompt should significantly increase the likelihood that the LLM generates code that closely matches the desired output and adheres to the specified structural requirements. Remember to test thoroughly!

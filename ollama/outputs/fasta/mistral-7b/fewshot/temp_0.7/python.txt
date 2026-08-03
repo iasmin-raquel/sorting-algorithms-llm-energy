@@ -1,0 +1,77 @@
+### Prompt Structure
+```python
+# The Computer Language Benchmarks Game
+# contributed by [You]
+
+import sys
+import random
+
+def generate_random_number():
+    # Implement the naive linear congruential generator using the given constants
+    IM = 139968
+    IA = 3877
+    IC = 29573
+    Seed = 42
+    Seed = (Seed * IA + IC) % IM
+    return Seed * (1 / IM)
+
+def generate_nucleotide(probabilities):
+    # Convert probabilities into cumulative probabilities and select a nucleotide using linear search
+    cumulative_probs = [0] + list(sum(prob[i:] for prob in zip(probabilities, probabilities[1:])) for i in range(len(probabilities)))
+    random_number = generate_random_number()
+    for index, probs in enumerate(cumulative_probs):
+        if random_number <= probs:
+            return alphabet[index]
+
+def generate_fasta(sequence, alphabet, name):
+    # Generate a FASTA formatted sequence using the given sequence and alphabet
+    length = len(sequence)
+    output = f">{name}\n"
+    for i in range(0, length, 60):
+        line = sequence[i:i+60]
+        output += line + "\n" if (i+60) < length else line + "\n" + "-\n"
+    return output
+
+def generate_dna_sequences(N):
+    # Generate the DNA sequences as specified in the problem description
+    ALU = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA" \
+          "TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT" \
+          "AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG" \
+          "GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG" \
+          "CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
+
+    IUB_alphabet = {"a": 0.27, "c": 0.12, "g": 0.12, "t": 0.27,
+                     "B": 0.02, "D": 0.02, "H": 0.02, "K": 0.02, "M": 0.02,
+                     "N": 0.02, "R": 0.02, "S": 0.02, "V": 0.02, "W": 0.02, "Y": 0.02}
+    Homo_sapiens_alphabet = {"a": 0.3029549426680, "c": 0.1979883004921,
+                              "g": 0.1975473066391, "t": 0.3015094502008}
+    alphabet = IUB_alphabet if "IUB" in sys.argv[1] else Homo_sapiens_alphabet
+
+    sequences = [
+        generate_fasta(ALU, alphabet, f">ONE Homo sapiens alu"),
+        generate_fasta("".join([generate_nucleotide(IUB_alphabet) for _ in range(N*3)]), IUB_alphabet, f">TWO IUB ambiguity codes"),
+        generate_fasta("".join([generate_nucleotide(Homo_sapiens_alphabet) for _ in range(N*5)]), Homo_sapiens_alphabet, f">THREE Homo sapiens frequency")
+    ]
+    return "\n".join(sequences)
+
+if __name__ == "__main__":
+    N = int(sys.argv[1])
+    output = generate_dna_sequences(N)
+    print(output)
+```
+
+### Key Requirements
+- Implement the provided naive linear congruential generator for generating random numbers
+- Use the given ALU sequence and IUB/Homo sapiens alphabets with their exact probabilities
+- Generate DNA sequences as specified in the problem description (repeat fasta, random fasta)
+- Output the sequences in the specified format (FASTA formatted sequences, line length, order)
+- Receive N as a command-line argument
+
+### Variable Values
+- IM = 139968
+- IA = 3877
+- IC = 29573
+- Seed = 42
+
+### Notes
+- The prompt enforces the use of the provided LCG for generating random numbers and ensures that the generated sequences do not cache the random number sequence.

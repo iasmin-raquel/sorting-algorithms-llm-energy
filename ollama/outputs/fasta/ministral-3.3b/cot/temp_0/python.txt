@@ -1,0 +1,99 @@
+### Prompt Structure
+
+Act as a Python developer tasked with implementing the FASTA sequence generation problem from the Computer Language Benchmarks Game. You must follow these instructions precisely:
+
+1. **Decompose the problem into clear steps**:
+   - Parse command-line argument `N` to determine output length.
+   - Define and precompute cumulative probabilities for both IUB and Homo sapiens alphabets.
+   - Implement a Linear Congruential Generator (LCG) with exact parameters:
+     ```
+     IM = 139968
+     IA = 3877
+     IC = 29573
+     Seed = 42
+     Max = 1.0 (for floating-point random number generation)
+     ```
+   - Generate sequences in three formats:
+     a) Repeat the ALU sequence `n*2` times, formatted as ">ONE Homo sapiens alu".
+     b) Randomly sample from IUB alphabet using cumulative probabilities, formatted as ">TWO IUB ambiguity codes" with `n*3` characters.
+     c) Randomly sample from Homo sapiens alphabet using cumulative probabilities, formatted as ">THREE Homo sapiens frequency" with `n*5` characters.
+
+2. **Implement the LCG without caching**:
+   - Generate a random number each time a nucleotide is selected.
+   - Use linear search on cumulative probabilities to select nucleotides.
+
+3. **Output format validation**:
+   - Ensure line length is exactly 60 characters (pad with spaces if necessary).
+   - Validate output against reference files for `N=1000` using `diff`.
+
+4. **Edge cases and robustness**:
+   - Handle invalid command-line arguments gracefully.
+   - Ensure no random number sequence is cached between selections.
+
+5. **Code structure**:
+   - Use functions to modularize:
+     - `generate_random_number(seed)` for LCG.
+     - `select_nucleotide(cumulative_probs, random_num)` for weighted selection.
+     - `generate_sequence(alphabet, n_chars)` for sequence generation.
+   - Write a main function that orchestrates the entire process.
+
+6. **Output file writing**:
+   - Write sequences to `output.txt` in the exact specified format (no extra lines or spaces).
+
+7. **Validation step**:
+   - After execution, run:
+     ```bash
+     diff output.txt reference.txt > /dev/null 2>&1
+     ```
+   - If this fails, the implementation is incorrect.
+
+### Key Requirements
+- Must use the provided LCG constants exactly as given.
+- No caching of random numbers between nucleotide selections.
+- Output must match the exact format (e.g., line length = 60 chars).
+- Use cumulative probabilities for weighted selection.
+- Validate output against reference files for `N=1000` using `diff`.
+- Handle command-line argument parsing robustly.
+
+### Variable Values
+#### ALU Sequence:
+```
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+```
+
+#### IUB Alphabet Probabilities (cumulative):
+| Nucleotide | Probability | Cumulative Probability |
+|------------|-------------|------------------------|
+| a          | 0.27        | 0.27                   |
+| c          | 0.12        | 0.39                   |
+| g          | 0.12        | 0.51                   |
+| t          | 0.27        | 0.78                   |
+| B/D/H/K/M/N/R/S/V/W/Y | 0.02 each   | Add sequentially (e.g., cumulative for B=0.39+0.02=0.41) |
+
+#### Homo sapiens Alphabet Probabilities (cumulative):
+| Nucleotide | Probability       | Cumulative Probability |
+|------------|-------------------|------------------------|
+| a          | 0.3029549426680   | 0.3029549426680        |
+| c          | 0.1979883004921   | 0.4999432431601        |
+| g          | 0.1975473066391   | 0.6974905497992        |
+| t          | 0.3015094502008   | 1.0                    |
+
+#### LCG Parameters:
+- `IM = 139968`
+- `IA = 3877`
+- `IC = 29573`
+- Seed starts at `42`.
+- Max value for random number: `1.0` (floating-point).
+
+### Notes
+- The IUB alphabet probabilities are distributed as follows:
+  - Each ambiguity code (`B`, `D`, etc.) has a probability of **0.02**.
+  - Their cumulative probabilities must be computed sequentially after the standard nucleotides (`a`, `c`, `g`, `t`).
+  - For example, cumulative for `B` = 0.39 (from `a+c+g`) + 0.02 = 0.41.
+- The Homo sapiens alphabet is strictly ordered by probability: `a < c < g < t`.
+- Ensure the LCG generates floating-point numbers in `[0, 1)` for correct cumulative probability matching.
+- If the model struggles with floating-point precision, hint it to round random numbers to 6 decimal places before comparison.

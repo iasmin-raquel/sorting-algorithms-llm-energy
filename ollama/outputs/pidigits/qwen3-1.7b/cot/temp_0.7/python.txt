@@ -1,0 +1,31 @@
+### Prompt Structure
+You are tasked with implementing the pidigits problem from the Computer Language Benchmarks Game in Python. The goal is to compute the first N digits of π using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic. The output must match the reference for N=30, with 10 digits per line, padding with spaces if necessary, and each line ending with "\t:N" where N is the input argument.
+
+### Key Requirements
+- Use Python's arbitrary precision integers (handled by native integers).
+- Receive N as a command-line argument.
+- Implement the algorithm steps exactly as described: next_step, extract(3), extract(4), and produce.
+- Perform both extract(3) and extract(4) for verification.
+- Output in the specified format: 10 digits per line, padding with spaces, and "\t:N" at the end of each line.
+- Ensure the algorithm runs until q > r is false, with proper handling of the loop.
+
+### Variable Values
+- Initial state: q = 1, r = 0, t = 1, k = 0.
+- Algorithm parameters: next_step, extract(3), extract(4), and produce are implemented as per the problem description.
+
+### Notes
+- The code must use Python's arbitrary precision integers, which are handled by native integers.
+- The output format requires precise formatting, including 10 digits per line and padding with spaces if the last line has fewer than 10 digits.
+- The algorithm steps must be implemented exactly as described, including the verification of extract(3) and extract(4) for correctness.
+
+### Prompt Structure
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+[A bullet list of the critical constraints the generated prompt must enforce]
+
+### Variable Values
+[The full list of algorithm parameters with their exact values]
+
+### Notes
+[Any relevant observations about this specific prompt, such as known risks of ambiguity or expected model behavior]

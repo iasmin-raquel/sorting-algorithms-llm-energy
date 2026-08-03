@@ -1,0 +1,114 @@
+---
+
+### **Prompt Structure**
+**Few-shot Prompt for Binary Tree Allocation Benchmark (CLBG Game):**
+
+---
+#### **Example 1: N-body Simulation (Structure Focus)**
+```cpp
+// [Structures/Functions for iteration, tuple-based traversal, and command-line args]
+int main(int argc, char* argv[]) {
+    // Parse input (e.g., `N = atoi(argv[1])`).
+    // Define body structures with gravitational forces.
+    // Use a loop to advance simulation steps (e.g., `for (i=1; i<=n; i++)`).
+
+    // Output format:
+    printf("%.9f\n");  // Example energy output.
+
+    return 0;
+}
+```
+**Key Observations:**
+- Command-line argument parsing (`argc/argv`).
+- Iterative loop with fixed steps.
+- Output formatted to `stdout` (e.g., floating-point values).
+
+---
+
+#### **Example 2: Binary Tree Allocation Benchmark**
+*(Replace the n-body logic with tree-specific operations.)*
+
+```cpp
+// [Tree node structure, allocation/deallocation logic]
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+int main(int argc, char* argv[]) {
+    // Parse N = atoi(argv[1]).
+    int min_depth = 4;
+    int max_depth = max(min_depth + 2, N);
+    int stretch_depth = max_depth + 1;
+
+    // --- Stretch Tree ---
+    Node* stretch_tree = allocate_perfect_binary_tree(stretch_depth);
+    printf("stretch tree of depth %d\tcheck: C\n", stretch_depth);
+
+    // --- Long-Lived Tree ---
+    Node* long_lived_tree = allocate_long_lived_tree(max_depth);
+    printf("long lived tree of depth %d\tcheck: C\n", max_depth);
+
+    // --- Bottom-Up Trees (Iterations) ---
+    for (int depth = min_depth; depth <= max_depth; depth += 2) {
+        int iterations = (1 << (max_depth - depth + min_depth));
+        for (int i = 0; i < iterations; ++i) {
+            Node* temp_tree = allocate_perfect_binary_tree(depth);
+            // Walk and deallocate (e.g., `free(temp_tree)`).
+        }
+        printf("I\t trees of depth %d\tcheck: C\n", depth);
+    }
+
+    return 0;
+}
+```
+**Key Observations:**
+- **Output Format:** Exactly match the specified format.
+- **Tree Operations:**
+  - Allocate/deallocate trees bottom-up (iterative loop).
+  - Use `max_depth` and `stretch_depth` as defined.
+  - Check memory validity after each operation.
+
+---
+
+### **Key Requirements**
+- **Language:** Pure C++ (no external libraries beyond `<cstdio>`, `<stdlib.h>`).
+- **Input Handling:**
+  - Parse `N` from command-line argument (`argv[1]`).
+  - Enforce `min_depth = 4` and compute `max_depth`/`stretch_depth`.
+- **Tree Logic:**
+  - Define a `Node` struct with `left/right` pointers.
+  - Implement:
+    1. **Stretch Tree:** Allocate/deallocate at `stretch_depth`.
+    2. **Long-Lived Tree:** Persist while other trees are allocated.
+    3. **Bottom-Up Trees:** Iterate over depths in steps of 2 (e.g., `4,6,...`).
+- **Output:**
+  - Print lines in exact format:
+    ```
+    stretch tree of depth D\tcheck: C
+    I\t trees of depth D\tcheck: C
+    long lived tree of depth D\tcheck: C
+    ```
+  - Use `\t` for tab separation.
+- **No Optimizations:** Explicit allocations/deallocations (e.g., `new`/`delete`).
+
+---
+
+### **Variable Values**
+| Parameter          | Value                     |
+|--------------------|---------------------------|
+| `min_depth`        | `4`                       |
+| `max_depth`        | `max(min_depth + 2, N)`   |
+| `stretch_depth`    | `max_depth + 1`           |
+| **Iterations Formula** | `(1 << (max_depth - depth + min_depth))` |
+
+---
+### **Notes**
+- **Ambiguity Risk:** The prompt avoids specifying exact allocation/deallocation logic (e.g., "walk the tree counting nodes") to encourage creative solutions. Ensure the LLM adheres to the **exact output format** and **no optimizations**.
+- **Edge Cases:**
+  - If `N < min_depth + 2`, `max_depth = N`; otherwise, use `min_depth + 2`.
+  - Use `1 << (x)` for bit-shifting in iteration calculations.
+- **Expected Behavior:** The LLM should generate code that:
+  - Compiles without warnings/errors.
+  - Matches the reference output for `N=10` (via `diff`).

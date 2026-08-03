@@ -1,0 +1,22 @@
+### Prompt Structure
+You are tasked with implementing the Fasta problem from the Computer Language Benchmarks Game in Java. The code must generate DNA sequences based on specified alphabets using a naive linear congruential generator (LCG) and produce output in a strict format. The code must handle three distinct scenarios: repeat fasta, random fasta for IUB, and random fasta for Homo sapiens. The output must match the reference when validated with `diff output.txt reference.txt` for N=1000.
+
+### Key Requirements
+- Use the exact LCG parameters: IM=139968, IA=3877, IC=29573, Seed=42.
+- Use the ALU sequence, IUB alphabet, and Homo sapiens alphabet with their exact probabilities.
+- Generate sequences of lengths 2*N, 3*N, and 5*N respectively.
+- Output must adhere to the specified format: 60-character line length, three sequences in order.
+- Ensure the LCG is not cached, and random numbers are generated on-the-fly.
+- The code must receive N as a command-line argument.
+
+### Variable Values
+- ALU sequence: "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
+- IUB probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02
+- Homo sapiens probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+- N: Command-line argument (e.g., 1000)
+
+### Notes
+- The LCG must generate random numbers without caching, ensuring each nucleotide selection is independent.
+- The cumulative probabilities for each alphabet must be calculated accurately to match the reference.
+- The output format must strictly follow line length (60 characters) and sequence counts (2*N, 3*N, 5*N).
+- The code must handle the three distinct alphabets and their probabilities, ensuring the generated sequences are identical to the reference when validated.

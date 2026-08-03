@@ -1,0 +1,35 @@
+### Prompt Structure
+Write a Python script that takes the number of sequences to generate (N) as a command-line argument. The script should implement three functions: `repeat_fasta`, `random_fasta_IUB`, and `random_fasta_Homo`.
+
+The `repeat_fasta` function generates DNA sequences by copying from the given ALU sequence, repeating it n*2 times.
+
+The `random_fasta_IUB` function generates DNA sequences using weighted random selection from the IUB alphabet with the provided probabilities. The output should be n*3 characters long.
+
+The `random_fasta_Homo` function generates DNA sequences using weighted random selection from the Homo sapiens alphabet with the provided probabilities. The output should be n*5 characters long.
+
+The script should produce output in the specified format, with each sequence having a line length of 60 characters.
+
+### Key Requirements
+- The script must be implemented in Python
+- The script should receive N as a command-line argument
+- The script must use the LCG with the exact constants defined for generating random numbers
+- The script must use the ALU sequence, IUB and Homo sapiens alphabets with their exact probabilities as defined
+- The script should not cache the random number sequence
+- The output format should match the one specified in the problem description
+
+### Variable Values
+```python
+IM = 139968
+IA = 3877
+IC = 29573
+Seed = 42
+
+ALU_sequence = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA\nTCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAA"
+IUB_alphabet = {'a': 0.27, 'c': 0.12, 'g': 0.12, 't': 0.27, 'B': 0.02, 'D': 0.02, 'H': 0.02, 'K': 0.02, 'M': 0.02,
+                'N': 0.02, 'R': 0.02, 'S': 0.02, 'V': 0.02, 'W': 0.02, 'Y': 0.02}
+Homo_sapiens_alphabet = {'a': 0.3029549426680, 'c': 0.1979883004921, 'g': 0.1975473066391, 't': 0.3015094502008}
+```
+
+### Notes
+- The script may need to convert the expected probability of each nucleotide into cumulative probabilities and match a random number against those cumulative probabilities to select each nucleotide using linear search, as described in the problem description.
+- The script should ensure that the output is identical to the reference when validated with `diff output.txt reference.txt` for N=1000.

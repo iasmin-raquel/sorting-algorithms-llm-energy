@@ -1,0 +1,32 @@
+[The actual prompt text that will be sent to the target LLM]
+
+I must implement the pidigits problem in C++ using the GMP library. The code must:
+1. Use the Unbounded Spigot Algorithm (Gibbons) with the specified steps
+2. Receive N as a command-line argument
+3. Calculate the first N digits of Pi with arbitrary precision arithmetic
+4. Output 10 digits per line, padding with spaces if needed
+5. Verify the output against the reference using extract(3) and extract(4)
+6. Follow the exact algorithm steps: next_step, extract, produce
+7. Ensure the output format matches: "\t:N" with running total
+
+Key Requirements:
+- Use GMP library for arbitrary precision arithmetic
+- Receive N via command-line argument
+- Implement next_step, extract, produce exactly as specified
+- Perform both extract(3) and extract(4) for verification
+- Output 10 digits per line with padding
+- Ensure the running total is printed in the specified format
+
+Variable Values:
+- N: 30 (as per reference validation)
+- Initial state: q=1, r=0, t=1, k=0
+- Algorithm steps: next_step, extract, produce in order
+- Output format: 10 digits per line, padding with spaces, "\t:N" with running total
+
+Notes:
+- The GMP library must be properly included and linked
+- The code must handle the algorithm steps precisely, including the loop for producing digits
+- The verification steps are critical to ensure output matches the reference
+- The output formatting requires careful handling of padding and line endings
+
+The LLM must generate a C++ implementation that strictly adheres to these specifications, including the exact algorithm steps and verification requirements.

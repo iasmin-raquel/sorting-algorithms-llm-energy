@@ -1,0 +1,58 @@
+### Prompt Structure
+
+Explain the problem in terms of binary tree construction and memory management to an LLM. Provide a step-by-step chain-of-thought reasoning that breaks down each required task:
+
+1. Start by defining the `TreeNode` structure with pointers for left and right children.
+2. Explain how to compute the parameters (`min_depth = 4`, `max_depth`, `stretch_depth`) based on input `N`.
+3. Describe the logic behind computing `iterations` using bit shifting to maximize bottom-up tree allocations.
+4. Outline the functions/methods needed:
+   - `createStretchTree`: Allocate a perfect binary tree until memory exhaustion (must stretch memory).
+   - `createLongLivedTree`: Create and retain a tree in long-lived memory while others are deallocated.
+   - `walkAndDeallocateTrees`: For each depth from min_depth to max_depth, allocate, traverse, and deallocate trees with given iterations.
+5. Detail the output format:
+   - Print `"stretch tree of depth D\t check: C"` for stretch tree.
+   - Print `"I\t trees of depth D\t check: C"` for iterative trees (with `C` indicating correctness).
+   - Print `"long lived tree of depth D\t check: C"` for the long-lived tree.
+6. Emphasize constraints:
+   - Memory allocations must be identical to Jeremy Zerfas's reference implementation.
+   - Ensure deallocation happens *after* all nodes are traversed.
+   - Use the exact command-line argument `N` for inputs, compute depth dynamically.
+7. Provide an example of how to test correctness using `diff` with reference files for `N=10`.
+
+---
+
+### Key Requirements
+- **Language**: Pure C++ (no external libraries like `iostream`, only basic includes).
+- **Exact Commands**: Must accept a command-line argument for `N`.
+- **Structures**: Define a `TreeNode` with `left` and `right` pointers.
+- **Memory Allocation Logic**:
+  - Stretch tree: Max depth (`stretch_depth = max_depth + 1`) to force memory allocation.
+  - Long-lived tree: Must persist after iterative trees are deallocated.
+  - Iterative trees: Uses bit-shifted iterations for each depth.
+- **Output Format**: Strictly follow the tab-separated `check:` markers (e.g., `\t check: C`).
+- **Allocation/Deallocation**: No optimization tricks; allocate nodes fully before traversing and deallocating.
+- **Validation**: Output must match reference files when validated with `diff output.txt reference.txt`.
+
+---
+
+### Variable Values
+- **Inputs**:
+  - Command-line argument: `-- N` (user-provided integer).
+- **Algorithm Parameters**:
+  - `min_depth = 4`
+  - `max_depth = max(min_depth + 2, N)`
+    Example: If `N=10`, `max_depth=6`.
+  - `stretch_depth = max_depth + 1` → For `N=10`, `stretch_depth=7`.
+  - Iterations:
+    `iterations = (1 << (max_depth - depth + min_depth))`
+    Example: For `depth=4, N=10`, `iterations=16`.
+
+---
+### Notes
+- **Precision**: The bit-shifted iterations ensure the exact number of tree creations per depth matches Jeremy Zerfas’s reference.
+- **Edge Cases**: Handle invalid `N` (e.g., non-integer or negative) by exiting gracefully or printing an error message.
+- **Testing**: Assume pre-existing `reference.txt` files for validation. The prompt should guide the LLM to structure code to match these outputs exactly, including edge cases like depth 4 for small `N`.
+- **Avoid Ambiguity**:
+  - Clarify that "stretch tree" must allocate until memory exhaustion (not just a single node).
+  - Emphasize that leaf nodes and interior nodes must use identical allocations—no optimizations or shortcuts.
+- **Model Behavior**: The LLM should generate a correct, non-optimized implementation with clear separation of functions for stretch trees, long-lived trees, and iterative walks.

@@ -1,0 +1,119 @@
+---
+
+### **Prompt Structure**
+You are tasked with writing a Java program that generates three DNA sequences based on the Fasta problem requirements in the Computer Language Benchmarks Game. The program must adhere strictly to the specifications below.
+
+#### **Step 1: Understand Requirements**
+- The command-line argument `N` determines sequence length scaling factors for output format:
+  - Line length = 60 characters.
+  - Three sequences generated, each scaled by `n*X` where `X` is defined per specification (2, 3, 5).
+- Use the given **random number generator** (LCG) without caching results:
+  ```
+  IM = 139968,
+  IA = 3877,
+  IC = 29573,
+  Seed = 42.
+  ```
+
+#### **Step 2: Break Sequence Generation into Cases**
+1. **Repeat FASTA (ALU sequence):**
+   - Copy the provided `ALU` string as many times as needed (`n*2`), aligned to 60-character lines.
+   - Example for `N=1`: Output should match:
+     ```
+     >ONE Homo sapiens alu
+     GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+     TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT...
+     ```
+   - Validate correctness with `diff` on output vs reference for `N=1000`.
+
+2. **Random FASTA (IUB/Homo sapiens alphabets):**
+   - Use cumulative probabilities from the given distributions:
+     IUB (`{a, c, g, t, B...Y}`) and Homo sapiens (`{a, c, g, t}`).
+   - For each nucleotide, generate a pseudo-random number via LCG to select via linear search against cumulative probabilities.
+   - Output must match scaled `n*3` for IUB and `n*5` for Homo sapiens.
+
+#### **Step 3: Generate Cumulative Probabilities**
+Convert the input probability distributions into cumulative distributions:
+```
+IUB Example:
+a=0.27 → cum[0] = 0.00
+c=0.12 → cum[1] = 0.27
+g=0.12 → cum[2] = 0.39
+t=0.27 → cum[3] = 0.66
+B=0.02 → cum[4] = 0.68, etc.
+```
+Validate by checking:
+`cum[i] + cum[i+1]` matches input probability for each entry.
+
+#### **Step 4: Implement Linear Search with LCG**
+For a generated random number `R` (0 ≤ R < 1):
+- Find the smallest index `i` where `cum[i] > R`.
+- Select nucleotide corresponding to `i`.
+
+**Edge Cases:**
+- If `R ≥ cum[last entry]`, return a fallback (e.g., `N` for IUB or `t` if probabilities sum to 1.0).
+
+#### **Step 5: Handle Output Formatting**
+- Each line must end with `\n`.
+- Exactly three lines per sequence group (e.g., ">ONE..." + two lines of 60 chars).
+- Use `System.out.println()` to ensure no trailing whitespace.
+
+---
+
+### **Key Requirements**
+- ✅ Language: **Pure Java** (no libraries beyond Java’s standard tools).
+- ✅ No cached random values.
+- ✅ Validates against reference sequences (`diff` compliance).
+- ✅ Scales output to `n*X` characters per sequence group.
+- ✅ **Strict adherence** to LCG constants and IUB/Homo sapiens definitions.
+
+---
+
+### **Variable Values**
+#### **LCG Constants (Exact)**
+| Name | Value  |
+|------|--------|
+| IM   | `139968` |
+| IA   | `3877`   |
+| IC   | `29573`  |
+
+#### **ALU Sequence** (`GGCC...AAAATACAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAG...`)
+*(Full string provided in problem description.)*
+
+#### **IUB Alphabet + Probabilities**
+| Code | Probability |
+|------|-------------|
+| a    | 0.27        |
+| c    | 0.12        |
+| g    | 0.12        |
+| t    | 0.27        |
+| B    | 0.02        |
+| D    | 0.02        |
+| H    | 0.02        |
+| K    | 0.02        |
+| M    | 0.02        |
+| N    | 0.02        |
+| R    | 0.02        |
+| S    | 0.02        |
+| V    | 0.02        |
+| W    | 0.02        |
+| Y    | 0.02        |
+
+#### **Homo sapiens Alphabet + Probabilities**
+| Nucleotide | Probability                |
+|------------|----------------------------|
+| a          | `0.3029549426680`         |
+| c          | `0.1979883004921`         |
+| g          | `0.1975473066391`         |
+| t          | `0.3015094502008`         |
+
+---
+
+### **Notes**
+- **Ambiguity Risk:** If cumulative probabilities sum to <1.0 (e.g., IUB), assume probabilities default to 0 for missing entries (validates against edge cases).
+- **LCG Seed Handling:** Initialize `Seed = 42` at program start; regenerate randomly each time a nucleotide is selected.
+- **Testing Strategy:**
+  - Test `N=1` manually to verify repetition.
+  - Validate randomness via `diff` on output vs reference for `N=1000`.
+- **Output Formatting:** Ensure no trailing spaces/line breaks (use `System.out.print()` judiciously).
+- **Model Behavior:** Prefer linear search over binary for simplicity, though optimize if the LLM struggles with large cumulative arrays.

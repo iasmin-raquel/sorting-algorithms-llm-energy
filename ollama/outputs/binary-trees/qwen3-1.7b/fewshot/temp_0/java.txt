@@ -1,0 +1,57 @@
+### Prompt Structure
+You are to implement the Binary Trees problem from the Computer Language Benchmarks Game in Java. Your task is to:
+1. Define a `TreeNode` structure with `left` and `right` child pointers.
+2. Allocate a "stretch tree" of depth `D` (where `D = max_depth + 1`), check it exists, and deallocate it.
+3. Allocate a "long-lived tree" that persists even when other trees are deallocated.
+4. Allocate and walk many "bottom-up" trees (depth `D`), count nodes, and deallocate them.
+5. Ensure the long-lived tree is still valid after all allocations.
+
+### Key Requirements
+- Use `min_depth = 4`, `max_depth = max(4, N)`, `stretch_depth = max_depth + 1`.
+- `iterations = 1 << (max_depth - depth + min_depth)` for each depth from `min_depth` to `max_depth` (step 2).
+- The stretch tree must be allocated, checked, and deallocated.
+- The long-lived tree must be allocated and checked.
+- Bottom-up trees must be allocated, walked, and deallocated.
+- Output must match the reference for `N=10` (i.e., `max_depth = 10`).
+
+### Variable Values
+- `min_depth = 4`
+- `max_depth = max(4, N)` (N is provided as a command-line argument)
+- `stretch_depth = max_depth + 1`
+- `iterations = 1 << (max_depth - depth + min_depth)` for each depth from `min_depth` to `max_depth` (step 2)
+- `N` is received as a command-line argument
+
+### Notes
+- The output must be identical to the reference when validated with `diff output.txt reference.txt` for `N=10`.
+- The long-lived tree must be checked for existence after all allocations.
+- Leaf nodes must be the same as interior nodes, with identical memory allocation.
+- Do not optimize away the work (e.g., do not reduce allocations/deallocations).
+
+### Generated Prompt
+You are to implement the Binary Trees problem from the Computer Language Benchmarks Game in Java. Your task is to:
+1. Define a `TreeNode` structure with `left` and `right` child pointers.
+2. Allocate a "stretch tree" of depth `D` (where `D = max_depth + 1`), check it exists, and deallocate it.
+3. Allocate a "long-lived tree" that persists even when other trees are deallocated.
+4. Allocate and walk many "bottom-up" trees (depth `D`), count nodes, and deallocate them.
+5. Ensure the long-lived tree is still valid after all allocations.
+
+### Key Requirements
+- Use `min_depth = 4`, `max_depth = max(4, N)`, `stretch_depth = max_depth + 1`.
+- `iterations = 1 << (max_depth - depth + min_depth)` for each depth from `min_depth` to `max_depth` (step 2).
+- The stretch tree must be allocated, checked, and deallocated.
+- The long-lived tree must be allocated and checked.
+- Bottom-up trees must be allocated, walked, and deallocated.
+- Output must match the reference for `N=10` (i.e., `max_depth = 10`).
+
+### Variable Values
+- `min_depth = 4`
+- `max_depth = max(4, N)` (N is provided as a command-line argument)
+- `stretch_depth = max_depth + 1`
+- `iterations = 1 << (max_depth - depth + min_depth)` for each depth from `min_depth` to `max_depth` (step 2)
+- `N` is received as a command-line argument
+
+### Notes
+- The output must be identical to the reference when validated with `diff output.txt reference.txt` for `N=10`.
+- The long-lived tree must be checked for existence after all allocations.
+- Leaf nodes must be the same as interior nodes, with identical memory allocation.
+- Do not optimize away the work (e.g., do not reduce allocations/deallocations).

@@ -1,0 +1,55 @@
+### Prompt Structure
+You are an expert Java code generator tasked with creating a complete and runnable Java program to implement the Binary Trees problem from the Computer Language Benchmarks Game. This problem requires generating multiple binary trees, including stretched trees, long-lived trees, and bottom-up trees, to thoroughly test memory allocation and deallocation behavior. The goal is to produce output identical to the reference when validated using `diff output.txt reference.txt`.
+
+Here's a breakdown of the task and the expected code structure:
+
+**1. Problem Understanding:**
+The core requirement is to create perfect binary trees (at minimum the number of allocations of Jeremy Zerfas's C program) before deallocation, without any optimizations. This means allocating nodes for the entire tree structure upfront, even if not all levels are immediately used. Leaf nodes must have identical memory allocation as interior nodes.
+
+**2. Code Structure and Functionality:**
+   - **Node Definition:** Define a `TreeNode` class with `left` and `right` child pointers.
+   - **Command Line Argument:** The program should accept an integer `N` as a command-line argument, which determines the number of iterations for tree generation and testing.
+   - **Parameters:**
+     - `min_depth = 4` (This is fixed)
+     - `max_depth = max(min_depth + 2, N)` (Calculate this based on `N`)
+     - `stretch_depth = max_depth + 1` (Calculate this based on `max_depth`)
+     - `iterations = 1 << (max_depth - depth + min_depth)` (This will be calculated within the loop)
+   - **Stretch Tree:** Generate a binary tree of a specific depth (`stretch_depth`).
+   - **Long-Lived Tree:** Allocate and maintain a long-lived binary tree that survives all other allocations and deallocations. This tree should remain consistently accessible throughout the program's execution.
+   - **Bottom-Up Trees:** Create multiple binary trees, starting from smaller depths and increasing them in steps of 2, up to `max_depth`.  For each depth 'D', allocate a tree, walk it counting nodes, deallocate the tree, and repeat `iterations` times.
+   - **Node Counting & Deallocation:** Implement logic to count nodes within each allocated tree during traversal. Ensure proper deallocation of each tree after use.
+   - **Output Formatting:** Generate output in the specified format:  "depth\t trees of depth D\t check: C".
+
+**3. Step-by-Step Reasoning & Code Generation:**
+
+*   **Initialization:** Start by setting `N` from the command line arguments. Calculate `min_depth`, `max_depth`, and `stretch_depth`.
+*   **Looping:** Iterate through depths from `min_depth` to `max_depth` with a step of 2. For each depth, calculate the number of iterations per tree based on the formula: `iterations = 1 << (max_depth - depth + min_depth)`.
+*   **Tree Allocation & Deallocation:** Inside the loop:
+    *   Allocate a binary tree of the current depth.
+    *   Traverse the tree, counting the nodes.
+    *   Deallocate the tree.
+*   **Long-Lived Tree Maintenance:** Ensure the long-lived tree is always accessible and remains valid after allocations and deallocations.
+*   **Output Generation:**  Generate the output string for each depth using the calculated values and the specified format.
+
+Now, implement the complete Java program following these guidelines.  The code must be executable and produce the exact expected output when run with a specific `N` value.
+
+### Key Requirements
+*   Java implementation only.
+*   Command-line argument parsing for 'N'.
+*   Correct calculation of `min_depth`, `max_depth`, and `stretch_depth`.
+*   Proper definition of the `TreeNode` class (left/right child pointers).
+*   Implementation of stretch tree, long-lived tree, and bottom-up tree generation.
+*   Accurate node counting and deallocation for each tree.
+*   Output formatting to match the specified format exactly.
+*   The code must be fully functional and produce identical output as the reference file when validated with `diff output.txt reference.txt`.
+
+### Variable Values
+- `min_depth = 4`
+- `max_depth = max(4 + 2, N)`  // This will depend on the provided value of 'N'
+- `stretch_depth = max_depth + 1` // This will depend on the provided value of 'N'
+- `iterations = 1 << (max_depth - depth + min_depth)` (Calculated within the loop)
+- `N` = Command Line Argument
+
+### Notes
+*   The most critical aspect is creating fully allocated trees before any deallocation and maintaining the long-lived tree consistently.
+*   Pay close attention to memory management to avoid leaks or incorrect node counts. Thorough testing with different values of 'N' is recommended.  Ensure that the output generated matches the expected format precisely. Consider using a debugger to trace the execution and verify the number of nodes allocated and deallocated. The value of N will affect max_depth, which in turn affects the computation of iterations.

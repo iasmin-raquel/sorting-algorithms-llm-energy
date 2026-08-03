@@ -1,0 +1,29 @@
+### Prompt Structure
+You are to implement the Fasta problem from the Computer Language Benchmarks Game in Java. The task involves generating DNA sequences using specific algorithms and parameters. The code must:
+- Generate sequences by repeating a given DNA sequence (repeat fasta).
+- Generate sequences by weighted random selection from alphabets (random fasta).
+- Use a naive linear congruential generator (LCG) with exact constants.
+- Output in the specified format with three sequences of different lengths.
+- Validate against a reference using `diff output.txt reference.txt` for N=1000.
+
+### Key Requirements
+- Use the LCG with IM=139968, IA=3877, IC=29573, Seed=42.
+- Generate sequences based on ALU, IUB, and Homo sapiens alphabets with exact probabilities.
+- Output three sequences in order: 
+  1. ">ONE Homo sapiens alu" followed by repeat fasta of ALU with n*2 characters.
+  2. ">TWO IUB ambiguity codes" followed by random fasta of IUB with n*3 characters.
+  3. ">THREE Homo sapiens frequency" followed by random fasta of Homo sapiens with n*5 characters.
+- Ensure the output format matches the specified line length (60 characters) and sequence lengths.
+- Do not cache the random number sequence.
+
+### Variable Values
+- ALU sequence: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+- IUB alphabet probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02
+- Homo sapiens alphabet probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+- N: command-line argument (e.g., 1000)
+- LCG constants: IM=139968, IA=3877, IC=29573, Seed=42
+
+### Notes
+- The LCG must be implemented naively without caching, ensuring each random number is generated sequentially.
+- The code must handle the exact probabilities for each alphabet and generate sequences of the specified lengths.
+- The output must be validated using `diff output.txt reference.txt` for N=1000, ensuring the generated sequences match the reference.

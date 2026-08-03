@@ -1,19 +1,21 @@
 ### Prompt Structure
-Write a Java program that takes an N (integer) as command-line argument and generates the Mandelbrot set in PBM P4 format. The program should use 50 iterations and an escape threshold of 4.0, plotting the region real in [-1.5, 0.5], imaginary in [-1.0, 1.0]. The output should be written byte-by-byte with MSB first, zero-padded per row.
+Write a Java program that takes N as a command-line argument and generates the Mandelbrot set in PBM P4 format. The program should perform 50 iterations with an escape threshold of lim = 2.0 * 2.0, using squared magnitude to avoid computing square roots. The output should be identical to the reference when validated with `cmp` for N=200.
 
 ### Key Requirements
 - The program must be implemented in Java
-- It should receive N as a command-line argument via Integer.parseInt(args[0])
-- Use exactly 50 iterations and escape threshold 4.0
+- It should receive N as a command-line argument
+- Use exactly 50 iterations and escape threshold lim = 2.0 * 2.0
 - Write PBM P4 header and binary pixel data to stdout
+- Produce output validatable with `cmp` for N=200
 
 ### Variable Values
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region real: [-1.5, 0.5]
-- Plot region imaginary: [-1.0, 1.0]
-- Output format: PBM P4
-- Bit packing: MSB first, zero-padded per row
+- Escape threshold (squared): lim = 2.0 * 2.0
+- A point belongs to the set if |Z|² <= lim after all iterations
+- Use squared magnitude (zr*zr + zi*zi) to avoid computing square roots
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- Output format: PBM P4 with pixel packing of 8 per byte, MSB first
 
 ### Notes
-Ensure the output is identical to the reference when validated with "cmp output.pbm reference.pbm" for N=200. Be aware that the model may generate code that does not strictly adhere to these constraints but still produces correct results.
+The program should handle the case where N is not divisible by 8 by padding the last byte of each row with zeros on the right. The output should only contain the header and binary pixel data, without any additional comments or formatting.

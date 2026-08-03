@@ -1,130 +1,58 @@
 ### Prompt Structure
 ```text
-You are an expert Python programmer specializing in image generation and computer science benchmarks. You will implement the Mandelbrot set problem from the Computer Language Benchmarks Game.
+You are an expert Python code generator specializing in computer science problems. Your task is to generate a complete Python program that implements the Mandelbrot set using the specified parameters and output format. The program should take an integer `N` as a command-line argument, representing the size of the bitmap.
 
-Here are three examples demonstrating the desired output structure:
+Here are three examples demonstrating the expected input/output structure:
 
-Example 1:
+**Example 1:**
 ```python
-# The Computer Language Benchmarks Game
-from math import sqrt
-import sys
-
-PI = 3.14159265358979323
-SOLAR_MASS = 4 * PI * PI
-DAYS_PER_YEAR = 365.24
-
-class Body:
-  def __init__(self, x, y, z, vx, vy, vz, mass):
-    self.x = x; self.y = y; self.z = z
-    self.vx = vx; self.vy = vy; self.vz = vz
-    self.mass = mass
-
-def offset_momentum(bodies): ...
-def energy(bodies): ...
-def advance(bodies, dt): ...
-
-def nbody(n):
-  bodies = [ Body(...), ... ]
-  offset_momentum(bodies)
-  print("%.9f" % energy(bodies))
-  for i in range(n):
-    advance(bodies, 0.01)
-  print("%.9f" % energy(bodies))
-
-if __name__ == '__main__':
-  main(int(sys.argv[1]))
+# Example with N=200 (This is just for demonstration - your code will use different parameters)
+# ... (Your Mandelbrot set code here) ...
+# Output will be a PBM P4 image file.
 ```
 
-Example 2:
+**Example 2:**
 ```python
-# The Computer Language Benchmarks Game
-from math import sqrt
-import sys
-
-PI = 3.14159265358979323
-SOLAR_MASS = 4 * PI * PI
-DAYS_PER_YEAR = 365.24
-
-class Body:
-  def __init__(self, x, y, z, vx, vy, vz, mass):
-    self.x = x; self.y = y; self.z = z
-    self.vx = vx; self.vy = vy; self.vz = vz
-    self.mass = mass
-
-def offset_momentum(bodies): ...
-def energy(bodies): ...
-def advance(bodies, dt): ...
-
-def nbody(n):
-  bodies = [ Body(...), ... ]
-  offset_momentum(bodies)
-  print("%.9f" % energy(bodies))
-  for i in range(n):
-    advance(bodies, 0.01)
-  print("%.9f" % energy(bodies))
-
-if __name__ == '__main__':
-  main(int(sys.argv[1]))
+# Another example demonstrating the output format
+# ... (Your Mandelbrot set code here) ...
+# Output will be a PBM P4 image file.
 ```
 
-Example 3:
+**Example 3:**
 ```python
-# The Computer Language Benchmarks Game
-from math import sqrt
-import sys
-
-PI = 3.14159265358979323
-SOLAR_MASS = 4 * PI * PI
-DAYS_PER_YEAR = 365.24
-
-class Body:
-  def __init__(self, x, y, z, vx, vy, vz, mass):
-    self.x = x; self.y = y; self.z = z
-    self.vx = vx; self.vy = vy; self.vz = vz
-    self.mass = mass
-
-def offset_momentum(bodies): ...
-def energy(bodies): ...
-def advance(bodies, dt): ...
-
-def nbody(n):
-  bodies = [ Body(...), ... ]
-  offset_momentum(bodies)
-  print("%.9f" % energy(bodies))
-  for i in range(n):
-    advance(bodies, 0.01)
-  print("%.9f" % energy(bodies))
-
-if __name__ == '__main__':
-  main(int(sys.argv[1]))
+# A final example to illustrate the process
+# ... (Your Mandelbrot set code here) ...
+# Output will be a PBM P4 image file.
 ```
 
-Now, implement the Mandelbrot set problem as described below:
+Now, generate the Python code for the Mandelbrot set implementation based on the following requirements:
 
-Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap. Write output byte-by-byte in portable bitmap format (PBM P4). The output must be identical to the reference when validated with: cmp output.pbm reference.pbm for N=200.
+*   **Maximum iterations:** 50
+*   **Escape threshold:** lim = 2.0 * 2.0
+*   **Coordinate mapping:** real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+*   **Output format:** PBM P4 (header: "P4\n" followed by "N N\n", packed 8 bits per pixel, MSB first).  Pad the last byte of each row with zeros if N is not divisible by 8. Write only the header and binary pixel data to stdout.
+*   **Argument:** The program should take an integer `N` as a command-line argument.
+*   **Algorithm:** Use squared magnitude (zr\*zr + zi\*zi) to avoid computing square roots.  Z = Z\*Z + C, starting from Z = (0, 0).
 
-Maximum iterations: 50
-Escape threshold: 4.0
-Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-Output: PBM P4 format, bits packed MSB first, zero-padded per row
-
+```python
+# Your code here
+```
 ```
 
 ### Key Requirements
-*   The code must be written in Python.
-*   It should receive the size of the bitmap (N) as a command-line argument via `int(sys.argv[1])`.
-*   It must use exactly 50 iterations and an escape threshold of 4.0.
-*   It needs to generate PBM P4 header text and binary pixel data to stdout. The output should be byte-by-byte, packed MSB first, with zero padding per row.
+*   The generated Python code must be executable and produce the correct Mandelbrot set image in PBM P4 format.
+*   The code must take an integer `N` as a command-line argument.
+*   It must use exactly 50 iterations and the escape threshold lim = 2.0 * 2.0.
+*   The output to stdout must be formatted correctly according to the PBM P4 specification (header + binary pixel data).
+*   The code should efficiently calculate the Mandelbrot set using squared magnitude to avoid square root computations.
+*   The coordinate mapping should be implemented accurately.
 
 ### Variable Values
-*   `N`: Command-line argument representing the bitmap size (integer).
+*   `N`: Integer representing the size of the bitmap (command-line argument)
+*   `lim`: 2.0 * 2.0
 *   `max_iterations`: 50
-*   `escape_threshold`: 4.0
-*   `real_min`: -1.5
-*   `real_max`: 0.5
-*   `imag_min`: -1.0
-*   `imag_max`: 1.0
+*   `real(C)`: `2.0 * x / N - 1.5`
+*   `imag(C)`: `2.0 * y / N - 1.0`
 
 ### Notes
-*   Focus on the structure and output format of the example code provided.  Do not include any unnecessary comments or explanations in the generated code. The goal is to produce a functional implementation based solely on the examples.
+The prompt uses few-shot prompting to guide the LLM towards generating code that matches the desired structure and functionality. The examples provided are intentionally simple and focus on demonstrating the output format rather than the core Mandelbrot set algorithm.  The LLM should be able to understand the overall task based on these examples and generate a complete, executable Python program. It's crucial that the generated code adheres strictly to the specified parameters and output format to ensure compatibility with the validation process (cmp).

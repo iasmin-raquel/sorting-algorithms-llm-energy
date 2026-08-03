@@ -1,0 +1,78 @@
+### **Prompt Structure**
+```
+Explain how to implement a Java program for the Binary Trees problem in the Computer Language Benchmarks Game using command-line input `N`. The code must replicate Jeremy Zerfas's C implementation by exactly mimicking its memory allocation behavior while producing output in the specified format.
+
+**Chain-of-Thought Reasoning:**
+1. **Problem Decomposition:**
+   - First, define a binary tree node structure in Java with:
+     ```java
+     class TreeNode {
+         TreeNode left;
+         TreeNode right;
+     }
+     ```
+   - Compute parameters dynamically based on `N` (provided via command-line):
+     - `min_depth = 4`
+     - `max_depth = max(min_depth + 2, N)`
+     - `stretch_depth = max_depth + 1`
+   - Allocate:
+     a. A **stretched tree** (deepest first) to verify memory allocation correctness.
+     b. A **long-lived tree**, which persists while other trees are allocated/deallocated (e.g., in a loop).
+     c. Bottom-up trees for each `depth` from `min_depth` to `max_depth` in steps of 2, counting allocations during traversal.
+   - Output must match the exact format specified:
+     ```
+     stretch tree of depth D\t check: C
+     For each depth [min_depth..max_depth] (step 2):
+       I\t trees of depth D\t check: C
+     long lived tree of depth D\t check: C
+     ```
+
+2. **Implementation Steps:**
+   - **Allocation Logic:** Use `iterations = 1 << (max_depth - depth + min_depth)` to ensure minimal allocations.
+   - **Tree Construction:** Prefer recursive allocation for clarity, but avoid optimizations (e.g., hoisting).
+   - **Deallocation Verification:** After each tree’s traversal, check its existence using memory checks (e.g., `System.gc()` or profiling tools).
+   - **Output Handling:** Print the results in a single file with `\t` separators.
+
+3. **Edge Cases:**
+   - If `N < min_depth + 2`, adjust `max_depth` to `min_depth`.
+   - Ensure leaf nodes and interior nodes use identical memory allocations (no hidden optimizations).
+```
+
+---
+
+### **Key Requirements**
+- **Language:** Java (standard JDK, no third-party libraries unless specified).
+- **Input Handling:**
+  - Parse command-line argument `N` and exit if invalid.
+- **Memory Allocation:**
+  - Must match Jeremy Zerfas’s C program *literally* in terms of allocations (no shortcuts like object pooling or manual memory control beyond explicit deallocation).
+- **Output Format:** Exactly:
+  ```
+  stretch tree of depth D\t check: C
+  I\t trees of depth D\t check: C (for each valid `depth` from `min_depth` to `max_depth`)
+  long lived tree of depth D\t check: C
+  ```
+  - Replace `D`, `C` with computed values.
+- **Node Structure:** Only `left`/`right` pointers; no additional fields.
+- **Profiling Requirement:** Verify memory correctness *before* deallocation using either:
+  - Runtime checks (e.g., assert node existence after dealloc).
+  - Java’s garbage collection + profiling tools (if allowed).
+
+---
+
+### **Variable Values**
+| Parameter          | Value                          | Calculation/Note                                                                 |
+|--------------------|-------------------------------|-------------------------------------------------------------------------------|
+| `N`                | Command-line argument (`int`)   | Must be validated (e.g., `>= min_depth`).                                    |
+| `min_depth`        | 4                             | Hardcoded constant for the problem.                                          |
+| `max_depth`        | `max(min_depth + 2, N)`       | Clamp to `N` if larger than `min_depth + 2`.                                  |
+| `stretch_depth`    | `max_depth + 1`               | Used for the deepest tree allocation.                                        |
+| `iterations`       | `1 << (max_depth - depth + min_depth)` | Computed per depth in bottom-up trees.                                      |
+
+---
+
+### **Notes**
+- **Ambiguity Risk:** The "check" (`C`) in output refers to an implicit validation via memory existence post-deallocation. Clarify this to the LLM as a placeholder (e.g., `true` if verified).
+- **Performance Focus:** Avoid compiler optimizations (e.g., `-Xlint:unchecked` if needed). Explicit allocation/deallocation paths are required.
+- **Testing:** Require validation against `diff output.txt reference.txt` for `N=10`. Output must match exactly, including whitespace and `\t`.
+- **Model Behavior:** Enforce no assumptions about JVM specifics (e.g., avoid platform-dependent code like `Runtime.exec`).

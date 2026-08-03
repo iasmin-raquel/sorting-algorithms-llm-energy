@@ -1,0 +1,23 @@
+[The actual prompt text that will be sent to the target LLM]
+
+Key Requirements:
+- Define a tree node structure with left and right child pointers.
+- Allocate a stretch tree of depth D, check existence, and deallocate.
+- Allocate a long-lived tree that persists while other trees are allocated/deallocated.
+- Allocate, walk, and deallocate many bottom-up trees (each depth from min_depth to max_depth step 2).
+- Ensure the long-lived tree exists after all allocations.
+- Output in the exact format: "stretch tree of depth D\t check: C", "I\t trees of depth D\t check: C", "long lived tree of depth D\t check: C".
+- Use min_depth = 4, max_depth = max(6, N), stretch_depth = max_depth + 1, iterations = 1 << (max_depth - depth + min_depth) (depth is the current depth being processed).
+
+Variable Values:
+- N: received via command-line argument (e.g., 10)
+- min_depth: 4
+- max_depth: max(6, N)
+- stretch_depth: max_depth + 1
+- iterations: 1 << (max_depth - depth + min_depth) (depth is the current depth being processed)
+
+Notes:
+- The code must not optimize away work, ensuring all allocations and deallocations are performed as specified.
+- The output must match the reference for N=10, with exact depth ranges and tree structures.
+- The stretch tree must be allocated, checked to exist, and deallocated, while the long-lived tree must remain alive.
+- The bottom-up trees must be allocated, walked, and deallocated, with their node counts verified.

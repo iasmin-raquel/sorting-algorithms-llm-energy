@@ -1,0 +1,63 @@
+### Prompt Structure
+Okay, let's generate a Chain-of-Thought prompt to guide an LLM in creating Java code for the Fasta problem from the Computer Language Benchmarks Game. The goal is to produce precisely formatted output based on specified sequences and probabilities, utilizing a linear congruential generator (LCG) for random number generation without caching.
+
+**Prompt:**
+
+"You are an expert Java programmer tasked with implementing a solution to the Fasta problem described in the Computer Language Benchmarks Game. Your task involves generating three DNA-like sequences – one using the ALU sequence, another using the IUB alphabet with ambiguity codes, and a third utilizing Homo sapiens nucleotide frequencies – based on a given input size N.  The output must conform to a strict format:
+
+1.  **Repeat Fasta (ALU):** Generate a sequence of length 2N characters by repeating the ALU sequence.
+2.  **IUB Ambiguity Codes:** Generate a sequence of length 3N characters using the IUB alphabet and its specified probabilities.
+3.  **Homo Sapiens Frequencies:** Generate a sequence of length 5N characters using the Homo sapiens nucleotide frequencies.
+
+The generated output must be precisely formatted as follows:
+
+*   Line Length: 60 characters
+*   Sequence Headers: Each sequence should start with a header line in the format '>ONE Homo sapiens alu', '>TWO IUB ambiguity codes', and '>THREE Homo sapiens frequency'.
+*   Sequence Content: The following sequence content should immediately follow each header.
+    *   ALU: The repeated ALU sequence, padded to length 2N.
+    *   IUB:  The randomly generated IUB sequence of length 3N.
+    *   Homo sapiens: The randomly generated Homo sapiens sequence of length 5N.
+
+**Algorithm Details & Constraints:**
+
+You *must* implement the following algorithm precisely:
+
+1.  **Probability Cumulative Calculation:** For each alphabet (ALU, IUB, Homo sapiens), calculate cumulative probabilities for each nucleotide based on their provided frequencies. Store these in an array or similar data structure to enable efficient random selection.
+2.  **Linear Congruential Generator (LCG):** Use the following LCG constants to generate a pseudo-random number:
+    *   IM = 139968
+    *   IA = 3877
+    *   IC = 29573
+    *   Seed = 42
+    *   `Random(Max)` function:  `Seed = (Seed * IA + IC) modulo IM; return Max * Seed / IM` – Do not cache the random number sequence. Calculate a new seed each time you need to generate a random number.
+3.  **Nucleotide Selection:** Use the `Random()` function to select nucleotides for each sequence according to their respective cumulative probability distributions.  This selection process should be repeated N times for each sequence length.
+4. **Command-Line Argument**: The code must accept an integer 'N' as a command-line argument representing the desired length of the sequences.
+
+**Specifically, use these exact values:**
+
+*   ALU Sequence: `GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA...` (The full ALU sequence)
+*   IUB Alphabet and Probabilities:  a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+*   Homo sapiens Alphabet and Probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+*   The generated output must be identical to the reference when validated using `diff output.txt reference.txt for N=1000`.
+
+Now, begin by outlining the key steps you would take to implement this solution in Java.  Describe your approach step-by-step, detailing how you'd handle probability calculations, random number generation, and sequence construction before finally providing a complete Java code snippet."
+
+### Key Requirements
+*   Java implementation is mandatory.
+*   Command-line argument parsing for `N`.
+*   Correct use of the LCG with specified constants and no caching.
+*   Accurate implementation of cumulative probability calculations for each alphabet.
+*   Precise sequence generation according to the specified lengths and input data.
+*   Output formatting must exactly match the given requirements (line length, headers, and content).
+*   No caching of the random number generator's state.
+
+### Variable Values
+ALU Sequence: `GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA...`
+IUB Alphabet & Probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+Homo sapiens Alphabet & Probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+IM = 139968
+IA = 3877
+IC = 29573
+Seed = 42
+
+### Notes
+This prompt is designed to elicit a precise and complete Java solution, emphasizing the iterative process of breaking down the problem into smaller steps. The explicit constraints are crucial for ensuring that the LLM generates code compliant with all requirements, particularly regarding randomness and output formatting.  The emphasis on "thinking out loud" within the Chain-of-Thought framework should help guide the model toward a robust solution.

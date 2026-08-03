@@ -1,0 +1,34 @@
+[The actual prompt text that will be sent to the target LLM]
+
+### Key Requirements
+- Define a tree node structure with left and right child pointers
+- Allocate a stretch tree of depth D (D = max_depth + 1) and ensure it exists
+- Allocate a long-lived tree that persists while other trees are allocated and deallocated
+- Allocate, walk, and deallocate bottom-up trees (depth from min_depth to max_depth, step 2)
+- Check that the long-lived tree still exists after all allocations
+- Output in the exact format: "stretch tree of depth D\t check: C" for each depth, "long lived tree of depth D\t check: C"
+
+### Variable Values
+- min_depth = 4
+- max_depth = max(6, N)  (N received via command-line argument)
+- stretch_depth = max_depth + 1
+- iterations = 1 << (max_depth - depth + min_depth)  (depth varies from min_depth to max_depth, step 2)
+- N = command-line argument
+
+### Notes
+- The code must not optimize away the work, so all allocations and deallocations must be explicitly handled
+- The stretch tree must be allocated, checked to exist, and deallocated
+- The long-lived tree must be allocated and checked to exist after all other allocations
+- The output must match the reference when validated with diff output.txt reference.txt for N=10
+- The node structure must be identical for leaf and interior nodes
+- The bottom-up trees must be allocated, walked, and deallocated in sequence
+
+### Prompt Structure
+The LLM must generate Python code that:
+1. Defines a Node class with left and right pointers
+2. Allocates a stretch tree of depth D (D = max_depth + 1) and ensures it exists
+3. Allocates a long-lived tree that persists while other trees are allocated and deallocated
+4. Allocates, walks, and deallocates bottom-up trees (depth from min_depth to max_depth, step 2)
+5. Checks that the long-lived tree still exists after all allocations
+6. Produces output in the exact format specified, including checks for each depth
+7. Uses the exact parameters: min_depth=4, max_depth = max(6, N), stretch_depth = max_depth + 1, iterations = 1 << (max_depth - depth + min_depth)

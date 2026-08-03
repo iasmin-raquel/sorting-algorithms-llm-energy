@@ -1,0 +1,66 @@
+---
+
+### **Prompt Structure**
+
+**Example 1 (Repeat FASTA from ALU sequence):**
+```
+Input: n = [2]
+Output:
+>ONE Homo sapiens alu
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATTGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGC...
+```
+
+**Example 2 (Random FASTA from IUB alphabet):**
+```
+Input: n = [3]
+Output:
+>TWO IUB ambiguity codes
+BHNWYRDSMKNVTHHHHHHHH... (randomly selected based on given probabilities)
+```
+
+**Example 3 (Random FASTA from Homo sapiens alphabet):**
+```
+Input: n = [5]
+Output:
+>THREE Homo sapiens frequency
+ACGTACGTGTAGATCCTGTAATCCTGGGAAAGGAAGTGC... (randomly selected based on given probabilities)
+```
+
+---
+**Target Problem:**
+Write a Java program that generates FASTA sequences as specified:
+
+- **Repeat FASTA**: Repeats the provided ALU sequence `n*2` times.
+- **Random FASTA (IUB)**: Randomly selects nucleotides from IUB alphabet using cumulative probabilities and an LCG (`IM=13968`, `IA=3877`, `IC=29573`, Seed=42).
+- **Random FASTA (Homo sapiens)**: Same for Homo sapiens frequencies.
+- **Output Format**: Exactly match the sample above, including line length of 60 chars.
+
+**Methodology:**
+1. Implement LCG to generate random numbers without caching.
+2. Convert nucleotide probabilities to cumulative values for linear search.
+3. Generate sequences by selecting nucleotides based on random numbers.
+
+---
+### **Key Requirements**
+- Strict adherence to command-line argument `N` as input.
+- No cached random numbers; use raw seed updates per selection.
+- Use LCG exactly as specified (no caching, no modifications).
+- Cumulative probability must be computed for linear matching.
+- Output format: **Fixed 60-character lines**, no extra whitespace.
+
+---
+### **Variable Values**
+| Parameter                | Value                                 |
+|--------------------------|---------------------------------------|
+| ALU sequence              | GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA... (full sequence) |
+| IUB alphabet probabilities| `a=0.27, c=0.12, g=0.12, t=0.27; B/D/H/K/M/N/R/S/V/W/Y=0.02` |
+| Homo sapiens alphabet     | `a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008` |
+| LCG constants:           | `IM = 139968`, `IA = 3877`, `IC = 29573`, Seed = 42   |
+
+---
+### **Notes**
+- **Edge cases**: Ensure sequences are exactly divisible by line length (60).
+- **Precision**: Probability math must handle floating-point rounding carefully.
+- **Ambiguity risk**: IUB codes require exact linear selection—no bias. Example:
+  If random < `0.27`, choose `a`/`t`; else use next code if ≤ cumulative bounds.
+- **Output validation**: Validate against `diff output.txt reference.txt` for N=1000.

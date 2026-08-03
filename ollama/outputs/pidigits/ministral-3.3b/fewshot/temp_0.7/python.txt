@@ -1,0 +1,102 @@
+### Prompt Structure
+
+Below is a Few-Shot Demonstration followed by your target problem:
+
+**Few-Shot Example:**
+For the pseudo-problem of generating digits of a "pi-like" sequence using arbitrary precision arithmetic, consider this template structure from a given `fasta` benchmark problem (as an illustrative analogy):
+
+---
+```python
+import sys
+
+# --- Problem-Specific Constants ---
+# Example placeholder variables; actual implementation must match your logic.
+INITIAL_STATE = (q=1, r=0, t=1)  # Initial state for computation
+DIGIT_EXTRACTION_OPERATIONS = lambda q, r, t: extract(3)  # Must call next_step() internally.
+
+def next_step(q, r):
+    """Advance the algorithm by one term using exact arithmetic rules."""
+    k = k + 1       # (Note: 'k' must be tracked externally in main loop)
+    r = r + 2 * q
+    r = r * (2*k + 1)
+    t = t * (2*k + 1)
+    q = q * k
+    return q, r, t
+
+def extract(x):
+    """Return floor((q*x + r) / t)."""
+    # Must compute using arbitrary precision integers.
+    pass
+
+def produce(d):
+    """Adjust state after selecting digit 'd'."""
+    q *= 10
+    r = (r - t * d) * 10
+    return q, r
+
+# --- Main Execution ---
+if __name__ == "__main__":
+    N = int(sys.argv[1]) if len(sys.argv) > 1 else 30  # Default to N=30 for testing.
+    k = 0
+    digits_output = []
+    for _ in range(N):
+        while True:
+            q, r, t = next_step(k)
+            d = extract(3)
+            if d == extract(4):  # Verify digit selection (as per problem).
+                produce(d)       # Update state.
+                digits_output.append(str(d))
+                break
+            else:
+                k += 1           # Recompute with updated k.
+
+        # Format: 10 digits/line + trailing tab/colon/run_total
+        if len(digits_output) % 10 == 0 or _ == N-1:
+            line = "".join(digits_output[-10:] or [""] * 10)
+            print(f"{line}\t:{k}:", end="\n" if digits_output else "")
+
+---
+```
+
+**Your Target Problem:**
+Implement the Unbounded Spigot Algorithm for calculating the first **N** digits of π (where N is a command-line argument) using arbitrary precision arithmetic. Follow the exact rules defined below:
+
+---
+
+### Key Requirements
+- Use **arbitrary-precision native Python integers** (no `decimal` library).
+- Parse **N** from `sys.argv[1]`; default to `30` for local testing.
+- State variables must initialize as: `q=1`, `r=0`, `t=1`, `k=0`.
+- For each digit:
+  - Call `next_step()` until `q > r == False`.
+  - Compute `d = extract(3)` and verify `extract(4) == d` before outputting.
+  - If verification fails, recompute with updated `k`.
+- Output format: **10 digits/line**, padded with spaces if <10; followed by `\t:<running_total>` (e.g., `\t:N` where N is the line number).
+- Validate against reference files for `N=30` using `diff`.
+
+---
+
+### Variable Values
+```python
+def extract(x):  # Returns floor((q*x + r) / t)
+    pass
+
+def next_step(q, r):  # Update state via these rules:
+    k += 1
+    r = r + 2 * q       # <-- Tracked externally in main loop.
+    r *= (2*k + 1)
+    t *= (2*k + 1)
+    q *= k
+
+def produce(d):
+    q *= 10
+    r = (r - t * d) * 10  # Adjust state after digit selection.
+```
+
+---
+
+### Notes
+- **Ambiguity Risk**: Ensure the LLM understands `q`, `r`, and `t` are non-static; they change per iteration. Clarify variable scoping in `next_step`.
+- **State Management**: The loop must track `k` incrementally—do not hardcode it.
+- **Output Formatting**: Use Python’s string slicing to pad lines (<10 digits) with spaces, e.g., `"   \t:N"` for 6-digit lines.
+- **Verification Step**: Both `extract(3)` and `extract(4)` must be called (use the same `q`, `r`, `t` instance). The LLM may overlook this if not emphasized.

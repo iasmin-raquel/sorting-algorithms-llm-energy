@@ -1,0 +1,69 @@
+### Prompt Structure
+
+**Example Template Analysis:**
+The provided `nbody` code demonstrates a Java command-line program that takes an input integer (e.g., `N`) and produces structured output. Below is the extracted structural framework for binary tree allocation and deallocation:
+
+1. **Command-Line Argument Parsing**:
+   - Use `Integer.parseInt(args[0])` to read `N`.
+2. **Binary Tree Node Structure**:
+   ```java
+   static class TreeNode {
+       TreeNode left, right; // Pointers to children
+       TreeNode() { /* Constructors */ }
+   }
+   ```
+3. **Main Loop and Output Formats**:
+   - The output should consist of three types of checks:
+     - `"stretch tree of depth D\t check: C"` (allocates once, deallocates).
+     - For each `depth` from `min_depth` to `max_depth` in steps of 2:
+       `"I\t trees of depth D\t check: C"` (iterative allocation/deallocation).
+     - `"long lived tree of depth D\t check: C"` (checks existence post-deallocations).
+4. **Core Logic**:
+   - Define helper methods for tree construction, traversal (node counting), and deallocation.
+   - Compute `max_depth = max(min_depth + 2, N)`; `stretch_depth = max_depth + 1`.
+   - Use `iterations = 1 << (max_depth - depth + min_depth)` to scale iterations.
+
+**Target Task:**
+Write a Java program that implements the specified binary tree operations and outputs in the required format when executed with command-line argument `N`.
+
+---
+### Key Requirements
+
+- **Language**: Must be Java.
+- **Input Handling**:
+  - Read `N` from command line via `args[0]`.
+  - Use `min_depth = 4` for all calculations. Ignore other `nbody` code (e.g., physics).
+- **Node Structure**:
+  - Define a tree node with exactly two pointers (`left`, `right`). Leaf nodes shall allocate identical memory to interior nodes (no "optimization").
+- **Allocation/Deallocation Logic**:
+  - **Stretch Tree**: Allocate once, verify existence, deallocate.
+  - **Iterative Trees**: For each depth in `[min_depth..max_depth]` with step 2:
+    - Allocate `iterations` trees (bottom-up construction).
+    - Deallocate after traversal to count nodes.
+  - **Long-Lived Tree**: Post-allocation/deallocation check of memory persistence.
+- **Output Format**:
+  Exactly match the specified format for each tree type, including tab-separated checks.
+- **No Optimizations**: Avoid garbage collection or language-specific optimizations (e.g., `System.gc()` calls).
+- **Edge Cases**: Handle cases where `N < min_depth` by using `max_depth = min_depth + 2`.
+
+---
+### Variable Values
+
+| Parameter          | Value                     |
+|---------------------|---------------------------|
+| `min_depth`         | 4                         |
+| `max_depth`         | `max(min_depth + 2, N)`   |
+| `stretch_depth`     | `max_depth + 1`           |
+| `iterations`        | `1 << (max_depth - depth + min_depth)` for each depth |
+
+---
+### Notes
+
+- **Ambiguity Handling**:
+  - The prompt clarifies the need to use **bitwise shifts** (`<<`) for `iterations` calculations, derived from Jeremy Zerfas’s C program.
+  - The term "check" in output refers to a post-deallocation memory existence verification step (e.g., via reference counting or boolean flag). Example: `"stretch tree of depth X\t check: true"`.
+- **Expected Model Behavior**:
+  - Assume the LLM enforces strict adherence to Java’s GC rules (no premature deallocations unless explicitly coded).
+  - The focus is on *allocation count* as per the reference implementation, not runtime efficiency. Thus, naive recursive construction/deconstruction is allowed for correctness.
+- **Tool Dependencies**:
+  - If the target LLM lacks access to real `System.gc()` or heap inspection tools, implement a placeholder flag (e.g., `static boolean longLivedExists = true`). Adjustments are needed only if the model requests runtime validation.

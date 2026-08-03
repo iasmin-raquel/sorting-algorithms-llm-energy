@@ -1,0 +1,38 @@
+### Prompt Structure
+You are tasked with implementing the pidigits problem from the Computer Language Benchmarks Game in Python. The goal is to calculate the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic. The algorithm must follow these steps:
+
+1. **Initialization**: Start with q=1, r=0, t=1, k=0.
+2. **Next Step**: Increment k, update r and t, then q.
+3. **Extract**: Compute floor((q*x + r)/t) for x=3 and x=4 to verify correctness.
+4. **Produce**: Adjust q and r based on the extracted digits.
+5. **Output**: Print digits 10 per line, with padding if necessary, and include the running total.
+
+Your implementation must:
+- Use native arbitrary precision integers.
+- Receive N as a command-line argument.
+- Follow the exact algorithm steps (next_step, extract, produce).
+- Verify the output with extract(3) and extract(4).
+- Format the output as specified: 10 digits per line, padding with spaces, and include the running total "\t:N".
+
+### Key Requirements
+- Use arbitrary precision integers for q, r, t.
+- Initialize q=1, r=0, t=1, k=0.
+- Implement next_step, extract, and produce functions exactly as described.
+- Ensure the loop for producing digits runs until q > r.
+- Verify the output with extract(3) and extract(4).
+- Format the output with 10 digits per line, padding with spaces if needed.
+- Include the running total "\t:N" in the output.
+
+### Variable Values
+- q: 1 (initial value)
+- r: 0 (initial value)
+- t: 1 (initial value)
+- k: 0 (initial value)
+- N: Command-line argument (e.g., 30)
+- The algorithm must run until q > r (for producing digits)
+
+### Notes
+- The algorithm must handle arbitrary precision arithmetic, which Python supports via integers.
+- The produce function must correctly adjust q and r based on the extracted digits.
+- The output formatting requires careful handling of line breaks and padding.
+- The verification step (extract(3) and extract(4)) is critical to ensure correctness.

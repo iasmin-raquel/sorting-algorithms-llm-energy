@@ -1,0 +1,38 @@
+### Prompt Structure
+Write a Java program that generates DNA sequences based on the given rules and outputs them in the specified format. The program should receive N as a command-line argument, use the provided LCG for random number generation, and adhere to the ALU sequence, IUB, and Homo sapiens alphabets with their exact probabilities.
+
+### Key Requirements
+- The program must be implemented in Java
+- It should accept N as a command-line argument
+- Use the provided LCG for generating random numbers
+- Implement the ALU sequence, IUB, and Homo sapiens alphabets with their exact probabilities
+- Output DNA sequences in the specified format (three sequences of different types)
+- Do not cache the random number sequence
+
+### Variable Values
+#### ALU Sequence
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+
+#### IUB Alphabet and Probabilities
+a=0.27, c=0.12, g=0.12, t=0.27,
+B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,
+N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+
+#### Homo sapiens Alphabet and Probabilities
+a=0.3029549426680, c=0.1979883004921,
+g=0.1975473066391, t=0.3015094502008
+
+#### LCG Constants
+IM = 139968
+IA = 3877
+IC = 29573
+Seed = 42
+
+### Notes
+The program should generate DNA sequences by copying from a given sequence (repeat fasta) and by weighted random selection from two alphabets (random fasta). The output must be identical to the reference when validated with `diff output.txt reference.txt` for N=1000. The line length of the output should be 60 characters, and the sequences should be ordered as specified in the problem description.
+
+The program should convert the expected probability of each nucleotide into cumulative probabilities and match a random number against those cumulative probabilities to select each nucleotide using linear search. It should not cache the random number sequence.

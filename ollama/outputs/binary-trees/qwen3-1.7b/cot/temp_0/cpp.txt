@@ -1,0 +1,44 @@
+### Prompt Structure
+You are tasked with implementing the Binary Trees problem from the Computer Language Benchmarks Game in C++. Your goal is to create perfect binary trees with leaf nodes matching interior nodes, using at minimum the number of allocations as Jeremy Zerfas's C program. The output must match the reference for N=10. 
+
+### Key Requirements
+- Define a tree node structure with left and right child pointers.
+- Allocate a stretch tree of depth D, check it exists, and deallocate it.
+- Allocate a long-lived tree that persists while other trees are allocated and deallocated.
+- Allocate, walk, and deallocate many bottom-up trees (depth D, step 2 from min_depth=4 to max_depth).
+- Ensure the long-lived tree still exists after all operations.
+- Output in the exact format: "stretch tree of depth D\t check: C" for depths from min_depth to max_depth (step 2), and "long lived tree of depth D\t check: C".
+
+### Variable Values
+- min_depth = 4
+- max_depth = max(4 + 2, N)
+- stretch_depth = max_depth + 1
+- iterations = 1 << (max_depth - depth + min_depth)
+- N received via command-line argument
+
+### Notes
+- The code must use min_depth=4 and compute max_depth and stretch_depth as specified.
+- The stretch tree must use at minimum the number of allocations as Jeremy Zerfas's C program.
+- Leaf nodes must be the same as interior nodes, with the same memory allocation.
+- The output must match the reference for N=10, including the exact format and depth ranges.
+- The long-lived tree must survive all allocations and deallocations.
+
+### Prompt Text
+You are to implement the Binary Trees problem from the Computer Language Benchmarks Game in C++. Your solution must:
+1. Define a tree node structure with left and right child pointers.
+2. Allocate a stretch tree of depth D, check it exists, and deallocate it.
+3. Allocate a long-lived tree that persists while other trees are allocated and deallocated.
+4. Allocate, walk, and deallocate many bottom-up trees (depth D, step 2 from min_depth=4 to max_depth).
+5. Ensure the long-lived tree still exists after all operations.
+6. Output in the exact format: "stretch tree of depth D\t check: C" for depths from min_depth to max_depth (step 2), and "long lived tree of depth D\t check: C".
+
+### Chain-of-Thought Explanation
+The prompt must guide the LLM to:
+- Define the node structure with left and right pointers.
+- Allocate the stretch tree, check existence, and deallocate it.
+- Create a long-lived tree that persists.
+- Generate bottom-up trees for each depth from min_depth to max_depth (step 2).
+- Ensure the long-lived tree remains valid.
+- Output in the required format with the specified parameters.
+
+The LLM must ensure the code uses the exact parameters (min_depth=4, max_depth = max(6, N), stretch_depth = max_depth + 1, iterations = 1 << (max_depth - depth + 4)), and matches the reference for N=10. The code must handle memory allocation, tree walking, and deallocation correctly, with the stretch tree's allocations matching Jeremy Zerfas's program.

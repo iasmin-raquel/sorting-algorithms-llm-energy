@@ -1,18 +1,21 @@
 ### Prompt Structure
-Write a Python script that generates the Mandelbrot set in PBM P4 format for a given N. The script should receive N as a command-line argument and adhere to the specified parameters.
+Write a Python script that takes N as a command-line argument and generates the Mandelbrot set in PBM P4 format. The script should perform 50 iterations with an escape threshold of lim = 2.0 * 2.0, using squared magnitude to avoid computing square roots. The output should be identical to the reference when validated with `cmp output.pbm reference.pbm` for N=200.
 
 ### Key Requirements
 - The script must be written in Python
-- The script should accept N as an integer command-line argument via `int(sys.argv[1])`
-- The script should use exactly 50 iterations and escape threshold 4.0
-- The output should be in PBM P4 format, with bits packed MSB first and zero-padded per row
+- The script should receive N as a command-line argument
+- The script should use exactly 50 iterations and escape threshold lim = 2.0 * 2.0
+- The script should write PBM P4 header and binary pixel data to stdout
+- The output must be validatable with `cmp output.pbm reference.pbm` for N=200
 
 ### Variable Values
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region (real): [-1.5, 0.5]
-- Plot region (imaginary): [-1.0, 1.0]
-- Output format: PBM P4
+- Escape threshold (squared): lim = 2.0 * 2.0
+- A point belongs to the set if |Z|² <= lim after all iterations
+- Use squared magnitude (zr*zr + zi*zi) to avoid computing square roots
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
 
 ### Notes
-Ensure that the output is identical to the reference when validated with `cmp output.pbm reference.pbm` for N=200. The script should write both the text header and binary pixel data to stdout.
+- The output format includes a header "P4\n" followed by "N N\n", with pixels packed 8 per byte, MSB first (bit 1 = in set, bit 0 = not in set)
+- If N is not divisible by 8, the last byte of each row is padded with zeros on the right.

@@ -1,0 +1,62 @@
+### Prompt Structure
+**Chain-of-Thought Reasoning for Binary Tree Allocation in Java:**
+
+1. **Problem Decomposition:**
+   - First, define a `TreeNode` structure with left and right child pointers.
+   - Calculate the command-line argument `N` to determine `max_depth`, ensuring it adheres to the formula: `max(min_depth + 2, N)` where `min_depth = 4`.
+   - Compute `stretch_depth` as `max_depth + 1`.
+   - For each depth from `min_depth` to `max_depth` (step 2), generate iterations using the formula `(1 << (max_depth - depth + min_depth))`.
+
+2. **Stretch Tree Logic:**
+   - Allocate a tree of depth `stretch_depth`, verify its existence, and deallocate it.
+   - Output: `"stretch tree of depth D\t check: C"` where `D` is the stretch depth.
+
+3. **Long-Lived Tree Logic:**
+   - Create a long-lived tree (e.g., using static allocation or a global variable) with depth `max_depth`.
+   - After deallocating other trees, verify its existence.
+   - Output: `"long lived tree of depth D\t check: C"`.
+
+4. **Bottom-Up Trees Logic:**
+   - For each depth from `min_depth` to `max_depth` (step 2):
+     a. Allocate a tree of that depth.
+     b. Walk the tree to count nodes (to ensure correctness).
+     c. Deallocate it.
+     d. Output: `"I\t trees of depth D\t check: C"` where `D` is the current depth.
+
+5. **Implementation Steps:**
+   - Use Java’s memory management to allocate, traverse, and deallocate trees explicitly.
+   - Ensure no optimizations (e.g., compiler/VM optimizations) are applied to avoid discrepancies with the reference output.
+   - Validate outputs using `diff` against a reference file for `N=10`.
+
+---
+
+### Key Requirements
+- **Language:** Pure Java (no external libraries or frameworks).
+- **Input Handling:** Command-line argument `N` must be parsed and validated.
+- **Tree Structure:**
+  - Define `TreeNode` with `left`, `right`, and `data` fields (or omit `data` if not needed for allocation count).
+  - Allocate trees using explicit memory management (e.g., `new TreeNode()`).
+- **Output Format:** Strictly follow the specified format, including tabs (`\t`) and line breaks.
+- **Memory Checks:**
+  - Verify stretch tree existence before deallocation.
+  - Confirm long-lived tree persists after other trees are freed.
+- **Iterations:** Compute iterations dynamically using bit shifting for efficiency.
+- **No Optimizations:** Avoid compiler/VM optimizations (e.g., use `final` or explicit allocation checks).
+
+---
+
+### Variable Values
+| Parameter          | Value                     |
+|--------------------|---------------------------|
+| `min_depth`        | 4                         |
+| `max_depth`        | `max(min_depth + 2, N)`   |
+| `stretch_depth`    | `max_depth + 1`           |
+| Iterations Formula | `(1 << (max_depth - depth + min_depth))` |
+
+---
+
+### Notes
+- **Ambiguity Risk:** Ensure the LLM interprets "walk" as a manual traversal (e.g., DFS/BFS) to count nodes, not relying on garbage collection behavior.
+- **Edge Cases:** Handle `N < 6` by setting `max_depth = N` (since `min_depth + 2 = 6`).
+- **Verification:** The output must match the reference exactly for `N=10`. Use `diff` to validate correctness.
+- **Performance Note:** Avoid premature optimizations; focus on raw allocation/deallocation logic.

@@ -1,0 +1,61 @@
+---
+
+### **Prompt Structure**
+**Task:** Implement the Unbounded Spigot Algorithm (Gibbons) for calculating the first *N* digits of π using arbitrary precision arithmetic in C++. The solution must adhere strictly to the provided algorithmic steps and output format.
+
+#### **Few-Shot Examples:**
+1. **Example 1 (Basic Structure):**
+   ```cpp
+   // Assume this is a placeholder for the core logic.
+   // Focus on structure: command-line argument, stateful loop, formatted output.
+   int main(int argc, char* argv[]) {
+       if (argc != 2) { /* error handling omitted */ }
+       int N = std::stoi(argv[1]);
+       // Initialize q=1, r=0, t=1, k=0
+       // Loop until digits are exhausted:
+       //   - Call next_step()
+       //   - Compute d = extract(3)
+       //   - If d == extract(4), output digit and call produce(d)
+       //   - Else, call next_step() again
+       // Output: 10 digits per line with "\t:N" suffix.
+   }
+   ```
+
+2. **Example 2 (Output Formatting):**
+   ```cpp
+   // Mock output for N=30:
+   // 3.14159265358979326589\t:30
+   // (Pad trailing spaces if fewer than 10 digits per line.)
+   ```
+
+---
+
+### **Key Requirements**
+- **Arbitrary Precision:** Use the GMP library (`libgmpxx`) for arbitrary-precision arithmetic.
+- **Input Handling:** Parse `N` from command-line argument (`argv[1]`).
+- **Algorithm Compliance:**
+  - Initialize state: `q = 1`, `r = 0`, `t = 1`, `k = 0`.
+  - Implement `next_step()` exactly as described (4 operations).
+  - Use `extract(x)` and `produce(d)` per algorithm.
+- **Digit Selection:** Compare `extract(3)` vs. `extract(4)`; output only if they match.
+- **Output Format:**
+  - Print 10 digits per line, padded with spaces if <10 digits.
+  - End each line with `\t:N` (e.g., `\t:30`).
+- **No External Dependencies:** Avoid non-GMP libraries unless explicitly required by GMP.
+
+---
+
+### **Variable Values**
+| Variable | Value       |
+|----------|------------|
+| `N`      | Command-line argument (e.g., `argv[1]`). |
+| Initial State: | `q = 1`, `r = 0`, `t = 1`, `k = 0`. |
+| Algorithm Steps: | Followed verbatim as per problem description. |
+
+---
+
+### **Notes**
+- **GMP Library:** Ensure the LLM generates code compatible with GMP’s arbitrary-precision types (e.g., `mpz_t` for integers).
+- **Edge Cases:** Handle cases where `N=0` or invalid input gracefully (e.g., exit with error code).
+- **Ambiguity Risk:** Clarify that *exact* variable names (`q`, `r`, etc.) must match the problem’s definitions.
+- **Output Validation:** The output must match the reference for `N=30` exactly (digits + formatting).

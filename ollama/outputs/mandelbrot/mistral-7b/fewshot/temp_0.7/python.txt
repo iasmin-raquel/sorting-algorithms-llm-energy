@@ -1,47 +1,35 @@
 ### Prompt Structure
 ```python
 # The Computer Language Benchmarks Game
-# contributed by [Your Name]
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
+
+# Naive implementation of Mandelbrot set visualization in Python
 
 import sys
 from math import sqrt
 
-PI = 3.14159265358979323
-
-class MandelbrotPoint:
-    def __init__(self, x, y):
-        self.x = x; self.y = y
-
-def mandelbrot_iteration(point): ...
-def mandelbrot_escape_test(point): ...
-
-def plot_mandelbrot_set(N):
-    min_x, max_x, min_y, max_y = ...
-    for i in range(N):
-        for j in range(N):
-            point = MandelbrotPoint(min_x + (j / N) * (max_x - min_x), min_y + (i / N) * (max_y - min_y))
-            if mandelbrot_escape_test(point) <= 4.0:
-                # PBM P4 header as text and binary pixel data
-                print('P4\n# Created by the Computer Language Benchmarks Game\n' + str(N) + ' ' + str(N) + '\n255\n')
-                for k in range(N):
-                    bin_data = ...
-                    sys.stdout.buffer.write(bin_data)
+def mandelbrot(n):
+    # Your code here
 
 if __name__ == '__main__':
-    plot_mandelbrot_set(int(sys.argv[1]))
+    mandelbrot(int(sys.argv[1]))
 ```
 
 ### Key Requirements
-- Implemented in Python
-- Receives N as a command-line argument via int(sys.argv[1])
-- Uses exactly 50 iterations and escape threshold 4.0
-- Writes PBM P4 header as text and binary pixel data to stdout
+- Write a Python program that computes and visualizes the Mandelbrot set
+- Receives N as a command-line argument
+- Uses exactly 50 iterations and escape threshold lim = 2.0 * 2.0
+- Writes PBM P4 header and binary pixel data to stdout
+- Produces output validatable with cmp for N=200
 
 ### Variable Values
 - Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-- Output: PBM P4 format, bits packed MSB first, zero-padded per row
+- Escape threshold (squared): lim = 2.0 * 2.0
+- A point belongs to the set if |Z|² <= lim after all iterations
+- Use squared magnitude (zr*zr + zi*zi) to avoid computing square roots
+- Iteration formula: Z = Z*Z + C, starting from Z = (0, 0)
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
+- Output format: PBM P4 header and binary pixel data to stdout
 
 ### Notes
-The generated code includes a simplified Mandelbrot set calculation as an example of how to implement the problem. The function names `mandelbrot_iteration` and `mandelbrot_escape_test` are placeholders for you to provide the actual implementation.
+- The provided example code is not related to the Mandelbrot set problem but serves as a demonstration of the expected structure for Python programs in the Computer Language Benchmarks Game.

@@ -1,0 +1,55 @@
+### Prompt Structure
+```python
+# The Computer Language Benchmarks Game
+# contributed by [Model Name]
+
+import sys
+from sympy import *
+
+N = int(sys.argv[1])
+Q, R, T, K = 1, 0, 1, 0
+
+def next_step():
+    global Q, R, T, K
+    K += 1
+    R += 2*Q
+    R *= (2*K + 1)
+    T *= (2*K + 1)
+    Q *= K
+
+def extract(x):
+    return floor((Q*x + R) / T)
+
+def produce(d):
+    global Q, R, T
+    Q *= 10
+    R = (R - T*d) * 10
+
+def digit_selection():
+    while True:
+        next_step()
+        d = extract(3)
+        if d == extract(4):
+            print(f"{d:>{LINELEN}}", end="\t:")
+            print(f"{str(N - K//100)[-LINELEN:]}" if (K % 100 != 0) else "\n")
+            produce(d)
+        else:
+            next_step()
+
+if __name__ == '__main__':
+    digit_selection()
+```
+
+### Key Requirements
+- Implement the solution in Python using native arbitrary precision integers
+- Receive N as a command-line argument
+- Use the initial state, next_step, extract and produce operations exactly as defined above
+- Perform both extract(3) and extract(4) for digit verification
+- Produce output in the exact format specified above
+
+### Variable Values
+- N: The number of digits to calculate (received via command-line argument)
+- Q, R, T, K: Initial state and variables used during the algorithm execution
+
+### Notes
+- This prompt is designed to generate a Python implementation of the Pidigits problem using the Unbounded Spigot Algorithm (Gibbons). The provided example code serves as a demonstration of the expected structure and style. The model should focus on extracting the general structure while ignoring specific content such as variable names or function names.

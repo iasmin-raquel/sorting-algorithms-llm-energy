@@ -1,0 +1,71 @@
+### Prompt Structure
+You are tasked with implementing the **Unbounded Spigot Algorithm** (Gibbons) to compute the first *N* digits of π using arbitrary precision arithmetic in Python. Your solution must adhere strictly to the following requirements:
+
+1. **Input Handling**: The program should accept `N` as a command-line argument, where `N` is the number of digits of π to compute.
+2. **Initialization**: Start with the initial state:
+   - `q = 1`
+   - `r = 0`
+   - `t = 1`
+   - `k = 0`
+
+3. **Next Step (Advance Algorithm)**:
+   - Update `k` as: `k = k + 1`.
+   - Compute intermediate values in this order:
+     ```
+     r = r + 2 * q
+     r = r * (2*k + 1)
+     t = t * (2*k + 1)
+     q = q * k
+     ```
+   - Repeat until `q > r` is false.
+
+4. **Digit Extraction (`extract(x)`)**:
+   - Implement the function to return the floor of `(q*x + r) / t`.
+   - Use this in the digit selection logic below.
+
+5. **Digit Selection**:
+   - Compute `d = extract(3)`.
+   - Compare it with `extract(4)` (a verification step).
+     - If they match, output `d` and call `produce(d)`.
+     - Otherwise, re-run `next_step`.
+
+6. **Digit Production (`produce(d)`)**:
+   - Update the state as follows:
+     ```
+     q = q * 10
+     r = (r - t*d) * 10
+     ```
+
+7. **Output Format**:
+   - Print digits in groups of 10 per line, padded with spaces if fewer than 10 remain.
+   - Each line must end with `\t:N`, where `N` is the running total of digits printed so far (e.g., `\t:32` for the first 32 digits).
+   - Ensure the output matches the reference exactly when validated against `diff output.txt reference.txt` for `N=30`.
+
+8. **Arbitrary Precision**: Use Python’s native arbitrary-precision integers (`int`) to avoid overflow.
+
+---
+### Key Requirements
+- **Strict Algorithm Compliance**: Follow the exact sequence of operations in `next_step`, `extract(x)`, and `produce(d)`.
+- **Digit Verification**: Always compute both `extract(3)` and `extract(4)` for correctness.
+- **Output Precision**: Pad lines with spaces if fewer than 10 digits remain; ensure `\t:N` is appended correctly.
+- **Command-Line Argument**: Parse `N` from the command line (e.g., `python script.py 50`).
+- **No External Libraries**: Use only Python’s built-in capabilities for arbitrary precision.
+
+---
+### Variable Values
+| Parameter | Value       |
+|-----------|------------|
+| Algorithm Initialization (`q`, `r`, `t`, `k`) | `1, 0, 1, 0` |
+| Digit Extraction Inputs (`x`) | Always use `3` and `4` for verification. |
+| Output Group Size | 10 digits per line. |
+
+---
+### Notes
+- **Edge Cases**: Handle cases where `N` is very large (e.g., `N=10000`). The algorithm should terminate correctly without infinite loops.
+- **Performance**: Optimize the loop for efficiency, but correctness must take precedence over speed.
+- **Ambiguity Risk**: Ensure the LLM interprets `extract(3)` and `extract(4)` as floor divisions (not truncation). Clarify that Python’s `/` is integer division when operands are integers.
+- **Output Formatting**: The `\t:N` suffix must be appended *after* printing each group of digits, not as part of the digit string. Example:
+  ```
+  3141592653\t:10
+  8589793238\t:20
+  ```

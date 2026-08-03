@@ -1,0 +1,28 @@
+### Prompt Structure
+Implement a Python program that calculates the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons). The program should perform the following steps:
+
+1. Initialize variables q, r, t, and k according to the given initial state.
+2. Implement the next_step function as described.
+3. Implement extract(x) and produce(d) functions as defined.
+4. Advance the algorithm using next_step until q > r is false.
+5. Compute d = extract(3) and e = extract(4).
+6. If d == e, output digit d and call produce(d). Otherwise, call next_step again.
+7. Format the output with 10 digits per line, a running total, and the correct end-of-line characters.
+8. Receive N as a command-line argument.
+
+### Key Requirements
+- The program must be implemented in Python using native arbitrary precision integers.
+- The program should receive N as a command-line argument.
+- The program must use the initial state, next_step, extract, and produce operations exactly as defined above.
+- The program must perform both extract(3) and extract(4) for digit verification.
+- The output format should be identical to the one specified in the problem description.
+
+### Variable Values
+- q: 1 (initial state)
+- r: 0 (initial state)
+- t: 1 (initial state)
+- k: 0 (initial state)
+
+### Notes
+- The program may need to handle large numbers, so using a library like SymPy or mpmath for arbitrary precision arithmetic is recommended.
+- Be aware that the Unbounded Spigot Algorithm requires many iterations to calculate even a few digits of Pi accurately. This means the program will take some time to run, especially for larger values of N.

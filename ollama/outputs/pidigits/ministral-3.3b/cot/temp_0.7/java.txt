@@ -1,0 +1,84 @@
+---
+
+### **Prompt Structure**
+*"Explain how to implement the Pidigits problem in Java using the Unbounded Spigot Algorithm (Gibbons) for arbitrary-precision Pi calculation. Follow these steps:
+
+1. **Problem Breakdown**:
+   Write a Java program that reads an integer `N` from command-line arguments, computes the first N digits of π using:
+   - The initial state: `{q = 1, r = 0, t = 1, k = 0}`
+   - The `next_step()` function (exactly as defined below).
+   - The `extract(x)` and `produce(d)` functions (exactly as defined below).
+   - Digit selection logic:
+     a) Loop until `q > r` is false.
+     b) Compute `d = extract(3)`. If `d == extract(4)`, output `d` and call `produce(d)`.
+     c) Else, repeat `next_step()` until condition holds again.
+
+2. **Output Format**:
+   - Print 10 digits per line (pad with spaces if fewer than 10 remain).
+   - Each line ends with a tab (`\t`), colon (`:`), and running total `N` (e.g., `\t:30`).
+   - Example output for N=30 matches the reference when compared to `diff output.txt reference.txt`.
+
+3. **Algorithm Implementation**:
+   - **next_step()** must execute these steps in order:
+     ```
+     k = k + 1;
+     r = r + 2 * q;
+     r = r * (2 * k + 1);
+     t = t * (2 * k + 1);
+     q = q * k;
+     ```
+   - **extract(x)** must return `floor((q*x + r) / t)`.
+   - **produce(d)** must:
+     ```
+     q = q * 10;
+     r = (r - t*d) * 10;
+     ```
+
+4. **Constraints on Java**:
+   - Use `BigInteger` for arbitrary-precision arithmetic.
+   - Assume N is a positive integer passed as `main[0]`.
+   - Output must be exact: no rounding, no deviations from the given rules.
+
+5. **Edge Cases & Testing**:
+   Verify correctness by comparing output to a reference Pi file up to 30 digits and handling these:
+   - Exact digit selection (d=extract(3) vs d=extract(4)).
+   - Line breaks (10 digits/line + trailing spaces/tabs).
+   - Edge case where N is not a multiple of 10.
+
+6. **Debugging Guidance**:
+   If `q > r` fails before computing all digits, restart the loop from the last saved state.
+   For example, after producing a digit, check if `q > r` resets to false prematurely (e.g., due to floating-point inaccuracy). Handle this by reapplying `next_step()` until the condition holds.
+
+---
+**Implement exactly as specified. Output the first N digits of π using arbitrary precision and no extra logic.**"
+
+---
+
+### **Key Requirements**
+- **Arbitrary Precision**: Use `BigInteger` for all variables (`q`, `r`, `t`, intermediate steps).
+- **Command-line Input**: Read `N` from `main[0]` as an integer.
+- **Precision Matching**: Extract digits by comparing `extract(3)` and `extract(4)`; output only when both match.
+- **Output Format**:
+  - Precisely 10 digits per line (left-aligned).
+  - Pad with spaces if fewer than 10 remain in the last line.
+  - End each line with `\t:N` (e.g., for N=30: `abcdefg\thijkl\t:30`).
+- **Algorithm Integrity**: Follow Gibbons’ algorithm step-by-step without deviation.
+
+---
+
+### **Variable Values**
+| Variable | Initial Value | Updated by               |
+|----------|---------------|--------------------------|
+| `q`      | `1`           | `next_step()`            |
+| `r`      | `0`           | `next_step()`            |
+| `t`      | `1`           | `next_step()`            |
+| `k`      | `0`           | `next_step()` + increment |
+| `N`      | Command-line arg (e.g., `30`) | Input to program |
+
+---
+
+### **Notes**
+- **Ambiguity Handling**: The prompt explicitly states that the LLM must avoid floating-point errors by treating BigInteger operations as exact integer math.
+- **Edge Case for N=1**: Output should be `"4\t:1"` (no line break needed).
+- **Model Reliance**: This assumes the LLM correctly parses command-line input (`main[0]`) and handles `BigInteger` division/modulo arithmetic precisely.
+- **Verification Assurance**: The use of `extract(3)` vs. `extract(4)` ensures correctness by comparing two independent digit calculations per step.

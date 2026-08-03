@@ -1,0 +1,61 @@
+```java
+/* The Computer Language Benchmarks Game
+   contributed by [Your Name]
+*/
+
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class pidigits {
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.err.println("Usage: java pidigits N");
+            return;
+        }
+        int N = Integer.parseInt(args[0]);
+        System.out.println(">PIDIGITS");
+        runAlgorithm(N);
+    }
+
+    private static void runAlgorithm(int N) {
+        // State variables
+        BigInteger q = BigInteger.ONE;
+        BigInteger r = BigInteger.ZERO;
+        BigInteger t = BigInteger.ONE;
+        int k = 0;
+
+        // Output formatting
+        int lineCount = 0;
+        int digitsPerLine = 10;
+        int runningTotal = 0;
+
+        while (true) {
+            // Advance the algorithm
+            k++;
+            r = r.add(q.multiply(BigInteger.valueOf(2 * k + 1)));
+            r = r.multiply(BigInteger.valueOf(2 * k + 1));
+            t = t.multiply(BigInteger.valueOf(2 * k + 1));
+            q = q.multiply(BigInteger.valueOf(k));
+
+            // Extract a digit
+            int d = extract(q, r, t);
+            runningTotal += d;
+
+            // Output formatting
+            if (lineCount % digitsPerLine == 0) {
+                System.out.println("\t:" + runningTotal);
+            }
+            if (lineCount % digitsPerLine == digitsPerLine - 1) {
+                System.out.print(" ");
+            }
+            System.out.print(d);
+            lineCount++;
+            if (lineCount >= N) break;
+        }
+    }
+
+    private static int extract(BigInteger q, BigInteger r, BigInteger t) {
+        return q.multiply(BigInteger.valueOf(10)).subtract(r).divide(t).intValue();
+    }
+}
+```

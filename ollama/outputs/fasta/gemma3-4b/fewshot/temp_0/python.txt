@@ -1,0 +1,129 @@
+### Prompt Structure
+```text
+You are an expert Python code generator. Your task is to generate a complete Python script that implements the Fasta problem from the Computer Language Benchmarks Game. The script should take an integer `N` as a command-line argument and produce three DNA sequences based on the specified algorithms.
+
+Here are two examples demonstrating the expected structure of the output:
+
+Example 1:
+```python
+# Example code (binary-trees Python)
+
+# The Computer Language Benchmarks Game
+# contributed by Antoine Pitrou
+# modified by Dominique Wahli
+# modified by Heinrich Acker
+
+import sys
+
+def make_tree(depth):
+    if not depth: return None, None
+    depth -= 1
+    return make_tree(depth), make_tree(depth)
+
+def check_tree(node):
+    (left, right) = node
+    if not left: return 1
+    return 1 + check_tree(left) + check_tree(right)
+
+min_depth = 4
+max_depth = max(min_depth + 2, int(sys.argv[1]))
+stretch_depth = max_depth + 1
+
+print("stretch tree of depth %d\t check:" %
+    stretch_depth, check_tree(make_tree(stretch_depth)))
+
+long_lived_tree = make_tree(max_depth)
+iterations = 2**max_depth
+
+for depth in range(min_depth, stretch_depth, 2):
+    check = 0
+    for i in range(1, iterations + 1):
+        check += check_tree(make_tree(depth))
+    print("%d\t trees of depth %d\t check:" % (iterations, depth), check)
+    iterations //= 4
+
+print("long lived tree of depth %d\t check:" %
+    max_depth, check_tree(long_lived_tree))
+```
+
+Example 2:
+```python
+import random
+import sys
+
+def generate_alu(n):
+    alu = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA"
+    return alu * (n // 2)
+
+def generate_iub(n):
+    iub = ""
+    probabilities = {'a': 0.27, 'c': 0.12, 'g': 0.12, 't': 0.27,
+                     'B': 0.02, 'D': 0.02, 'H': 0.02, 'K': 0.02, 'M': 0.02,
+                     'N': 0.02, 'R': 0.02, 'S': 0.02, 'V': 0.02, 'W': 0.02, 'Y': 0.02}
+    for i in range(n * 3):
+        nucleotide = random.choices(list(probabilities.keys()), weights=list(probabilities.values()))[0]
+        iub += nucleotide
+    return iub
+
+def generate_homosapiens(n):
+    homosapiens = ""
+    probabilities = { 'a': 0.3029549426680, 'c': 0.1979883004921,
+                       'g': 0.1975473066391, 't': 0.3015094502008}
+    for i in range(n * 5):
+        nucleotide = random.choices(list(probabilities.keys()), weights=list(probabilities.values()))[0]
+        homosapiens += nucleotide
+    return homosapiens
+
+if __name__ == "__main__":
+    N = int(sys.argv[1])
+
+    alu_sequence = generate_alu(N)
+    iub_sequence = generate_iub(N)
+    homosapiens_sequence = generate_homosapiens(N)
+
+    print(">" + "ONE Homo sapiens alu" + f" {alu_sequence[:60]}...")
+    print(">" + "TWO IUB ambiguity codes" + f" {iub_sequence[:60]}...")
+    print(">" + "THREE Homo sapiens frequency" + f" {homosapiens_sequence[:60]}...")
+```
+
+Now, generate the Python code to solve the Fasta problem. The code should:
+
+1.  Take an integer `N` as a command-line argument.
+2.  Implement the repeat fasta algorithm using the ALU sequence.
+3.  Implement the random fasta algorithm using the IUB alphabet and probabilities.
+4.  Implement the Homo sapiens frequency algorithm using the Homo sapiens alphabet and probabilities.
+5.  Generate three DNA sequences as specified in the output format:
+    *   `>ONE Homo sapiens alu` followed by repeat fasta of ALU with n\*2 characters
+    *   `>TWO IUB ambiguity codes` followed by random fasta of IUB with n\*3 characters
+    *   `>THREE Homo sapiens frequency` followed by random fasta of Homo sapiens with n\*5 characters
+6.  Do not cache the random number sequence. Use the following LCG constants:
+    *   `IM = 139968`
+    *   `IA = 3877`
+    *   `IC = 29573`
+    *   `Seed = 42`
+
+```python
+# Your code here
+```
+### Key Requirements
+*   The generated Python code must be complete and executable.
+*   It must take the integer `N` as a command-line argument.
+*   It must implement the repeat fasta, random fasta, and Homo sapiens frequency algorithms correctly.
+*   It must use the specified LCG constants for random number generation.
+*   It must utilize the provided ALU sequence, IUB alphabet with probabilities, and Homo sapiens alphabet with probabilities.
+*   The output format must strictly adhere to the requirements (line length, sequence headers, and truncated sequences).
+*   No caching of the random number sequence is allowed.
+*   The code should be well-documented and easy to understand.
+
+### Variable Values
+*   `IM = 139968`
+*   `IA = 3877`
+*   `IC = 29573`
+*   `Seed = 42`
+*   ALU sequence: `GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA`
+*   IUB alphabet and probabilities: `a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02`
+*   Homo sapiens alphabet and probabilities: `a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008`
+*   `N` (command-line argument)
+
+### Notes
+*   The prompt emphasizes the importance of adhering to the exact output format and algorithm specifications.  Pay close attention to the line length constraint and the truncation of sequences. The LCG implementation is critical for reproducibility.  Ensure that no caching occurs during random number generation. The example code provided serves as a guide for the expected structure and functionality, but the generated code should be fully self-contained and executable.

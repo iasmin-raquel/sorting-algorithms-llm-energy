@@ -1,0 +1,18 @@
+### Prompt Structure
+A C++ program to calculate the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) and print them with a running total. The output should be identical to the reference when validated.
+
+### Key Requirements
+- Implementation in C++ using the GMP library for arbitrary precision arithmetic
+- Receives N as a command-line argument
+- Uses the initial state, next_step, extract, and produce operations exactly as defined
+- Performs both extract(3) and extract(4) for digit verification
+- Produces output in the exact format specified: 10 digits per line, each line ends with a tab, colon, and running total: "\t:N"
+
+### Variable Values
+- q: arbitrary precision integer representing the state variable Q
+- r: arbitrary precision integer representing the state variable R
+- t: arbitrary precision integer representing the state variable T
+- k: integer representing the step counter
+
+### Notes
+The provided example code serves as a demonstration and should not be directly incorporated into the solution. The C++ code that the target LLM will produce should not include the FASTA sequence generation, but focus on implementing the Pi calculation and formatted output.

@@ -1,64 +1,45 @@
 ### Prompt Structure
+Here’s a concise few-shot prompt template for solving the Mandelbrot set generation problem based on the given requirements:
 
-**Few-shot Example (Mandelbrot Set in PBM Format)**
 ---
-*Example 1: N-body simulation structure*
+**Example 1 (N-body simulation):**
+The provided n-body code structure includes:
+- A function `main(n)` that reads integer command-line argument `n` for simulation steps.
+- Output is written directly to stdout using `print()` statements (e.g., energy values).
+- Key logic: body physics computations looped via external counter (here, N=simulation steps).
+
+---
+
+**Target Problem: Mandelbrot Set Generator**
+1. Implement a Python function that takes integer command-line argument `N` and produces the following output:
+   - **PBM P4 Header**: `"P4\n${N} ${N}\n"` (written as literal string to stdout).
+   - **Pixel Data**: 8-bit packed bits (MSB = set, LSB = not set), padded with zeros if `N % 8 ≠ 0`.
+     *Example*: For a row with 9 pixels (`N=23`), first byte encodes [bits 0-7+1], second byte adds zeros.
+   - **Iterations**: Exactly 50 per complex point, using the formula:
+     `Z = Z*Z + C` (starting at `(0,0)`) with threshold `lim=4.0`.
+   - Coordinate mapping: `C.x = 2*x/N – 1.5`, `C.y = 2*y/N – 1.0`.
+   - Validation: Output must match the reference PBM for N=200 exactly (byte-per-byte).
+
+---
+**Key Requirements**
+- Strictly output raw PBM header + binary pixels to stdout **only**.
+- No function wrappers (e.g., avoid returning values or files).
+- Explicit iteration limit and escape threshold (`lim = 4.0` squared magnitude).
+- Packed bits must use `MSB=1` for set, `LSB=0` otherwise.
+
+---
+**Variable Values**
 ```python
-# Simulate n-body system with given constraints
-from math import sqrt
-import sys
-
-class Body:
-    def __init__(self, x, y=0.0, vx=0.0):
-        self.x = x; self.y = y
-        self.vx = vx  # Only position/velocity in 2D here for brevity
-
-def main(n):
-    bodies = [...]  # Define initial body configuration
-    print("P4\n{}\n".format(...))  # Example header (placeholder)
-    for _ in range(n):
-        # Calculate force, update positions, and pack bits to stdout
-        ...
+N         = int(sys.argv[1])              # Command-line argument (e.g., "200")
+max_iterations = 50                       # Fixed per problem specs
+lim       = 4.0                          # lim² = 4.0², threshold for escape
 ```
 
 ---
-**Target Task:**
-Write a Python script that generates the Mandelbrot set for `N`×`N` pixels using `sys.argv[1]` as input. Output must be PBM P4 format (header + packed binary data).
-
+**Notes**
+- **Ambiguities**: Model may infer `sys`/`open()` but enforce that raw `print()` is sole output method.
+- **Edge Cases**:
+  - Padding zeros in non-divisible-by-8 rows (e.g., byte for 9 pixels = `[bits 0..7 + 1, 0]`).
+  - Validate packed bits are MSB-first (little-endian convention).
+- **Avoid**: Print ASCII art or auxiliary debug logs; only stdout matters.
 ---
-
-### Key Requirements
-- **Must implement**:
-  - Command-line argument parsing via `int(sys.argv[1])`.
-  - Mandelbrot iteration logic with fixed *max_iter=50* and escape threshold `4.0`.
-  - Exact region bounds: `real=[−1.5,0.5]`, `imaginary=[−1.0,1.0]`.
-- **Output format**:
-  - PBM P4 header (ASCII) followed by packed MSB-first binary pixels.
-  - Zero-padding per row for bit-perfect alignment.
-- **No auxiliary code**: Only the core function generating the set *and* writing stdout.
-
----
-
-### Variable Values
-```python
-MANDELBROT_PARAMETERS = {
-    "max_iter": 50,
-    "escape_threshold": 4.0,
-    "x_range": [-1.5, 0.5],
-    "y_range": [-1.0, 1.0]
-}
-```
-
----
-### Notes
-1. **Packing**: Pixels must be bit-packed per row (MSB first), padded to align.
-2. **Avoid helper functions**: The LLM should self-contain the Mandelbrot loop logic.
-3. **Edge cases**:
-   - No trailing newline after header.
-   - Correctly handle `N=200` for validation compliance.
-4. **Example hint for packing**:
-   ```python
-   # Pseudocode: Convert 2D array to packed bits
-   packed_bits = sum(row << (i * row_length) for i, row in enumerate(rows))
-   ```
-5. **Performance note**: Prioritize minimalism over readability; omit non-essential comments unless critical (e.g., “bit-pad” in PBM spec).

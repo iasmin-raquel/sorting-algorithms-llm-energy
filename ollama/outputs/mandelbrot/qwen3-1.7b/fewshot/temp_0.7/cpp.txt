@@ -1,29 +1,27 @@
 ### Prompt Structure
-You are to implement the Mandelbrot set in C++ as per the Computer Language Benchmarks Game. The code must:
-- Accept N as a command-line argument.
-- Plot the Mandelbrot set with real range [-1.5, 0.5] and imaginary range [-1.0, 1.0].
-- Use exactly 50 iterations and escape threshold 4.0.
-- Output in PBM P4 format (MSB first, zero-padded per row).
-- Match the reference output for N=200.
+You will generate a C++ program to compute the Mandelbrot set according to the Computer Language Benchmarks Game's requirements. The program must:
+- Accept N as a command-line argument
+- Use exactly 50 iterations with escape threshold lim = 4.0
+- Map complex numbers using real(C) = 2.0*x/N -1.5 and imag(C) = 2.0*y/N -1.0
+- Output PBM P4 format with 8 pixels per byte, MSB first
+- Validate output with cmp against reference.pbm for N=200
 
 ### Key Requirements
-- N must be read from command line as argument.
-- Exactly 50 iterations per point.
-- Escape threshold 4.0.
-- Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0].
-- Output PBM P4 format with MSB first, zero-padded rows.
-- Code must be in C++ and not use template metaprogramming.
+- Use exactly 50 iterations
+- Escape threshold lim = 2.0 * 2.0 (4.0)
+- Coordinate mapping: real(C) = 2.0*x/N -1.5, imag(C) = 2.0*y/N -1.0
+- Output PBM P4 header (P4\n N N) with 8 pixels per byte, MSB first
+- Pad with zeros if N not divisible by 8
+- Write only header and binary pixel data to stdout
 
 ### Variable Values
-- N: integer command-line argument.
-- max_iterations: 50.
-- escape_threshold: 4.0.
-- plot_real_min: -1.5.
-- plot_real_max: 0.5.
-- plot_imag_min: -1.0.
-- plot_imag_max: 1.0.
+- N: integer command-line argument
+- max_iterations: 50
+- lim: 4.0
+- pixel_format: 8 per byte, MSB first
+- coordinate_mapping: real(C) = 2.0*x/N -1.5, imag(C) = 2.0*y/N -1.0
 
 ### Notes
-- The model must not include template metaprogramming.
-- The output must be identical to the reference for N=200.
-- The code must handle pixel data correctly for PBM P4 format.
+- Ensure N is divisible by 8 for correct padding
+- Use squared magnitude (zr*zr + zi*zi) to avoid sqrt
+- Validate output with cmp output.pbm reference.pbm for N=200

@@ -1,0 +1,63 @@
+### Prompt Structure
+Okay, let's generate a Chain-of-Thought prompt for an LLM to implement the Fasta problem from the Computer Language Benchmarks Game in C++.
+
+**Prompt:**
+
+"You are an expert C++ code generator tasked with creating a program that simulates DNA sequence generation based on three different methods: repeat fasta, random fasta using IUB alphabet probabilities, and random fasta using Homo sapiens frequencies. The program must adhere to strict formatting requirements and utilize a linear congruential generator (LCG) for random number generation without caching the sequence.
+
+**Step 1: Understand the Problem.**
+The goal is to generate three distinct DNA sequences – one using the ALU sequence (repeat fasta), another using the IUB alphabet with specified probabilities, and the third using Homo sapiens frequencies. The output must be formatted precisely as described in the problem definition, including line length constraints and the specific order of the sequences.
+
+**Step 2: Design the LCG.**
+Implement a linear congruential generator (LCG) using the following parameters:
+*   IM = 139968
+*   IA = 3877
+*   IC = 29573
+*   Seed = 42
+
+The `Random(Max)` function should calculate a random number between 0 and Max (inclusive) using the LCG formula: `Seed = (Seed * IA + IC) modulo IM` and return `Max * Seed / IM`.  Crucially, do not cache the `Seed` value after each call to `Random()`.
+
+**Step 3: Implement the Sequence Generation Functions.**
+Create three functions:
+*   `repeat_fasta(std::string sequence, int n)`: Generates a sequence of length `n * 2` by repeating the given `sequence`.
+*   `random_iub(int n)`: Generates a sequence of length `n * 3` using the IUB alphabet and its probabilities.  Use the LCG to select nucleotides based on their probabilities.
+*   `random_homo_sapiens(int n)`: Generates a sequence of length `n * 5` using Homo sapiens frequencies, also utilizing the LCG for nucleotide selection.
+
+**Step 4: Formatting and Output.**
+The main function should:
+1.  Take an integer `N` as a command-line argument.
+2.  Call the three sequence generation functions to create the sequences.
+3.  Print the output in the specified format, including the header lines (">ONE Homo sapiens alu", ">TWO IUB ambiguity codes", ">THREE Homo sapiens frequency") and ensuring each sequence does not exceed 60 characters in length.
+
+**Step 5: Alphabet Definitions.**
+Use the following alphabet definitions and probabilities:
+
+*   **ALU:** GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+*   **IUB:** a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+*   **Homo sapiens:** a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+
+**Step 6:  Considerations.**
+Ensure the code is well-commented and easy to understand. Pay close attention to the LCG implementation to avoid caching and ensure proper random number generation. The output should be identical to the reference when validated using `diff output.txt reference.txt for N=1000`.
+
+Now, generate the C++ code."
+
+### Key Requirements
+*   The generated code must be in C++.
+*   It must accept an integer `N` as a command-line argument.
+*   It *must* implement the LCG with the specified constants (IM, IA, IC, Seed).
+*   It *must* use the provided ALU sequence, IUB alphabet probabilities, and Homo sapiens frequencies.
+*   The output must strictly adhere to the 60-character line length and three-sequence format.
+*   The LCG should not cache the `Seed` value after each call.
+*   The code should be well-commented for clarity.
+
+### Variable Values
+*   IM = 139968
+*   IA = 3877
+*   IC = 29573
+*   Seed = 42
+*   ALU sequence (as provided in the prompt)
+*   IUB alphabet probabilities (as provided in the prompt)
+*   Homo sapiens frequencies (as provided in the prompt)
+
+### Notes
+This prompt is designed to elicit a complete and correct C++ implementation of the Fasta problem. The Chain-of-Thought approach guides the LLM through the necessary steps, emphasizing the critical aspects like LCG implementation and output formatting.  The explicit instructions regarding no caching are crucial for achieving the desired random number generation behavior.  Testing with N=1000 will be essential to verify the correctness of the generated code against the reference output. The prompt's detailed breakdown should minimize ambiguity and increase the likelihood of a successful outcome.

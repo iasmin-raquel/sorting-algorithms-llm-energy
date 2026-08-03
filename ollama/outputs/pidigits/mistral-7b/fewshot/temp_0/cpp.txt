@@ -1,0 +1,31 @@
+### Prompt Structure
+Here is a prompt that demonstrates the structure and style for implementing the Pidigits problem in C++ using arbitrary precision arithmetic. The example provided uses the Unbounded Spigot Algorithm (Gibbons) with the initial state, next_step, extract, and produce operations as defined.
+
+```cpp
+// The Computer Language Benchmarks Game
+// Implementation of Pidigits problem using arbitrary precision arithmetic
+#include <iostream>
+#include <gmpxx.h> // Arbitrary precision arithmetic library (GMP)
+
+int main(int argc, char *argv[]) {
+    unsigned const N = argc > 1 ? atoi(argv[1]) : 1;
+    // ... (Your implementation will fill in the missing parts)
+}
+```
+
+### Key Requirements
+- The solution must be implemented in C++ using the GMP library for arbitrary precision arithmetic.
+- The code should receive N as a command-line argument.
+- It must use the initial state, next_step, extract, and produce operations exactly as defined above.
+- Both extract(3) and extract(4) should be performed for digit verification.
+- The output format should match the one specified in the problem description.
+
+### Variable Values
+- IM: 139968
+- IA: 3877
+- IC: 29573
+- Last: 42 (or any other initial value)
+
+### Notes
+- The example provided does not include the implementation of the missing parts. You will need to fill in the gaps with your own code that follows the structure and requirements outlined above.
+- This prompt is designed to guide the model towards generating a solution that adheres to the given constraints while maintaining the expected style and structure.

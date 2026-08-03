@@ -1,26 +1,30 @@
 ### Prompt Structure
 You are to implement the Mandelbrot set in Python according to the Computer Language Benchmarks Game. The code must:
 - Accept N as a command-line argument.
-- Use exactly 50 iterations and escape threshold 4.0.
-- Plot the Mandelbrot set in the region [-1.5, 0.5] × [-1.0, 1.0].
-- Output in PBM P4 format (binary, MSB first, zero-padded per row).
-- Match the reference output for N=200.
+- Use exactly 50 iterations with escape threshold lim = 2.0 * 2.0.
+- Compute squared magnitude to avoid square roots.
+- Map coordinates via real(C) = 2.0 * x / N - 1.5 and imag(C) = 2.0 * y / N - 1.0.
+- Output in PBM P4 format with 8 bits per byte (MSB first), padding with zeros if N not divisible by 8.
+- Validate against reference.pbm for N=200.
 
 ### Key Requirements
-- Use N as int(sys.argv[1]).
-- Exactly 50 iterations.
-- Escape threshold 4.0.
-- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0].
-- Output PBM P4 header and binary pixel data to stdout.
-- MSB-first byte ordering, zero-padded per row.
+- Use exactly 50 iterations.
+- Escape threshold lim = 2.0 * 2.0.
+- Use squared magnitude (zr*zr + zi*zi).
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0.
+- Output PBM P4 header and binary pixel data.
+- Pad with zeros if N not divisible by 8.
+- Validate against reference.pbm for N=200.
 
 ### Variable Values
-- N: integer from command line argument.
+- N: integer (200 for validation).
 - Max iterations: 50.
-- Escape threshold: 4.0.
-- Plot region: real min=-1.5, real max=0.5, imaginary min=-1.0, imaginary max=1.0.
+- Escape threshold: 2.0 * 2.0.
+- Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0.
+- Pixel packing: 8 bits per byte, MSB first (bit 1 = in set, bit 0 = not in set).
 
 ### Notes
-- The output must match the reference for N=200, requiring precise pixel calculations.
-- The PBM P4 format requires the header "P4" followed by the pixel data.
-- The pixel data is stored as bytes, with each row padded to the next multiple of 4 bytes.
+- Ensure coordinate mapping is correctly applied.
+- Handle N not divisible by 8 by padding with zeros.
+- Validate output with cmp against reference.pbm for N=200.
+- Use squared magnitude to avoid square roots.

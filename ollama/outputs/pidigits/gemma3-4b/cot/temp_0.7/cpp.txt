@@ -1,0 +1,57 @@
+### Prompt Structure
+You are an expert C++ code generator specializing in implementing algorithms from the Computer Language Benchmarks Game. Your task is to generate a complete C++ program that calculates and prints the first N digits of Pi using the Unbounded Spigot Algorithm (Gibbons) with arbitrary precision arithmetic, adhering strictly to the problem description and algorithm requirements.
+
+**Step 1: Initial Reasoning & Code Structure**
+
+Let's break down this complex task into manageable steps. The core of the solution involves implementing the Gibbons spigot algorithm for Pi calculation. We will use the GMP library for arbitrary precision arithmetic.  The program needs to accept 'N' as a command-line argument, representing the number of digits to calculate. It must then iterate through the spigot algorithm, tracking the state variables `q`, `r`, `t`, and `k`. The `extract` function calculates a digit based on these values, and the `produce` function updates the state for the next iteration.  Crucially, we need to perform two separate extractions: one with `extract(3)` and another with `extract(4)` to verify that the digits are correct. This will allow us to detect potential issues in the algorithm's implementation.
+
+**Step 2: Code Outline & Detailed Instructions**
+
+Here’s a detailed outline of the C++ code structure, incorporating GMP for arbitrary precision arithmetic:
+
+1.  **Include Headers:** Include necessary headers like `<iostream>`, `<string>`, `<gmp.h>`, and `<gmpxx.h>`.
+2.  **Define Constants:** Define constants for the initial state variables: `q = 1`, `r = 0`, `t = 1`, and `k = 0`.
+3.  **Function Declarations:** Declare functions for:
+    *   `next_step()`: Updates the algorithm's state based on the steps described in the problem.
+    *   `extract(int digit)`: Calculates a single digit from the current state using GMP. Returns the floor of the result.
+    *   `produce(int digit)`: Updates the algorithm's state after extracting a digit and preparing for the next iteration.
+4.  **Main Function:**
+    *   Get the number of digits `N` from the command-line argument.
+    *   Initialize variables to store the calculated digits (e.g., a string or vector).
+    *   Loop until the desired number of digits (`N`) is calculated:
+        *   Call `next_step()` to advance the algorithm.
+        *   Call `extract(3)` and `extract(4)` to get the extracted digits.
+        *   Compare the two extracted digits. If they are equal, print the digit and call `produce(digit)`. Otherwise, call `next_step()` again.
+    *   Format the output string with 10 digits per line, padding with spaces if necessary, and appending the running total (N).
+    *   Print the formatted output to the console, followed by a tab, colon, and the running total.
+
+**Step 3: Detailed Algorithm Implementation**
+
+Now let's flesh out the algorithm steps within each function:
+
+*   `next_step()`:  Increment `k`, update `r`, `t`, and `q` according to the Gibbons spigot algorithm rules.
+*   `extract(int digit)`: Calculate `floor((q*digit + r) / t)` using GMP arithmetic.
+*   `produce(int digit)`: Update `q`, `r`, and `t` by multiplying them accordingly, preparing for the next iteration.
+
+**Step 4: Output Formatting & Finalization**
+
+Ensure that the output is formatted precisely as specified in the problem description - 10 digits per line with a tab, colon, and the running total.  Handle cases where the last line has fewer than 10 digits by padding with spaces.
+
+Now, write the C++ code following this outline and instructions. Remember to use GMP for arbitrary precision arithmetic.
+### Key Requirements
+*   The code must be written in C++.
+*   It must utilize the GMP library for arbitrary precision arithmetic.
+*   The program must receive the number of digits (N) as a command-line argument.
+*   Implement the Unbounded Spigot Algorithm (Gibbons) precisely, following the defined steps: `next_step`, `extract(3)`, and `extract(4)` with the correct formulas for `q`, `r`, `t`, and `k`.
+*   The output must adhere strictly to the format specified in the problem description: 10 digits per line, tab, colon, and running total.
+*   Include comprehensive error handling (e.g., check if N is a valid positive integer).
+*   Perform both `extract(3)` and `extract(4)` for digit verification during each step.
+*   Use clear variable names and comments to enhance readability.
+
+### Variable Values
+`q = 1`, `r = 0`, `t = 1`, `k = 0` (Initial state variables)
+`N`: Command-line argument representing the number of digits to calculate.
+### Notes
+*   This prompt emphasizes careful implementation of the Gibbons spigot algorithm, particularly the digit extraction step with both `extract(3)` and `extract(4)`.
+*   GMP's handling of large numbers is crucial for accurate Pi calculation.
+*   The output formatting requires precise control to ensure compliance with the benchmark specification. Consider using string manipulation techniques carefully to achieve the desired format.

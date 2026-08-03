@@ -1,72 +1,48 @@
+```text
 ### Prompt Structure
-```
-You are an expert C++ code generator for the Computer Language Benchmarks Game. You will be provided with a problem description and a few-shot example demonstrating the desired output format. Your task is to generate C++ code that solves the problem, adhering strictly to the specified constraints.
+Given the following examples of Mandelbrot set generation in C++, implement a function that generates a PBM P4 bitmap image of the Mandelbrot set. The input `N` is the size of the bitmap (N x N). Use a maximum of 50 iterations and an escape threshold of 2.0 * 2.0. Output the header "P4\n" followed by "N N\n", then write the pixel data byte-by-byte to standard output in PBM format, with MSB first (bit 1 = in set, bit 0 = not in set). The output must be identical when compared against a reference image for N=200.  Do not include any comments or extra code; only the C++ implementation.
 
-Here's an example:
-
+Example 1:
 ```cpp
-/*
- * The Computer Language Benchmarks Game
- * contributed by Jeffrey Beu
- * modified by Danny Angelo Carminati Grein
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-namespace {
-struct body {
-  double x, y, z;
-  double vx, vy, vz;
-  const double mass;
-};
-
-const double pi = 3.141592653589793;
-const double solar_mass = 4 * pi * pi;
-const double days_per_year = 365.24;
-const double dt = 0.01;
-
-[... resto do código C++ do n-body ...]
-
-}
-
-int main(int,char** argv) {
-  auto solar_system = construct_tuple(sun,jupiter,saturn,uranus,neptune);
-  offset(solar_system);
-  printf("%.9f\n", energy(solar_system));
-  int n = atoi(argv[1]);
-  for (int i = 1; i <= n; i++) advance(solar_system);
-  printf("%.9f\n", energy(solar_system));
-  return 0;
+int main(int argc, char** argv) {
+    int N = atoi(argv[1]);
+    // Implementation details here...
+    return 0;
 }
 ```
 
-Now, solve the following problem: Plot the Mandelbrot set [-1.5-i, 0.5+i] on an N-by-N bitmap. Write output byte-by-byte in portable bitmap format (PBM P4). The output must be identical to the reference when validated with: cmp output.pbm reference.pbm for N=200.
+Example 2:
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
-Use the following parameters exactly as given:
-- Maximum iterations: 50
-- Escape threshold: 4.0
-- Plot region: real in [-1.5, 0.5], imaginary in [-1.0, 1.0]
-- Output: PBM P4 format, bits packed MSB first, zero-padded per row
-
-Generate the C++ code.
+int main(int argc, char** argv) {
+    int N = atoi(argv[1]);
+    // Implementation details here...
+    return 0;
+}
 ```
 
 ### Key Requirements
-*   The generated code must be valid C++.
-*   It should take an integer `N` as a command-line argument.
-*   It must use exactly 50 iterations for the Mandelbrot set calculation.
-*   The escape threshold must be set to 4.0.
-*   The plotting region should cover real values from -1.5 to 0.5 and imaginary values from -1.0 to 1.0.
-*   It must output the resulting bitmap in PBM P4 format (byte-by-byte, MSB first, zero-padded per row).
-*   The code should include a header for `stdio.h` and `stdlib.h`.
+*   The generated C++ code must be complete and executable.
+*   It should correctly implement the Mandelbrot set algorithm with 50 iterations and a lim of 2.0 * 2.0.
+*   The output format must strictly adhere to PBM P4, including the header and byte-by-byte pixel data representation (MSB first).
+*   The code should accept `N` as a command-line argument.
+*   It should produce a valid bitmap image that can be compared using `cmp` against a reference image for N=200. No additional formatting or comments are to be included in the output.
+*   The coordinate mapping should be implemented accurately based on the problem description (real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0).
 
 ### Variable Values
+*   `N`:  Integer representing the size of the bitmap (e.g., 200).  Received as a command-line argument.
 *   Maximum iterations: 50
-*   Escape threshold: 4.0
-*   Plot region: real [-1.5, 0.5], imaginary [-1.0, 1.0]
-*   Output format: PBM P4 (MSB first, zero-padded)
+*   Escape threshold (squared): lim = 2.0 * 2.0
+*   Iteration formula: Z = Z\*Z + C, starting from Z = (0, 0)
+*   Coordinate mapping: real(C) = 2.0 * x / N - 1.5, imag(C) = 2.0 * y / N - 1.0
 
 ### Notes
-The prompt utilizes few-shot prompting to guide the LLM towards generating the desired C++ code structure and adhering to the specific constraints of the problem. The example provided demonstrates the expected input/output format and overall coding style.  The inclusion of specific parameter values clarifies expectations for numerical calculations and output formatting. Focus on producing runnable, correct code based on this guidance.
+The prompt relies on few-shot learning to guide the LLM towards generating a correct and efficient Mandelbrot set implementation in C++. The provided examples are intentionally simple to focus the model's attention on the essential structure of the code, rather than specific algorithm details. The emphasis is on accurate output formatting and adherence to the specified constraints (iteration count, threshold, and bitmap format).
+```

@@ -1,0 +1,89 @@
+---
+
+### **Prompt Structure**
+**Few-shot Prompt for Binary Tree Allocation Benchmark (CLBG Game):**
+
+---
+#### **Example 1: Stretch Tree (C-like pseudocode → Python adaptation)**
+```python
+# Define a tree node structure with left/right children.
+class Node:
+    def __init__(self, left=None, right=None):
+        self.left = left
+        self.right = right
+
+def allocate_stretch_tree(depth):
+    # Allocate a perfect binary tree of given depth (stretch case).
+    if depth == 0: return None
+    node = Node()
+    node.left = allocate_stretch_tree(depth - 1)
+    node.right = allocate_stretch_tree(depth - 1)
+    return node
+
+# Output format for stretch tree:
+print(f"stretch tree of depth {depth}\tcheck: allocations match reference")
+```
+
+---
+#### **Example 2: Bottom-Up Tree (Iterative Allocation)**
+```python
+def allocate_bottom_up_tree(depth):
+    # Allocate a perfect binary tree iteratively (bottom-up).
+    nodes = [None] * (2**depth - 1)
+    for i in range(1, len(nodes)):
+        parent_idx = (i // 2) - 1
+        if parent_idx >= 0:
+            nodes[parent_idx].left = nodes[i]
+            nodes[parent_idx].right = nodes[i + 1] if i + 1 < len(nodes) else None
+    return nodes[-1]
+
+# Output format for each depth iteration:
+for d in [min_depth, min_depth+2, ...]:
+    iterations = 2**(max_depth - d + min_depth)
+    print(f"I\t trees of depth {d}\tcheck: allocations match reference")
+```
+
+---
+#### **Example 3: Long-Lived Tree (Persistent Allocation)**
+```python
+def allocate_long_lived_tree(depth):
+    # Allocate a tree that persists across iterations.
+    return allocate_stretch_tree(depth)  # or iterative method
+
+# Output format for long-lived case:
+print(f"long lived tree of depth {depth}\tcheck: still exists after deallocations")
+```
+
+---
+**Target Problem:**
+Implement a Python program that:
+1. Reads `N` from command-line arguments.
+2. Defines a binary tree node structure with `left`/`right` pointers.
+3. Implements three cases:
+   - **Stretch Tree**: Allocate, validate, and deallocate a perfect binary tree of depth `stretch_depth`.
+   - **Bottom-Up Trees**: For each depth from `min_depth` to `max_depth` (step 2), allocate `iterations` trees, walk them, deallocate, and check memory.
+   - **Long-Lived Tree**: Allocate a persistent tree that survives deallocations of other trees.
+4. Output must match the exact format specified in the problem statement.
+
+---
+### **Key Requirements**
+- **Strict Output Format**: No deviations from the template (e.g., no extra newlines, incorrect indentation).
+- **No Optimizations**: Explicitly avoid garbage collection or compiler optimizations (e.g., use explicit `del` for deallocation).
+- **Memory Validation**: Assume a reference checker (`diff output.txt reference.txt`) validates allocations.
+- **Command-Line Parsing**: Use `sys.argv[1]` to read `N`.
+- **Tree Structure**: Leaf nodes must mirror interior nodes in memory layout (no special handling).
+
+---
+### **Variable Values**
+| Parameter          | Value                     |
+|--------------------|---------------------------|
+| `min_depth`        | 4                         |
+| `max_depth`        | `max(min_depth + 2, N)`   |
+| `stretch_depth`    | `max_depth + 1`           |
+| `iterations`       | `2**(max_depth - depth + min_depth)` (per iteration) |
+
+---
+### **Notes**
+- **Ambiguity Risk**: The "walk" operation is unspecified—assume it involves traversing all nodes (e.g., DFS/BFS) to count allocations. Clarify if the LLM requires explicit traversal logic.
+- **Edge Cases**: Handle `N < min_depth + 2` by setting `max_depth = min_depth`.
+- **Tool Dependencies**: The prompt assumes no external tools for validation; focus on code structure and output format compliance.

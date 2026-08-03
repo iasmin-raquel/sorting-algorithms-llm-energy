@@ -1,0 +1,127 @@
+```text
+### Prompt Structure
+Here are three examples of binary tree implementations:
+
+Example 1:
+```cpp
+#include <iostream>
+#include <vector>
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+// Function to create a new node
+Node* newNode(int val) {
+    Node* n = new Node;
+    n->data = val;
+    n->left = nullptr;
+    n->right = nullptr;
+    return n;
+}
+
+// Example function to print the tree (inorder traversal) - replace with your actual implementation
+void printTree(Node* root) {
+    if (root != nullptr) {
+        printTree(root->left);
+        std::cout << root->data << " ";
+        printTree(root->right);
+    }
+}
+
+// ... Your tree creation and deletion logic here ...
+```
+
+Example 2:
+```cpp
+#include <iostream>
+#include <vector>
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+// Function to create a new node
+Node* newNode(int val) {
+    Node* n = new Node;
+    n->data = val;
+    n->left = nullptr;
+    n->right = nullptr;
+    return n;
+}
+
+// Example function to print the tree (inorder traversal) - replace with your actual implementation
+void printTree(Node* root) {
+    if (root != nullptr) {
+        printTree(root->left);
+        std::cout << root->data << " ";
+        printTree(root->right);
+    }
+}
+
+// ... Your tree creation and deletion logic here ...
+```
+
+Example 3:
+```cpp
+#include <iostream>
+#include <vector>
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+// Function to create a new node
+Node* newNode(int val) {
+    Node* n = new Node;
+    n->data = val;
+    n->left = nullptr;
+    n->right = nullptr;
+    return n;
+}
+
+// Example function to print the tree (inorder traversal) - replace with your actual implementation
+void printTree(Node* root) {
+    if (root != nullptr) {
+        printTree(root->left);
+        std::cout << root->data << " ";
+        printTree(root->right);
+    }
+}
+
+// ... Your tree creation and deletion logic here ...
+```
+
+Now, implement a C++ program that creates perfect binary trees of varying depths. The program should:
+
+1.  Define a `Node` structure with `left` and `right` child pointers.
+2.  Allocate a binary tree to stretch memory (check for existence), and deallocate it.
+3.  Allocate a long-lived binary tree that will live on while other trees are allocated and deallocated.
+4.  Allocate, walk, and deallocate many bottom-up binary trees.
+5.  Check that the long-lived binary tree still exists.
+
+The program should take an integer `N` as a command-line argument.  It must generate output in the following format for each depth from min\_depth to max\_depth (step 2): "Depth\tTrees of depth D\tCheck: C", where Depth is the current depth being processed, Trees of depth D indicates the number of trees created at that depth, and Check: C represents a success or failure check.  The parameters are: `min_depth = 4`, `max_depth = max(min_depth + 2, N)`, `stretch_depth = max_depth + 1`, `iterations = 1 << (max_depth - depth + min_depth)` and `N` received via command-line argument.  Ensure the code allocates and deallocates memory correctly to avoid memory leaks.
+
+### Key Requirements
+*   The generated C++ code must implement a binary tree data structure with node allocation and deallocation.
+*   It must take an integer 'N' as a command-line argument.
+*   The program should generate output in the specified format, including depth, number of trees created at each depth, and check results (represented by "Check: C").
+*   Memory management (allocation and deallocation) is crucial to avoid memory leaks.  The long-lived tree must persist throughout the execution.
+*   The algorithm should correctly calculate `min_depth`, `max_depth`, and `stretch_depth` based on the input 'N'.
+
+### Variable Values
+*   `min_depth`: 4
+*   `max_depth`: 6 (calculated as max(4+2, N) = max(6, N))
+*   `stretch_depth`: 7 (calculated as max_depth + 1 = 6 + 1 = 7)
+*   `N`: Command-line argument (integer).  The exact value will depend on the input.
+*   `iterations`: Calculated based on `max_depth - depth + min_depth` and N for each depth.
+
+### Notes
+*   This prompt emphasizes structure over content. The LLM should focus on generating the code skeleton and output formatting, rather than providing the full tree creation logic.  The examples are meant to illustrate the expected code style and output format.  Error handling and optimization are not required in this context. Ensure correct memory allocation and deallocation to avoid leaks and crashes.
+```

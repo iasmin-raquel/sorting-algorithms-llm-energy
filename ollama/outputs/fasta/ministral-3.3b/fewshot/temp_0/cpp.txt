@@ -1,0 +1,113 @@
+### Prompt Structure
+
+**Example 1 (Binary Trees):**
+```cpp
+#include <iostream>
+int main(int argc, char *argv[]) {
+    // Read command-line argument N and process it.
+    int N = /* parse from argv */;
+    // Implement logic to generate binary trees of varying depths based on N.
+    std::cout << "stretch tree output" << std::endl;  // Example output format
+}
+```
+
+**Example 2 (Fasta Problem):**
+```cpp
+#include <iostream>
+#include <string>
+#include <vector>
+
+struct RandomGenerator {
+    int seed;
+    double random(double max) {
+        seed = ((seed * IA + IC) % IM);
+        return max * seed / IM;
+    }
+};
+
+constexpr int IM = 139968, IA = 3877, IC = 29573;
+
+std::string generateRepeatFasta(const std::string& pattern, int n) {
+    // Implement logic to repeat the given sequence 'n' times.
+}
+
+std::string generateRandomFasta(const std::vector<std::pair<char, double>>& alphabet,
+                               int length) {
+    // Implement weighted random selection using cumulative probabilities.
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) { /* Handle error */ }
+    int N = std::stoi(argv[1]);
+
+    RandomGenerator rng{42};
+    const std::string ALU_SEQUENCE = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA...";
+
+    // Generate sequences:
+    auto repeat_alu = generateRepeatFasta(ALU_SEQUENCE, N * 2);
+    auto random_iub   = generateRandomFasta({{'a',0.27}, {'c',0.12}, /* ... */}, N * 3);
+    auto random_hsap  = generateRandomFasta({{'a',0.3029549426680}, {'c',0.1979883004921}, /* ... */}, N * 5);
+
+    // Output in exact format:
+    std::cout << ">ONE Homo sapiens alu\n" << repeat_alu << "\n";
+    std::cout << ">TWO IUB ambiguity codes\n" << random_iub << "\n";
+    std::cout << ">THREE Homo sapiens frequency\n" << random_hsap;
+}
+```
+
+---
+
+### Key Requirements
+- **C++ Implementation**: Must use C++ syntax and standard libraries.
+- **Command-line Argument Parsing**: Read `N` from `argv[1]` (e.g., `./program 5`).
+- **LCG Usage**: Implement the provided LCG (`IM=139968`, `IA=3877`, `IC=29573`) with seed=42, no caching.
+- **Output Format**:
+  - Line length: Exactly 60 characters per line (pad/truncate as needed).
+  - Three sequences in order:
+    1. Repeat ALU sequence (`>ONE Homo sapiens alu` + `n*2` chars).
+    2. Random IUB sequence (`>TWO IUB ambiguity codes` + `n*3` chars).
+    3. Random Homo sapiens sequence (`>THREE Homo sapiens frequency` + `n*5` chars).
+- **Weighted Random Selection**: Use cumulative probabilities for each alphabet.
+- **No Caching**: Generate random numbers on-demand per nucleotide.
+
+---
+
+### Variable Values
+#### Alphabets and Probabilities:
+1. **ALU Sequence** (repeat):
+   ```cpp
+   const std::string ALU_SEQUENCE = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA" +
+                                   "TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT" +
+                                   "AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG" +
+                                   "GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG" +
+                                   "CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+   ```
+2. **IUB Alphabet** (probabilities):
+   ```cpp
+   const std::vector<std::pair<char, double>> IUB_ALPHABET = {
+       {'a', 0.27}, {'c', 0.12}, {'g', 0.12}, {'t', 0.27},
+       {'B', 0.02}, {'D', 0.02}, {'H', 0.02}, {'K', 0.02},
+       {'M', 0.02}, {'N', 0.02}, {'R', 0.02}, {'S', 0.02},
+       {'V', 0.02}, {'W', 0.02}, {'Y', 0.02}
+   };
+   ```
+3. **Homo sapiens Alphabet** (probabilities):
+   ```cpp
+   const std::vector<std::pair<char, double>> HSAP_ALPHABET = {
+       {'a', 0.3029549426680}, {'c', 0.1979883004921},
+       {'g', 0.1975473066391}, {'t', 0.3015094502008}
+   };
+   ```
+
+#### LCG Constants:
+```cpp
+constexpr int IM = 139968, IA = 3877, IC = 29573;
+```
+
+---
+
+### Notes
+- **Output Truncation**: If `N*length` exceeds line limits (e.g., `n*2=1000`), split into multiple lines of 60 chars each.
+- **Edge Cases**: Handle invalid `N` (e.g., non-integer input) gracefully or exit with an error message.
+- **Cumulative Probabilities**: For weighted random selection, compute cumulative probabilities for each alphabet and use binary search to match random numbers efficiently. The prompt expects a linear search as per the problem description.
+- **Random Seed**: Always initialize `seed=42` in `main()` before generating sequences.

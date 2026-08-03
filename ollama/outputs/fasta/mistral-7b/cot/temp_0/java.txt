@@ -1,0 +1,30 @@
+### Prompt Structure
+Write a Java program that takes N as a command-line argument and generates three DNA sequences in the specified format. The program should use the provided ALU sequence, IUB alphabet with probabilities, and Homo sapiens alphabet with probabilities for generating the sequences. The program must use the LCG with the exact constants defined above to generate random numbers.
+
+### Key Requirements
+- The program must be implemented in Java
+- The program should receive N as a command-line argument
+- The program must use the LCG with the exact constants IM, IA, IC, and Seed defined above for generating random numbers
+- The program must use the ALU sequence, IUB alphabet with probabilities, and Homo sapiens alphabet with probabilities as provided
+- The output should be in the exact format specified above
+- The program should not cache the random number sequence
+
+### Variable Values
+- IM = 139968
+- IA = 3877
+- IC = 29573
+- Seed = 42
+
+- ALU sequence: GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+                  TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+                  AAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+                  GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+                  CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+
+- IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+
+- Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+
+### Notes
+- The program should convert the expected probability of each nucleotide into cumulative probabilities and match a random number against those cumulative probabilities to select each nucleotide using linear search
+- The program should not cache the random number sequence, but generate a new one each time a nucleotide needs to be selected.

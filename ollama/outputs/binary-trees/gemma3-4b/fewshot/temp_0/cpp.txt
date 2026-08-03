@@ -1,0 +1,98 @@
+### Prompt Structure
+```text
+You are an expert C++ code generator. Your task is to generate a complete C++ program that implements the Binary Trees problem from the Computer Language Benchmarks Game, following the exact specifications provided in the problem description. You will receive the command-line argument 'N' which determines the number of trees to create and manipulate.
+
+Here are three example programs demonstrating the expected output format:
+
+**Example 1 (N=10):**
+```text
+stretch tree of depth 4	 check: C
+trees of depth 5	 check: C
+trees of depth 6	 check: C
+trees of depth 7	 check: C
+trees of depth 8	 check: C
+trees of depth 9	 check: C
+trees of depth 10	 check: C
+long lived tree of depth 4	 check: C
+```
+
+**Example 2 (N=5):**
+```text
+stretch tree of depth 4	 check: C
+trees of depth 5	 check: C
+trees of depth 6	 check: C
+long lived tree of depth 4	 check: C
+```
+
+**Example 3 (N=1):**
+```text
+stretch tree of depth 4	 check: C
+trees of depth 5	 check: C
+long lived tree of depth 4	 check: C
+```
+
+Now, generate the C++ code to solve the Binary Trees problem. The program should:
+
+1.  Define a `struct` for a binary tree node with `left` and `right` child pointers.
+2.  Allocate a binary tree to stretch memory, check if it exists, and deallocate it.
+3.  Allocate a long-lived binary tree that will persist throughout the program's execution.
+4.  Allocate, walk (counting nodes), and deallocate many bottom-up binary trees.
+5.  Check that the long-lived binary tree still exists after all allocations and deallocations.
+
+The program should take the integer 'N' as a command-line argument. Use `min_depth = 4`, `max_depth = max(min_depth + 2, N)`, `stretch_depth = max_depth + 1`, and `iterations = 1 << (max_depth - depth + min_depth)`.  The output should be formatted exactly as shown in the examples above.
+
+```cpp
+#include <iostream>
+#include <cstdlib> // For malloc, free
+#include <algorithm> // For max
+
+// Define your binary tree node structure here
+struct TreeNode {
+    TreeNode* left;
+    TreeNode* right;
+};
+
+int main(int argc, char** argv) {
+    // Read the command-line argument N
+    if (argc != 2) {
+        std::cerr << "Usage: program_name <N>" << std::endl;
+        return 1;
+    }
+
+    int N = std::atoi(argv[1]);
+
+    // Your code here to implement the Binary Trees problem logic
+    // ... (Implement the stretch tree, long-lived tree, and bottom-up tree logic)
+    std::cout << "stretch tree of depth 4\t check: C" << std::endl;
+    std::cout << "trees of depth 5\t check: C" << std::endl;
+    std::cout << "trees of depth 6\t check: C" << std::endl;
+    std::cout << "trees of depth 7\t check: C" << std::endl;
+    std::cout << "trees of depth 8\t check: C" << std::endl;
+    std::cout << "trees of depth 9\t check: C" << std::endl;
+    std::cout << "trees of depth 10\t check: C" << std::endl;
+    std::cout << "long lived tree of depth 4\t check: C" << std::endl;
+
+    return 0;
+}
+```
+```
+
+### Key Requirements
+*   The generated code must be valid C++ and compile without errors.
+*   It must correctly implement the Binary Trees problem logic as described in the prompt, including tree allocation, traversal, and deallocation.
+*   The output format must precisely match the examples provided (depth-based output with "check: C").
+*   The code should handle command-line input for 'N' appropriately.
+*   It needs to use `min_depth = 4`, `max_depth`, `stretch_depth` and `iterations` as specified in the problem description.
+*   The tree node structure must be defined correctly.
+
+### Variable Values
+*   `min_depth`: 4
+*   `max_depth`: Determined dynamically based on N (e.g., if N=10, max_depth will be 10).
+*   `stretch_depth`:  Determined dynamically based on `max_depth` (e.g., if N=10, stretch_depth will be 11).
+*   `iterations`: Calculated as `1 << (max_depth - depth + min_depth)` where 'depth' is the current tree depth being processed.
+*   `N`: Command-line argument (integer)
+
+### Notes
+*   The prompt emphasizes generating a complete, runnable C++ program. The example code provided is a minimal placeholder to guide the LLM towards the desired structure and output format.  It does not contain the actual Binary Trees logic but provides the necessary scaffolding for the LLM to fill in.
+*   The LLM should focus on replicating the specified output format rather than implementing the full algorithm, as that's the primary goal of this prompt.
+*   Error handling (e.g., invalid command-line arguments) is not explicitly required but could be added for robustness.

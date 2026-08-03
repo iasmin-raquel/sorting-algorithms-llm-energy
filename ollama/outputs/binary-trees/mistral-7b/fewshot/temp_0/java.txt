@@ -1,0 +1,62 @@
+### Prompt Structure
+Here is a prompt that demonstrates the structure for implementing the Binary Trees problem in Java. The example code provided is a transliteration from Michael Ferguson's Chapel program, and this prompt will guide the model to create a similar structure for the binary tree problem.
+
+```java
+public final class BinaryTree {
+    // Define a tree node structure with left and right child pointers
+    static class Node {
+        // ...
+    }
+
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]);
+        int min_depth = 4;
+        int max_depth = Math.max(min_depth + 2, N);
+        int stretch_depth = max_depth + 1;
+
+        // Allocate a binary tree to stretch memory, check it exists, and deallocate it
+        Node root = createBinaryTree(stretch_depth);
+        // ...
+        deallocateBinaryTree(root);
+
+        // Allocate a long-lived binary tree which will live on while other trees are allocated and deallocated
+        root = createBinaryTree(max_depth);
+        // ...
+
+        // Allocate, walk, and deallocate many bottom-up binary trees:
+        for (int depth = min_depth; depth <= max_depth; depth++) {
+            int iterations = 1 << (max_depth - depth + min_depth);
+            for (int i = 0; i < iterations; i++) {
+                root = createBinaryTree(depth);
+                // Walk the tree and count nodes
+                int nodeCount = walkTree(root);
+                deallocateBinaryTree(root);
+                // ... check if long-lived tree still exists
+            }
+        }
+
+        // Print output in the exact format specified above
+        System.out.printf("stretch tree of depth %d\t check: C\n", stretch_depth);
+        for (int depth = min_depth; depth <= max_depth; depth++) {
+            System.out.printf("%d\t trees of depth %d\t check: C\n", iterations, depth);
+        }
+        System.out.printf("long lived tree of depth %d\t check: C\n", max_depth);
+    }
+}
+```
+
+### Key Requirements
+- The model should create a Node class to represent the binary tree nodes with left and right child pointers.
+- The main method should receive N as a command-line argument, compute min_depth, max_depth, and stretch_depth accordingly.
+- Implement the logic for allocating, walking, and deallocating binary trees of different depths.
+- Print output in the exact format specified above.
+
+### Variable Values
+- N: Command-line argument
+- min_depth: 4
+- max_depth: Computed as described above
+- stretch_depth: Computed as described above
+
+### Notes
+- The model should not optimize away the work, and leaf nodes must be the same as interior nodes with the same memory allocation.
+- The output must be identical to the reference when validated with `diff output.txt reference.txt` for N=10.

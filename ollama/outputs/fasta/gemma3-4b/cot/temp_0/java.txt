@@ -1,0 +1,69 @@
+### Prompt Structure
+Okay, let's generate a Chain-of-Thought prompt to guide an LLM in creating Java code for the Fasta problem from the Computer Language Benchmarks Game. The goal is to produce precisely the required output with the specified algorithm and constraints.
+
+**Prompt:**
+
+"You are an expert Java programmer tasked with implementing a solution to the Fasta problem as defined in the Computer Language Benchmarks Game. Your task is to generate complete, runnable Java code that fulfills all requirements outlined below.  I will guide you through the process step-by-step using Chain-of-Thought prompting.
+
+**Step 1: Understanding the Problem & Initial Design**
+
+First, let's break down the problem into smaller parts. We need to generate three different DNA sequences: one using the ALU sequence (repeat fasta), one using the IUB alphabet with ambiguity codes, and one using the Homo sapiens frequency distribution. The length of each sequence will be determined by an input parameter 'N'.  We'll use a Linear Congruential Generator (LCG) to generate random numbers for selecting nucleotides based on their probabilities. We must avoid caching the LCG sequence to ensure true randomness.
+
+**Step 2: Implementing the LCG**
+
+Implement the LCG as follows:
+*   `IM = 139968`
+*   `IA = 3877`
+*   `IC = 29573`
+*   `Seed = 42`
+
+The `Random(Max)` function should calculate a random number between 0 and `Max` (inclusive) using the LCG formula:  `Seed = (Seed * IA + IC) modulo IM`, then return `Max * Seed / IM`.
+
+**Step 3: Generating Sequences**
+
+Now, let's implement the sequence generation logic for each of the three types:
+
+*   **Repeat Fasta (ALU):** Use the provided ALU sequence.  The length of this sequence will be `N * 2`.
+*   **IUB Ambiguity Codes:** Generate random nucleotides from the IUB alphabet, using their specified probabilities. The length of this sequence will be `N * 3`.
+*   **Homo Sapiens Frequency:** Generate random nucleotides from the Homo sapiens frequency distribution, using their specified probabilities. The length of this sequence will be `N * 5`.
+
+**Step 4: Formatting the Output**
+
+The output must adhere to a specific format:
+
+1.  `>ONE Homo sapiens alu` followed by the ALU sequence (length N*2).
+2.  `>TWO IUB ambiguity codes` followed by the IUB sequence (length N*3).
+3.  `>THREE Homo sapiens frequency` followed by the Homo sapiens sequence (length N*5).
+
+Each line should be a maximum of 60 characters long.
+
+**Step 5: Handling Command-Line Arguments**
+
+The program must accept an integer 'N' as a command-line argument, which determines the length of all three sequences.
+
+**Step 6:  Final Code Generation**
+
+Now, write the complete Java code incorporating all these steps. Ensure that you handle potential errors gracefully and provide clear comments to explain your logic.  Pay close attention to detail to ensure the output matches the exact requirements.
+
+Let me know when you're ready to start writing the code. I will provide feedback and guide you through any necessary adjustments."
+
+### Key Requirements
+*   The generated code must be fully functional Java code.
+*   It must accept an integer 'N' as a command-line argument.
+*   It must implement the LCG with the specified constants (IM, IA, IC, Seed).
+*   It must use the provided ALU sequence, IUB alphabet and probabilities, and Homo sapiens alphabet and probabilities exactly as defined.
+*   The output format must be strictly adhered to: three sequences in the specified order and line length.
+*   The random number generator must *not* cache the sequence; each call to `Random()` should produce a new value.
+*   Error handling (e.g., invalid command-line arguments) should be considered, though not explicitly required for this prompt.
+
+### Variable Values
+*   `IM = 139968`
+*   `IA = 3877`
+*   `IC = 29573`
+*   `Seed = 42`
+*   ALU sequence: `GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA...` (full sequence)
+*   IUB alphabet and probabilities: a=0.27, c=0.12, g=0.12, t=0.27, B=0.02, D=0.02, H=0.02, K=0.02, M=0.02, N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+*   Homo sapiens alphabet and probabilities: a=0.3029549426680, c=0.1979883004921, g=0.1975473066391, t=0.3015094502008
+
+### Notes
+This prompt is designed to elicit a detailed and step-by-step response from the LLM. The Chain-of-Thought approach should help guide the model towards generating correct code by explicitly outlining the necessary steps and constraints.  The emphasis on avoiding caching of the LCG sequence is crucial for ensuring accurate randomness. The provided variable values are fixed and must be used exactly as specified.

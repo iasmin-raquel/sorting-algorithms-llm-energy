@@ -1,0 +1,88 @@
+### Prompt Structure
+
+**Example 1 (Binary Trees):**
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class BinaryTrees {
+    public static void main(String[] args) {
+        int n = args.length > 0 ? Integer.parseInt(args[0]) : 0;
+        // Implementation follows a specific structure:
+        // - Uses command-line argument `n` for input.
+        // - Outputs formatted results to stdout with thread-based execution.
+    }
+}
+```
+
+**Example 2 (Fasta Problem):**
+```java
+import java.util.Random;
+
+public class FastaGenerator {
+    public static void main(String[] args) {
+        int N = Integer.parseInt(args[0]); // Read command-line argument `N`.
+        // Generate sequences with exact output format:
+        // 1. ">ONE Homo sapiens alu" followed by repeated ALU sequence (n*2 chars).
+        // 2. ">TWO IUB ambiguity codes" followed by random IUB sequence (n*3 chars).
+        // 3. ">THREE Homo sapiens frequency" followed by random Homo sapiens sequence (n*5 chars).
+        // Each line must be exactly 60 characters long.
+    }
+}
+```
+
+---
+
+### Key Requirements
+- **Language**: Pure Java, no external libraries beyond `java.util.Random` or basic I/O.
+- **Input Handling**: Command-line argument `N` parsed as an integer.
+- **Randomness**:
+  - Use the provided LCG (`IM=139968`, `IA=3877`, `IC=29573`, Seed=42) *without caching*.
+  - Generate random numbers on-demand for each nucleotide selection.
+- **Output Format**:
+  - Exactly three sequences, each prefixed with a header (`>ONE`, `>TWO`, `>THREE`).
+  - Line length: 60 characters (pad with spaces if necessary).
+  - Sequences must match the specified lengths (`n*2`, `n*3`, `n*5`).
+- **Alphabets/Probabilities**:
+  - Use exact IUB and Homo sapiens probability distributions.
+  - For weighted random selection, compute cumulative probabilities *and* use linear search to select nucleotides.
+- **No Caching**: Do not store or reuse random numbers between selections.
+
+---
+
+### Variable Values
+#### Alphabets & Probabilities:
+1. **ALU Sequence (Repeat Fasta)**:
+   ```
+   GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+   TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+   AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+   GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+   CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA
+   ```
+2. **IUB Ambiguity Codes** (Probabilities):
+   ```
+   a=0.27, c=0.12, g=0.12, t=0.27,
+   B=0.02, D=0.02, H=0.02, K=0.02, M=0.02,
+   N=0.02, R=0.02, S=0.02, V=0.02, W=0.02, Y=0.02
+   ```
+3. **Homo sapiens** (Probabilities):
+   ```
+   a=0.3029549426680, c=0.1979883004921,
+   g=0.1975473066391, t=0.3015094502008
+   ```
+#### LCG Constants:
+- `IM = 139968`
+- `IA = 3877`
+- `IC = 29573`
+- Seed = **42**
+
+---
+
+### Notes
+- **Ambiguity Handling**: For IUB codes, treat each as a distinct nucleotide (e.g., `B` is not a subset of `A/C/G/T`). Use cumulative probabilities to select among all valid options.
+- **Edge Cases**:
+  - If `N=0`, output an empty file (no sequences).
+  - Ensure line lengths are exactly 60 chars by padding with spaces if needed.
+- **LCG Behavior**: The seed must be updated *exactly* as per the formula for each random number. No intermediate caching allowed.
+- **Validation**: The generated output must pass `diff` checks against reference files for `N=1000`.

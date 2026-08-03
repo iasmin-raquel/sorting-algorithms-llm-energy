@@ -1,0 +1,43 @@
+```text
+### Prompt Structure
+You are an expert Java code generator specializing in implementing the Binary Trees problem from the Computer Language Benchmarks Game. Your task is to generate a complete Java program that satisfies all the requirements outlined in the problem description, including the specific parameters and output format.  You will receive a command-line argument 'N' representing the number of trees to create.
+
+Here are some examples demonstrating the desired structure and output format:
+
+**Example 1:**
+```java
+stretch tree of depth 4	 check: C
+I	 trees of depth 4	 check: C
+long lived tree of depth 4	 check: C
+```
+
+**Example 2:**
+```java
+stretch tree of depth 5	 check: C
+I	 trees of depth 5	 check: C
+long lived tree of depth 5	 check: C
+```
+
+Now, generate the Java code to implement the Binary Trees problem as described. Remember to use min_depth = 4, max_depth calculated based on N, stretch_depth = max_depth + 1 and iterations as specified in the prompt. Ensure your output matches the format shown above precisely.  Focus solely on generating the Java code; do not include any explanations or comments beyond what's necessary for the code itself to function correctly.
+
+```
+### Key Requirements
+*   The generated code must be complete, runnable Java code.
+*   It should receive 'N' as a command-line argument and use it to determine parameters like min_depth, max_depth, and stretch_depth.
+*   The code must define a `TreeNode` class with `left` and `right` child pointers.
+*   Implement the logic for creating a "stretch tree" of varying depths (from min_depth to max_depth in steps of 2), allocating and deallocating trees as specified.
+*   Create a long-lived binary tree that persists throughout the process.
+*   Implement a loop that generates multiple bottom-up binary trees, counting nodes and deallocating them.
+*   The final output must be formatted exactly as shown in the examples (e.g., "stretch tree of depth 4\t check: C").
+*   The code should efficiently allocate and deallocate memory to minimize overhead, avoiding unnecessary optimizations or shortcuts that would deviate from the problem's requirements.
+
+### Variable Values
+*   `min_depth = 4`
+*   `max_depth = 10` (Assuming N=10 for demonstration - adjust as needed)
+*   `stretch_depth = 11`
+*   `iterations = 1 << (max_depth - depth + min_depth)`
+*   `N = 10`
+
+### Notes
+*   The prompt emphasizes the need for a complete and functional Java implementation. The LLM should focus on generating correct code that adheres to all specified constraints, rather than providing detailed explanations or comments.  It's crucial that the output matches the exact format (including tabs) provided in the examples. Consider memory management carefully – mimicking the original C program’s approach is critical for validating the solution against the benchmark.
+```

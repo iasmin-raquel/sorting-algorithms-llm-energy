@@ -1,0 +1,50 @@
+### Prompt Structure
+Here is a prompt that uses few-shot learning to generate a Python script for creating binary trees. The example code provided is from the n-body problem in Python. I will modify it to create binary trees instead.
+
+```python
+# The Computer Language Benchmarks Game
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
+
+class Node:
+    # ... (define the Node class with left and right child pointers)
+
+def create_tree(node, depth):
+    # ... (implement the logic for creating binary trees of a given depth)
+
+def stretch_tree():
+    # ... (implement the logic for creating a stretch tree)
+
+def long_lived_tree():
+    # ... (implement the logic for creating a long-lived binary tree)
+
+def bottom_up_trees(depth):
+    # ... (implement the logic for creating and deallocating many bottom-up binary trees)
+
+def main(n):
+    min_depth = 4
+    max_depth = max(min_depth + 2, n)
+    stretch_depth = max_depth + 1
+    # ... (define other variables as needed)
+
+    # ... (implement the main loop that creates and deallocates trees)
+
+if __name__ == '__main__':
+    main(int(sys.argv[1]))
+```
+
+### Key Requirements
+- The generated script should be written in Python.
+- It should take N as a command-line argument.
+- The script must use `min_depth = 4` and calculate `max_depth` and `stretch_depth` according to the provided definitions.
+- The script should define a `Node` class with left and right child pointers.
+- It should implement the logic for creating binary trees of a given depth, stretch tree, long-lived tree, and bottom-up trees.
+- The output format should be identical to the reference when validated with `diff output.txt reference.txt`.
+
+### Variable Values
+- `min_depth` = 4
+- `max_depth` will vary based on N
+- `stretch_depth` = `max_depth + 1`
+
+### Notes
+- The prompt focuses on the structure and format of the solution, not its content.
+- The model should generate code that follows the provided example's style and structure while adapting it to create binary trees instead of solving the n-body problem.
