@@ -1,0 +1,2 @@
+cot/temp_0/python
+fewshot/temp_0.7/python
