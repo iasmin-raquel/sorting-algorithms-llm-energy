@@ -1,0 +1,15 @@
+algoritmo,modelo_prompt,modelo_codigo,estrategia,temperatura,linguagem,compilou,executou,diff_correto,motivo_falha
+pidigits,qwen3-1.7b,llama3.1-8b,cot,0,python,sim(sintaxe),sim,nao,
+pidigits,qwen3-1.7b,llama3.1-8b,fewshot,0.7,python,sim(sintaxe),nao,-,AssertionError: Verification failed
+pidigits,gemma3-4b,stable-code-3b,cot,0,java,nao,-,-,/tmp/pidigitstest/stable-code-3b_cot_temp_0_java_java/PiDigits.java:12: error: '
+pidigits,gemma3-4b,stable-code-3b,cot,0,python,nao,-,-,SyntaxError: unmatched ')'
+pidigits,mistral-7b,qwen2.5-coder-7b,cot,0,cpp,nao,-,-,codigo-final/pidigits/qwen2.5-coder-7b/cot/temp_0/pidigits.cpp:2:10: fatal error
+pidigits,mistral-7b,qwen2.5-coder-7b,cot,0,java,sim,sim,nao,
+pidigits,ministral-3.3b,codegemma-7b,cot,0.7,cpp,nao,-,-,codigo-final/pidigits/codegemma-7b/cot/temp_0.7/pidigits.cpp:2:10: fatal error: 
+pidigits,ministral-3.3b,codegemma-7b,cot,0.7,java,sim,sim,nao,
+pidigits,ministral-3.3b,codegemma-7b,cot,0.7,python,sim(sintaxe),nao,-,UnboundLocalError: cannot access local variable 'k' where it is not associated w
+pidigits,ministral-3.3b,codegemma-7b,cot,0,cpp,nao,-,-,codigo-final/pidigits/codegemma-7b/cot/temp_0/pidigits.cpp:7:67: error: stray �
+pidigits,ministral-3.3b,codegemma-7b,cot,0,java,nao,-,-,sem classe publica
+pidigits,ministral-3.3b,codegemma-7b,cot,0,python,sim(sintaxe),sim,sim,
+pidigits,ministral-3.3b,codegemma-7b,fewshot,0.7,python,sim(sintaxe),nao,-,UnboundLocalError: cannot access local variable 't' where it is not associated w
+pidigits,ministral-3.3b,codegemma-7b,fewshot,0,python,sim(sintaxe),nao,-,NameError: name 'k' is not defined

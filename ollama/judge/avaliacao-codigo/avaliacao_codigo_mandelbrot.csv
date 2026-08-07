@@ -1,0 +1,27 @@
+algoritmo,modelo_prompt,modelo_codigo,estrategia,temperatura,linguagem,compilou,executou,diff_correto,motivo_falha
+mandelbrot,qwen3-1.7b,llama3.1-8b,cot,0.7,python,sim(sintaxe),sim,nao,
+mandelbrot,qwen3-1.7b,llama3.1-8b,cot,0,python,sim(sintaxe),nao,-,NameError: name 'cmp_output' is not defined
+mandelbrot,qwen3-1.7b,llama3.1-8b,fewshot,0.7,java,sim,nao,-,	at Mandelbrot.main(Mandelbrot.java:7)
+mandelbrot,qwen3-1.7b,llama3.1-8b,fewshot,0.7,python,sim(sintaxe),sim,nao,
+mandelbrot,qwen3-1.7b,llama3.1-8b,fewshot,0,cpp,nao,-,-,codigo-final/mandelbrot/llama3.1-8b/fewshot/temp_0/mandelbrot.cpp:23:13: error: 
+mandelbrot,qwen3-1.7b,llama3.1-8b,fewshot,0,java,nao,-,-,/tmp/mandeltest2/llama3.1-8b_fewshot_temp_0_java_java/Mandelbrot.java:35: error:
+mandelbrot,qwen3-1.7b,llama3.1-8b,fewshot,0,python,sim(sintaxe),sim,nao,
+mandelbrot,gemma3-4b,stable-code-3b,cot,0,cpp,nao,-,-,codigo-final/mandelbrot/stable-code-3b/cot/temp_0/mandelbrot.cpp:37:163: error: 
+mandelbrot,gemma3-4b,stable-code-3b,cot,0,java,nao,-,-,/tmp/mandeltest2/stable-code-3b_cot_temp_0_java_java/Mandelbrot.java:11: error: 
+mandelbrot,gemma3-4b,stable-code-3b,cot,0,python,nao,-,-,"Sorry: IndentationError: unexpected indent (mandelbrot.py, line 21)"
+mandelbrot,gemma3-4b,stable-code-3b,fewshot,0.7,cpp,nao,-,-,codigo-final/mandelbrot/stable-code-3b/fewshot/temp_0.7/mandelbrot.cpp:13:94: er
+mandelbrot,gemma3-4b,stable-code-3b,fewshot,0.7,java,nao,-,-,/tmp/mandeltest2/stable-code-3b_fewshot_temp_0.7_java_java/MandelbrotGenerator.j
+mandelbrot,gemma3-4b,stable-code-3b,fewshot,0.7,python,nao,-,-,SyntaxError: unmatched ')'
+mandelbrot,gemma3-4b,stable-code-3b,fewshot,0,java,nao,-,-,sem classe publica
+mandelbrot,gemma3-4b,stable-code-3b,fewshot,0,python,nao,-,-,SyntaxError: unmatched ')'
+mandelbrot,mistral-7b,qwen2.5-coder-7b,cot,0.7,cpp,sim,sim,nao,
+mandelbrot,mistral-7b,qwen2.5-coder-7b,cot,0.7,java,sim,sim,nao,
+mandelbrot,mistral-7b,qwen2.5-coder-7b,cot,0.7,python,sim(sintaxe),sim,nao,
+mandelbrot,mistral-7b,qwen2.5-coder-7b,cot,0,cpp,sim,sim,sim,
+mandelbrot,mistral-7b,qwen2.5-coder-7b,cot,0,java,nao,-,-,/tmp/mandeltest2/qwen2.5-coder-7b_cot_temp_0_java_java/MandelbrotSet.java:35: er
+mandelbrot,mistral-7b,qwen2.5-coder-7b,cot,0,python,sim(sintaxe),sim,nao,
+mandelbrot,mistral-7b,qwen2.5-coder-7b,fewshot,0.7,java,sim,sim,nao,
+mandelbrot,ministral-3.3b,codegemma-7b,fewshot,0.7,java,nao,-,-,/tmp/mandeltest2/codegemma-7b_fewshot_temp_0.7_java_java/Mandelbrot.java:36: err
+mandelbrot,ministral-3.3b,codegemma-7b,fewshot,0,cpp,sim,sim,nao,
+mandelbrot,ministral-3.3b,codegemma-7b,fewshot,0,java,sim,sim,nao,
+mandelbrot,ministral-3.3b,codegemma-7b,fewshot,0,python,sim(sintaxe),sim,nao,

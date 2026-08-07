@@ -1,0 +1,21 @@
+algoritmo,modelo_prompt,modelo_codigo,estrategia,temperatura,linguagem,compilou,executou,diff_correto,motivo_falha
+binary-trees,ministral-3.3b,codegemma-7b,cot,0.7,java,nao,-,-,/tmp/bttest/codegemma-7b_cot_temp_0.7_java_java/BinaryTrees.java:28: error: inco
+binary-trees,ministral-3.3b,codegemma-7b,cot,0,cpp,nao,-,-,codigo-final/binary-trees/codegemma-7b/cot/temp_0/binary-trees.cpp:44:40: error:
+binary-trees,ministral-3.3b,codegemma-7b,cot,0,java,sim,sim,nao,
+binary-trees,ministral-3.3b,codegemma-7b,cot,0,python,sim(sintaxe),sim,nao,
+binary-trees,ministral-3.3b,codegemma-7b,fewshot,0.7,cpp,nao,-,-,codigo-final/binary-trees/codegemma-7b/fewshot/temp_0.7/binary-trees.cpp:11:19: 
+binary-trees,ministral-3.3b,codegemma-7b,fewshot,0.7,java,sim,sim,nao,
+binary-trees,ministral-3.3b,codegemma-7b,fewshot,0.7,python,sim(sintaxe),nao,-,AttributeError: 'TreeNode' object has no attribute 'left'
+binary-trees,ministral-3.3b,codegemma-7b,fewshot,0,cpp,nao,-,-,codigo-final/binary-trees/codegemma-7b/fewshot/temp_0/binary-trees.cpp:31:21: er
+binary-trees,ministral-3.3b,codegemma-7b,fewshot,0,java,sim,nao,-,	at BinaryTreeAllocation.main(BinaryTreeAllocation.java:16)
+binary-trees,ministral-3.3b,codegemma-7b,fewshot,0,python,sim(sintaxe),sim,nao,
+binary-trees,qwen3-1.7b,llama3.1-8b,cot,0.7,cpp,nao,-,-,codigo-final/binary-trees/llama3.1-8b/cot/temp_0.7/binary-trees.cpp:14:26: error
+binary-trees,qwen3-1.7b,llama3.1-8b,cot,0.7,python,sim(sintaxe),sim,nao,
+binary-trees,qwen3-1.7b,llama3.1-8b,cot,0,cpp,sim,sim,nao,
+binary-trees,qwen3-1.7b,llama3.1-8b,cot,0,python,sim(sintaxe),nao,-,NameError: name 'N' is not defined
+binary-trees,qwen3-1.7b,llama3.1-8b,fewshot,0.7,java,nao,-,-,/tmp/bttest/llama3.1-8b_fewshot_temp_0.7_java_java/Main.java:89: error: cannot f
+binary-trees,qwen3-1.7b,llama3.1-8b,fewshot,0.7,python,sim(sintaxe),nao,-,AttributeError: 'Node' object has no attribute '_set_child'
+binary-trees,qwen3-1.7b,llama3.1-8b,fewshot,0,python,sim(sintaxe),sim,nao,
+binary-trees,gemma3-4b,stable-code-3b,cot,0.7,cpp,nao,-,-,codigo-final/binary-trees/stable-code-3b/cot/temp_0.7/binary-trees.cpp:14:5: err
+binary-trees,gemma3-4b,stable-code-3b,cot,0.7,java,nao,-,-,/tmp/bttest/stable-code-3b_cot_temp_0.7_java_java/BinaryTrees.java:16: error: ';
+binary-trees,gemma3-4b,stable-code-3b,cot,0,java,nao,-,-,/tmp/bttest/stable-code-3b_cot_temp_0_java_java/BinaryTrees.java:24: error: ';' 
