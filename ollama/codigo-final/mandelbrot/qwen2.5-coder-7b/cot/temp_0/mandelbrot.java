@@ -1,70 +1,51 @@
 import java.io.IOException;
 import java.util.Scanner;
 
-public class MandelbrotGenerator {
+public class MandelbrotSet {
     public static void main(String[] args) throws IOException {
         if (args.length != 1) {
-            System.out.println("Usage: java MandelbrotGenerator <N>");
+            System.out.println("Usage: java MandelbrotSet <N>");
             return;
         }
 
         int N = Integer.parseInt(args[0]);
-        double escapeThreshold = 4.0;
-        int maxIterations = 50;
+        double limSquared = 2.0 * 2.0;
 
         // PBM P4 header
-        System.out.println("P4");
-        System.out.printf("%d %d\n", N, N);
+        System.out.printf("P4\n%d %d\n", N, N);
 
         for (int y = 0; y < N; y++) {
+            int pixel = 0;
+            int bitIndex = 7;
+
             for (int x = 0; x < N; x++) {
-                double real = -1.5 + (x * 2.0 / N);
-                double imag = -1.0 + (y * 2.0 / N);
-                int iteration = mandelbrot(real, imag, maxIterations, escapeThreshold);
+                double cr = 2.0 * x / N - 1.5;
+                double ci = 2.0 * y / N - 1.0;
+                double zr = 0.0, zi = 0.0;
 
-                // Write the pixel data byte-by-byte with MSB first
-                if ((iteration & 0x80) != 0) {
-                    System.out.print((char) 128); // Set the most significant bit
-                } else {
-                    System.out.print((char) 0);
+                for (int i = 0; i < 50; i++) {
+                    double zrSquared = zr * zr;
+                    double ziSquared = zi * zi;
+                    if (zrSquared + ziSquared > limSquared) break;
+                    zi = 2 * zr * zi + ci;
+                    zr = zrSquared - ziSquared + cr;
                 }
 
-                iteration <<= 1;
-                if ((iteration & 0x80) != 0) {
-                    System.out.print((char) 64); // Set the second most significant bit
-                } else {
-                    System.out.print((char) 0);
-                }
+                // Set bit based on whether the point is in the set
+                pixel |= (i == 50 ? 1 : 0) << bitIndex;
 
-                iteration <<= 1;
-                if ((iteration & 0x80) != 0) {
-                    System.out.print((char) 32); // Set the third most significant bit
-                } else {
-                    System.out.print((char) 0);
-                }
-
-                iteration <<= 1;
-                if ((iteration & 0x80) != 0) {
-                    System.out.print((char) 16); // Set the fourth most significant bit
-                } else {
-                    System.out.print((char) 0);
+                // Move to next bit or start new byte if necessary
+                if (--bitIndex < 0) {
+                    System.out.write(pixel);
+                    pixel = 0;
+                    bitIndex = 7;
                 }
             }
-        }
-    }
 
-    private static int mandelbrot(double real, double imag, int maxIterations, double escapeThreshold) {
-        double zReal = 0.0;
-        double zImag = 0.0;
-        for (int i = 0; i < maxIterations; i++) {
-            double temp = zReal * zReal - zImag * zImag + real;
-            zImag = 2 * zReal * zImag + imag;
-            zReal = temp;
-
-            if (zReal * zReal + zImag * zImag > escapeThreshold) {
-                return i;
+            // Write any remaining bits in the last byte
+            if (bitIndex != 7) {
+                System.out.write(pixel << (8 - bitIndex));
             }
         }
-        return maxIterations;
     }
 }

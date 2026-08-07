@@ -1,44 +1,35 @@
 import sys
 
 def mandelbrot_set(N):
-    # Define constants based on problem requirements
-    max_iter = 50
-    escape_threshold = 4.0
-    real_range = (-1.5, 0.5)
-    imag_range = (-1.0, 1.0)
-
-    # Calculate the step size for real and imaginary axes
-    real_step = (real_range[1] - real_range[0]) / N
-    imag_step = (imag_range[1] - imag_range[0]) / N
-
-    # Generate the Mandelbrot set
-    pixels = bytearray()
-    for i in range(N):
-        for j in range(N):
-            # Calculate the initial complex number z and c
-            real = real_range[0] + j * real_step
-            imag = imag_range[1] - i * imag_step
-            z_real, z_imag = 0.0, 0.0
+    lim_squared = 2.0 * 2.0
+    max_iterations = 50
+    
+    # Calculate PBM header
+    header = f"P4\n{N} {N}\n"
+    print(header, end='')
+    
+    for y in range(N):
+        for x in range(N):
+            zr, zi = 0, 0
+            cr, ci = (2.0 * x / N - 1.5), (2.0 * y / N - 1.0)
             iteration = 0
-
-            # Iterate until the escape condition is met or max_iter is reached
-            while (z_real * z_real + z_imag * z_imag) < escape_threshold and iteration < max_iter:
-                temp_real = z_real * z_real - z_imag * z_imag + real
-                z_imag = 2 * z_real * z_imag + imag
-                z_real = temp_real
+            
+            while zr*zr + zi*zi <= lim_squared and iteration < max_iterations:
+                zr_new = zr*zr - zi*zi + cr
+                zi_new = 2*zr*zi + ci
+                zr, zi = zr_new, zi_new
                 iteration += 1
-
-            # Set the pixel color based on the number of iterations
-            pixels.append(0 if iteration == max_iter else 1)
-
-    # Write the PBM P4 header and binary data to stdout
-    print("P4")
-    print(N, N)
-    sys.stdout.buffer.write(pixels)
+            
+            # Write binary pixel data to stdout
+            if iteration == max_iterations:
+                print('0', end='', flush=True)  # Black pixel (inset)
+            else:
+                print('1', end='', flush=True)  # White pixel (outside set)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python mandelbrot.py <N>")
         sys.exit(1)
+    
     N = int(sys.argv[1])
     mandelbrot_set(N)

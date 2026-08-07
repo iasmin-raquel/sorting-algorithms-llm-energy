@@ -1,80 +1,43 @@
-import java.io.PrintStream;
+import java.util.Scanner;
 
 public class Mandelbrot {
 
-    private static final int MAX_ITERATIONS = 50;
-    private static final double ESCAPE_THRESHOLD = 4.0;
-
     public static void main(String[] args) {
         int N = Integer.parseInt(args[0]);
+        int lim = 4;
+        int maxIterations = 50;
 
-        boolean[][] pixels = new boolean[N][N];
+        System.out.println("P4\n" + N + " " + N);
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                pixels[i][j] = isInMandelbrot(mapPixelToComplex(i, j, N));
-            }
-        }
+        for (int y = 0; y < N; y++) {
+            byte row = 0;
+            for (int x = 0; x < N; x++) {
+                double realC = 2.0 * x / N - 1.5;
+                double imagC = 2.0 * y / N - 1.0;
+                double realZ = 0;
+                double imagZ = 0;
+                int iterations = 0;
 
-        printPbmP4(pixels, N);
-    }
+                while (iterations < maxIterations) {
+                    double realTemp = realZ * realZ - imagZ * imagZ;
+                    imagZ = 2 * realZ * imagZ + imagC;
+                    realZ = realTemp + realC;
+                    iterations++;
 
-    private static boolean isInMandelbrot(Complex c) {
-        Complex z = new Complex(0, 0);
+                    if (realZ * realZ + imagZ * imagZ > lim) {
+                        break;
+                    }
+                }
 
-        for (int i = 0; i < MAX_ITERATIONS; i++) {
-            z = z.square().add(c);
-            if (z.magnitude() > ESCAPE_THRESHOLD) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static Complex mapPixelToComplex(int i, int j, int N) {
-        double x = -1.5 + (0.75 * i) / N;
-        double y = -1.0 + (2.0 * j) / N;
-        return new Complex(x, y);
-    }
-
-    private static void printPbmP4(boolean[][] pixels, int N) {
-        PrintStream out = System.out;
-
-        out.println("P4");
-        out.println(N + " " + N);
-
-        for (int i = 0; i < N; i++) {
-            int bits = 0;
-            for (int j = 0; j < N; j++) {
-                bits |= (pixels[i][j] ? 1 : 0) << (N - j - 1);
-                if (j == N - 1) {
-                    out.print(bits);
+                row |= (iterations < maxIterations) ? (1 << (7 - x % 8)) : 0;
+                if (x % 8 == 7) {
+                    System.out.print(row);
                 }
             }
-            out.println();
-        }
-    }
 
-    private static class Complex {
-        private double real;
-        private double imag;
-
-        public Complex(double real, double imag) {
-            this.real = real;
-            this.imag = imag;
-        }
-
-        public Complex square() {
-            return new Complex(real * real - imag * imag, 2 * real * imag);
-        }
-
-        public Complex add(Complex c) {
-            return new Complex(real + c.real, imag + c.imag);
-        }
-
-        public double magnitude() {
-            return Math.sqrt(real * real + imag * imag);
+            if (N % 8 != 0 && x == N - 1) {
+                System.out.print(row);
+            }
         }
     }
 }

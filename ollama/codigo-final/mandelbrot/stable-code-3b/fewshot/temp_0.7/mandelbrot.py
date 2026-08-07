@@ -1,37 +1,40 @@
 import sys
-
-def mandelbrot(N):
-    # Parameters
-    max_iterations = 50
-    escape_threshold = 4.0
-    real_range = [-1.5, 0.5]
-    imaginary_range = [-1.0, 1.0]
-
-    # Output PBM P4 header
-    print("P3")  # PBM P4 format
-    print(f"N {N}")
-    print("255")  # Max color value
-
-    for row in range(N):
-        for col in range(N):
-            # Calculate complex number
-            c = complex(-1.5 + (col / N) * (0.5 - (-1.5))), -1.0 + (row / N) * (1.0 - (-1.0)))
-
-            z = 0
-            for i in range(max_iterations)):
-                z = z*z + c
-                if abs(z) > escape_threshold:
-                    break
-
-            # Convert to grayscale value (black background))
-            pixel_value = 0
-            if i == max_iterations:
-                pixel_value = 255  # Set pixel to white if escaped
-
-            # Output pixel data as byte
-            print(pixel_value.to_bytes(1, 'big'))
+from PIL import Image
 
 
-if __name__ == "__main__":
-    N = int(sys.argv[1])
-    mandelbrot(N)
+def mandelbrot_set(width, height):
+    img = Image.new('P', (width, height)), "black"
+
+    for x in range(0, width):
+        real = 2.0 * x / width - 1.5
+        imag = 2.0 * y / height - 1.0
+        zx, zy = 0, 0
+        iteration_count = 0
+        while (zr*zr + zi*zi) <= lim and iteration_count < 50:
+            zx, zy = zx*zx - zy*zy + real, 2.0 * zx * zy / width + imag
+            zr, zi = zx, zy
+            iteration_count += 1
+        if (zr*zr + zi*zi) <= lim and iteration_count == 50:
+            img.putpixel((x, y)), "white"
+
+    return img
+
+
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python mandelbrot.py <N>")
+        exit(1)
+
+    try:
+        N = int(sys.argv[1]))
+    except ValueError:
+        print("Error: N must be an integer.")
+        exit(1)
+
+    width, height = 800, 600
+    img = mandelbrot_set(width, height))
+    img.save('mandelbrot.pbm', "PBM")
+
+
+if __name__ == '__main__':
+    main()

@@ -1,6 +1,6 @@
 #include <iostream>
-#include <fstream>
 #include <cmath>
+#include <cstring>
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -8,56 +8,42 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int N = std::stoi(argv[1]);
-    const int maxIterations = 50;
-    const double escapeThreshold = 4.0;
-    const double realMin = -1.5, realMax = 0.5;
-    const double imagMin = -1.0, imagMax = 1.0;
+    int N = std::atoi(argv[1]);
+    double lim = 4.0; // Escape threshold squared
+    const int maxIter = 50;
 
-    std::ofstream outputFile("output.pbm", std::ios::binary);
-    if (!outputFile) {
-        std::cerr << "Error opening output file" << std::endl;
-        return 1;
-    }
-
-    // Write PBM header
-    outputFile << "P4\n";
-    outputFile << N << ' ' << N << '\n';
+    // PBM P4 header
+    std::cout << "P4\n" << N << ' ' << N << '\n';
 
     for (int y = 0; y < N; ++y) {
-        double imag = imagMin + (imagMax - imagMin) * y / (N - 1);
-        unsigned char byte = 0;
-        int bitPos = 7;
+        unsigned char row[N / 8];
+        memset(row, 0, sizeof(row));
 
         for (int x = 0; x < N; ++x) {
-            double real = realMin + (realMax - realMin) * x / (N - 1);
-            double zx = 0.0, zy = 0.0;
-            int iteration = 0;
+            double zx = 2.0 * x / N - 1.5;
+            double zy = 2.0 * y / N - 1.0;
+            double cr = zx;
+            double ci = zy;
+            int iter = 0;
 
-            while (zx * zx + zy * zy < escapeThreshold && iteration < maxIterations) {
-                double temp = zx * zx - zy * zy + real;
-                zy = 2.0 * zx * zy + imag;
+            while (zx * zx + zy * zy <= lim && iter < maxIter) {
+                double temp = zx * zx - zy * zy + cr;
+                zy = 2.0 * zx * zy + ci;
                 zx = temp;
-                ++iteration;
+                ++iter;
             }
 
-            if (iteration == maxIterations)
-                byte |= (1 << bitPos); // Set bit if point is in the set
-
-            if (--bitPos < 0) {
-                outputFile.put(byte);
-                byte = 0;
-                bitPos = 7;
+            // Set the pixel if it belongs to the Mandelbrot set
+            if (iter == maxIter) {
+                int byteIndex = x / 8;
+                int bitIndex = x % 8;
+                row[byteIndex] |= (1 << (7 - bitIndex));
             }
         }
 
-        if (bitPos != 7) { // Pad remaining bits
-            while (bitPos >= 0)
-                byte |= (1 << bitPos--);
-            outputFile.put(byte);
-        }
+        // Output the row of pixels
+        std::cout.write(reinterpret_cast<char*>(row), sizeof(row));
     }
 
-    outputFile.close();
     return 0;
 }

@@ -1,73 +1,119 @@
-import java.io.*;
-public class Mandelbrot {
-    private static final int MAX_ITERATIONS = 50;
-    private static final double ESCAPE_THRESHOLD = 4.0;
-    private static final int N = 200; // Set the bitmap size here
+import java.util.Scanner;
 
-    public static void main(String[] args) throws IOException {
-        if (args.length != 1)) {
-            System.out.println("Usage: java Mandelbrot <bitmap size>");
-            return;
-        }
-        int width = N * 2 + 1;
-        int height = (N * 2 + 1) / (2 * N + 1));
-        File outputFile = new File("output.pbm");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile)))) {
-            writer.write("P4\n" + width + " " + height + "\n");
-            double xMin = -1.5;
-            double xMax = 0.5;
-            double yMin = -1.0;
-            double yMax = 1.0;
-            int[] pixels = new int[width * height];
-            for (int i = 0; i < height; i++) {
-                double y = yMin + (yMax - yMin) * i / (height - 1));
-                for (int j = 0; j < width; j++) {
-                    double x = xMin + (xMax - xMin) * j / (width - 1));
-                    Complex z = new Complex(x, y));
-                    int iterations = 0;
-                    while (iterations < MAX_ITERATIONS)) {
-                        z = z.multiply(z).add(new Complex(x, y))));
-                        double magnitude = z.getMagnitude();
-                        if (magnitude > ESCAPE_THRESHOLD)) {
-                            pixels[i * width + j] = 0; // Mark the point as "escaped"
-                            break;
-                        }
-                        iterations++;
-                    }
-                }
+public class Mandelbrot {
+
+    private static final int MAX_ITERATIONS = 50;
+    private static final double ESCAPE_THRESHOLD = 2.0 * 2.0;
+
+    public static void main(String[] args) {
+        
+        // Read N from command-line argument
+        Scanner scanner = new Scanner(System.in));
+        int N = scanner.nextInt();
+        scanner.close();
+        
+        // Generate Mandelbrot set bitmap
+        double xScale = 2.0 / N;
+        double yScale = 2.0 / N;
+        double xOffset = -1.5;
+        double yOffset = -1.0;
+        int[] pixels = generateMandelbrotSet(N, xScale, yScale, xOffset, yOffset));
+        
+        // Output the bitmap in PBM P4 format
+        System.out.println("P4");
+        System.out.printf("%d %d%n", N, N));
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                int pixelValue = pixels[i * N + j]];
+                System.out.print(pixelValue > ESCAPE_THRESHOLD ? "1" : "0"));
             }
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    pixels[i * width + j] *= 255; // Scale the pixel color value to [0, 255] range
-                }
-            }
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    System.out.write(ByteBuffer.allocate(1)).put((byte) pixels[i * width + j])
-                            .array());
-                }
-            }
+            System.out.println();
         }
     }
 
-    private static class Complex {
-        private final double real;
-        private final double imaginary;
-
-        public Complex(double real, double imaginary) {
-            this.real = real;
-            this.imaginary = imaginary;
+    private static int[] generateMandelbrotSet(int N, double xScale, double yScale, double xOffset, double yOffset)) {
+        
+        // Initialize the pixels array with 0s
+        int[] pixels = new int[N * N]];
+        for (int i = 0; i < N * N; i++) {
+            pixels[i] = 0;
         }
-
-        public Complex multiply(Complex other) {
-            return new Complex(
-                    this.real * other.real - this.imaginary * other.imaginary,
-                    this.real * other.imaginary + this.imaginary * other.real
-            );
+        
+        // Calculate Mandelbrot set for each pixel
+        double x, y;
+        int iterationCount;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                x = xScale * (i + 1) / N - xOffset;
+                y = yScale * (j + 1) / N - yOffset;
+                iterationCount = mandelbrotIterations(x, y));
+                if (iterationCount >= MAX_ITERATIONS || iterationCount <= 0)) {
+                    pixels[i * N + j]] = 1;
+                }
+            }
         }
+        
+        return pixels;
+    }
 
-        public double getMagnitude() {
-            return Math.sqrt(this.real * this.real + this.imaginary * this.imaginary));
+    private static int mandelbrotIterations(double x, double y)) {
+        int iterationCount = 0;
+        double zr = 0.0;
+        double zi = 0.0;
+        while (zr * zr + zi * zi <= ESCAPE_THRESHOLD && iterationCount < MAX_ITERATIONS)) {
+            double zrTemp = zr * zr - zi * zi + x;
+            double ziTemp = 2.0 * zr * zi / N + y;
+            zr = zrTemp;
+            zi = ziTemp;
+            iterationCount++;
+        }
+        return iterationCount;
+    }
+
+    private static int[] generateReferenceBitmap(int N)) {
+        // Generate a reference bitmap for validation purposes
+        int[] pixels = new int[N * N]];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                pixels[i * N + j]] = 1; // Set to any non-zero value for validation purposes
+            }
+        }
+        return pixels;
+    }
+
+    private static boolean validateBitmap(int[] generatedPixels, int[] referencePixels)) {
+        // Validate the generated bitmap against a reference bitmap
+        boolean isValid = true;
+        for (int i = 0; i < generatedPixels.length && isValid; i++) {
+            if (generatedPixels[i]] != referencePixels[i]) {
+                isValid = false;
+            }
+        }
+        return isValid;
+    }
+
+    private static void printUsage() {
+        System.out.println("Usage: java Mandelbrot <N>");
+        System.exit(1);
+    }
+
+    public static void main(String[] args)) {
+        if (args.length != 1)) {
+            printUsage();
+        }
+        int N = Integer.parseInt(args[0]));
+        if (N <= 0 || N > 200)) {
+            System.out.println("Error: N must be a positive integer less than or equal to 200."));
+            System.exit(1);
+        }
+        int[] generatedPixels = generateMandelbrotSet(N, xScale, yScale, xOffset, yOffset));
+        int[] referencePixels = generateReferenceBitmap(N));
+        boolean isValid = validateBitmap(generatedPixels, referencePixels));
+        if (isValid)) {
+            System.out.println("The generated bitmap is validatable against a reference bitmap.");
+        } else {
+            System.out.println("Error: The generated bitmap is not validatable against the reference bitmap.");
+            System.exit(1);
         }
     }
 }

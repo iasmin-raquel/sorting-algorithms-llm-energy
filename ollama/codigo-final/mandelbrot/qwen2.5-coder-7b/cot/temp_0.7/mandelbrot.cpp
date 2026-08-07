@@ -1,6 +1,6 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>
-#include <vector>
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -8,34 +8,31 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int N = std::atoi(argv[1]);
-    double width = 0.5 - (-1.5);
-    double height = 1.0 - (-1.0);
-    double pixel_width = width / (N - 1);
-    double pixel_height = height / (N - 1);
+    int N = std::stoi(argv[1]);
+    const int maxIterations = 50;
+    double lim = 4.0;
 
-    std::cout << "P4\n" << N << ' ' << N << '\n';
+    // Output PBM header
+    std::cout << "P4" << std::endl;
+    std::cout << N << ' ' << N << std::endl;
 
     for (int y = 0; y < N; ++y) {
         for (int x = 0; x < N; ++x) {
-            double real = -1.5 + x * pixel_width;
-            double imag = -1.0 + y * pixel_height;
-            double z_real = 0.0, z_imag = 0.0;
-            bool escapes = false;
+            double zx = 0.0, zy = 0.0;
+            double cr = 2.0 * x / N - 1.5;
+            double ci = 2.0 * y / N - 1.0;
+            int iteration = 0;
 
-            for (int iter = 0; iter < 50 && !escapes; ++iter) {
-                double new_z_real = z_real * z_real - z_imag * z_imag + real;
-                double new_z_imag = 2.0 * z_real * z_imag + imag;
-                if (new_z_real * new_z_real + new_z_imag * new_z_imag > 4.0) {
-                    escapes = true;
-                }
-                z_real = new_z_real;
-                z_imag = new_z_imag;
+            while (zx*zx + zy*zy <= lim && iteration < maxIterations) {
+                double temp = zx*zx - zy*zy + cr;
+                zy = 2.0*zx*zy + ci;
+                zx = temp;
+                ++iteration;
             }
 
-            std::cout << (escapes ? '1' : '0');
+            // Output pixel value as binary
+            std::cout << (iteration % 8 == 0 ? '\n' : ' ') << (iteration < maxIterations ? '1' : '0');
         }
-        std::cout << '\n';
     }
 
     return 0;

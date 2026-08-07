@@ -1,65 +1,47 @@
 #include <iostream>
-#include <cmath>
-#include <cstdlib> // for atoi
+#include <complex>
 
-int main(int argc, char** argv) {
-  // Argument parsing (e.g., N from command line)
-  if (argc != 2 || *argv[1] == '\0') {
-    std::cerr << "Error: Please provide a valid integer value for N." << std::endl;
-    return 1;
-  }
-  int n = atoi(argv[1]));
+const int N = 1000;
+const int MAX_ITERATIONS = 50;
+const double ESCAPE_THRESHOLD = 4.0;
+const double IMAG_C = -1.0;
+const double REAL_C = -1.5;
 
-  // Mandelbrot set calculation loop (50 iterations max))
-  for (int i = 0; i < 50; ++i) {
-    // Loop over each pixel in the bitmap
-    for (int y = 0; y < n; ++y) {
-      for (int x = 0; x < n; ++x) {
-        double real = -1.5 + static_cast<double>(x)) / n;
-        double imag = -1.0 + static_cast<double>(y)) / n;
-        double mandelbrotValue = mandelbrot(real, imag));
-
-        // Check if the Mandelbrot value exceeds the escape threshold of 4.0
-        if (mandelbrotValue > 4.0)) {
-            std::cout << "1 "; // Set pixel to black
-        } else {
-            std::cout << "0 "; // Set pixel to white
-        }
-      }
+std::complex<double> mandelbrot(int x, int y) {
+    std::complex<double> C(REAL_C * (x + 0.5) / N, IMAG_C * (y + 0.5) / N);
+    std::complex<double> Z(0.0, 0.0));
+    int iterations = 0;
+    while (abs(Z)) < ESCAPE_THRESHOLD && iterations < MAX_ITERATIONS {
+        iterations++;
+        Z = Z * Z + C;
     }
-  }
-
-  // Output to stdout in PBM P4 format
-  std::cout << "P4" << std::endl;
-  std::cout << n << " " << n << std::endl;
-  std::cout << "0";
-  for (int y = 0; y < n; ++y) {
-    for (int x = 0; x < n; ++x) {
-      // ... pixel data calculation and output here ...
-    }
-  }
-  std::cout << std::endl;
-
-  return 0;
+    return Z;
 }
 
-double mandelbrot(double real, double imag) {
-  const int maxIterations = 50;
-  const double escapeThreshold = 4.0;
+void print_header() {
+    std::cout << "P4\n";
+    std::cout << N << " " << N << "\n";
+}
 
-  double zReal = real;
-  double zImag = imag;
-  int iterations = 0;
+int main(int argc, char** argv) {
+    if (argc != 2)) {
+        std::cerr << "Usage: " << argv[0] << " <N>\n";
+        return 1;
+    }
 
-  while (iterations < maxIterations && std::abs(zReal) < 1.5 && std::abs(zImag)) {
-    double tempReal = zReal * zReal - zImag * zImag;
-    double tempImag = 2 * zReal * zImag;
+    print_header();
 
-    zReal = tempReal + real;
-    zImag = tempImag + imag;
+    for (int y = 0; y < N; y++) {
+        for (int x = 0; x < N; x++) {
+            auto z = mandelbrot(x, y));
+            if (abs(z)) >= ESCAPE_THRESHOLD) {
+                std::cout << "1 ";
+            } else {
+                std::cout << "0 ";
+            }
+        }
+        std::cout << "\n";
+    }
 
-    iterations++;
-  }
-
-  return iterations / static_cast<double>(maxIterations));
+    return 0;
 }
