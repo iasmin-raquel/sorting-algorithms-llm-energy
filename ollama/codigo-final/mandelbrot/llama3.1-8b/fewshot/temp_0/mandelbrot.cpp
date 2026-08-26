@@ -27,14 +27,19 @@ int main(int argc, char* argv[]) {
                 ++iterations;
             }
 
-            if (iterations == max_iterations) {
-                output << "1 ";
-            } else {
-                output << "0 ";
+            if (iterations == max_iterations)
+                output << "1";
+            else
+                output << "0";
+
+            // Pad with zeros to 8 bytes per row
+            if ((x+1)%8 == 0 && x != N-1) {
+                output << "\n";
             }
         }
-        output << "\n";
     }
+
+    output.close();
 
     return 0;
 }

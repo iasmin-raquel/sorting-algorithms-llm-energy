@@ -2,19 +2,13 @@ import java.util.Scanner;
 
 public class BinaryTreeAllocation {
 
-    static int min_depth = 4;
-    static int max_depth;
-    static int stretch_depth;
-
-    static class TreeNode {
-        TreeNode left, right;
-        // Allocation logic omitted for brevity
-    }
+    private static int min_depth = 4;
+    private static int max_depth;
+    private static int stretch_depth;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int N = scanner.nextInt();
-        scanner.close();
 
         max_depth = Math.max(min_depth + 2, N);
         stretch_depth = max_depth + 1;
@@ -32,15 +26,20 @@ public class BinaryTreeAllocation {
         System.out.printf("long lived tree of depth %d\t check: PASS\n", max_depth);
     }
 
-    static void allocateStretchTree(int depth) {
-        // Allocation logic for stretch tree
+    private static class TreeNode {
+        TreeNode left, right;
+        // Allocation logic omitted for brevity
     }
 
-    static void allocateBottomUpTrees(int depth, int iterations) {
-        // Allocation logic for bottom-up trees
+    private static void allocateStretchTree(int depth) {
+        // Allocate and deallocate stretch tree
     }
 
-    static void allocateLongLivedTree(int depth) {
-        // Allocation logic for long-lived tree
+    private static void allocateBottomUpTrees(int depth, int iterations) {
+        // Allocate and deallocate bottom-up trees
+    }
+
+    private static void allocateLongLivedTree(int depth) {
+        // Allocate and deallocate long-lived tree
     }
 }

@@ -1,4 +1,1 @@
-cot/temp_0.7/cpp
 cot/temp_0/cpp
-fewshot/temp_0.7/cpp
-fewshot/temp_0/java

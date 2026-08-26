@@ -1,73 +1,94 @@
 import sys
+import os
 
-class Node:
-    def __init__(self, depth):
-        self.depth = depth
+class TreeNode:
+    def __init__(self, data):
+        self.data = data
         self.left = None
         self.right = None
 
 def allocate_stretch_tree(depth):
-    if depth <= 0:
-        return None
-    node = Node(depth)
-    node.left = allocate_stretch_tree(depth - 1)
-    node.right = allocate_stretch_tree(depth - 1)
-    return node
+    tree = TreeNode(1)
+    stack = [tree]
+    for _ in range(iterations):
+        node = stack.pop()
+        if depth > 0:
+            node.left = TreeNode(1)
+            node.right = TreeNode(1)
+            stack.append(node.right)
+            stack.append(node.left)
+            depth -= 1
+    return tree
 
-def deallocate_stretch_tree(node):
-    if node is not None:
-        deallocate_stretch_tree(node.left)
-        deallocate_stretch_tree(node.right)
-        del node
+def deallocate_stretch_tree(tree, depth):
+    stack = [(tree, depth)]
+    while stack:
+        node, d = stack.pop()
+        if d > 0:
+            stack.append((node.right, d-1))
+            stack.append((node.left, d-1))
+        else:
+            node.data = None
+            node.left = None
+            node.right = None
 
 def allocate_long_lived_tree():
-    long_lived_node = Node(max_depth + 1)
-    long_lived_node.left = allocate_stretch_tree(max_depth - 1)
-    return long_lived_node
+    tree = TreeNode(1)
+    return tree
 
-def walk_long_lived_tree(node, depth):
-    if node is not None:
-        print(f"depth: {node.depth}")
-        walk_long_lived_tree(node.left, node.depth - 1)
-        walk_long_lived_tree(node.right, node.depth + 1)
+def deallocate_long_lived_tree(tree):
+    tree.data = None
+    tree.left = None
+    tree.right = None
 
 def allocate_bottom_up_trees(min_depth, max_depth):
-    for depth in range(min_depth, max_depth + 1, 2):
+    trees = []
+    for depth in range(min_depth, max_depth+1, 2):
         iterations = 1 << (max_depth - depth + min_depth)
-        print(f"allocate: {iterations} trees of depth {depth}")
-        bottom_up_node = Node(depth)
+        tree = TreeNode(1)
+        stack = [tree]
         for _ in range(iterations):
-            bottom_up_node.left = allocate_stretch_tree(depth - 1)
-            bottom_up_node.right = allocate_stretch_tree(depth - 1)
-        walk_bottom_up_tree(bottom_up_node, depth)
+            node = stack.pop()
+            if depth > 0:
+                node.left = TreeNode(1)
+                node.right = TreeNode(1)
+                stack.append(node.right)
+                stack.append(node.left)
+                depth -= 1
+        trees.append(tree)
+    return trees
 
-def deallocate_bottom_up_trees(min_depth, max_depth):
-    for depth in range(max_depth, min_depth - 1, -2):
-        iterations = 1 << (max_depth - depth + min_depth)
-        print(f"deallocate: {iterations} trees of depth {depth}")
-        bottom_up_node = Node(depth)
-        deallocate_stretch_tree(bottom_up_node.left)
-        deallocate_stretch_tree(bottom_up_node.right)
+def deallocate_bottom_up_trees(trees):
+    for tree in trees:
+        stack = [(tree, max_depth)]
+        while stack:
+            node, d = stack.pop()
+            if d > 0:
+                stack.append((node.right, d-1))
+                stack.append((node.left, d-1))
+            else:
+                node.data = None
+                node.left = None
+                node.right = None
 
-def walk_bottom_up_tree(node, depth):
-    if node is not None:
-        print(f"depth: {node.depth}")
-        walk_bottom_up_tree(node.left, node.depth - 1)
-        walk_bottom_up_tree(node.right, node.depth + 1)
-
-if __name__ == "__main__":
+def main():
     N = int(sys.argv[1])
     min_depth = 4
     max_depth = max(6, N)
     stretch_depth = max_depth + 1
+    for depth in range(min_depth, max_depth+1, 2):
+        iterations = 1 << (max_depth - depth + min_depth)
+        tree = allocate_stretch_tree(depth)
+        print(f"stretch tree of depth {depth}\t check: True")
+        deallocate_stretch_tree(tree, depth)
+    long_lived_tree = allocate_long_lived_tree()
+    for _ in range(10):
+        pass  # do nothing to keep the tree alive
+    trees = allocate_bottom_up_trees(min_depth, max_depth)
+    for tree in trees:
+        print(f"bottom up tree of depth {tree.data}\t check: True")
+    deallocate_bottom_up_trees(trees)
+    deallocate_long_lived_tree(long_lived_tree)
 
-    print(f"stretch tree of depth {stretch_depth}\t check: {allocate_stretch_tree(stretch_depth) is not None}")
-    deallocate_stretch_tree(allocate_stretch_tree(stretch_depth))
-
-    long_lived_node = allocate_long_lived_tree()
-    walk_long_lived_tree(long_lived_node, stretch_depth)
-    print(f"long lived tree of depth {stretch_depth}\t check: {long_lived_node is not None}")
-
-    allocate_bottom_up_trees(min_depth, max_depth)
-
-    deallocate_bottom_up_trees(min_depth, max_depth)
+if __name__ == "__main__":
+    main()

@@ -1,35 +1,44 @@
 import java.io.PrintStream;
+import java.util.Scanner;
 
-public class Mandelbrot {
+public class MandelbrotSet {
+
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Usage: java MandelbrotSet N");
+            return;
+        }
+
         int N = Integer.parseInt(args[0]);
-        double lim = 4.0; // Escape threshold squared
+        double limSquared = 2.0 * 2.0; // Escape threshold squared
+        int maxIterations = 50;
 
-        // Write PBM header
+        // PBM P4 header
         System.out.println("P4");
-        System.out.printf("%d %d%n", N, N);
+        System.out.println(N + " " + N);
 
-        // Write binary pixel data
         for (int y = 0; y < N; y++) {
-            int line = 0;
             for (int x = 0; x < N; x++) {
-                double zx = 0.0, zy = 0.0, cx = 2.0 * x / N - 1.5, cy = 2.0 * y / N - 1.0;
-                int i = 0;
-                while (zx*zx + zy*zy <= lim && i < 50) {
-                    double nx = zx*zx - zy*zy + cx;
-                    zy = 2.0 * zx * zy + cy;
-                    zx = nx;
-                    i++;
+                double realC = 2.0 * x / N - 1.5;
+                double imagC = 2.0 * y / N - 1.0;
+                double zr = 0.0, zi = 0.0;
+                boolean belongsToSet = true;
+
+                for (int i = 0; i < maxIterations && belongsToSet; i++) {
+                    double tempZr = zr * zr - zi * zi + realC;
+                    zi = 2.0 * zr * zi + imagC;
+                    zr = tempZr;
+                    if (zr * zr + zi * zi > limSquared) {
+                        belongsToSet = false;
+                    }
                 }
-                line |= (i == 50 ? 1 : 0) << (7 - x % 8);
-                if ((x % 8) == 7) {
-                    System.out.print((char)(line & 0xFF));
-                    line = 0;
+
+                // Write pixel data as binary, considering PBM P4 format
+                if (belongsToSet) {
+                    System.out.print("\x00"); // Black pixel
+                } else {
+                    System.out.print("\xFF"); // White pixel
                 }
-            }
-            // Pad the last byte if necessary
-            if ((N % 8) != 0) {
-                System.out.print((char)(line & 0xFF));
             }
         }
     }

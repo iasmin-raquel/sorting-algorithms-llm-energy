@@ -1,50 +1,44 @@
 import sys
-import math
 
-def mandelbrot(c, max_iter):
-    z = c
-    for i in range(max_iter):
-        if abs(z[0]**2 + z[1]**2) > 4.0:
+def mandelbrot(c, lim=4.0):
+    z = complex(0, 0)
+    for i in range(50):
+        z = z*z + c
+        if abs(z) > lim:
             return i
-        z = (z[0]**2 + z[1]**2, 2*z[0]*z[1])
-    return max_iter
+    return 50
 
-def main():
-    if len(sys.argv) != 2 or not sys.argv[1].isdigit():
+def generate_image(N):
+    width = N
+    height = int(1.33 * N)  # aspect ratio of Mandelbrot set is approximately 3:2
+    image_data = bytearray(width*height)
+
+    for y in range(height):
+        for x in range(width):
+            c = complex(2.0*x/N - 1.5, 2.0*y/N - 1.0)
+            pixel_value = mandelbrot(c)
+            if pixel_value == 50:
+                # pixel is not part of the Mandelbrot set
+                image_data[y*width+x] = 0
+            else:
+                # pack 8 bits per byte, MSB first
+                byte_value = (pixel_value & 1) | ((pixel_value >> 1) & 2) | ((pixel_value >> 2) & 4) | ((pixel_value >> 3) & 8)
+                image_data[y*width+x] = byte_value
+
+    # pad with zeros if N is not divisible by 8
+    padding_bytes = (width % 8) * height
+    image_data += b'\x00' * padding_bytes
+
+    return image_data
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
         print("Usage: python mandelbrot.py <N>")
         sys.exit(1)
 
     N = int(sys.argv[1])
+    image_data = generate_image(N)
 
-    width, height = N, N
-    pixels = [[0]*width for _ in range(height)]
-
-    for y in range(height):
-        for x in range(width):
-            c = (2.0*x/N - 1.5, 2.0*y/N - 1.0)
-            iter_count = mandelbrot(c, 50)
-            if iter_count < 50:
-                pixels[y][x] = iter_count
-
-    # Pad with zeros if N is not divisible by 8
-    padding = (8 - width % 8) % 8
-    for row in pixels:
-        row.extend([0]*padding)
-
-    print("P4\n{} {}\n".format(width, height))
-    for row in pixels:
-        byte = b''
-        for pixel in row[:width]:
-            if pixel == 50:
-                # Escape threshold (all bits set)
-                byte += b'\xff'
-            elif pixel < 8:
-                # Pack 1-bit values
-                byte += chr(0x80 >> pixel).encode()
-            else:
-                # Pad with zeros for pixels > 7
-                byte += b'\x00'
-        print(byte.hex())
-
-if __name__ == "__main__":
-    main()
+    # write PBM P4 header and binary pixel data to stdout
+    print("P4\n", N, " ", int(1.33 * N), "\n")
+    sys.stdout.buffer.write(image_data)

@@ -32,7 +32,10 @@ API="http://localhost:11434/api/generate"
 
 declare -A EXT=( [cpp]=cpp [java]=java [python]=py )
 
-while read -r combo; do
+# O '|| [ -n "$combo" ]' garante que a ULTIMA linha seja processada mesmo quando
+# o arquivo nao termina com quebra de linha (senao o 'read' a descarta no EOF).
+while read -r combo || [ -n "$combo" ]; do
+  combo="$(printf '%s' "$combo" | tr -d '[:space:]')"   # tira espacos/CR sobrando
   [ -z "$combo" ] && continue
   case "$combo" in \#*) continue ;; esac      # ignora comentarios
 

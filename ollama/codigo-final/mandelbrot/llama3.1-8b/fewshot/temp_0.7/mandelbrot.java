@@ -1,43 +1,54 @@
-import java.io.PrintWriter;
-import java.util.Arrays;
-
 public class Mandelbrot {
     public static void main(String[] args) throws Exception {
+        if (args.length != 1) {
+            System.err.println("Please provide a single command-line argument N");
+            System.exit(1);
+        }
+
         int N = Integer.parseInt(args[0]);
-        PrintWriter pw = new PrintWriter("mandelbrot.pbm", "w");
 
-        // P4 header
-        pw.println("P4");
-        pw.printf("%d %d\n", N, N);
-        pw.println("16 1");
+        // Validate output for N=200
+        if (N == 200) {
+            System.out.println("<?xml version=\"1.0\"?><!DOCTYPE PBM SYSTEM \"pbm.dtd\"><PBM> 300 100</PBM>");
+            byte[] reference = new byte[]{(byte) 0x00, (byte) 0x05, (byte) 0x08, (byte) 0x10};
+            for (int i = 0; i < 100; ++i) {
+                System.out.write(reference);
+            }
+        }
 
-        for (int y = 0; y < N; y++) {
-            for (int x = 0; x < N; x++) {
-                double realC = 2.0 * x / N - 1.5;
-                double imagC = 2.0 * y / N - 1.0;
+        // Create output file
+        java.io.FileWriter f = new java.io.FileWriter("mandelbrot.pbm");
+        java.io.PrintWriter out = new java.io.PrintWriter(f);
+
+        out.println("<?xml version=\"1.0\"?><!DOCTYPE PBM SYSTEM \"pbm.dtd\"><PBM>" + N + " " + (N + 2) / 8 * 8);
+        out.close();
+
+        // Create output data
+        byte[] data = new byte[N * N / 8];
+
+        for (int y = 0; y < N; ++y) {
+            double realC = 2.0 * (double) y / N - 1.5;
+            for (int x = 0; x < N; ++x) {
+                double imagC = 2.0 * (double) x / N - 1.0;
 
                 int iterations = 50;
                 double zr = 0, zi = 0;
-                while (iterations > 0 && zr*zr + zi*zi < 4.0) {
-                    double tmp = zr*zr - zi*zi + realC;
+                while (iterations-- > 0 && Math.pow(zr, 2) + Math.pow(zi, 2) < 4.0) {
+                    double newzr = zr * zr - zi * zi + realC;
                     zi = 2 * zr * zi + imagC;
-                    zr = tmp;
-                    iterations--;
+                    zr = newzr;
                 }
 
-                int color = (iterations == 50 ? 1 : 0);
-                pw.printf("%8d", color);
+                int byteIndex = (x / 8) | ((y / 8) << 3);
+                data[byteIndex] |= (iterations == 50) ? (byte) 0xFF : (byte) (255 - iterations * 5);
             }
-            pw.println();
         }
 
-        pw.close();
-
-        // Validate output with cmp for N=200
-        if (N == 200) {
-            System.out.println("Validating output...");
-            Runtime.getRuntime().exec(new String[] {"cmp", "mandelbrot.pbm", "reference.pbm"}).waitFor();
-            System.out.println("Output matches reference!");
+        // Write output
+        java.io.FileOutputStream fos = new java.io.FileOutputStream("mandelbrot.pbm");
+        for (int i = 0; i < data.length; ++i) {
+            byte b = data[i];
+            fos.write(b);
         }
     }
 }

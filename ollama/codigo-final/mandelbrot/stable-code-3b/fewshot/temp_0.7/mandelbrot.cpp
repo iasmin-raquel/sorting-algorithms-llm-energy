@@ -1,47 +1,61 @@
 #include <iostream>
 #include <complex>
 #include <cmath>
+#include <vector>
 
-const int N = 200;
 const int MAX_ITERATIONS = 50;
 const double ESCAPE_THRESHOLD = 2.0 * 2.0;
 
-void mandelbrot(int width, int height) {
-    std::cout << "P4\n";
-    std::cout << N << " " << N << "\n";
+std::vector<unsigned char> generate_mandelbrot(int N) {
+    std::vector<unsigned char> image(N * N * 3);
+    for (int x = 0; x < N; ++x) {
+        for (int y = 0; y < N; ++y) {
+            double real_C = 2.0 * x / N - 1.5;
+            double imag_C = 2.0 * y / N - 1.0;
 
-    std::complex<double> center(-1.5 + 0.0 * std::pow(2.0, 1), -1.0 + 0.0 * std::pow(2.0, 1)));
-    double scale = 2.0 / N;
-
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            std::complex<double> z((x + 0.5) * scale - center.real(), (y + 0.5) * scale - center.imag()));
-
-            int iterationCount = 0;
-            while ((iterationCount++ < MAX_ITERATIONS) && std::abs(z)) {
-                z *= z + center;
+            std::complex<double> Z((real_C, imag_C)));
+            int iterations = 0;
+            while (abs(Z)) > ESCAPE_THRESHOLD && iterations < MAX_ITERATIONS) {
+                Z *= Z + std::complex<double>(real_C, imag_C)) ;
+                ++iterations;
             }
 
-            if (std::pow(2.0, iterationCount), 2) <= ESCAPE_THRESHOLD) {
-                std::cout << "1 ";
-            } else {
-                std::cout << "0 ";
+            if (iterations < MAX_ITERATIONS && abs(Z)) <= ESCAPE_THRESHOLD) {
+                unsigned char r = static_cast<unsigned char>(255 * std::max({0.0, Z.real(), -1.5}, {-1.0, 0.0}))));
+                unsigned char g = static_cast<unsigned char>(255 * std::max({0.0, Z.imag(), -1.0}, {0.0, 0.0}))));
+                image[(x + y * N) * 3] = r;
+                image[(x + y * N) * 3 + 1] = g;
             }
         }
     }
-    std::cout << "\n";
+    return image;
 }
 
 int main(int argc, char** argv) {
     if (argc != 2)) {
-        std::cout << "Usage: " << argv[0] << " N" << std::endl;
+        std::cout << "Usage: ./mandelbrot <N>" << std::endl;
         return 1;
     }
 
-    int width = N;
-    int height = N;
+    int N = atoi(argv[1]));
+    if (N <= 0)) {
+        std::cout << "Error: N must be a positive integer." << std::endl;
+        return 1;
+    }
 
-    mandelbrot(width, height);
+    std::vector<unsigned char> image = generate_mandelbrot(N));
+    int size = N * N * 3;
+    for (int i = 0; i < size; ++i) {
+        if (image[i]) {
+            std::cout << "Error: Failed to generate the Mandelbrot set image." << std::endl;
+            return 1;
+        }
+    }
 
+    std::cout << "P4\n";
+    std::cout << N << " " << N << "\n";
+    for (int i = 0; i < size; ++i) {
+        std::cout.put(image[i]));
+    }
     return 0;
 }

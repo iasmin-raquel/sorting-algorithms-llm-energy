@@ -1,11 +1,11 @@
 import sys
 from math import floor
 
-# State variables
-q = 1
-r = 0
-t = 1
-k = 0
+# Initialize state variables
+q, r, t, k = 1, 0, 1, 0
+
+# Parse N from command line arguments
+N = int(sys.argv[1]) if len(sys.argv) > 1 else 30
 
 # Function to extract a digit
 def extract(x):
@@ -13,20 +13,16 @@ def extract(x):
 
 # Function to advance the state
 def next_step(q, r):
-    global k
     k += 1
     r = r + 2 * q
-    r *= (2 * k + 1)
-    t *= (2 * k + 1)
+    r *= (2*k + 1)
+    t *= (2*k + 1)
     q *= k
 
-# Function to update state after digit selection
+# Function to adjust state after digit selection
 def produce(d):
     q *= 10
     r = (r - t * d) * 10
-
-# Parse N from command line argument
-N = int(sys.argv[1]) if len(sys.argv) > 1 else 30
 
 # Calculate and output digits
 digits_output = []
@@ -39,6 +35,6 @@ for _ in range(N):
             digits_output.append(str(d))
             break
 
-    # Format and print output
+    # Format and output digits
     line = "".join(digits_output[-10:] or [""] * 10)
     print(f"{line}\t:{k}:", end="\n" if digits_output else "")

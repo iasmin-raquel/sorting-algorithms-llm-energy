@@ -1,6 +1,19 @@
 #include <iostream>
-#include <fstream>
 #include <cmath>
+
+// Function to calculate whether a point belongs to the Mandelbrot set
+bool isMandelbrot(double cr, double ci) {
+    double zr = 0.0, zi = 0.0;
+    for (int i = 0; i < 50; ++i) {
+        double newZr = zr*zr - zi*zi + cr;
+        zi = 2.0 * zr * zi + ci;
+        zr = newZr;
+        if (zr*zr + zi*zi > 4.0) {
+            return false; // The point escapes the set
+        }
+    }
+    return true; // The point belongs to the set
+}
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -8,30 +21,22 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int N = std::stoi(argv[1]);
-    const int maxIterations = 50;
-    double lim = 4.0;
-
-    // Output PBM header
-    std::cout << "P4" << std::endl;
-    std::cout << N << ' ' << N << std::endl;
+    int N = std::atoi(argv[1]);
+    std::cout << "P4" << std::endl << N << ' ' << N << std::endl;
 
     for (int y = 0; y < N; ++y) {
         for (int x = 0; x < N; ++x) {
-            double zx = 0.0, zy = 0.0;
             double cr = 2.0 * x / N - 1.5;
             double ci = 2.0 * y / N - 1.0;
-            int iteration = 0;
-
-            while (zx*zx + zy*zy <= lim && iteration < maxIterations) {
-                double temp = zx*zx - zy*zy + cr;
-                zy = 2.0*zx*zy + ci;
-                zx = temp;
-                ++iteration;
+            if (isMandelbrot(cr, ci)) {
+                std::cout << '\1';
+            } else {
+                std::cout << '\0';
             }
-
-            // Output pixel value as binary
-            std::cout << (iteration % 8 == 0 ? '\n' : ' ') << (iteration < maxIterations ? '1' : '0');
+        }
+        // Padding with zeros if necessary
+        for (; x % 8 != 0; ++x) {
+            std::cout << '\0';
         }
     }
 

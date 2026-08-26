@@ -23,20 +23,22 @@ public class PiDigits {
                 q = q.multiply(k));
             }
 
-            piDigit = piDigit.add(extract(3))));
+            piDigit = piDigit.add(extract(3)));
         }
 
         System.out.println("Generated PI Digits:"));
-        for (int i = 0; i < N / 10 + 1; i++) {
-            String output = String.format("%10d\t", piDigit.mod(BigInteger.TEN)))));
-            System.out.print(output);
-            piDigit = piDigit.divide(BigInteger.valueOf(10))));
+        for (int i = 0; i < N / 10; i++) {
+            System.out.print(String.format("%10d", piDigit.mod(BigInteger.TEN)))));
+            piDigit = piDigit.divide(BigInteger.valueOf(10)))
         }
 
+        // Verification step
+        BigInteger digit1 = extract(3);
+        BigInteger digit2 = extract(4);
+        System.out.println("Verification: " + (digit1.equals(digit2)) ? "PASS" : "FAIL")));
     }
 
     private static BigInteger extract(int x) {
-        return q.multiply(x).add(r)).mod(t);
+        return q.multiply(x).add(r));
     }
-
 }

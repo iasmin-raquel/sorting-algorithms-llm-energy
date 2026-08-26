@@ -22,9 +22,9 @@ TreeNode* allocateStretchTree(int D) {
 // Function to check the existence of a tree
 bool checkTree(TreeNode* root, int D) {
     if (root == nullptr || D < 0) return false;
-    bool leftExist = checkTree(root->left, D - 1);
-    bool rightExist = checkTree(root->right, D - 1);
-    return leftExist && rightExist;
+    bool leftCheck = checkTree(root->left, D - 1);
+    bool rightCheck = checkTree(root->right, D - 1);
+    return leftCheck && rightCheck;
 }
 
 // Function to deallocate a tree
@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    // Ensure the long-lived tree still exists
+    // Ensure the long-lived tree still exists after all operations
     bool checkResult = checkTree(longLivedTree, max_depth);
     std::cout << "long lived tree of depth " << max_depth << "\t check: " << (checkResult ? "C" : "F") << std::endl;
 

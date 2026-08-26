@@ -1,15 +1,11 @@
 algoritmo,modelo_prompt,modelo_codigo,estrategia,temperatura,linguagem,compilou,executou,diff_correto,motivo_falha
-pidigits,qwen3-1.7b,llama3.1-8b,cot,0,python,sim(sintaxe),sim,nao,
-pidigits,qwen3-1.7b,llama3.1-8b,fewshot,0.7,python,sim(sintaxe),nao,-,AssertionError: Verification failed
-pidigits,gemma3-4b,stable-code-3b,cot,0,java,nao,-,-,/tmp/pidigitstest/stable-code-3b_cot_temp_0_java_java/PiDigits.java:12: error: '
-pidigits,gemma3-4b,stable-code-3b,cot,0,python,nao,-,-,SyntaxError: unmatched ')'
-pidigits,mistral-7b,qwen2.5-coder-7b,cot,0,cpp,nao,-,-,codigo-final/pidigits/qwen2.5-coder-7b/cot/temp_0/pidigits.cpp:2:10: fatal error
-pidigits,mistral-7b,qwen2.5-coder-7b,cot,0,java,sim,sim,nao,
-pidigits,ministral-3.3b,codegemma-7b,cot,0.7,cpp,nao,-,-,codigo-final/pidigits/codegemma-7b/cot/temp_0.7/pidigits.cpp:2:10: fatal error: 
-pidigits,ministral-3.3b,codegemma-7b,cot,0.7,java,sim,sim,nao,
-pidigits,ministral-3.3b,codegemma-7b,cot,0.7,python,sim(sintaxe),nao,-,UnboundLocalError: cannot access local variable 'k' where it is not associated w
-pidigits,ministral-3.3b,codegemma-7b,cot,0,cpp,nao,-,-,codigo-final/pidigits/codegemma-7b/cot/temp_0/pidigits.cpp:7:67: error: stray �
-pidigits,ministral-3.3b,codegemma-7b,cot,0,java,nao,-,-,sem classe publica
+pidigits,ministral-3.3b,codegemma-7b,fewshot,0.7,python,sim(sintaxe),nao,-,"Traceback (most recent call last):   File ""/home/iasmin/Documentos/Faculdade/experimentos-tcc/experimento-sorts/ollama/codigo-final/pidigits/codegemma-7b/fewshot/temp_0.7/pidigits.py"", line 31, in <mo"
+pidigits,ministral-3.3b,codegemma-7b,fewshot,0,python,sim(sintaxe),nao,-,"Traceback (most recent call last):   File ""/home/iasmin/Documentos/Faculdade/experimentos-tcc/experimento-sorts/ollama/codigo-final/pidigits/codegemma-7b/fewshot/temp_0/pidigits.py"", line 47, in <modu"
+pidigits,ministral-3.3b,codegemma-7b,cot,0.7,cpp,nao,-,-,erro de compilacao: /home/iasmin/Documentos/Faculdade/experimentos-tcc/experimento-sorts/ollama/codigo-final/pidigits/codegemma-7b/cot/temp_0.7/pidigits.cpp:2:10: fatal error: gmpxx.h: Arquivo ou diretório inexistente   
+pidigits,ministral-3.3b,codegemma-7b,cot,0.7,java,sim,nao,-,timeout (60s)
+pidigits,ministral-3.3b,codegemma-7b,cot,0,cpp,nao,-,-,erro de compilacao: /home/iasmin/Documentos/Faculdade/experimentos-tcc/experimento-sorts/ollama/codigo-final/pidigits/codegemma-7b/cot/temp_0/pidigits.cpp:7:67: error: stray ‘`’ in program     7 | - The algorithm generat
 pidigits,ministral-3.3b,codegemma-7b,cot,0,python,sim(sintaxe),sim,sim,
-pidigits,ministral-3.3b,codegemma-7b,fewshot,0.7,python,sim(sintaxe),nao,-,UnboundLocalError: cannot access local variable 't' where it is not associated w
-pidigits,ministral-3.3b,codegemma-7b,fewshot,0,python,sim(sintaxe),nao,-,NameError: name 'k' is not defined
+pidigits,qwen3-1.7b,llama3.1-8b,fewshot,0.7,python,sim(sintaxe),sim,nao,
+pidigits,gemma3-4b,stable-code-3b,cot,0.7,python,nao,-,-,"File ""/home/iasmin/Documentos/Faculdade/experimentos-tcc/experimento-sorts/ollama/codigo-final/pidigits/stable-code-3b/cot/temp_0.7/pidigits.py"", line 7     The `next_step`, `extract(3)`, and `extract"
+pidigits,gemma3-4b,stable-code-3b,cot,0,cpp,nao,-,-,erro de compilacao: /home/iasmin/Documentos/Faculdade/experimentos-tcc/experimento-sorts/ollama/codigo-final/pidigits/stable-code-3b/cot/temp_0/pidigits.cpp:6:10: fatal error: gmpxx.h: Arquivo ou diretório inexistente   
+pidigits,gemma3-4b,stable-code-3b,cot,0,java,nao,-,-,erro de compilacao: /tmp/tmpzdm8sop7/PiDigits.java:12: error: ';' expected         Scanner scanner = new Scanner(System.in));                                                 ^ /tmp/tmpzdm8sop7/PiDigits.java:19: error: il

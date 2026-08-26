@@ -1,3 +1,2 @@
 cot/temp_0.7/cpp
-cot/temp_0.7/java
 cot/temp_0/java

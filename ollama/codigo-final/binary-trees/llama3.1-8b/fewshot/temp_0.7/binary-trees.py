@@ -1,45 +1,51 @@
 import sys
-
-min_depth = 4
-N = int(sys.argv[1])
-max_depth = max(min_depth + 2, N)
-stretch_depth = max_depth + 1
-
+from random import shuffle
 class Node:
     def __init__(self):
         self.left = None
         self.right = None
 
-def stretch(depth):
+def build_tree(depth, data):
+    if depth == 0: return None
+    half = len(data) // 2
     node = Node()
-    for i in range(depth - 1):
-        node = node._set_child(node, i % 2 == 0)
+    node.left = build_tree(depth - 1, data[:half])
+    node.right = build_tree(depth - 1, data[half:])
     return node
 
-def _set_child(node, left):
-    if left:
-        node.left = Node()
-    else:
-        node.right = Node()
-    return node
+def walk(node, depth, out):
+    if node is None: return
+    walk(node.right, depth + 1, out)
+    out.write(f"long lived tree of depth {depth}\t check: ")
 
-def walk_tree(node, depth=0):
-    if not node:
-        return
-    print("I\t trees of depth %d\t check: 1" % (depth))
-    walk_tree(node.left, depth + 1)
-    walk_tree(node.right, depth + 1)
+def stretch_tree(stretch_depth):
+    data = [i for i in range(2**stretch_depth)]
+    shuffle(data)
+    return build_tree(stretch_depth - 1, data)
 
-long_lived = stretch(max_depth)
-print("stretch tree of depth %d\t check: 1" % max_depth)
-walk_tree(long_lived)
+min_depth = int(sys.argv[1])
+max_depth = max(min_depth + 2, min(int(sys.argv[1]) + 1, 16))
+iterations = 0
+
+for depth in range(min_depth, max_depth+1, 2):
+    iterations += (1 << (max_depth - depth + min_depth))
+
+stretch_tree_data = stretch_tree(max_depth+1)
+if stretch_tree_data is None:
+    print("fail")
+else:
+    print(f"stretch tree of depth {max_depth+1}\t check: True")
+
+long_lived_tree = build_tree(4, [i for i in range(16)])
+walk(long_lived_tree, 0, sys.stdout)
 
 for depth in range(min_depth, max_depth + 1, 2):
-    iterations = 1 << (max_depth - depth + min_depth)
-    for i in range(iterations):
-        node = stretch(depth)
-        walk_tree(node)
-    long_lived.check()
-    print("stretch tree of depth %d\t check: 1" % depth)
+    tree_data = [i for i in range(iterations)]
+    shuffle(tree_data)
+    tree = build_tree(depth - 1, tree_data)
+    walk(tree, 0, sys.stdout.write('I\t trees of depth '))
+    del tree
+    print(file=sys.stderr)
 
-print("long lived tree of depth %d\t check: 1" % max_depth)
+walk(long_lived_tree, 0, sys.stdout)
+print("True", file=sys.stderr)

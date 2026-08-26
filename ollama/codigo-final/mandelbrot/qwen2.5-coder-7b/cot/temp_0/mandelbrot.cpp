@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " N" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <N>" << std::endl;
         return 1;
     }
 
@@ -13,35 +13,34 @@ int main(int argc, char* argv[]) {
     const int maxIter = 50;
 
     // PBM P4 header
-    std::cout << "P4\n" << N << ' ' << N << '\n';
+    std::cout << "P4" << std::endl;
+    std::cout << N << " " << N << std::endl;
 
     for (int y = 0; y < N; ++y) {
         unsigned char row[N / 8];
         memset(row, 0, sizeof(row));
 
         for (int x = 0; x < N; ++x) {
-            double zx = 2.0 * x / N - 1.5;
-            double zy = 2.0 * y / N - 1.0;
-            double cr = zx;
-            double ci = zy;
-            int iter = 0;
+            double zx = 0.0, zy = 0.0;
+            double cx = 2.0 * x / N - 1.5;
+            double cy = 2.0 * y / N - 1.0;
 
+            int iter = 0;
             while (zx * zx + zy * zy <= lim && iter < maxIter) {
-                double temp = zx * zx - zy * zy + cr;
-                zy = 2.0 * zx * zy + ci;
-                zx = temp;
+                double nxz = zx * zx - zy * zy + cx;
+                zy = 2.0 * zx * zy + cy;
+                zx = nxz;
                 ++iter;
             }
 
-            // Set the pixel if it belongs to the Mandelbrot set
             if (iter == maxIter) {
+                // Pixel belongs to the set, mark as black
                 int byteIndex = x / 8;
                 int bitIndex = x % 8;
                 row[byteIndex] |= (1 << (7 - bitIndex));
             }
         }
 
-        // Output the row of pixels
         std::cout.write(reinterpret_cast<char*>(row), sizeof(row));
     }
 

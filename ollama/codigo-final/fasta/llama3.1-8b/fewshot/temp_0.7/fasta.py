@@ -1,103 +1,88 @@
-import sys
+import random
 
-# Define the linear congruential generator (LCG) function
-def lcg(seed, im, ia, ic):
-    while True:
-        seed = (ia * seed + ic) % im
-        yield seed / im  # Return a floating-point value between 0 and 1
-
-# Parse command-line argument N
-N = int(sys.argv[1])
-
-# Define the ALU sequence
-ALU_sequence = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGG AGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
-
-# Define the IUB alphabet with probabilities
-IUB_alphabet = {
-    'a': 0.27,
-    'c': 0.12,
-    'g': 0.12,
-    't': 0.27,
-    'B': 0.02,
-    'D': 0.02,
-    'H': 0.02,
-    'K': 0.02,
-    'M': 0.02,
-    'N': 0.02,
-    'R': 0.02,
-    'S': 0.02,
-    'V': 0.02,
-    'W': 0.02
-}
-
-# Define the Homo sapiens alphabet with probabilities
-Homo_sapiens_alphabet = {
-    'a': 0.3029549426680,
-    'c': 0.1979883004921,
-    'g': 0.1975473066391,
-    't': 0.3015094502008
-}
-
-# LCG parameters
 IM = 139968
 IA = 3877
 IC = 29573
 Seed = 42
 
-# Initialize the LCG with Seed as initial seed
-lcg_instance = lcg(Seed, IM, IA, IC)
+def lcg(random, seed):
+    while True:
+        seed = (IA * seed + IC) % IM
+        yield seed / float(IM)
 
-# Generate three DNA sequences based on given alphabets and probabilities
-for i in range(N):
-    # Sequence ONE: ALU
-    alu_sequence = ""
-    for j in range(i * 2):
-        r = next(lcg_instance)  # Get a random number between 0 and 1
-        if r < IUB_alphabet['a']:
-            alu_sequence += 'A'
-        elif r < (IUB_alphabet['a'] + IUB_alphabet['c']):
-            alu_sequence += 'C'
-        elif r < (IUB_alphabet['a'] + IUB_alphabet['c'] + IUB_alphabet['g']):
-            alu_sequence += 'G'
+def generate_random_fasta(n, alphabet_probabilities, alphabet):
+    random.seed(Seed)
+    sequence = ''
+    
+    for _ in range(n*3):  # Generate n*3 characters per line, with a maximum length of 60 characters per line.
+        next_number = int(next(lcg(random, Seed)))
+        
+        # Choose the character based on its probability
+        cumulative_probabilities = [sum(alphabet_probabilities[:i+1]) for i in range(len(alphabet))]
+        random_number = (next_number / float(IM)) % 1
+        
+        # Find which bucket the random number falls into
+        for i, cum_prob in enumerate(cumulative_probabilities):
+            if random_number < cum_prob:
+                sequence += alphabet[i]
+                break
+                
+    return sequence
+
+def generate_fasta(n, alu_sequence, iub_alphabet, homo_sapiens_alphabet):
+    # Generate the ALU fasta
+    alu_random = generate_random_fasta(n*2, [0.25]*4 + [0.005]*8, list(alu_sequence))
+    
+    # Generate the IUB fasta
+    iub_random = generate_random_fasta(n*3, iub_alphabet, 'actgBVDHKMRWS')
+    
+    # Generate the Homo sapiens fasta
+    homo_sapiens_random = generate_random_fasta(n*5, homo_sapiens_alphabet, 'acgt')
+    
+    output = ''
+    
+    # Write the ALU fasta to the output string
+    output += "ONE Homo sapiens alu\n"
+    for i in range(0, len(alu_sequence), 60):
+        if i + 60 <= len(alu_sequence):
+            output += alu_sequence[i:i+60] + '\n'
         else:
-            alu_sequence += 'T'
-
-    # Sequence TWO: IUB
-    iub_sequence = ""
-    for j in range(i * 3):
-        r = next(lcg_instance)  # Get a random number between 0 and 1
-        if r < Homo_sapiens_alphabet['a']:
-            iub_sequence += 'A'
-        elif r < (Homo_sapiens_alphabet['a'] + Homo_sapiens_alphabet['c']):
-            iub_sequence += 'C'
-        elif r < (Homo_sapiens_alphabet['a'] + Homo_sapiens_alphabet['c'] + Homo_sapiens_alphabet['g']):
-            iub_sequence += 'G'
+            output += alu_sequence[i:] + '\n'
+            
+    # Write the IUB fasta to the output string
+    output += "TWO IUB ambiguity codes\n"
+    for i in range(0, len(iub_random), 60):
+        if i + 60 <= len(iub_random):
+            output += iub_random[i:i+60] + '\n'
         else:
-            iub_sequence += 'T'
-
-    # Sequence THREE: Homo sapiens
-    homo_sequence = ""
-    for j in range(i * 5):
-        r = next(lcg_instance)  # Get a random number between 0 and 1
-        if r < Homo_sapiens_alphabet['a']:
-            homo_sequence += 'A'
-        elif r < (Homo_sapiens_alphabet['a'] + Homo_sapiens_alphabet['c']):
-            homo_sequence += 'C'
-        elif r < (Homo_sapiens_alphabet['a'] + Homo_sapiens_alphabet['c'] + Homo_sapiens_alphabet['g']):
-            homo_sequence += 'G'
+            output += iub_random[i:] + '\n'
+            
+    # Write the Homo sapiens fasta to the output string
+    output += "THREE Homo sapiens frequency\n"
+    for i in range(0, len(homo_sapiens_random), 60):
+        if i + 60 <= len(homo_sapiens_random):
+            output += homo_sapiens_random[i:i+60] + '\n'
         else:
-            homo_sequence += 'T'
+            output += homo_sapiens_random[i:] + '\n'
+            
+    return output
 
-    # Print the sequences in order
-    print("ONE Homo sapiens alu")
-    for k in range(0, len(ALU_sequence), 60):
-        print(ALU_sequence[k:k + 60])
-    print()
-    print("TWO IUB ambiguity codes")
-    for k in range(0, len(iub_sequence), 60):
-        print(iub_sequence[k:k + 60])
-    print()
-    print("THREE Homo sapiens frequency")
-    for k in range(0, len(homo_sequence), 60):
-        print(homo_sequence[k:k + 60])
-    print()
+if __name__ == '__main__':
+    import sys
+    
+    if len(sys.argv) != 2:
+        print("Usage: python fasta.py <N>")
+        exit(1)
+    
+    N = int(sys.argv[1])
+    
+    ALU_sequence = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGG AGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG CACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
+    IUB_alphabet = {'a': 0.27, 'c': 0.12, 'g': 0.12, 't': 0.27, 'B': 0.02, 'D': 0.02, 'H': 0.02, 'K': 0.02, 'M': 0.02, 'N': 0.02, 'R': 0.02, 'S': 0.02, 'V': 0.02, 'W': 0.02}
+    Homo_sapiens_alphabet = {'a': 0.3029549426680, 'c': 0.1979883004921, 'g': 0.1975473066391, 't': 0.3015094502008}
+
+    output = generate_fasta(N, ALU_sequence, IUB_alphabet, Homo_sapiens_alphabet)
+    
+    with open("output.txt", "w") as f:
+        f.write(output)
+
+# The code above generates the FASTA sequences according to the given problem.

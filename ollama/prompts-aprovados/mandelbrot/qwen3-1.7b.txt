@@ -1,5 +1,7 @@
+cot/temp_0.7/java
 cot/temp_0.7/python
 cot/temp_0/python
+fewshot/temp_0.7/cpp
 fewshot/temp_0.7/java
 fewshot/temp_0.7/python
 fewshot/temp_0/cpp

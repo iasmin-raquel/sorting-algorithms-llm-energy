@@ -7,18 +7,18 @@ IC = 29573
 Seed = 42
 Max = 1.0
 
-# IUB alphabet probabilities
-iub_probs = [0.27, 0.12, 0.12, 0.27] + [0.02] * 6
-
-# Homo sapiens alphabet probabilities
-homo_probs = [0.3029549426680, 0.1979883004921, 0.1975473066391, 0.3015094502008]
-
 # ALU sequence
-alu = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA" \
+ALU = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA" \
       "TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT" \
       "AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG" \
       "GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG" \
       "CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
+
+# IUB alphabet probabilities
+IUB_probs = [0.27, 0.12, 0.12, 0.27] + [0.02] * 8
+
+# Homo sapiens alphabet probabilities
+Homo_probs = [0.3029549426680, 0.1979883004921, 0.1975473066391, 0.3015094502008]
 
 def generate_random_number(seed):
     """Linear Congruential Generator"""
@@ -27,8 +27,8 @@ def generate_random_number(seed):
 
 def select_nucleotide(cumulative_probs, random_num):
     """Weighted selection based on cumulative probabilities"""
-    for i, p in enumerate(cumulative_probs):
-        if random_num < p:
+    for i, prob in enumerate(cumulative_probs):
+        if random_num < prob:
             return i
 
 def generate_sequence(alphabet, n_chars):
@@ -36,33 +36,31 @@ def generate_sequence(alphabet, n_chars):
     sequence = ""
     for _ in range(n_chars):
         random_num = generate_random_number(Seed)
-        nucleotide = alphabet[select_nucleotide(cumulative_probs, random_num)]
-        sequence += nucleotide
-        Seed = (IA * Seed + IC) % IM
+        index = select_nucleotide(alphabet, random_num)
+        sequence += alphabet[index]
     return sequence
 
-def write_sequence(filename, sequence):
-    """Write a sequence to a file in the specified format"""
-    with open(filename, "a") as f:
-        for i in range(0, len(sequence), 60):
-            f.write(sequence[i:i+60] + "\n")
+def main():
+    # Parse command-line argument
+    try:
+        N = int(sys.argv[1])
+    except ValueError:
+        print("Invalid command-line argument. Please provide a valid integer for N.")
+        sys.exit(1)
 
-# Parse command-line argument
-try:
-    N = int(sys.argv[1])
-except ValueError:
-    print("Invalid command-line argument. Please provide a valid integer for N.")
-    sys.exit(1)
+    # Generate sequences
+    alu_sequence = ALU * (N // 2)
+    iub_sequence = generate_sequence(IUB_probs, N * 3)
+    homo_sequence = generate_sequence(Homo_probs, N * 5)
 
-# Generate sequences
-alu_sequence = alu * 2
-iub_sequence = generate_sequence(list("ACGTBDSVWY"), N * 3)
-homo_sequence = generate_sequence(list("ACGT"), N * 5)
+    # Write sequences to file
+    with open("output.txt", "w") as f:
+        f.write(">ONE Homo sapiens alu\n")
+        f.write(alu_sequence + "\n")
+        f.write(">TWO IUB ambiguity codes\n")
+        f.write(iub_sequence + "\n")
+        f.write(">THREE Homo sapiens frequency\n")
+        f.write(homo_sequence + "\n")
 
-# Write sequences to file
-write_sequence("output.txt", ">ONE Homo sapiens alu\n" + alu_sequence)
-write_sequence("output.txt", ">TWO IUB ambiguity codes\n" + iub_sequence)
-write_sequence("output.txt", ">THREE Homo sapiens frequency\n" + homo_sequence)
-
-# Validation step
-# Compare output.txt with reference.txt using diff
+if __name__ == "__main__":
+    main()

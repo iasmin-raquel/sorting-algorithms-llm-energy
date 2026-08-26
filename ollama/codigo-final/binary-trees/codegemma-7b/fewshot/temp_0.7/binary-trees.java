@@ -4,71 +4,79 @@ public class BinaryTreeOperations {
 
     static class TreeNode {
         TreeNode left, right;
-
-        TreeNode() {
-            left = right = null;
-        }
+        TreeNode() {}
     }
 
-    static int maxDepth(int N) {
-        return Math.max(4, N);
-    }
-
-    static int stretchDepth(int maxDepth) {
-        return maxDepth + 1;
-    }
-
-    static long iterations(int maxDepth, int minDepth, int depth) {
-        return 1L << (maxDepth - depth + minDepth);
-    }
-
-    static TreeNode constructTree(int depth) {
-        if (depth == 0) {
-            return null;
-        }
-        TreeNode root = new TreeNode();
-        root.left = constructTree(depth - 1);
-        root.right = constructTree(depth - 1);
-        return root;
-    }
-
-    static int countNodes(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        return 1 + countNodes(root.left) + countNodes(root.right);
-    }
-
-    static void deallocateTree(TreeNode root) {
-        if (root == null) {
-            return;
-        }
-        deallocateTree(root.left);
-        deallocateTree(root.right);
-        root = null;
-    }
+    static int min_depth = 4;
+    static int max_depth;
+    static int stretch_depth;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        // Read N from command line
         int N = Integer.parseInt(args[0]);
-        int minDepth = 4;
-        int maxDepth = maxDepth(N);
-        int stretchDepth = stretchDepth(maxDepth);
 
-        System.out.println("stretch tree of depth " + stretchDepth + "\t check: " + (constructTree(stretchDepth) != null));
-        deallocateTree(constructTree(stretchDepth));
+        // Calculate max_depth
+        max_depth = Math.max(min_depth + 2, N);
+        stretch_depth = max_depth + 1;
 
-        for (int depth = minDepth; depth <= maxDepth; depth += 2) {
-            TreeNode[] trees = new TreeNode[(int) iterations(maxDepth, minDepth, depth)];
-            for (int i = 0; i < trees.length; i++) {
-                trees[i] = constructTree(depth);
-            }
-            System.out.println("I\t trees of depth " + depth + "\t check: " + countNodes(trees[trees.length - 1]));
-            for (TreeNode tree : trees) {
-                deallocateTree(tree);
+        // Stretch Tree
+        TreeNode stretchTree = createTree(stretch_depth);
+        verifyNode(stretchTree);
+        deleteTree(stretchTree);
+
+        // Iterative Trees
+        for (int depth = min_depth; depth <= max_depth; depth += 2) {
+            int iterations = 1 << (max_depth - depth + min_depth);
+            for (int i = 0; i < iterations; i++) {
+                TreeNode iterativeTree = createTree(depth);
+                countNodes(iterativeTree);
+                deleteTree(iterativeTree);
             }
         }
 
-        System.out.println("long lived tree of depth " + maxDepth + "\t check: " + (constructTree(maxDepth) != null));
+        // Long-Lived Tree
+        TreeNode longLivedTree = createTree(stretch_depth);
+        verifyNode(longLivedTree);
+        deleteTree(longLivedTree);
+    }
+
+    // Create a binary tree of the given depth
+    private static TreeNode createTree(int depth) {
+        if (depth == 0) {
+            return null;
+        }
+        TreeNode node = new TreeNode();
+        node.left = createTree(depth - 1);
+        node.right = createTree(depth - 1);
+        return node;
+    }
+
+    // Verify that the tree node exists
+    private static void verifyNode(TreeNode node) {
+        if (node == null) {
+            System.out.println("check: false");
+        } else {
+            System.out.println("check: true");
+        }
+    }
+
+    // Delete the binary tree
+    private static void deleteTree(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        deleteTree(node.left);
+        deleteTree(node.right);
+        node = null;
+    }
+
+    // Count the nodes in the binary tree
+    private static int countNodes(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return 1 + countNodes(node.left) + countNodes(node.right);
     }
 }

@@ -25,10 +25,11 @@ def mandelbrot_set(N):
             pixel_value = 0 if iteration == max_iterations else 1
             print(chr(pixel_value), end='')
         
-        # Pad row with zeros if N is not divisible by 8
-        padding = (N % 8)
-        if padding != 0:
-            print(''.join(['\x00'] * (8 - padding)), end='')
+        # Pad the last byte with zeros if N is not divisible by 8
+        if N % 8 != 0:
+            padding = (N % 8) // 2
+            for _ in range(padding):
+                print('\x00', end='')
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

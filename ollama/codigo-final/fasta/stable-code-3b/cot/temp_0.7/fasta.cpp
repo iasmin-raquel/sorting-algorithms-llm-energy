@@ -1,76 +1,59 @@
-# Here we will implement the required functionality in C++ code.
-# Since this prompt does not provide specific C++ code examples for each step, I'll provide a general outline of how you can approach writing the modular C++ code to solve the Fasta problem as specified in the Computer Language Benchmark Game.
+#include <iostream>
+#include <string>
+#include <random>
+#include <algorithm>
 
-1. **Understanding and Decomposition:**
-   - Break down the problem into manageable steps.
-   - Understand the specific requirements and constraints mentioned in the prompt.
+// LCG Implementation
+std::default_random_engine generator;
+std::uniform_int_distribution<int> distribution(1, 100);
 
-   Example:
-   ```python
-   # Example of decomposition for solving Fasta problem.
+int Random() {
+    return distribution(generator);
+}
 
-   # Step 1: Understanding and Decomposition
-   # Implement a modular structure that adheres to the specified requirements and constraints.
-   # Break down the problem into manageable steps.
-   # Create cumulative probability tables for both the IUB alphabet and the Homo sapiens alphabet.
-   ```
+// Function for generating repeat fasta of ALU with n*2 characters
+void RepeatFastaALU(const std::string& alu, int n) {
+    std::cout << ">ONE Homo sapiens alu" << std::endl;
+    for (int i = 0; i < n * 2; ++i) {
+        std::cout << alu[i % alu.length()]];
+    }
+    std::cout << std::endl;
+}
 
-2. **Random Number Generation (LCG):**
-   - Implement the Linear Congruential Generator (LCG) with the specified constants and without caching.
+// Function for generating random fasta of IUB with n*3 characters
+void RandomFastaIUB(int n) {
+    const std::string iub = "acgtbdghkscbadnhry";
+    const std::vector<double> probabilities = {0.27, 0.12, 0.12, 0.27};
 
-   Example:
-   ```python
-   # Example of LCG implementation for solving Fasta problem.
+    for (int i = 0; i < n * 3; ++i) {
+        int index = Random() % probabilities.size();
+        std::cout << iub[index]]);
+    }
+    std::cout << std::endl;
+}
 
-   # Step 2: Random Number Generation (LCG)
-   # Implement a LCG with the specified constants and without caching.
-   ```
+// Function for generating random fasta of Homo sapiens with n*5 characters
+void RandomFastHomoSapiens(int n) {
+    const std::string hs = "acgtbdghkscbadnhry";
+    const std::vector<double> probabilities = {0.302954, 0.19788300, 0.197052667, 0.3015094500}};
 
-3. **Probability Handling:**
-   - Create cumulative probability tables for both the IUB alphabet and the Homo sapiens alphabet.
+    for (int i = 0; i < n * 5; ++i) {
+        int index = Random() % probabilities.size();
+        std::cout << hs[index]]);
+    }
+    std::cout << std::endl;
+}
 
-   Example:
-   ```python
-   # Example of probability handling implementation for solving Fasta problem.
+// Command-Line Argument Handling
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cout << "Usage: " << argv[0] << " n" << std::endl;
+        return 1;
+    }
 
-   # Step 3: Probability Handling
-   # Implement a function to create cumulative probability tables for both the IUB alphabet and the Homo sapiens alphabet.
-   ```
+    int n = std::stoi(argv[1]));
 
-4. **Sequence Generation Logic:**
-   - Implement the repeat fasta functionality using the ALU sequence.
-   - Implement the weighted random selection from the IUB alphabet and the Homo sapiens alphabet.
+    // Generate the sequences based on each method
+    RepeatFastaALU("GGGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHISGAGCACTTTGGGAGGCCGAGGCGGGCGGA TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT AAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATHI...
 
-   Example:
-   ```python
-   # Example of sequence generation logic implementation for solving Fasta problem.
-
-   # Step 4: Sequence Generation Logic
-   # Implement a function to generate sequences based on provided parameters using appropriate algorithms and data structures.
-   ```
-
-5. **Output Formatting:**
-   - Format the output as specified in the prompt: 60-character line length, three sequences in order, etc.
-
-   Example:
-   ```python
-   # Example of output formatting implementation for solving Fasta problem.
-
-   # Step 5: Output Formatting
-   # Implement a function to format the generated output according to the specified constraints.
-   ```
-
-6. **Validation:**
-   - Validate the generated output against the reference file using the 'diff' command to guarantee correctness (N=10001).
-
-   Example:
-   ```python
-   # Example of validation implementation for solving Fasta problem.
-
-   # Step 6: Validation
-   # Implement a function to validate the generated output against the reference file using the 'diff' command.
-   ```
-
-By following this general outline, you can start implementing the modular C++ code to solve the Fasta problem as specified in the Computer Language Benchmark Game.
-
-Please note that the specific implementation details for each step may vary depending on your requirements and constraints.
+Here's an example of how to generate random fasta sequences using the LCG

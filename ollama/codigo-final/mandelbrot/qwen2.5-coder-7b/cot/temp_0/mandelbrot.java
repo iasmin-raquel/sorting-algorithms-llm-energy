@@ -1,10 +1,10 @@
 import java.io.IOException;
 import java.util.Scanner;
 
-public class MandelbrotSet {
+public class MandelbrotGenerator {
     public static void main(String[] args) throws IOException {
         if (args.length != 1) {
-            System.out.println("Usage: java MandelbrotSet <N>");
+            System.out.println("Usage: java MandelbrotGenerator <N>");
             return;
         }
 
@@ -15,36 +15,35 @@ public class MandelbrotSet {
         System.out.printf("P4\n%d %d\n", N, N);
 
         for (int y = 0; y < N; y++) {
-            int pixel = 0;
-            int bitIndex = 7;
-
+            int pixelRow = 0;
             for (int x = 0; x < N; x++) {
                 double cr = 2.0 * x / N - 1.5;
                 double ci = 2.0 * y / N - 1.0;
                 double zr = 0.0, zi = 0.0;
+                int iteration = 0;
 
-                for (int i = 0; i < 50; i++) {
-                    double zrSquared = zr * zr;
-                    double ziSquared = zi * zi;
-                    if (zrSquared + ziSquared > limSquared) break;
-                    zi = 2 * zr * zi + ci;
-                    zr = zrSquared - ziSquared + cr;
+                while (zr * zr + zi * zi <= limSquared && iteration < 50) {
+                    double tempZr = zr * zr - zi * zi + cr;
+                    zi = 2.0 * zr * zi + ci;
+                    zr = tempZr;
+                    iteration++;
                 }
 
-                // Set bit based on whether the point is in the set
-                pixel |= (i == 50 ? 1 : 0) << bitIndex;
+                // Set pixel color based on the number of iterations
+                int color = (iteration == 50) ? 1 : 0;
 
-                // Move to next bit or start new byte if necessary
-                if (--bitIndex < 0) {
-                    System.out.write(pixel);
-                    pixel = 0;
-                    bitIndex = 7;
+                // Pack pixels into bytes
+                pixelRow |= (color << ((N - x - 1) % 8));
+
+                if ((N - x - 1) % 8 == 7 || x == N - 1) {
+                    System.out.write(pixelRow);
+                    pixelRow = 0;
                 }
             }
 
-            // Write any remaining bits in the last byte
-            if (bitIndex != 7) {
-                System.out.write(pixel << (8 - bitIndex));
+            // Pad the last byte with zeros if necessary
+            while (N % 8 != 0) {
+                System.out.write(0);
             }
         }
     }

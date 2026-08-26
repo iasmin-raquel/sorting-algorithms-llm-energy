@@ -8,15 +8,21 @@ public class Pidigits {
         BigInteger r = BigInteger.ZERO;
         BigInteger t = BigInteger.ONE;
         int k = 0;
+        int count = 0;
 
-        for (int i = 0; i < N; i++) {
+        while (true) {
             next_step(q, r, t, k);
             int d = extract(3, q, r, t);
             if (d == extract(4, q, r, t)) {
                 System.out.print(d);
                 produce(d, q, r, t);
-                if (i % 10 == 9) {
-                    System.out.println("\t:" + (i + 1));
+                count++;
+                if (count % 10 == 0) {
+                    System.out.print("\t:" + N);
+                    if (count == N) {
+                        break;
+                    }
+                    System.out.println();
                 }
             }
         }
@@ -24,14 +30,14 @@ public class Pidigits {
 
     private static void next_step(BigInteger q, BigInteger r, BigInteger t, int k) {
         k++;
-        r = r.add(BigInteger.valueOf(2).multiply(q));
+        r = r.multiply(BigInteger.TWO).add(q);
         r = r.multiply(BigInteger.valueOf(2 * k + 1));
         t = t.multiply(BigInteger.valueOf(2 * k + 1));
         q = q.multiply(BigInteger.valueOf(k));
     }
 
     private static int extract(int x, BigInteger q, BigInteger r, BigInteger t) {
-        return q.multiply(BigInteger.valueOf(x)).add(r).divide(t).intValue();
+        return (int) ((q.multiply(BigInteger.valueOf(x)).add(r)).divide(t)).longValue();
     }
 
     private static void produce(int d, BigInteger q, BigInteger r, BigInteger t) {

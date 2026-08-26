@@ -1,98 +1,86 @@
 import sys
-import random
-from itertools import product
+from random import randrange
+
+IM = 139968
+IA = 3877
+IC = 29573
+Seed = 42
 
 def lcg(seed):
-    im = 139968
-    ia = 3877
-    ic = 29573
-    x = seed
     while True:
-        x = (ia * x + ic) % im
-        yield x / float(im)
+        seed = (IA * seed + IC) % IM
+        yield seed / float(IM)
 
-def probability(alphabet, probabilities, rand_num):
-    cumulative_prob = [0] * len(probabilities)
-    for i in range(len(probabilities)):
-        cumulative_prob[i] = sum(probabilities[:i+1])
-    nucleotides = []
-    for prob, cumul in zip(probabilities, cumulative_prob):
-        if rand_num < cumul:
-            return alphabet[probabilities.index(prob)]
-        else:
-            rand_num -= cumul
-    return None
+def nucleotide(probabilities, alphabet):
+    r = next(lcg(Seed))
+    cumulative_prob = 0.0
+    for n in range(len(alphabet)):
+        cumulative_prob += probabilities[n]
+        if r < cumulative_prob:
+            return alphabet[n]
 
-def dna_sequence(sequence, n, rand):
-    total_chars = len(sequence) * n
-    sequence_list = [''] * 3
-    for i in range(3):
-        index = 0
-        for _ in range(n):
-            next_nucleotide = probability(['a', 'c', 'g', 't'], [0.27, 0.12, 0.12, 0.27], rand.next()) 
-            sequence_list[i] += next_nucleotide * (total_chars // 4)
-    return '\n'.join(sequence_list)
+# Get the number of sequences from command line argument
+N = int(sys.argv[1])
 
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: python fasta.py <N>")
-        sys.exit(1)
+alu_sequence = 'GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA' \
+              'TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT' \
+              'AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG' \
+              'GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCA' \
+              'CTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA'
 
-    N = int(sys.argv[1])
-    ALU_sequence = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA" \
-                  + "TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT" \
-                  + "AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG" \
-                  + "GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG" \
-                  + "CACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA"
+iub_probabilities = [0.27, 0.12, 0.12, 0.27, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, \
+                     0.02, 0.02, 0.02, 0.02, 0.02]
+iub_alphabet = 'acgtB_DHKNMRSVW'
 
-    IUB_probabilities = {'a': 0.27, 'c': 0.12, 'g': 0.12, 't': 0.27,
-                         'B': 0.02, 'D': 0.02, 'H': 0.02, 'K': 0.02,
-                         'M': 0.02, 'N': 0.02, 'R': 0.02, 'S': 0.02,
-                         'V': 0.02, 'W': 0.02}
+homo_sapiens_probabilities = [0.3029549426680, 0.1979883004921, 0.1975473066391, \
+                             0.3015094502008]
+homo_sapiens_alphabet = 'actg'
 
-    Homo_sapiens_probabilities = {'a': 0.3029549426680, 'c': 0.1979883004921, 
-                                  'g': 0.1975473066391, 't': 0.3015094502008}
+# Print ONE Homo sapiens alu
+print('>ONE Homo sapiens alu')
+for _ in range(N):
+    print(alu_sequence * 2)
 
-    with open('output.txt', 'w') as f:
-        rand = lcg(42)
-        sequence_list = []
-        
-        # Generate ALU sequence
-        alu_sequence = dna_sequence(ALU_sequence, N, rand)
-        sequence_list.append(">" + "ONE Homo sapiens alu")
-        while len(alu_sequence) % 60 != 0:
-            alu_sequence += 'a'
-        sequence_list.append(alu_sequence[:60])
-        
-        # Generate IUB ambiguity codes
-        iub_sequence = dna_sequence('', N, rand)
-        for prob, nucleotide in sorted(IUB_probabilities.items()):
-            probability = IUB_probabilities[prob] / sum(IUB_probabilities.values())
-            while len(iub_sequence) % 3 != 0:
-                iub_sequence += nucleotide
-            for _ in range(int(probability * N)):
-                next_nucleotide = probability(['a', 'c', 'g', 't'], [0.27, 0.12, 0.12, 0.27], rand.next()) 
-                iub_sequence += next_nucleotide
-        sequence_list.append(">" + "TWO IUB ambiguity codes")
-        while len(iub_sequence) % 60 != 0:
-            iub_sequence += 'a'
-        sequence_list.append(iub_sequence[:60])
-        
-        # Generate Homo sapiens frequency
-        homo_sapiens_sequence = dna_sequence('', N, rand)
-        for prob, nucleotide in sorted(Homo_sapiens_probabilities.items()):
-            probability = Homo_sapiens_probabilities[prob] / sum(Homo_sapiens_probabilities.values())
-            while len(homo_sapiens_sequence) % 5 != 0:
-                homo_sapiens_sequence += nucleotide
-            for _ in range(int(probability * N)):
-                next_nucleotide = probability(['a', 'c', 'g', 't'], [0.27, 0.12, 0.12, 0.27], rand.next()) 
-                homo_sapiens_sequence += next_nucleotide
-        sequence_list.append(">" + "THREE Homo sapiens frequency")
-        while len(homo_sapiens_sequence) % 60 != 0:
-            homo_sapiens_sequence += 'a'
-        sequence_list.append(homo_sapiens_sequence[:60])
+# Print TWO IUB ambiguity codes
+print('>TWO IUB ambiguity codes')
+iub_seq = ''
+for _ in range(N * 3):
+    iub_seq += nucleotide(iub_probabilities, iub_alphabet)
+    if len(iub_seq) == 60:
+        print(iub_seq)
+        iub_seq = ''
 
-        f.write('\n'.join(sequence_list))
-        
-if __name__ == "__main__":
-    main()
+# Print THREE Homo sapiens frequency
+print('>THREE Homo sapiens frequency')
+homo_sapiens_seq = ''
+for _ in range(N * 5):
+    homo_sapiens_seq += nucleotide(homo_sapiens_probabilities, homo_sapiens_alphabet)
+    if len(homo_sapiens_seq) == 60:
+        print(homo_sapiens_seq)
+        homo_sapiens_seq = ''
+
+# Validate the output
+output_file_name = 'output.txt'
+with open(output_file_name, 'w') as f:
+    # Print ONE Homo sapiens alu
+    for _ in range(N):
+        f.write(alu_sequence * 2 + '\n')
+
+    # Print TWO IUB ambiguity codes
+    iub_seq = ''
+    for _ in range(N * 3):
+        iub_seq += nucleotide(iub_probabilities, iub_alphabet)
+        if len(iub_seq) == 60:
+            f.write(iub_seq + '\n')
+            iub_seq = ''
+
+    # Print THREE Homo sapiens frequency
+    homo_sapiens_seq = ''
+    for _ in range(N * 5):
+        homo_sapiens_seq += nucleotide(homo_sapiens_probabilities, homo_sapiens_alphabet)
+        if len(homo_sapiens_seq) == 60:
+            f.write(homo_sapiens_seq + '\n')
+            homo_sapiens_seq = ''
+
+import subprocess
+subprocess.run(['diff', 'output.txt', 'reference.txt'])

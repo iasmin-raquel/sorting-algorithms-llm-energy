@@ -33,11 +33,11 @@ def main():
     for y in range(height):
         for x in range(width):
             c = complex(2.0 * (x / N - 1.5), 2.0 * (y / N - 1.0))
-            n = mandelbrot(c, max_iter)
-            if n == max_iter:
+            m = mandelbrot(c, max_iter)
+            if m == max_iter:
                 pixels[y * width + x] |= 0xFF
             else:
-                pixels[y * width + x] &= ~0xFF
+                pixels[y * width + x] &= ~0x01
 
     # Pad with zeros if N not divisible by 8
     padding = (8 - (width % 8)) % 8
